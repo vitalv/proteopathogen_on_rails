@@ -1,0 +1,2 @@
+
+rails generate model Experiment title:text reference:string sample:string protocol:text has_quantitative_data:boolean public:boolean
