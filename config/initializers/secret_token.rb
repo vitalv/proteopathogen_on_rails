@@ -4,4 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-ProteopathogenOnRails::Application.config.secret_token = 'bebad7503282352e0970dfc3340bb195c2b3b8c8241ee2f092a318e29c22b341a1fdbb73521a64e07b96c3784387b9cf5db1457f77b6965a68ffeff22df88ac5'
+ProteopathogenOnRails::Application.config.secret_token = 'dfa6ca3c001d9b61bbf2a5e1bdc95656353426bddaa1fe222e19986a32edebdc8c565291bdb80cdc1225cb7123394b72d00378efd4d4715558b428b0d4bf0c5b'
