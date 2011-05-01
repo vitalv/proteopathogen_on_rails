@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  title: MyText
+  reference: MyString
+  sample: MyString
+  protocol: MyText
+  has_quantitative_data: false
+  public: false
+
+two:
+  title: MyText
+  reference: MyString
+  sample: MyString
+  protocol: MyText
+  has_quantitative_data: false
+  public: false
