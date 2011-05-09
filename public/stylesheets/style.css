@@ -1,7 +1,7 @@
 body {
-  background-color: #F9F9F9;
+  background-color: #f9f9f9;
   margin: 0% 12% 0% 12%;
-  color: #0A2747;
+  color: #0a2747;
   h3-font-size: 9pt; }
   body font {
     family: Helvetica, Arial, sans-serif;
@@ -11,3 +11,14 @@ header {
   height: 67px;
   background-color: #deeaea;
   border-bottom: solid #B6B5B0 3px; }
+
+nav_links {
+  font-weight: bold;
+  padding: 5px;
+  float: right; }
+  nav_links a {
+    color: #008080;
+    text-decoration: none;
+    padding: 2px 15px; }
+    nav_links a:hover {
+      color: #ACABAC; }
