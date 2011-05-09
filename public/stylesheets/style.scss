@@ -1,17 +1,35 @@
+$proteopath_green: #008080;
+$proteopath_light_green: #DEEAEA;
+$background_white: #F9F9F9;
+$blue_font_color: #0A2747;
+
 body {
-  background-color: #F9F9F9; 
+  background-color: $background_white; 
   margin: 0% 12% 0% 12%;
   font {
     family: Helvetica, Arial, sans-serif;
     size: 9pt;
   }
-  color: #0A2747;
+  color: $blue_font_color;
   h3: { font-size: 9pt }
 }
 
 
 header {
   height: 67px;
-  background-color: #deeaea;
+  background-color: $proteopath_light_green;
   border-bottom: solid #B6B5B0 3px;
+}
+
+
+nav_links {
+  font-weight: bold;
+  padding: 5px;
+  float: right;
+  a {
+    color: #008080;
+    text-decoration: none;
+    padding: 2px 15px;
+    &:hover{ color: #ACABAC; }
+  }
 }
