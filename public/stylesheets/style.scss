@@ -6,12 +6,9 @@ $blue_font_color: #0A2747;
 body {
   background-color: $background_white; 
   margin: 0% 12% 0% 12%;
-  font {
-    family: Helvetica, Arial, sans-serif;
-    size: 9pt;
-  }
+  font-family: arial;
+  font-size: 9pt;
   color: $blue_font_color;
-  h3: { font-size: 9pt }
 }
 
 
