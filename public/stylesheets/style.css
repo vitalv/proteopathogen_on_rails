@@ -3,23 +3,32 @@ body {
   margin: 0% 12% 0% 12%;
   font-family: arial;
   font-size: 9pt;
-  color: #0a2747;
-  h3-font-size: 10pt;
-  h2-font-size: 11pt;
-  h1-font-size: 12pt; }
+  color: #0a2747; }
 
 header {
   height: 67px;
   background-color: #deeaea;
-  border-bottom: solid #B6B5B0 3px; }
+  border-bottom: solid #b6b5b0 3px; }
 
 nav_links {
-  font-weight: bold;
   padding: 5px;
+  margin: 0 0 20px 0;
   float: right; }
-  nav_links a {
-    color: #008080;
-    text-decoration: none;
-    padding: 2px 15px; }
-    nav_links a:hover {
-      color: #ACABAC; }
+  nav_links ul {
+    list-style-type: none; }
+  nav_links li {
+    float: left;
+    padding: 0 20px; }
+    nav_links li a {
+      font-size: 10pt;
+      text-decoration: none;
+      font-weight: bold;
+      color: #008080; }
+      nav_links li a:hover {
+        color: #ACABAC; }
+
+content {
+  display: block;
+  clear: both;
+  border: solid #b6b5b0 1px;
+  padding: 20px; }

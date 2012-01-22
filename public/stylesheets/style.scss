@@ -2,6 +2,7 @@ $proteopath_green: #008080;
 $proteopath_light_green: #DEEAEA;
 $background_white: #F9F9F9;
 $blue_font_color: #0A2747;
+$gray: #B6B5B0;
 
 body {
   background-color: $background_white; 
@@ -11,22 +12,36 @@ body {
   color: $blue_font_color;
 }
 
-
 header {
   height: 67px;
   background-color: $proteopath_light_green;
-  border-bottom: solid #B6B5B0 3px;
+  border-bottom: solid $gray 3px;
+}
+
+nav_links {
+  padding: 5px;
+  margin: 0 0 20px 0;
+  float: right;
+  ul { list-style-type: none; }
+  li {
+    float: left;
+    padding: 0 20px;
+    a {
+	  font-size: 10pt;
+	  text-decoration: none;
+	  font-weight: bold;
+	  color: #008080;
+	  &:hover{ color: #ACABAC; }
+    }
+  }
 }
 
 
-nav_links {
-  font-weight: bold;
-  padding: 5px;
-  float: right;
-  a {
-    color: #008080;
-    text-decoration: none;
-    padding: 2px 15px;
-    &:hover{ color: #ACABAC; }
-  }
+
+content {
+  display:block;
+  clear: both;
+  border: solid $gray 1px;
+  padding: 20px;
+
 }
