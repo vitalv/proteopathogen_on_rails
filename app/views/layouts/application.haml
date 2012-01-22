@@ -4,28 +4,28 @@
   %head
     %meta{'http-equiv' => "Content-type", :content => "text/html", :charset => "utf-8" }
     %meta{:name => "keywords", :content => "proteomics Candida albicans host pathogen" }
-    
+
     %link{:rel => "icon", :href => "/images/g3360.png"}
     %title Proteopathogen
 
 
-    =stylesheet_link_tag 'style'
-    =javascript_include_tag :defaults
+  =stylesheet_link_tag 'style'
+  =javascript_include_tag :defaults
 
   %body
     %header
       =image_tag 'proteo_pathogen_logo1.png'
 
     %nav_links
-      =link_to 'HOME', '/'
-      =link_to 'BROWSE', '/browsexperiment'
-      =link_to 'SEARCH', '/search'
-      =link_to 'CONTACT', '/contact'
-  
+      %ul
+        %li=link_to 'HOME', '/'
+        %li=link_to 'BROWSE', '/browsexperiment'
+        %li=link_to 'SEARCH', '/search'
+        %li=link_to 'CONTACT', '/contact'
 
+    %content
 
-
-  =yield
+      =yield
 
 
 
