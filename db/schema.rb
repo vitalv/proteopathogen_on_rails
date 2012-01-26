@@ -12,28 +12,28 @@
 
 ActiveRecord::Schema.define(:version => 20110509153015) do
 
-  create_table "experiments", :force => true do |t|
-    t.text     "title"
-    t.string   "reference"
-    t.string   "sample"
-    t.text     "protocol"
-    t.boolean  "has_quantitative_data"
-    t.boolean  "public"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "identifications", :force => true do |t|
-    t.integer  "experiment_id",                                   :null => false
-    t.string   "search_database",                                 :null => false
-    t.string   "search_engine"
-    t.decimal  "score",            :precision => 22, :scale => 6
-    t.decimal  "threshold",        :precision => 22, :scale => 6
-    t.decimal  "molecular_weight", :precision => 12, :scale => 6
-    t.decimal  "pi",               :precision => 12, :scale => 6
-    t.decimal  "seq_coverage",     :precision => 12, :scale => 6
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
+#   create_table "experiments", :force => true do |t|
+#     t.text     "title"
+#     t.string   "reference"
+#     t.string   "sample"
+#     t.text     "protocol"
+#     t.boolean  "has_quantitative_data"
+#     t.boolean  "public"
+#     t.datetime "created_at"
+#     t.datetime "updated_at"
+#   end
+# 
+#   create_table "identifications", :force => true do |t|
+#     t.integer  "experiment_id",                                   :null => false
+#     t.string   "search_database",                                 :null => false
+#     t.string   "search_engine"
+#     t.decimal  "score",            :precision => 22, :scale => 6
+#     t.decimal  "threshold",        :precision => 22, :scale => 6
+#     t.decimal  "molecular_weight", :precision => 12, :scale => 6
+#     t.decimal  "pi",               :precision => 12, :scale => 6
+#     t.decimal  "seq_coverage",     :precision => 12, :scale => 6
+#     t.datetime "created_at"
+#     t.datetime "updated_at"
+#   end
 
 end

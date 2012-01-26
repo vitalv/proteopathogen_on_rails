@@ -5,9 +5,7 @@ class CreateExperiments < ActiveRecord::Migration
       t.string :reference
       t.string :sample
       t.text :protocol
-      t.boolean :has_quantitative_data
-      t.boolean :public
-
+      t.boolean :is_public
       t.timestamps
     end
   end
