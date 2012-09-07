@@ -5,3 +5,4 @@ tmp/
 *~
 *~~
 *.kate-swp
+rvm_use_1.9.3@rails3gemset
