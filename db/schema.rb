@@ -11,7 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120907133329) do
+ActiveRecord::Schema.define(:version => 20120907141137) do
+
+  create_table "spectrum_identification_lists", :force => true do |t|
+    t.string   "sil_id",                              :null => false
+    t.integer  "spectrum_identification_protocol_id"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
+  end
 
   create_table "spectrum_identification_protocols", :force => true do |t|
     t.string   "sip_id",            :null => false
