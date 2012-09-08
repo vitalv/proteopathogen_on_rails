@@ -1,14 +1,9 @@
 body {
-  background-color: #f9f9f9;
+  background-color: white;
   margin: 0% 12% 0% 12%;
   font-family: arial;
   font-size: 9pt;
   color: #0a2747; }
-
-header {
-  height: 67px;
-  background-color: #deeaea;
-  border-bottom: solid #b6b5b0 3px; }
 
 nav_links {
   padding: 5px;
