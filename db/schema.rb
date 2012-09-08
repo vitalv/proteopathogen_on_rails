@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,30 +11,24 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110509153015) do
+ActiveRecord::Schema.define(:version => 20120907141137) do
 
-#   create_table "experiments", :force => true do |t|
-#     t.text     "title"
-#     t.string   "reference"
-#     t.string   "sample"
-#     t.text     "protocol"
-#     t.boolean  "has_quantitative_data"
-#     t.boolean  "public"
-#     t.datetime "created_at"
-#     t.datetime "updated_at"
-#   end
-# 
-#   create_table "identifications", :force => true do |t|
-#     t.integer  "experiment_id",                                   :null => false
-#     t.string   "search_database",                                 :null => false
-#     t.string   "search_engine"
-#     t.decimal  "score",            :precision => 22, :scale => 6
-#     t.decimal  "threshold",        :precision => 22, :scale => 6
-#     t.decimal  "molecular_weight", :precision => 12, :scale => 6
-#     t.decimal  "pi",               :precision => 12, :scale => 6
-#     t.decimal  "seq_coverage",     :precision => 12, :scale => 6
-#     t.datetime "created_at"
-#     t.datetime "updated_at"
-#   end
+  create_table "spectrum_identification_lists", :force => true do |t|
+    t.string   "sil_id",                              :null => false
+    t.integer  "spectrum_identification_protocol_id"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
+  end
+
+  create_table "spectrum_identification_protocols", :force => true do |t|
+    t.string   "sip_id",            :null => false
+    t.string   "activity_date"
+    t.string   "input_spectra"
+    t.string   "search_database"
+    t.string   "analysis_software"
+    t.string   "search_type"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
 
 end
