@@ -1,4 +1,0 @@
-
-rails generate model Experiment title:text reference:string sample:string protocol:text has_quantitative_data:boolean public:boolean
-
-mirar que coño pasa con config/routes.rb
