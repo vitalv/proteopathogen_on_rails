@@ -11,7 +11,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120910090202) do
+ActiveRecord::Schema.define(:version => 20120910101515) do
+
+  create_table "searched_modifications", :force => true do |t|
+    t.integer  "spectrum_identification_protocol_id", :null => false
+    t.float    "mass_delta"
+    t.boolean  "is_fixed"
+    t.string   "residue"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
+  end
 
   create_table "spectrum_identification_items", :force => true do |t|
     t.string   "sii_id",                            :null => false
