@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120910101515) do
+ActiveRecord::Schema.define(:version => 20120910134651) do
 
   create_table "searched_modifications", :force => true do |t|
     t.integer  "spectrum_identification_protocol_id", :null => false
@@ -26,11 +26,12 @@ ActiveRecord::Schema.define(:version => 20120910101515) do
     t.string   "sii_id",                            :null => false
     t.integer  "spectrum_identification_result_id"
     t.string   "calc_m2z"
-    t.string   "exp_m2z"
-    t.integer  "rank"
-    t.integer  "charge_state"
+    t.string   "exp_m2z",                           :null => false
+    t.integer  "rank",                              :null => false
+    t.integer  "charge_state",                      :null => false
     t.datetime "created_at",                        :null => false
     t.datetime "updated_at",                        :null => false
+    t.string   "pass_threshold",                    :null => false
   end
 
   create_table "spectrum_identification_lists", :force => true do |t|
