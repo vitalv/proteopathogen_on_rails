@@ -11,7 +11,22 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120910134651) do
+ActiveRecord::Schema.define(:version => 20120911093752) do
+
+  create_table "peptide_evidences", :force => true do |t|
+    t.string   "peptide_evidence_id",             :null => false
+    t.string   "db_sequence_ref",                 :null => false
+    t.integer  "spectrum_identification_item_id"
+    t.integer  "peptide_id"
+    t.integer  "start"
+    t.integer  "end"
+    t.string   "pre"
+    t.string   "post"
+    t.boolean  "is_decoy"
+    t.string   "missed_cleavages"
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
+  end
 
   create_table "searched_modifications", :force => true do |t|
     t.integer  "spectrum_identification_protocol_id", :null => false
