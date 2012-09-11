@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120911102810) do
+ActiveRecord::Schema.define(:version => 20120911160347) do
 
   create_table "peptide_evidences", :force => true do |t|
     t.string   "peptide_evidence_id",             :null => false
@@ -43,6 +43,22 @@ ActiveRecord::Schema.define(:version => 20120911102810) do
     t.string   "value"
     t.datetime "created_at",                      :null => false
     t.datetime "updated_at",                      :null => false
+  end
+
+  create_table "sip_psi_ms_cv_terms", :force => true do |t|
+    t.integer  "spectrum_identification_protocol_id"
+    t.string   "psi_ms_cv_term_accession"
+    t.string   "value"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
+  end
+
+  create_table "sip_user_params", :force => true do |t|
+    t.integer  "spectrum_identification_protocol_id_id"
+    t.string   "name"
+    t.string   "value"
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
   end
 
   create_table "spectrum_identification_items", :force => true do |t|
