@@ -4,6 +4,7 @@ class CreateModifications < ActiveRecord::Migration
       t.string :residue
       t.string :location
       t.string :avg_mass_delta
+      t.timestamps
     end
   end
 end
