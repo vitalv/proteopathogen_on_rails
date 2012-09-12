@@ -6,4 +6,6 @@ class SpectrumIdentificationItem < ActiveRecord::Base
   has_many :peptide_evidences, :dependent => destroy
   validates_associated :peptide_evidences
   has_many :sii_psi_ms_cv_terms, :dependent => destroy
+  has_many :fragments, :dependent => destroy
+  belongs_to :peptide
 end

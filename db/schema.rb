@@ -11,13 +11,26 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120911160347) do
+ActiveRecord::Schema.define(:version => 20120912095428) do
+
+  create_table "fragments", :force => true do |t|
+    t.integer  "spectrum_identification_item_id"
+    t.integer  "charge"
+    t.integer  "index"
+    t.float    "m_mz"
+    t.integer  "m_intensity"
+    t.float    "m_error"
+    t.string   "fragment_type"
+    t.string   "psi_ms_cv_fragment_type_accession"
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+  end
 
   create_table "peptide_evidences", :force => true do |t|
     t.string   "peptide_evidence_id",             :null => false
     t.string   "db_sequence_ref",                 :null => false
     t.integer  "spectrum_identification_item_id"
-    t.integer  "peptide_id"
+    t.integer  "peptide_id",                      :null => false
     t.integer  "start"
     t.integer  "end"
     t.string   "pre"
@@ -26,6 +39,15 @@ ActiveRecord::Schema.define(:version => 20120911160347) do
     t.string   "missed_cleavages"
     t.datetime "created_at",                      :null => false
     t.datetime "updated_at",                      :null => false
+  end
+
+  create_table "peptides", :force => true do |t|
+    t.string   "mzid_scope_peptide_id"
+    t.string   "sequence"
+    t.string   "molecular_weight"
+    t.string   "isoelectric_point"
+    t.datetime "created_at",            :null => false
+    t.datetime "updated_at",            :null => false
   end
 
   create_table "searched_modifications", :force => true do |t|
@@ -71,6 +93,7 @@ ActiveRecord::Schema.define(:version => 20120911160347) do
     t.datetime "created_at",                        :null => false
     t.datetime "updated_at",                        :null => false
     t.string   "pass_threshold",                    :null => false
+    t.integer  "peptide_id",                        :null => false
   end
 
   create_table "spectrum_identification_lists", :force => true do |t|
