@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120912095428) do
+ActiveRecord::Schema.define(:version => 20120912104036) do
 
   create_table "fragments", :force => true do |t|
     t.integer  "spectrum_identification_item_id"
@@ -24,6 +24,12 @@ ActiveRecord::Schema.define(:version => 20120912095428) do
     t.string   "psi_ms_cv_fragment_type_accession"
     t.datetime "created_at",                        :null => false
     t.datetime "updated_at",                        :null => false
+  end
+
+  create_table "modifications", :force => true do |t|
+    t.string "residue"
+    t.string "location"
+    t.string "avg_mass_delta"
   end
 
   create_table "peptide_evidences", :force => true do |t|
