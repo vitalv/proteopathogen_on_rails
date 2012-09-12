@@ -70,7 +70,7 @@ ActiveRecord::Schema.define(:version => 20120912134303) do
   end
 
   create_table "sip_user_params", :force => true do |t|
-    t.integer "spectrum_identification_protocol_id_id"
+    t.integer "spectrum_identification_protocol_id"
     t.string  "name"
     t.string  "value"
   end
