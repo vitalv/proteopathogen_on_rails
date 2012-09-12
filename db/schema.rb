@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120912134303) do
+ActiveRecord::Schema.define(:version => 20120912144244) do
 
   create_table "fragments", :force => true do |t|
     t.integer "spectrum_identification_item_id"
@@ -60,6 +60,12 @@ ActiveRecord::Schema.define(:version => 20120912134303) do
   create_table "sii_psi_ms_cv_terms", :force => true do |t|
     t.integer "spectrum_identification_item_id"
     t.string  "psi_ms_cv_term_accession"
+    t.string  "value"
+  end
+
+  create_table "sii_user_params", :force => true do |t|
+    t.integer "spectrum_identification_item_id"
+    t.string  "name"
     t.string  "value"
   end
 
