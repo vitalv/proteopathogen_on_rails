@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120913111952) do
+ActiveRecord::Schema.define(:version => 20120913150822) do
 
   create_table "fragments", :force => true do |t|
     t.integer "spectrum_identification_item_id"
@@ -44,7 +44,6 @@ ActiveRecord::Schema.define(:version => 20120913111952) do
   end
 
   create_table "peptides", :force => true do |t|
-    t.string "mzid_scope_peptide_id"
     t.string "sequence"
     t.string "molecular_weight"
     t.string "isoelectric_point"
