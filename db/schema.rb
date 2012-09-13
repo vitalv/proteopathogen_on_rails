@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120912144244) do
+ActiveRecord::Schema.define(:version => 20120913111952) do
 
   create_table "fragments", :force => true do |t|
     t.integer "spectrum_identification_item_id"
@@ -55,6 +55,11 @@ ActiveRecord::Schema.define(:version => 20120912144244) do
     t.float   "mass_delta"
     t.boolean "is_fixed"
     t.string  "residue"
+  end
+
+  create_table "sii_peptide_evidences", :force => true do |t|
+    t.integer "spectrum_identification_item_id"
+    t.integer "peptide_evidence_id"
   end
 
   create_table "sii_psi_ms_cv_terms", :force => true do |t|
