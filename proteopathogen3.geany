@@ -18,13 +18,12 @@ long_line_column=72
 
 [files]
 current_page=5
-FILE_NAME_0=176;YAML;0;16;1;1;0;/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/config/database.yml;0;4
-FILE_NAME_1=303;Ruby;0;16;1;1;0;/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/db/migrate/20120910101515_create_searched_modifications.rb;0;4
-FILE_NAME_2=285;Ruby;0;16;1;1;0;/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/app/models/spectrum_identification_protocol.rb;0;4
-FILE_NAME_3=330;Ruby;0;16;1;1;0;/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/app/models/spectrum_identification_list.rb;0;4
-FILE_NAME_4=78;Ruby;0;16;1;1;0;/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/db/migrate/20120910090202_add_threshold_to_spectrum_identification_protocols.rb;0;4
-FILE_NAME_5=0;Ruby;0;16;1;1;0;/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/db/schema.rb;0;4
-FILE_NAME_6=0;Ruby;0;16;1;1;0;/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/app/models/spectrum_identification_item.rb;0;4
+FILE_NAME_0=154;Ruby;0;16;1;1;0;/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/db/migrate/20120912144244_create_sii_user_params.rb;0;4
+FILE_NAME_1=76;Ruby;0;16;1;1;0;/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/app/models/sii_user_param.rb;0;4
+FILE_NAME_2=182;Ruby;0;16;1;1;0;/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/app/models/sii_psi_ms_cv_term.rb;0;4
+FILE_NAME_3=480;YAML;0;16;1;1;0;/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/config/database.yml;0;4
+FILE_NAME_4=86;YAML;0;16;1;1;0;/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/test/fixtures/spectrum_identification_items.yml;0;4
+FILE_NAME_5=0;Ruby;0;16;1;1;0;/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/test/unit/spectrum_identification_protocol_test.rb;0;4
 
 [VTE]
 last_dir=/home/vital
