@@ -11,7 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120913150822) do
+ActiveRecord::Schema.define(:version => 20120914085839) do
+
+  create_table "db_sequences", :force => true do |t|
+    t.string "accession"
+    t.string "description"
+    t.text   "sequence"
+  end
 
   create_table "fragments", :force => true do |t|
     t.integer "spectrum_identification_item_id"
@@ -31,8 +37,6 @@ ActiveRecord::Schema.define(:version => 20120913150822) do
   end
 
   create_table "peptide_evidences", :force => true do |t|
-    t.string  "peptide_evidence_id",             :null => false
-    t.string  "db_sequence_ref",                 :null => false
     t.integer "spectrum_identification_item_id"
     t.integer "peptide_id"
     t.integer "start"
@@ -41,6 +45,7 @@ ActiveRecord::Schema.define(:version => 20120913150822) do
     t.string  "post"
     t.boolean "is_decoy"
     t.string  "missed_cleavages"
+    t.integer "db_sequence_id"
   end
 
   create_table "peptides", :force => true do |t|
