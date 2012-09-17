@@ -58,7 +58,6 @@ ActiveRecord::Schema.define(:version => 20120917125645) do
   end
 
   create_table "protein_detection_hypotheses", :force => true do |t|
-    t.integer "peptide_evidence_id"
     t.integer "protein_ambiguity_group_id"
     t.string  "protein_detection_hypothesis_id"
     t.string  "pass_threshold"
