@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120917125645) do
+ActiveRecord::Schema.define(:version => 20120917151851) do
 
   create_table "db_sequences", :force => true do |t|
     t.string "accession"
@@ -75,6 +75,11 @@ ActiveRecord::Schema.define(:version => 20120917125645) do
     t.string  "psi_ms_cv_term_accession"
   end
 
+  create_table "protein_hypothesis_pepevidence_join_table", :id => false, :force => true do |t|
+    t.integer "protein_detection_hypothesis_id"
+    t.integer "peptide_evidence_id"
+  end
+
   create_table "protein_hypothesis_peptide_evidences", :force => true do |t|
     t.integer "peptide_evidence_id"
     t.integer "protein_detection_hypothesis_id"
@@ -85,6 +90,11 @@ ActiveRecord::Schema.define(:version => 20120917125645) do
     t.float   "mass_delta"
     t.boolean "is_fixed"
     t.string  "residue"
+  end
+
+  create_table "sii_pepevidence_join_table", :id => false, :force => true do |t|
+    t.integer "spectrum_identification_item_id"
+    t.integer "peptide_evidence_id"
   end
 
   create_table "sii_peptide_evidences", :force => true do |t|
