@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120917101412) do
+ActiveRecord::Schema.define(:version => 20120917125645) do
 
   create_table "db_sequences", :force => true do |t|
     t.string "accession"
@@ -53,11 +53,27 @@ ActiveRecord::Schema.define(:version => 20120917101412) do
     t.string "isoelectric_point"
   end
 
+  create_table "protein_ambiguity_groups", :force => true do |t|
+    t.string "protein_ambiguity_group_id"
+  end
+
   create_table "protein_detection_hypotheses", :force => true do |t|
     t.integer "peptide_evidence_id"
+    t.integer "protein_ambiguity_group_id"
     t.string  "protein_detection_hypothesis_id"
     t.string  "pass_threshold"
     t.string  "name"
+  end
+
+  create_table "protein_detection_hypothesis_psi_ms_cv_terms", :force => true do |t|
+    t.integer "protein_detection_hypothesis_id"
+    t.string  "name"
+    t.string  "value"
+  end
+
+  create_table "protein_detection_hypothesis_user_params", :force => true do |t|
+    t.integer "protein_detection_hypothesis_id"
+    t.string  "psi_ms_cv_term_accession"
   end
 
   create_table "protein_hypothesis_peptide_evidences", :force => true do |t|
