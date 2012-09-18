@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120918090905) do
+ActiveRecord::Schema.define(:version => 20120918092740) do
 
   create_table "db_sequences", :force => true do |t|
     t.string "accession"
@@ -85,6 +85,11 @@ ActiveRecord::Schema.define(:version => 20120918090905) do
   create_table "protein_hypothesis_peptide_evidences", :force => true do |t|
     t.integer "peptide_evidence_id"
     t.integer "protein_detection_hypothesis_id"
+  end
+
+  create_table "psi_ms_cv_terms", :force => true do |t|
+    t.string "accession"
+    t.string "name"
   end
 
   create_table "searched_modifications", :force => true do |t|
