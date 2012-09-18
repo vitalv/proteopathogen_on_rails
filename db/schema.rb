@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120918092740) do
+ActiveRecord::Schema.define(:version => 20120918094503) do
 
   create_table "db_sequences", :force => true do |t|
     t.string "accession"
@@ -90,6 +90,16 @@ ActiveRecord::Schema.define(:version => 20120918092740) do
   create_table "psi_ms_cv_terms", :force => true do |t|
     t.string "accession"
     t.string "name"
+  end
+
+  create_table "search_databases", :force => true do |t|
+    t.string   "name"
+    t.string   "version"
+    t.datetime "date"
+    t.string   "organism"
+    t.integer  "number_of_sequences"
+    t.boolean  "is_decoy"
+    t.string   "decoy_type"
   end
 
   create_table "searched_modifications", :force => true do |t|
