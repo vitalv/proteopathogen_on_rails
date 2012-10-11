@@ -1,5 +1,7 @@
 #!/usr/bin/ruby
 
+#ruby loader.rb /home/vital/pepXML_protXML_2_mzid_V/SILAC_phos_OrbitrapVelos_1_interact-ipro-filtered.mzid
+
 require 'rubygems'
 require 'mzid_parser'
 require 'mzid_2_db'
