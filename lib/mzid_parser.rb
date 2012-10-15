@@ -26,6 +26,11 @@ class Mzid
       this_search_type_node = sip.xpath(".//xmlns:SearchType")
       search_type = get_cvParam_and_or_userParam(this_search_type_node)
       
+      #---- threshold ----
+      #<Threshold minOccurs:1 >
+      thr = sip.xpath(".//xmlns:Threshold")
+      threshold = get_cvParam_and_or_userParam(thr)
+      
       #---- analyisis_software ----
       analysisSoftware_ref, analysis_software = sip.xpath("./@analysisSoftware_ref").to_s, ""
       @doc.xpath("//xmlns:AnalysisSoftware").each do |soft|
@@ -64,7 +69,7 @@ class Mzid
             version = db.xpath("./@version").to_s #version: optional
             releaseDate = db.xpath("./@releaseDate").to_s #releaseDate: optional
             num_seq = db.xpath("./@numDatabaseSequences").to_s #optional
-            sdb = SearchDatabase.new(name, location, version, releaseDate, num_seq)
+            sdb = SearchDB.new(name, location, version, releaseDate, num_seq)
             search_db_arr << sdb if search_db_arr.empty?
             search_db_arr << sdb unless search_db_arr.include? sdb
           end
@@ -92,7 +97,7 @@ class Mzid
       user_params = getuserParams(sip)
       
       
-      sips << Sip.new(sip_id, search_type, analysis_software, input_spectra, search_db_arr, searched_modification_arr,
+      sips << Sip.new(sip_id, search_type, threshold, analysis_software, input_spectra, search_db_arr, searched_modification_arr,
                       psi_ms_terms, user_params)      
 
     end #@doc.xpath("//xmlns:SpectrumIdentificationProtocol").each do |sip|
@@ -113,7 +118,7 @@ end
       name = name + " ; " + getuserParams(node)[0][:name] if name != ""
       name = getuserParams(node)[0][:name] if name == ""
     else
-      break
+      #break
       puts "there must be at least cvParam and/or userParam under #{node.node_name}"
     end
   end
@@ -142,15 +147,16 @@ end
 
 ##CLASE Sip SpectrumIdentificationProtocol 
 SearchedModification = Struct.new(:mass_delta, :fixedMod, :residue, :unimod_accession)
-SearchDatabase = Struct.new(:name, :location, :version, :releaseDate, :num_seq)
+SearchDB = Struct.new(:name, :location, :version, :releaseDate, :num_seq)
 #A Struct is a convinient way tu bundle a number of attributes together, using accessor methods, without having to write an explicit class
 
 class Sip
-  attr_reader :sip_id, :search_type, :analysis_software, :input_spectra, :search_db_arr, 
+  attr_reader :sip_id, :search_type, :threshold, :analysis_software, :input_spectra, :search_db_arr, 
                :searched_modification_arr, :psi_ms_terms, :user_params
-  def initialize(sip_id, search_type, analysis_software, input_spectra, search_db_arr, searched_modification_arr, psi_ms_terms, user_params)  
+  def initialize(sip_id, search_type, threshold, analysis_software, input_spectra, search_db_arr, searched_modification_arr, psi_ms_terms, user_params)  
      @sip_id = sip_id 
      @search_type = search_type
+     @threshold = threshold
      @analysis_software = analysis_software
      @input_spectra = input_spectra
      @search_db_arr = search_db_arr
