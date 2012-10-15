@@ -18,15 +18,15 @@ class Mzid
     #<AnalysisProtocolCollection minOccurs: 1> -> <SpectrumIdentificationProtocol minOccurs:1 max:unbounded>
     @doc.xpath("//xmlns:SpectrumIdentificationProtocol").each do |sip|
       
-      #--- sip_id ---    
+      #---- sip_id ----
       sip_id = sip.xpath("./@id").to_s
       
-      #--- search_type ---
+      #---- search_type ----
       #<SearchType minOccurs:1 >
       this_search_type_node = sip.xpath(".//xmlns:SearchType")
       search_type = get_cvParam_and_or_userParam(this_search_type_node)
       
-      #--- analyisis_software ---
+      #---- analyisis_software ----
       analysisSoftware_ref, analysis_software = sip.xpath("./@analysisSoftware_ref").to_s, ""
       @doc.xpath("//xmlns:AnalysisSoftware").each do |soft|
         if soft.xpath("./@id").to_s == analysisSoftware_ref
@@ -35,7 +35,7 @@ class Mzid
         end
       end      
       
-      #--- input_spectra ---
+      #---- input_spectra ----
       input_spectra, spectraData_ref, searchDb_ref = "" , "", ""
       #<AnalysisCollection minOccurs:1> | <SpectrumIdentification minOccurs:1 max:unbounded>
       #Para obtener input_spectra tengo que buscar en 2 sitios:
@@ -53,24 +53,25 @@ class Mzid
         end
       end
       
-      #--- search_db_things ---
+      #---- search_db_things ----
       #<SearchDatabase minOccurs: 0, maxOccurs: unbounded>
       search_db_arr = []
       if !@doc.xpath("//xmlns:SearchDatabase").empty?
         @doc.xpath("//xmlns:SearchDatabase").each do |db|
           if db.xpath("./@id").to_s == searchDb_ref
-            name = db.get_cvParam_and_or_userParam(db.xpath(".//xmlns:DatabaseName"))
+            name = get_cvParam_and_or_userParam(db.xpath(".//xmlns:DatabaseName"))
             location = db.xpath("./@location").to_s #location: required
             version = db.xpath("./@version").to_s #version: optional
             releaseDate = db.xpath("./@releaseDate").to_s #releaseDate: optional
             num_seq = db.xpath("./@numDatabaseSequences").to_s #optional
             sdb = SearchDatabase.new(name, location, version, releaseDate, num_seq)
-            search_db_arr << sdb unless search_db_arr.collect { |saved_sdb| saved_sdb == sdb }
+            search_db_arr << sdb if search_db_arr.empty?
+            search_db_arr << sdb unless search_db_arr.include? sdb
           end
         end
       end
       
-      #--- searched_modifications ---
+      #---- searched_modifications -----
       #<ModificationParams minOccurs: 0> <SearchModification minOccurs: 1>
       if !sip.xpath(".//xmlns:ModificationParams").empty?
         searched_modification_arr = []
@@ -83,27 +84,24 @@ class Mzid
         end      
       end
       
-      #--- psi_ms_terms ---
+      #---- psi_ms_terms ----
       all_cvParams_per_sip = getcvParams(sip)
       psi_ms_terms = all_cvParams_per_sip.delete_if { |h| h[:cvRef] != "PSI-MS" }
       
-      #--- user_params ---
+      #---- user_params ----
       user_params = getuserParams(sip)
       
       
-      sips << Sip.new(sip_id, search_type, analysis_software, input_spectra, search_db_things, searched_modification_arr,
+      sips << Sip.new(sip_id, search_type, analysis_software, input_spectra, search_db_arr, searched_modification_arr,
                       psi_ms_terms, user_params)      
 
-    end
-    
-    return sips #Array de objetos SIP 
-    
+    end #@doc.xpath("//xmlns:SpectrumIdentificationProtocol").each do |sip|
+    return sips #Array de objetos SIP     
   end
-
 end
 
 
-  #private
+  private
   
    #special method for retrieving these when <cvParam minOccurs:1 max:1> y <userParams minOccurs:1  max:1>
    #I can't figure out whether they are mutually exclusive or not
@@ -148,14 +146,14 @@ SearchDatabase = Struct.new(:name, :location, :version, :releaseDate, :num_seq)
 #A Struct is a convinient way tu bundle a number of attributes together, using accessor methods, without having to write an explicit class
 
 class Sip
-  attr_reader :sip_id, :search_type, :analysis_software, :input_spectra, :search_db_things, 
+  attr_reader :sip_id, :search_type, :analysis_software, :input_spectra, :search_db_arr, 
                :searched_modification_arr, :psi_ms_terms, :user_params
-  def initialize(sip_id, search_type, analysis_software, input_spectra, search_db_things, searched_modification_arr, psi_ms_terms, user_params)  
+  def initialize(sip_id, search_type, analysis_software, input_spectra, search_db_arr, searched_modification_arr, psi_ms_terms, user_params)  
      @sip_id = sip_id 
      @search_type = search_type
      @analysis_software = analysis_software
      @input_spectra = input_spectra
-     @search_db_things = search_db_things
+     @search_db_arr = search_db_arr
      @searched_modification_arr = searched_modification_arr
      @psi_ms_terms = psi_ms_terms
      @user_params = user_params
