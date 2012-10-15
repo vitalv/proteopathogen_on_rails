@@ -1,0 +1,208 @@
+find_header: checking for sqlite3.h... -------------------- yes
+
+"gcc -o conftest -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/i686-linux -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/ruby/backward -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1 -I. -I/home/vital/.rvm/usr/include  -D_FILE_OFFSET_BITS=64   -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC conftest.c  -L. -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -Wl,-R/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/usr/lib -Wl,-R/home/vital/.rvm/usr/lib -L.  -rdynamic -Wl,-export-dynamic     -Wl,-R -Wl,/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -lruby  -lpthread -lrt -ldl -lcrypt -lm   -lc"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: int main() {return 0;}
+/* end */
+
+"gcc -E -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/i686-linux -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/ruby/backward -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1 -I. -I/home/vital/.rvm/usr/include  -D_FILE_OFFSET_BITS=64   -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC  conftest.c -o conftest.i"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: #include <sqlite3.h>
+/* end */
+
+--------------------
+
+find_library: checking for sqlite3_libversion_number() in -lsqlite3... -------------------- yes
+
+"gcc -o conftest -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/i686-linux -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/ruby/backward -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1 -I. -I/home/vital/.rvm/usr/include  -D_FILE_OFFSET_BITS=64   -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC conftest.c  -L. -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -Wl,-R/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/usr/lib -Wl,-R/home/vital/.rvm/usr/lib -L.  -rdynamic -Wl,-export-dynamic     -Wl,-R -Wl,/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -lruby -lsqlite3  -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: En la función ‘t’:
+conftest.c:5:53: error: ‘sqlite3_libversion_number’ no se declaró aquí (primer uso en esta función)
+conftest.c:5:53: nota: cada identificador sin declarar se reporta sólo una vez para cada función en el que aparece
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { void ((*volatile p)()); p = (void ((*)()))sqlite3_libversion_number; return 0; }
+/* end */
+
+"gcc -o conftest -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/i686-linux -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/ruby/backward -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1 -I. -I/home/vital/.rvm/usr/include  -D_FILE_OFFSET_BITS=64   -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC conftest.c  -L. -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -Wl,-R/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/usr/lib -Wl,-R/home/vital/.rvm/usr/lib -L.  -rdynamic -Wl,-export-dynamic     -Wl,-R -Wl,/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -lruby -lsqlite3  -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: En la función ‘t’:
+conftest.c:5:1: aviso: declaración implícita de la función ‘sqlite3_libversion_number’ [-Wimplicit-function-declaration]
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { sqlite3_libversion_number(); return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for rb_proc_arity()... -------------------- yes
+
+"gcc -o conftest -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/i686-linux -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/ruby/backward -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1 -I. -I/home/vital/.rvm/usr/include  -D_FILE_OFFSET_BITS=64   -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC conftest.c  -L. -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -Wl,-R/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/usr/lib -Wl,-R/home/vital/.rvm/usr/lib -L.  -rdynamic -Wl,-export-dynamic    -lsqlite3  -Wl,-R -Wl,/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -lruby -lsqlite3  -lpthread -lrt -ldl -lcrypt -lm   -lc"
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { void ((*volatile p)()); p = (void ((*)()))rb_proc_arity; return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for sqlite3_initialize()... -------------------- yes
+
+"gcc -o conftest -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/i686-linux -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/ruby/backward -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1 -I. -I/home/vital/.rvm/usr/include  -D_FILE_OFFSET_BITS=64   -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC conftest.c  -L. -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -Wl,-R/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/usr/lib -Wl,-R/home/vital/.rvm/usr/lib -L.  -rdynamic -Wl,-export-dynamic    -lsqlite3  -Wl,-R -Wl,/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -lruby -lsqlite3  -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: En la función ‘t’:
+conftest.c:5:53: error: ‘sqlite3_initialize’ no se declaró aquí (primer uso en esta función)
+conftest.c:5:53: nota: cada identificador sin declarar se reporta sólo una vez para cada función en el que aparece
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { void ((*volatile p)()); p = (void ((*)()))sqlite3_initialize; return 0; }
+/* end */
+
+"gcc -o conftest -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/i686-linux -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/ruby/backward -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1 -I. -I/home/vital/.rvm/usr/include  -D_FILE_OFFSET_BITS=64   -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC conftest.c  -L. -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -Wl,-R/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/usr/lib -Wl,-R/home/vital/.rvm/usr/lib -L.  -rdynamic -Wl,-export-dynamic    -lsqlite3  -Wl,-R -Wl,/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -lruby -lsqlite3  -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: En la función ‘t’:
+conftest.c:5:1: aviso: declaración implícita de la función ‘sqlite3_initialize’ [-Wimplicit-function-declaration]
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { sqlite3_initialize(); return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for sqlite3_backup_init()... -------------------- yes
+
+"gcc -o conftest -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/i686-linux -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/ruby/backward -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1 -I. -I/home/vital/.rvm/usr/include  -D_FILE_OFFSET_BITS=64   -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC conftest.c  -L. -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -Wl,-R/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/usr/lib -Wl,-R/home/vital/.rvm/usr/lib -L.  -rdynamic -Wl,-export-dynamic    -lsqlite3  -Wl,-R -Wl,/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -lruby -lsqlite3  -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: En la función ‘t’:
+conftest.c:5:53: error: ‘sqlite3_backup_init’ no se declaró aquí (primer uso en esta función)
+conftest.c:5:53: nota: cada identificador sin declarar se reporta sólo una vez para cada función en el que aparece
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { void ((*volatile p)()); p = (void ((*)()))sqlite3_backup_init; return 0; }
+/* end */
+
+"gcc -o conftest -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/i686-linux -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/ruby/backward -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1 -I. -I/home/vital/.rvm/usr/include  -D_FILE_OFFSET_BITS=64   -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC conftest.c  -L. -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -Wl,-R/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/usr/lib -Wl,-R/home/vital/.rvm/usr/lib -L.  -rdynamic -Wl,-export-dynamic    -lsqlite3  -Wl,-R -Wl,/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -lruby -lsqlite3  -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: En la función ‘t’:
+conftest.c:5:1: aviso: declaración implícita de la función ‘sqlite3_backup_init’ [-Wimplicit-function-declaration]
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { sqlite3_backup_init(); return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for sqlite3_column_database_name()... -------------------- yes
+
+"gcc -o conftest -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/i686-linux -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/ruby/backward -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1 -I. -I/home/vital/.rvm/usr/include  -D_FILE_OFFSET_BITS=64   -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC conftest.c  -L. -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -Wl,-R/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/usr/lib -Wl,-R/home/vital/.rvm/usr/lib -L.  -rdynamic -Wl,-export-dynamic    -lsqlite3  -Wl,-R -Wl,/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -lruby -lsqlite3  -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: En la función ‘t’:
+conftest.c:5:53: error: ‘sqlite3_column_database_name’ no se declaró aquí (primer uso en esta función)
+conftest.c:5:53: nota: cada identificador sin declarar se reporta sólo una vez para cada función en el que aparece
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { void ((*volatile p)()); p = (void ((*)()))sqlite3_column_database_name; return 0; }
+/* end */
+
+"gcc -o conftest -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/i686-linux -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/ruby/backward -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1 -I. -I/home/vital/.rvm/usr/include  -D_FILE_OFFSET_BITS=64   -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC conftest.c  -L. -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -Wl,-R/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/usr/lib -Wl,-R/home/vital/.rvm/usr/lib -L.  -rdynamic -Wl,-export-dynamic    -lsqlite3  -Wl,-R -Wl,/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -lruby -lsqlite3  -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: En la función ‘t’:
+conftest.c:5:1: aviso: declaración implícita de la función ‘sqlite3_column_database_name’ [-Wimplicit-function-declaration]
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { sqlite3_column_database_name(); return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for sqlite3_enable_load_extension()... -------------------- yes
+
+"gcc -o conftest -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/i686-linux -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/ruby/backward -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1 -I. -I/home/vital/.rvm/usr/include  -D_FILE_OFFSET_BITS=64   -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC conftest.c  -L. -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -Wl,-R/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/usr/lib -Wl,-R/home/vital/.rvm/usr/lib -L.  -rdynamic -Wl,-export-dynamic    -lsqlite3  -Wl,-R -Wl,/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -lruby -lsqlite3  -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: En la función ‘t’:
+conftest.c:5:53: error: ‘sqlite3_enable_load_extension’ no se declaró aquí (primer uso en esta función)
+conftest.c:5:53: nota: cada identificador sin declarar se reporta sólo una vez para cada función en el que aparece
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { void ((*volatile p)()); p = (void ((*)()))sqlite3_enable_load_extension; return 0; }
+/* end */
+
+"gcc -o conftest -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/i686-linux -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/ruby/backward -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1 -I. -I/home/vital/.rvm/usr/include  -D_FILE_OFFSET_BITS=64   -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC conftest.c  -L. -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -Wl,-R/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/usr/lib -Wl,-R/home/vital/.rvm/usr/lib -L.  -rdynamic -Wl,-export-dynamic    -lsqlite3  -Wl,-R -Wl,/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -lruby -lsqlite3  -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: En la función ‘t’:
+conftest.c:5:1: aviso: declaración implícita de la función ‘sqlite3_enable_load_extension’ [-Wimplicit-function-declaration]
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { sqlite3_enable_load_extension(); return 0; }
+/* end */
+
+--------------------
+
+have_func: checking for sqlite3_load_extension()... -------------------- yes
+
+"gcc -o conftest -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/i686-linux -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/ruby/backward -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1 -I. -I/home/vital/.rvm/usr/include  -D_FILE_OFFSET_BITS=64   -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC conftest.c  -L. -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -Wl,-R/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/usr/lib -Wl,-R/home/vital/.rvm/usr/lib -L.  -rdynamic -Wl,-export-dynamic    -lsqlite3  -Wl,-R -Wl,/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -lruby -lsqlite3  -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: En la función ‘t’:
+conftest.c:5:53: error: ‘sqlite3_load_extension’ no se declaró aquí (primer uso en esta función)
+conftest.c:5:53: nota: cada identificador sin declarar se reporta sólo una vez para cada función en el que aparece
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { void ((*volatile p)()); p = (void ((*)()))sqlite3_load_extension; return 0; }
+/* end */
+
+"gcc -o conftest -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/i686-linux -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1/ruby/backward -I/home/vital/.rvm/rubies/ruby-1.9.3-p0/include/ruby-1.9.1 -I. -I/home/vital/.rvm/usr/include  -D_FILE_OFFSET_BITS=64   -O3 -ggdb -Wextra -Wno-unused-parameter -Wno-parentheses -Wno-long-long -Wno-missing-field-initializers -Wpointer-arith -Wwrite-strings -Wdeclaration-after-statement -Wimplicit-function-declaration  -fPIC conftest.c  -L. -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -Wl,-R/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/usr/lib -Wl,-R/home/vital/.rvm/usr/lib -L.  -rdynamic -Wl,-export-dynamic    -lsqlite3  -Wl,-R -Wl,/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -L/home/vital/.rvm/rubies/ruby-1.9.3-p0/lib -lruby -lsqlite3  -lpthread -lrt -ldl -lcrypt -lm   -lc"
+conftest.c: En la función ‘t’:
+conftest.c:5:1: aviso: declaración implícita de la función ‘sqlite3_load_extension’ [-Wimplicit-function-declaration]
+checked program was:
+/* begin */
+1: #include "ruby.h"
+2: 
+3: /*top*/
+4: int main() {return 0;}
+5: int t() { sqlite3_load_extension(); return 0; }
+/* end */
+
+--------------------
+
