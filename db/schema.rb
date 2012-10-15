@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120918094503) do
+ActiveRecord::Schema.define(:version => 20121015140047) do
 
   create_table "db_sequences", :force => true do |t|
     t.string "accession"
@@ -174,13 +174,12 @@ ActiveRecord::Schema.define(:version => 20120918094503) do
   end
 
   create_table "spectrum_identification_protocols", :force => true do |t|
-    t.string "sip_id",            :null => false
-    t.string "activity_date"
-    t.string "input_spectra"
-    t.string "search_database"
-    t.string "analysis_software"
-    t.string "search_type"
-    t.string "threshold",         :null => false
+    t.string  "sip_id",             :null => false
+    t.string  "input_spectra"
+    t.string  "analysis_software"
+    t.string  "search_type"
+    t.string  "threshold",          :null => false
+    t.integer "search_database_id"
   end
 
   create_table "spectrum_identification_results", :force => true do |t|
