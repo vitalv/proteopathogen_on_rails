@@ -19,7 +19,7 @@ class Mzid
     @doc.xpath("//xmlns:SpectrumIdentificationProtocol").each do |sip|
       
       #---- sip_id ----
-      sip_id = sip.xpath("./@id").to_s
+      sip_id = sip.attr("id")
       
       #---- search_type ----
       #<SearchType minOccurs:1 >
@@ -32,9 +32,9 @@ class Mzid
       threshold = get_cvParam_and_or_userParam(thr)
       
       #---- analyisis_software ----
-      analysisSoftware_ref, analysis_software = sip.xpath("./@analysisSoftware_ref").to_s, ""
+      analysisSoftware_ref, analysis_software = sip.attr("analysisSoftware_ref"), ""
       @doc.xpath("//xmlns:AnalysisSoftware").each do |soft|
-        if soft.xpath("./@id").to_s == analysisSoftware_ref
+        if soft.attr("id") == analysisSoftware_ref
           software_name_node = soft.xpath(".//xmlns:SoftwareName")
           analysis_software = get_cvParam_and_or_userParam(software_name_node)
         end
@@ -46,15 +46,15 @@ class Mzid
       #Para obtener input_spectra tengo que buscar en 2 sitios:
       #1º Con mi sip_id busco en <SpectrumIdentification> para obtener spectraData_ref y searchDb_ref
       @doc.xpath("//xmlns:SpectrumIdentification").each do |si|
-        if si.xpath("./@spectrumIdentificationProtocol_ref").to_s == sip_id #spectrumIdentificationProtocol_ref : required
+        if si.attr("spectrumIdentificationProtocol_ref") == sip_id #spectrumIdentificationProtocol_ref : required
           spectraData_ref = si.xpath(".//xmlns:InputSpectra/@spectraData_ref").to_s
           searchDb_ref = si.xpath(".//xmlns:SearchDatabaseRef/@searchDatabase_ref").to_s
         end
       end 
       #2º Una vez obtenido el spectraData_ref puedo buscar en <SpectraData>
       @doc.xpath("//xmlns:SpectraData").each do |spectra_data| #<DataCollection> : <Inputs> : <SpectraData>
-        if spectra_data.xpath("./@id").to_s == spectraData_ref
-          input_spectra = spectra_data.xpath("./@location").to_s
+        if spectra_data.attr("id") == spectraData_ref
+          input_spectra = spectra_data.attr("location")
         end
       end
       
@@ -63,13 +63,10 @@ class Mzid
       search_db_arr = []
       if !@doc.xpath("//xmlns:SearchDatabase").empty?
         @doc.xpath("//xmlns:SearchDatabase").each do |db|
-          if db.xpath("./@id").to_s == searchDb_ref
+          if db.attr("id") == searchDb_ref
             name = get_cvParam_and_or_userParam(db.xpath(".//xmlns:DatabaseName"))
-            location = db.xpath("./@location").to_s #location: required
-            version = db.xpath("./@version").to_s unless db.xpath("./@version").blank? #version: optional
-            releaseDate = db.xpath("./@releaseDate").to_s unless db.xpath("./@releaseDate").blank? #releaseDate: optional
-            num_seq = db.xpath("./@numDatabaseSequences").to_s.to_i #optional
-            num_seq = nil if num_seq == 0
+            location,    version = db.attr("location"),     db.attr("version")
+            releaseDate, num_seq = db.attr("releaseDate"),  db.attr("numDatabaseSequences")
             sdb = SearchDB.new(name, location, version, releaseDate, num_seq)
             search_db_arr << sdb if search_db_arr.empty?
             search_db_arr << sdb unless search_db_arr.include? sdb
@@ -82,9 +79,8 @@ class Mzid
       if !sip.xpath(".//xmlns:ModificationParams").empty?
         searched_modification_arr = []
         sip.xpath(".//xmlns:SearchModification").each do |search_mod|
-          mass_d = search_mod.xpath("./@massDelta").to_s
-          fixed = search_mod.xpath("./@fixedMod").to_s
-          residue = search_mod.xpath("./@residues").to_s
+          mass_d, fixed = search_mod.attr("massDelta"), search_mod.attr("fixedMod")
+          residue = search_mod.attr("residues")
           unimod_ac = getcvParams(search_mod)[0][:accession] #<cvParam minOccurs:1>
           searched_modification_arr << SearchedModification.new(mass_d, fixed, residue, unimod_ac)        
         end      
@@ -128,7 +124,7 @@ end
   def getcvParams(parent_node)
     cvParams = []
     parent_node.xpath(".//xmlns:cvParam").each do |cvP|
-      cv_hash = {:name => cvP.xpath("./@name").to_s , :accession => cvP.xpath("./@accession").to_s, :value => cvP.xpath("./@value").to_s, :cvRef => cvP.xpath("./@cvRef").to_s} 
+      cv_hash = {:name => cvP.attr("name"), :accession => cvP.attr("accession"), :value => cvP.xpath("value"), :cvRef => cvP.attr("cvRef")} 
       cvParams << cv_hash
     end
     return cvParams
@@ -138,7 +134,7 @@ end
   def getuserParams(parent_node)
     userParams = []
     parent_node.xpath(".//xmlns:userParam").each do |userP|
-      user_hash = {:name => userP.xpath("./@name").to_s, :value => userP.xpath("./@value").to_s} 
+      user_hash = {:name => userP.attr("name"), :value => userP.attr("value")} 
       userParams << user_hash
     end
     return userParams
