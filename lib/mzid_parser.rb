@@ -66,8 +66,8 @@ class Mzid
           if db.xpath("./@id").to_s == searchDb_ref
             name = get_cvParam_and_or_userParam(db.xpath(".//xmlns:DatabaseName"))
             location = db.xpath("./@location").to_s #location: required
-            version = db.xpath("./@version").to_s #version: optional
-            releaseDate = db.xpath("./@releaseDate").to_s #releaseDate: optional
+            version = db.xpath("./@version").to_s unless db.xpath("./@version").blank? #version: optional
+            releaseDate = db.xpath("./@releaseDate").to_s unless db.xpath("./@releaseDate").blank? #releaseDate: optional
             num_seq = db.xpath("./@numDatabaseSequences").to_s.to_i #optional
             num_seq = nil if num_seq == 0
             sdb = SearchDB.new(name, location, version, releaseDate, num_seq)
