@@ -68,7 +68,8 @@ class Mzid
             location = db.xpath("./@location").to_s #location: required
             version = db.xpath("./@version").to_s #version: optional
             releaseDate = db.xpath("./@releaseDate").to_s #releaseDate: optional
-            num_seq = db.xpath("./@numDatabaseSequences").to_s #optional
+            num_seq = db.xpath("./@numDatabaseSequences").to_s.to_i #optional
+            num_seq = nil if num_seq == 0
             sdb = SearchDB.new(name, location, version, releaseDate, num_seq)
             search_db_arr << sdb if search_db_arr.empty?
             search_db_arr << sdb unless search_db_arr.include? sdb
@@ -137,7 +138,7 @@ end
   def getuserParams(parent_node)
     userParams = []
     parent_node.xpath(".//xmlns:userParam").each do |userP|
-      user_hash = {:name => userP.xpath("./@name").to_s , :accession => userP.xpath("./@accession").to_s, :value => userP.xpath("./@value").to_s} 
+      user_hash = {:name => userP.xpath("./@name").to_s, :value => userP.xpath("./@value").to_s} 
       userParams << user_hash
     end
     return userParams

@@ -25,8 +25,9 @@ class Mzid2db
       user_params = sip.user_params
       
       search_db_arr.each do |sdb|
-        SearchDatabase.new(sdb.name
-        sdb.first_or_create
+        SearchDatabase.find_or_create_by_name_and_version_and_release_date_and_number_of_sequences_and_location
+        (:name => sdb.name, :version => sdb.version, :release_date => sdb.releaseDate, :number_of_sequences => sdb.num_seq, :location => sdb.location)
+        #this_sdb.first_or_create
       end
       
       sip = SpectrumIdentificationProtocol.new(:sip_id, :input_spectra, :analysis_software, :search_type, :threshold)
