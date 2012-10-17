@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121016104529) do
+ActiveRecord::Schema.define(:version => 20121017133358) do
 
   create_table "db_sequences", :force => true do |t|
     t.string "accession"
@@ -136,6 +136,13 @@ ActiveRecord::Schema.define(:version => 20121016104529) do
     t.string  "psi_ms_cv_term_accession"
     t.string  "value"
   end
+
+  create_table "sip_sdb_join_table", :id => false, :force => true do |t|
+    t.integer "search_database_id"
+    t.integer "spectrum_identification_protocol_id"
+  end
+
+  add_index "sip_sdb_join_table", ["search_database_id", "spectrum_identification_protocol_id"], :name => "index_sip_sdb"
 
   create_table "sip_user_params", :force => true do |t|
     t.integer "spectrum_identification_protocol_id"

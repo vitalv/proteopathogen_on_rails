@@ -1,7 +1,7 @@
 class SpectrumIdentificationProtocol < ActiveRecord::Base
   # attr_accessible :title, :body
   validates :sip_id, :presence => true
-  belongs_to :search_database
+  has_and_belongs_to_many :search_databases, :join_table => 'sip_sdb_join_table'
   has_many :spectrum_identification_lists, :dependent => :destroy
   validates_associated :spectrum_identification_lists
   has_many :searched_modifications, :dependent => :destroy
