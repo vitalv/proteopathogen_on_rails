@@ -124,7 +124,7 @@ end
   def getcvParams(parent_node)
     cvParams = []
     parent_node.xpath(".//xmlns:cvParam").each do |cvP|
-      cv_hash = {:name => cvP.attr("name"), :accession => cvP.attr("accession"), :value => cvP.xpath("value"), :cvRef => cvP.attr("cvRef")} 
+      cv_hash = {:name => cvP.attr("name"), :accession => cvP.attr("accession"), :value => cvP.attr("value"), :cvRef => cvP.attr("cvRef")} 
       cvParams << cv_hash
     end
     return cvParams
