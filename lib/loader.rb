@@ -6,8 +6,7 @@
 require File.expand_path(File.dirname(__FILE__)) + "/../config/environment.rb"
 #require '../config/environment.rb'
 
-require 'bundler/setup'
-#$: << 'lib/'
+#require 'bundler/setup'
 require 'mzid_parser'
 require 'mzid_2_db'
 
