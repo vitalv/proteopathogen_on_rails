@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120918094503) do
+ActiveRecord::Schema.define(:version => 20121017133358) do
 
   create_table "db_sequences", :force => true do |t|
     t.string "accession"
@@ -93,13 +93,11 @@ ActiveRecord::Schema.define(:version => 20120918094503) do
   end
 
   create_table "search_databases", :force => true do |t|
-    t.string   "name"
-    t.string   "version"
-    t.datetime "date"
-    t.string   "organism"
-    t.integer  "number_of_sequences"
-    t.boolean  "is_decoy"
-    t.string   "decoy_type"
+    t.string  "name"
+    t.string  "version"
+    t.string  "release_date"
+    t.integer "number_of_sequences"
+    t.string  "location"
   end
 
   create_table "searched_modifications", :force => true do |t|
@@ -139,6 +137,13 @@ ActiveRecord::Schema.define(:version => 20120918094503) do
     t.string  "value"
   end
 
+  create_table "sip_sdb_join_table", :id => false, :force => true do |t|
+    t.integer "search_database_id"
+    t.integer "spectrum_identification_protocol_id"
+  end
+
+  add_index "sip_sdb_join_table", ["search_database_id", "spectrum_identification_protocol_id"], :name => "index_sip_sdb"
+
   create_table "sip_user_params", :force => true do |t|
     t.integer "spectrum_identification_protocol_id"
     t.string  "name"
@@ -174,13 +179,12 @@ ActiveRecord::Schema.define(:version => 20120918094503) do
   end
 
   create_table "spectrum_identification_protocols", :force => true do |t|
-    t.string "sip_id",            :null => false
-    t.string "activity_date"
-    t.string "input_spectra"
-    t.string "search_database"
-    t.string "analysis_software"
-    t.string "search_type"
-    t.string "threshold",         :null => false
+    t.string  "sip_id",             :null => false
+    t.string  "input_spectra"
+    t.string  "analysis_software"
+    t.string  "search_type"
+    t.string  "threshold",          :null => false
+    t.integer "search_database_id"
   end
 
   create_table "spectrum_identification_results", :force => true do |t|
