@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121017150138) do
+ActiveRecord::Schema.define(:version => 20121018151506) do
 
   create_table "db_sequences", :force => true do |t|
     t.string "accession"
@@ -101,10 +101,10 @@ ActiveRecord::Schema.define(:version => 20121017150138) do
   end
 
   create_table "searched_modifications", :force => true do |t|
-    t.integer "spectrum_identification_protocol_id", :null => false
     t.float   "mass_delta"
     t.boolean "is_fixed"
     t.string  "residue"
+    t.string  "unimod_accession"
   end
 
   create_table "sii_pepevidence_join_table", :id => false, :force => true do |t|
@@ -144,6 +144,13 @@ ActiveRecord::Schema.define(:version => 20121017150138) do
 
   add_index "sip_sdb_join_table", ["search_database_id", "spectrum_identification_protocol_id"], :name => "index_sip_sdb"
 
+  create_table "sip_searched_mod_join_table", :id => false, :force => true do |t|
+    t.integer "searched_modification_id"
+    t.integer "spectrum_identification_protocol_id"
+  end
+
+  add_index "sip_searched_mod_join_table", ["searched_modification_id", "spectrum_identification_protocol_id"], :name => "index_sip_searched_mod"
+
   create_table "sip_user_params", :force => true do |t|
     t.integer "spectrum_identification_protocol_id"
     t.string  "name"
@@ -179,11 +186,15 @@ ActiveRecord::Schema.define(:version => 20121017150138) do
   end
 
   create_table "spectrum_identification_protocols", :force => true do |t|
-    t.string "sip_id",            :null => false
+    t.string "sip_id",                   :null => false
     t.string "input_spectra"
     t.string "analysis_software"
     t.string "search_type"
-    t.string "threshold",         :null => false
+    t.string "threshold",                :null => false
+    t.string "parent_tol_plus_value"
+    t.string "parent_tol_minus_value"
+    t.string "fragment_tol_plus_value"
+    t.string "fragment_tol_minus_value"
   end
 
   create_table "spectrum_identification_results", :force => true do |t|
