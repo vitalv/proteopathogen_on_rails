@@ -10,6 +10,8 @@ class Mzid2db
 #ENtonces tendría que controlar que no se vuelve a insertar el mismo experimento para
 #usar  find_or_create SOLO en aquellas tablas con Global-scope  (que pueden tener records iguales en distintos SIP:experimentos/busquedas) como search_databases o peptides, etc..
 
+
+
   def save2tables
 
     @mzid_obj.sips.each do |sip|
@@ -30,10 +32,11 @@ class Mzid2db
       #this_sip = SpectrumIdentificationProtocol.find_or_create_by_sip_id_and_input_spectra_and_analysis_software_and_search_type_and_threshold(:sip_id => sip_id, :input_spectra => input_spectra, :analysis_software => analysis_software, :search_type => search_type, :threshold => threshold)
       this_sip = SpectrumIdentificationProtocol.create(:sip_id => sip_id, :input_spectra => input_spectra, :analysis_software => analysis_software, :search_type => search_type, :threshold => threshold, :parent_tol_plus_value => parent_tol_plus_value, :parent_tol_minus_value => parent_tol_minus_value, :fragment_tol_plus_value => fragment_tol_plus_value, :fragment_tol_minus_value => fragment_tol_minus_value)
       #this_sip.create . Always . Don't have to check whether record exists bc even if all this_sip columns/attributes are found in a previous record, this_sip may be a completely new experiment (for instance repeating the search with a new DB)
+      #well you could check just one thing: mzid file is the same and sip_id is the same, then DO check record exists and don't insert if true
       
       #---- SAVE 2 search_databases AND sip_sdb_join_table ----   ##STILL HAVE 2 CREATE INDEX IN JOIN TABLE##
       search_db_arr.each do |sdb|
-        this_sdb = SearchDatabase.find_or_create_by_name_and_version_and_release_date_and_number_of_sequences_and_location(:name => sdb.name, :version => sdb.version, :release_date => sdb.releaseDate, :number_of_sequences => sdb.num_seq, :location => sdb.location)
+        this_sdb = SearchDatabase.find_gr_create_by_name_and_version_and_release_date_and_number_of_sequences_and_location(:name => sdb.name, :version => sdb.version, :release_date => sdb.releaseDate, :number_of_sequences => sdb.num_seq, :location => sdb.location)
         #Aqui SÍ debo usar find_or_create porque es Global-scope. De hecho muchas veces irá a la parte "find"
         this_sip.search_databases << this_sdb unless this_sip.search_databases.include? this_sdb
       end
@@ -55,7 +58,9 @@ class Mzid2db
       #---- SAVE 2 searched_modifications ---- Global-scope
       searched_mod_arr.each do |mod|
         #Y ademas estoy insertando records que ya existian! Entonces pa que coño quiero la join table !!
-        this_mod = SearchedModification.find_or_create_by_unimod_accession_and_residue_and_is_fixed(:unimod_accession => mod.unimod_accession, :mass_delta => mod.mass_delta, :residue => mod.residue, :is_fixed => mod.fixedMod)
+        #is_fixed boolean 'true' is saved as 1 in mysql -tinyint(1)-, so watch the fuck out
+        fixed = '1' if mod.fixedMod == 'true'; fixed = '0' if mod.fixedMod == 'false'
+        this_mod = SearchedModification.find_or_create_by_unimod_accession_and_mass_delta_and_residue_and_is_fixed(:unimod_accession => mod.unimod_accession, :mass_delta => mod.mass_delta, :residue => mod.residue, :is_fixed => fixed)
         this_sip.searched_modifications << this_mod unless this_sip.searched_modifications.include? this_mod
       end
       
@@ -64,4 +69,16 @@ class Mzid2db
   end
 
 
+
+
 end
+
+
+  def rollback(mzid_object)
+    puts "\n-Error saving data 2 tables. Rolling back -- \n\n"
+    mzid_object.sips.each do |sip|
+      db_sip_id = SpectrumIdentificationProtocol.find_by_sip_id(sip.sip_id)
+      SpectrumIdentificationProtocol.destroy(db_sip_id)
+    end   
+  
+  end
