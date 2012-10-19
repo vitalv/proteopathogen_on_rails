@@ -10,12 +10,21 @@ require File.expand_path(File.dirname(__FILE__)) + "/../config/environment.rb"
 require 'mzid_parser'
 require 'mzid_2_db'
 
+CURRENT_MZID_FILE = ARGV[0]
+CURRENT_MZID_FILE_SHA1 = Digest::SHA1.hexdigest('/home/vital/pepXML_protXML_2_mzid_V/SILAC_phos_OrbitrapVelos_1_interact-ipro-filtered.mzid')
+
 begin 
 
-  mzid_object = Mzid.new(ARGV[0])
+  #check CURRENT_MZID_FILE is not already stored
+
+  mzid_object = Mzid.new(CURRENT_MZID_FILE)
   #mzid_object = Mzid.new("/home/vital/pepXML_protXML_2_mzid_V/SILAC_phos_OrbitrapVelos_1_interact-ipro-filtered.mzid")
   
   Mzid2db.new(mzid_object).save2tables
+  
+  rescue Exception => msg
+    puts "\n#{msg}"
+    rollback(mzid_object)
   
   #~ rescue Exception => msg
   #~ puts msg
