@@ -22,9 +22,10 @@ begin
   
   Mzid2db.new(mzid_object).save2tables
   
+    
   rescue Exception => msg
     puts "\n#{msg}"
-    rollback(mzid_object)
+    rollback(saved_sip_ids)
   
   #~ rescue Exception => msg
   #~ puts msg
