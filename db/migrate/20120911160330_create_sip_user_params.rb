@@ -4,6 +4,7 @@ class CreateSipUserParams < ActiveRecord::Migration
       t.references :spectrum_identification_protocol
       t.string :name
       t.string :value
+      t.timestamps
     end
   end
 end
