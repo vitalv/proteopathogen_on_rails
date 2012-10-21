@@ -9,12 +9,11 @@ class Mzid2db
   #La idea es que una vez que se empieza a insertar datos (un experimento/busqueda) se llenen TOODAS las tablas y que no se quede a medias. Y si no se completa el proceso hacer un rollback automatico
   #ENtonces tendría que controlar que no se vuelve a insertar el mismo experimento para
   #usar  find_or_create SOLO en aquellas tablas con Global-scope  (que pueden tener records iguales en distintos SIP:experimentos/busquedas) como search_databases o peptides, etc..
-  @@saved_sip_ids
 
 
   def save2tables
 
-    saved_sip_ids = []
+
     @mzid_obj.sips.each do |sip|
     
       sip_id = sip.sip_id
@@ -38,7 +37,7 @@ class Mzid2db
       
       #---- SAVE 2 search_databases AND sip_sdb_join_table ----   ##STILL HAVE 2 CREATE INDEX IN JOIN TABLE##
       search_db_arr.each do |sdb|
-        this_sdb = SearchDatabase.find_gr_create_by_name_and_version_and_release_date_and_number_of_sequences_and_location(:name => sdb.name, :version => sdb.version, :release_date => sdb.releaseDate, :number_of_sequences => sdb.num_seq, :location => sdb.location)
+        this_sdb = SearchDatabase.find_or_create_by_name_and_version_and_release_date_and_number_of_sequences_and_location(:name => sdb.name, :version => sdb.version, :release_date => sdb.releaseDate, :number_of_sequences => sdb.num_seq, :location => sdb.location)
         #Aqui SÍ debo usar find_or_create porque es Global-scope. De hecho muchas veces irá a la parte "find"
         this_sip.search_databases << this_sdb unless this_sip.search_databases.include? this_sdb
       end
@@ -69,27 +68,26 @@ class Mzid2db
    
     end # @mzid_obj.sips.each do |sip|
     
-    puts "saved_sip_ids: #{saved_sip_ids}"
-    
-    return saved_sip_ids #ESTO NO se returna si el error que rescato al llamar a save2tables ha ocurrido antes!!
     
   end # def save2tables
 
 
 
 
-  def rollback(saved_sip_ids)
+  def rollback(mzid_object)
     puts "\n-Error saving data 2 tables. Rolling back -- \n\n"
     
-    SpectrumIdentificationProtocol.destroy(saved_sip_ids)
+    #seria interesante tener el experimento (metadata de la tabla spectra_acquisition_run)
+    #para así facilmente borrar todos sus sip    
     
-    
-#    unless SpectrumIdentificationProtocol.find(:all).empty?
-#		mzid_object.sips.each do |sip|
-#        db_sip_id = SpectrumIdentificationProtocol.find_by_sip_id(sip.sip_id)
-#        SpectrumIdentificationProtocol.destroy(db_sip_id)
-#      end   
-#   end
+    unless SpectrumIdentificationProtocol.find(:all).empty?
+	  mzid_object.sips.each do |sip|		
+	  if  saved_sip_id = SpectrumIdentificationProtocol.find_by_sip_id(sip.sip_id)
+		#DANGER!: sip_id puede ser "SIP_1" en muchos experimentos distintos y no quiero borrarlos todos, solo el 
+        SpectrumIdentificationProtocol.destroy(saved_sip_id)
+      end
+    end   
+   end
    
   end
 
