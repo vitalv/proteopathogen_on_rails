@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121019084932) do
+ActiveRecord::Schema.define(:version => 20121021165515) do
 
   create_table "db_sequences", :force => true do |t|
     t.string "accession"
@@ -86,6 +86,13 @@ ActiveRecord::Schema.define(:version => 20121019084932) do
     t.string "name"
   end
 
+  create_table "samples", :force => true do |t|
+    t.string "organism"
+    t.string "protocol"
+    t.string "date"
+    t.string "researcher"
+  end
+
   create_table "search_databases", :force => true do |t|
     t.string  "name"
     t.string  "version"
@@ -158,6 +165,13 @@ ActiveRecord::Schema.define(:version => 20121019084932) do
     t.integer "spectrum_identification_result_id", :null => false
     t.string  "name"
     t.string  "value"
+  end
+
+  create_table "spectra_acquisition_runs", :force => true do |t|
+    t.string "fraction"
+    t.string "instrument"
+    t.string "ionization"
+    t.string "analyzer"
   end
 
   create_table "spectrum_identification_items", :force => true do |t|
