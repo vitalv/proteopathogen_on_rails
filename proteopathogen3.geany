@@ -17,12 +17,11 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=4
-FILE_NAME_0=0;None;0;16;1;1;0;/home/vital/proteopathogen_on_rails/app/models/spectrum_identification_list.rb;0;4
-FILE_NAME_1=0;None;0;16;1;1;0;/home/vital/proteopathogen_on_rails/app/models/spectrum_identification_protocol.rb;0;4
-FILE_NAME_2=0;None;0;16;1;1;0;/home/vital/proteopathogen_on_rails/config/database.yml;0;4
-FILE_NAME_3=600;None;0;16;1;1;0;/home/vital/proteopathogen_on_rails/app/views/layouts/application.haml;0;4
-FILE_NAME_4=0;None;0;16;1;1;0;/home/vital/proteopathogen_on_rails/public/stylesheets/style.scss;0;4
+current_page=3
+FILE_NAME_0=0;None;0;16;1;1;0;/home/vital/proteopathogen_on_rails/app/models/spectrum_identification_protocol.rb;0;4
+FILE_NAME_1=0;None;0;16;1;1;0;/home/vital/proteopathogen_on_rails/app/models/spectrum_identification_list.rb;0;4
+FILE_NAME_2=175;None;0;16;1;1;0;/home/vital/proteopathogen_on_rails/app/models/spectrum_identification_result.rb;0;4
+FILE_NAME_3=126;None;0;16;1;1;0;/home/vital/proteopathogen_on_rails/app/models/spectrum_identification_item.rb;0;4
 
 [VTE]
 last_dir=/home/vital
