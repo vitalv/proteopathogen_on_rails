@@ -4,6 +4,7 @@ class CreateSiiUserParams < ActiveRecord::Migration
       t.references :spectrum_identification_item
       t.string :name
       t.string :value
+      t.timestamps
     end
   end
 end
