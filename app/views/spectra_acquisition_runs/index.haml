@@ -1,1 +1,11 @@
-Aqui pongo esa lista de todos los spectra_acquisition_Runs, yupii
+-if @spectra_acquisition_runs.blank?
+  Sample with sample_id : #{params[:sample_id]} has no associated spectra_acquisition_runs
+-else 
+  -@spectra_acquisition_runs.each do |msrun|
+    Spectra Acquisition Run #{msrun.id}: 
+    %br
+    Instrument: #{msrun.instrument}
+    %br
+    Ionization: #{msrun.ionization}
+
+%p=submit_tag("New spectra acquisition run")
