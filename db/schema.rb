@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121021165515) do
+ActiveRecord::Schema.define(:version => 20121022162202) do
 
   create_table "db_sequences", :force => true do |t|
     t.string "accession"
@@ -36,7 +37,7 @@ ActiveRecord::Schema.define(:version => 20121021165515) do
   end
 
   create_table "peptide_evidences", :force => true do |t|
-    t.integer "peptide_id",       :null => false
+    t.integer "peptide_id"
     t.integer "start"
     t.integer "end"
     t.string  "pre"
@@ -81,6 +82,11 @@ ActiveRecord::Schema.define(:version => 20121021165515) do
 
   add_index "protein_hypothesis_pepevidence_join_table", ["protein_detection_hypothesis_id", "peptide_evidence_id"], :name => "index_proteinhypothesis_pepevidence"
 
+  create_table "protein_hypothesis_peptide_evidences", :force => true do |t|
+    t.integer "peptide_evidence_id"
+    t.integer "protein_detection_hypothesis_id"
+  end
+
   create_table "psi_ms_cv_terms", :force => true do |t|
     t.string "accession"
     t.string "name"
@@ -115,6 +121,11 @@ ActiveRecord::Schema.define(:version => 20121021165515) do
 
   add_index "sii_pepevidence_join_table", ["spectrum_identification_item_id", "peptide_evidence_id"], :name => "index_sii_pepevidence"
 
+  create_table "sii_peptide_evidences", :force => true do |t|
+    t.integer "spectrum_identification_item_id"
+    t.integer "peptide_evidence_id"
+  end
+
   create_table "sii_psi_ms_cv_terms", :force => true do |t|
     t.integer "spectrum_identification_item_id"
     t.string  "psi_ms_cv_term_accession"
@@ -122,11 +133,9 @@ ActiveRecord::Schema.define(:version => 20121021165515) do
   end
 
   create_table "sii_user_params", :force => true do |t|
-    t.integer  "spectrum_identification_item_id"
-    t.string   "name"
-    t.string   "value"
-    t.datetime "created_at",                      :null => false
-    t.datetime "updated_at",                      :null => false
+    t.integer "spectrum_identification_item_id"
+    t.string  "name"
+    t.string  "value"
   end
 
   create_table "sip_psi_ms_cv_terms", :force => true do |t|
@@ -168,10 +177,11 @@ ActiveRecord::Schema.define(:version => 20121021165515) do
   end
 
   create_table "spectra_acquisition_runs", :force => true do |t|
-    t.string "fraction"
-    t.string "instrument"
-    t.string "ionization"
-    t.string "analyzer"
+    t.string  "fraction"
+    t.string  "instrument"
+    t.string  "ionization"
+    t.string  "analyzer"
+    t.integer "sample_id",  :null => false
   end
 
   create_table "spectrum_identification_items", :force => true do |t|

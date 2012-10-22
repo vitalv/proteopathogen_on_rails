@@ -2,12 +2,22 @@ class SpectraAcquisitionRunsController < ApplicationController
 
 def index
 
-  puts "Guardar en una variable toda la lista de SARs para ser visualizada enel view" 
+  if Sample.find(params[:sample_id])
+    @spectra_acquisition_runs = Sample.find(params[:sample_id]).spectra_acquisition_runs
+  end
 
 end
 
 def new
-  #Aqui es donde pondre el formulario, un boton para subir el mzid y correr mi codigo save2tables
+  @sample_id = params[:sample_id]
+  @spectra_acquisition_run = SpectraAcquisitionRun.new
 end
+
+def create
+
+  #params[:spectra_acquisition_run] is a hash with keys :fraction, :instrument, :ionization, etc...
+
+end
+
 
 end

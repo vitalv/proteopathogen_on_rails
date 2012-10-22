@@ -1,0 +1,20 @@
+%h2 Spectra acquisition run - #{@sample_id}
+=form_for :spectra_acquisition_run, :url => {:action => "create"} do |f|
+  %p
+    = f.label :fraction
+    %br
+    = f.text_field :fraction
+  %p
+    = f.label :instrument
+    %br
+    = f.text_field :instrument
+  %p
+    = f.label :ionization
+    %br
+    = f.text_field :ionization
+  %p
+    = f.label :analyzer
+    %br
+    = f.text_field :analyzer
+  %p
+    = f.submit
