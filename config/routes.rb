@@ -15,6 +15,8 @@ ProteopathogenOnRails::Application.routes.draw do
   resources :samples do 
     resources :spectra_acquisition_runs
   end
+  
+  resources :mzid_files
 
   # Sample resource route with options:
   #   resources :products do

@@ -1,0 +1,9 @@
+//check sample_id present and valid!!
+%h2 Upload .mzid File for biological sample with sample_id: #{params[:sample_id]}
+// CHECK uploaded mzid file # SIPS == biological_sample.spectra_acquisition_runs.count
+%p
+= form_for @mzid_file, :url => {:action => "create"} do |f|
+  =f.file_field 'uploaded_file'
+  %br
+  =f.submit
+  

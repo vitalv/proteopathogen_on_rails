@@ -1,0 +1,14 @@
+%h2 .mzid Files
+-if @all_mzid_files.blank?
+  No stored .mzid files
+-else 
+  -@all_mzid_files.each do |mzidf|
+    Spectra Acquisition Run #{msrun.id}: 
+    %br
+    Instrument: #{msrun.instrument}
+    %br
+    Ionization: #{msrun.ionization}
+    
+%p   
+  =form_tag({:action => "new"}, :method => "get") do
+    =submit_tag("New mzid file")
