@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121022162202) do
+ActiveRecord::Schema.define(:version => 20121023123150) do
 
   create_table "db_sequences", :force => true do |t|
     t.string "accession"
@@ -34,6 +34,14 @@ ActiveRecord::Schema.define(:version => 20121022162202) do
     t.string "residue"
     t.string "location"
     t.string "avg_mass_delta"
+  end
+
+  create_table "mzid_files", :force => true do |t|
+    t.string "location"
+    t.string "sha1"
+    t.string "creator"
+    t.string "submission_date"
+    t.string "name"
   end
 
   create_table "peptide_evidences", :force => true do |t|

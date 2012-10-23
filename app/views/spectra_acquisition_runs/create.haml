@@ -1,2 +1,19 @@
-Show here the created Spectra acquisition run
+%b= "Saved Spectra acquisition run for Sample: #{params[:sample_id]} !"
+%br
+- @all_saved_msruns.each do |msrun|
+  - if @saved_msrun.id == msrun.id
+    %b= "NEW spectra_acquisition_run! Id: #{@saved_msrun.id}: #{@saved_msrun.fraction} #{@saved_msrun.instrument} #{@saved_msrun.ionization}"
+  - else   
+    %p= "spectra_acquisition_run id: #{msrun.id}: #{msrun.fraction} #{msrun.instrument} #{msrun.ionization}"
+
+%p   
+  =form_tag({:controller => "spectra_acquisition_runs", :action => "new"}, :method => "get") do
+    =submit_tag("New spectra acquisition run")
+
+%b - OR -
+
+%p
+  =form_tag({:controller => "mzid_files", :action => "new"}, :method => "get") do
+    =hidden_field_tag :sample_id, params[:sample_id]
+    =submit_tag("Upload mzid file")
 

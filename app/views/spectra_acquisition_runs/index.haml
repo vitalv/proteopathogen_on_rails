@@ -7,5 +7,7 @@
     Instrument: #{msrun.instrument}
     %br
     Ionization: #{msrun.ionization}
-
-%p=submit_tag("New spectra acquisition run")
+    
+%p   
+  =form_tag({:controller => "spectra_acquisition_runs", :action => "new"}, :method => "get") do
+    =submit_tag("New spectra acquisition run")
