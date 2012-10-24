@@ -1,5 +1,13 @@
-@location es #{@location}
+%b= "Saved .mzid File! (Sample_id: #{@sample_id} )"
 %br
-@name es #{@name}
+="Name: #{@saved_mzid.name}"
 %br
-@sha1 es #{@sha1}
+="Location: #{@saved_mzid.location}"
+%br
+="Submission Date: #{@saved_mzid.submission_date}"
+
+= form_tag :action => "load_mzid_data_into_tables"  do
+  =hidden_field_tag :sample_id, @sample_id
+  =hidden_field_tag :saved_mzid_id, @saved_mzid.id
+  %br
+  =submit_tag 'Load .mzid data into tables'

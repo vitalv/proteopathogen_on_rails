@@ -1,15 +1,18 @@
 class SamplesController < ApplicationController
 
 def index
-
+ 
+  @all_samples = Sample.find(:all)
+ 
 end
 
 
 def new
+
   @sample = Sample.new
-  #Aqui es donde pondre el formulario, un boton para subir el mzid y correr mi codigo save2tables
-  #En el view new es donde puedo poner fields_for spectra_acq_run bajo form_for @sample
+  
 end
+
 
 def create
 
