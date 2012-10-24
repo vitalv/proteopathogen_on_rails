@@ -55,7 +55,7 @@ class Mzid
       #2º Una vez obtenido el spectraData_ref puedo buscar en <SpectraData>
       @doc.xpath("//xmlns:SpectraData").each do |spectra_data| #<DataCollection> : <Inputs> : <SpectraData>
         if spectra_data.attr("id") == spectraData_ref
-          input_spectra = spectra_data.attr("location")
+          input_spectra = spectra_data.attr("location").split("/")[-1]
         end
       end
       

@@ -1,7 +1,8 @@
 class Mzid2db
 
-  def initialize(mzid_object)
+  def initialize(mzid_object, mzid_id)
     @mzid_obj = mzid_object
+    @mzid_file_id = mzid_id
   end
 
 
@@ -12,12 +13,11 @@ class Mzid2db
 
 
   def save2tables
-
-
+    
     @mzid_obj.sips.each do |sip|
     
       sip_id = sip.sip_id
-      input_spectra = sip.input_spectra
+      input_spectra = sip.input_spectra      
       analysis_software = sip.analysis_software
       search_type = sip.search_type
       threshold = sip.threshold      
@@ -27,11 +27,13 @@ class Mzid2db
       parent_tol_plus_value, parent_tol_minus_value = sip.parent_tolerance[0][:value], sip.parent_tolerance[1][:value]
       fragment_tol_plus_value, fragment_tol_minus_value = sip.fragment_tolerance[0][:value], sip.fragment_tolerance[1][:value]
       user_params = sip.user_params
+      spectra_acquisition_run_id = SpectraAcquisitionRun.find_by_spectra_file(input_spectra).id 
+      #these sips refer to an input_spectra (via 1:1 <SpectrumIdentification><InputSpectra>) that EXISTS in table Spectra_acquisition_runs.spectra_file
+
       
       #---- SAVE 2 spectrum_identification_protocols ----
       #this_sip = SpectrumIdentificationProtocol.find_or_create_by_sip_id_and_input_spectra_and_analysis_software_and_search_type_and_threshold(:sip_id => sip_id, :input_spectra => input_spectra, :analysis_software => analysis_software, :search_type => search_type, :threshold => threshold)
-      this_sip = SpectrumIdentificationProtocol.create(:sip_id => sip_id, :input_spectra => input_spectra, :analysis_software => analysis_software, :search_type => search_type, :threshold => threshold, :parent_tol_plus_value => parent_tol_plus_value, :parent_tol_minus_value => parent_tol_minus_value, :fragment_tol_plus_value => fragment_tol_plus_value, :fragment_tol_minus_value => fragment_tol_minus_value)
-      saved_sip_ids << this_sip.id
+      this_sip = SpectrumIdentificationProtocol.create(:sip_id => sip_id, :input_spectra => input_spectra, :spectra_acquisition_run_id => spectra_acquisition_run_id, :analysis_software => analysis_software, :search_type => search_type, :threshold => threshold, :parent_tol_plus_value => parent_tol_plus_value, :parent_tol_minus_value => parent_tol_minus_value, :fragment_tol_plus_value => fragment_tol_plus_value, :fragment_tol_minus_value => fragment_tol_minus_value, :mzid_file_id => @mzid_file_id)
       #this_sip.create . Always . Don't have to check whether record exists bc even if all this_sip columns/attributes are found in a previous record, this_sip may be a completely new experiment (for instance repeating the search with a new DB)
       #well you could check just one thing: mzid file is the same and sip_id is the same, then DO check record exists and don't insert if true
       
@@ -74,24 +76,18 @@ class Mzid2db
 
 
 
-  def rollback(mzid_object)
+end
+
+
+  def rollback(sample_id)
     puts "\n-Error saving data 2 tables. Rolling back -- \n\n"
     
     #seria interesante tener el experimento (metadata de la tabla spectra_acquisition_run)
     #para así facilmente borrar todos sus sip    
     
     unless SpectrumIdentificationProtocol.find(:all).empty?
-	  mzid_object.sips.each do |sip|		
-	  if  saved_sip_id = SpectrumIdentificationProtocol.find_by_sip_id(sip.sip_id)
-		#DANGER!: sip_id puede ser "SIP_1" en muchos experimentos distintos y no quiero borrarlos todos, solo el 
-        SpectrumIdentificationProtocol.destroy(saved_sip_id)
-      end
+
     end   
-   end
    
   end
-
-
-end
-
 
