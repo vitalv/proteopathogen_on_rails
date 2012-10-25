@@ -1,13 +1,27 @@
+* {
+  margin: 0; }
+
+html, body {
+  height: 100%; }
+
+.wrapper {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -5.5em; }
+
+.footer, .push {
+  height: 5.5em; }
+
 body {
   background-color: white;
-  margin: 0% 12% 0% 12%;
+  padding: 0% 12% 0% 12%;
   font-family: arial;
   font-size: 9pt;
   color: #0a2747; }
 
 nav_links {
   padding: 5px;
-  margin: 0 0 20px 0;
   float: right; }
   nav_links ul {
     list-style-type: none; }
@@ -25,5 +39,5 @@ nav_links {
 content {
   display: block;
   clear: both;
-  border: solid #b6b5b0 1px;
+  border-top: solid #b6b5b0 2px;
   padding: 20px; }
