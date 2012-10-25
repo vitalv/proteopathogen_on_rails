@@ -100,7 +100,7 @@ class Mzid
       
       #---- user_params ----
       user_params = getuserParams(sip)
-      
+     
       arguments_arr = [sip_id, search_type, threshold, analysis_software, input_spectra, search_db_arr, searched_modification_arr, parent_tolerance, fragment_tolerance, psi_ms_terms, user_params]
       sips << Sip.new(arguments_arr)
 
@@ -108,7 +108,33 @@ class Mzid
     return sips #Array de objetos SIP     
   end
   
-end
+  
+  
+  def sils
+  
+    sils = []
+    #---- spectrum_identification_lists ---- Each SIP has one SIL
+    @doc.xpath("//xmlns:SpectrumIdentificationList").each do |sil|
+      sil_id = sil.attr("id")
+      #sip_id = @doc.xpath("//xmlns:SpectrumIdentification").collect { |si| si.attr("spectrumIdentificationProtocol_ref") if si.attr("spectrumIdentificationList_ref") == sil_id }
+      sis = @doc.xpath("//xmlns:SpectrumIdentification")
+      si = sis.select { |si| si.attr("spectrumIdentificationList_ref") == sil_id }
+      sip_id = si.attr("spectrumIdentifcationList_ref") #I need sip_id here is cool so I can insert it in the sil table
+
+      
+      
+      #Un SIL puede ser un array de objetos SIR: sil << Sir.new(arg, arg)
+    end
+  end
+  
+  
+  
+end #class Mzid
+
+
+
+
+
 
 
   private

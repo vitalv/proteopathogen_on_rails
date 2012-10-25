@@ -29,6 +29,8 @@ class Mzid2db
       user_params = sip.user_params
       spectra_acquisition_run_id = SpectraAcquisitionRun.find_by_spectra_file(input_spectra).id 
       #these sips refer to an input_spectra (via 1:1 <SpectrumIdentification><InputSpectra>) that EXISTS in table Spectra_acquisition_runs.spectra_file
+      
+      sils = sip.sils
 
       
       #---- SAVE 2 spectrum_identification_protocols ----
@@ -85,9 +87,13 @@ end
     #seria interesante tener el experimento (metadata de la tabla spectra_acquisition_run)
     #para así facilmente borrar todos sus sip    
     
-    unless SpectrumIdentificationProtocol.find(:all).empty?
-
-    end   
+    Sample.find(sample_id).spectra_acquisition_runs.each do |sar|
+      sar.spectrum_identification_protocols.each do |sip|
+        SpectrumIdentificationProtocol.destroy(sip.id)
+      end
+      SpectraAcquisitionRun.destroy(sar.id)
+    end
+    Sample.destroy(sample_id)
    
   end
 
