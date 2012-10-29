@@ -44,8 +44,10 @@ class MzidFilesController < ApplicationController
  
     Mzid2db.new(mzid_object, saved_mzid_id).save2tables
     rescue Exception => msg
-      puts "\n#{msg}"
-      rollback(@sample_id)
+      @exc = msg
+      @trace = msg.backtrace.inspect
+      rollback(@sample_id) if Sample.exists? @sample_id #sometimes I might refresh the view with the "load .mzid file" button when the sample_id was already destroyed in rollback
+      render :rescue
 
   end
 

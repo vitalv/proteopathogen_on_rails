@@ -119,12 +119,13 @@ class Mzid
       #sip_id = @doc.xpath("//xmlns:SpectrumIdentification").collect { |si| si.attr("spectrumIdentificationProtocol_ref") if si.attr("spectrumIdentificationList_ref") == sil_id }
       sis = @doc.xpath("//xmlns:SpectrumIdentification")
       si = sis.select { |si| si.attr("spectrumIdentificationList_ref") == sil_id }
-      sip_id = si.attr("spectrumIdentifcationList_ref") #I need sip_id here is cool so I can insert it in the sil table
+      sip_id = si[0].attr("spectrumIdentifcationList_ref") #I need sip_id here so I can insert it in the sil table
 
       
       
       #Un SIL puede ser un array de objetos SIR: sil << Sir.new(arg, arg)
     end
+    return sils
   end
   
   
