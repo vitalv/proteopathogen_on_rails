@@ -3,11 +3,12 @@
   No stored .mzid files
 -else 
   -@all_mzid_files.each do |mzidf|
-    Spectra Acquisition Run #{msrun.id}: 
-    %br
-    Instrument: #{msrun.instrument}
-    %br
-    Ionization: #{msrun.ionization}
+    %p
+      mzid file: #{mzidf.name}
+      %br
+      sha-1: #{mzidf.sha1}
+      %br
+      submission date: #{mzidf.submission_date}
     
 %p   
   =form_tag({:action => "new"}, :method => "get") do
