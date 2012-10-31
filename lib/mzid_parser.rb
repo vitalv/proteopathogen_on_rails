@@ -84,9 +84,9 @@ class Mzid
           residue = search_mod.attr("residues")
           unimod_ac = getcvParams(search_mod)[0][:accession] #<cvParam minOccurs:1>
           searched_modification_arr << SearchedMod.new(mass_d, fixed, residue, unimod_ac)        
-        end      
+        end
       end
-      
+            
       #---- parent_tol_cv_terms & fragment_tol_cv_terms ----
       parent_tolerance_node = sip.xpath(".//xmlns:ParentTolerance")[0] #<ParentTolerance maxOccurs: 1>
       parent_tolerance = getcvParams(parent_tolerance_node) unless parent_tolerance_node.nil?
