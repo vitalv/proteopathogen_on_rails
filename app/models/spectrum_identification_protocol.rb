@@ -2,7 +2,6 @@ class SpectrumIdentificationProtocol < ActiveRecord::Base
   # attr_accessible :title, :body
   validates :sip_id, :presence => true
   validates :spectra_acquisition_run_id, :presence => true
-  validates :mzid_file_id, :presence => true
   has_many :spectrum_identification_results, :through => spectrum_identification_lists, :dependent => :destroy
   validates_associated :spectrum_identification_lists
   has_and_belongs_to_many :search_databases, :join_table => 'sip_sdb_join_table'
@@ -10,5 +9,4 @@ class SpectrumIdentificationProtocol < ActiveRecord::Base
   has_many :sip_psi_ms_cv_terms, :dependent => :destroy
   has_many :sip_user_params, :dependent => :destroy
   belongs_to :spectra_acquisition_run
-  belongs_to :mzid_file
 end
