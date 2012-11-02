@@ -12,11 +12,11 @@ ProteopathogenOnRails::Application.routes.draw do
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
-  resources :samples do 
+  resources :mzid_files do 
     resources :spectra_acquisition_runs
   end
   
-  resources :mzid_files
+  #resources :mzid_files
 
   # Sample resource route with options:
   #   resources :products do

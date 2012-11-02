@@ -3,6 +3,6 @@ class MzidFile < ActiveRecord::Base
   validates :location, :presence => true
   validates :sha1, :uniqueness => true
   validates :name, :presence => true
-  has_many :spectrum_identification_protocols #No :dependent => :destroy
-  validates_associated :spectrum_identification_protocols
+  has_many :spectra_acquisition_runs, :dependent => :destroy
+  validates_associated :spectra_acquisition_runs
 end

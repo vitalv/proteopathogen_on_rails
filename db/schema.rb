@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121024143533) do
+ActiveRecord::Schema.define(:version => 20121102100850) do
 
   create_table "db_sequences", :force => true do |t|
     t.string "accession"
@@ -191,6 +191,7 @@ ActiveRecord::Schema.define(:version => 20121024143533) do
     t.string  "analyzer"
     t.integer "sample_id",    :null => false
     t.string  "spectra_file"
+    t.integer "mzid_file_id"
   end
 
   create_table "spectrum_identification_items", :force => true do |t|
@@ -220,7 +221,6 @@ ActiveRecord::Schema.define(:version => 20121024143533) do
     t.string  "fragment_tol_plus_value"
     t.string  "fragment_tol_minus_value"
     t.integer "spectra_acquisition_run_id"
-    t.integer "mzid_file_id"
   end
 
   create_table "spectrum_identification_results", :force => true do |t|
