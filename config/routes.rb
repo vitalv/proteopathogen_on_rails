@@ -12,10 +12,20 @@ ProteopathogenOnRails::Application.routes.draw do
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
-  resources :mzid_files do 
-    resources :spectra_acquisition_runs
+ 
+  namespace :admin do
+    resources :experiments, :except => :show
+    resources :mzid_files
+    resources :spectra_acquisition_runs, :except => :show
   end
-  
+ 
+  # I don't want a resource for all of these bc I just want the 'show' action
+  #resources :spectra_acquisition_runs
+  #resources :spectrum_identification_protocols
+  #resources :spectrum_identification_lists
+  #resources 
+
+     
   #resources :mzid_files
 
   # Sample resource route with options:
@@ -59,7 +69,7 @@ ProteopathogenOnRails::Application.routes.draw do
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
-  # match ':controller(/:action(/:id(.:format)))'
-  match 'mzid_files/load_mzid_data_into_tables'
+   match ':controller(/:action(/:id(.:format)))'
+  
   
 end

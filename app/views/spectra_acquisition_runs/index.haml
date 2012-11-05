@@ -1,27 +1,16 @@
-%b= "All Spectra acquisition runs for mzid file: #{params[:mzid_file_id]}"
-%br
-@mzid_file_id es "#{@mzid_file_id}"
-%br
--if @spectra_acquisition_runs.blank?
-  @mzid_file_id es "#{@mzid_file_id}"
--else 
-  -@spectra_acquisition_runs.each do |msrun|
-    %p
+%b= "Spectra acquisition runs for mzid file: #{@mzid_file_name}"
+%p
+  -if @spectra_acquisition_runs.blank?
+    #{@mzid_file_name} has no associated spectra acquisition runs
+    %p   
+      =form_tag({:controller => "spectra_acquisition_runs", :action => "new"}, :method => "get") do
+        =submit_tag("New spectra acquisition run")    
+  -else 
+    -@spectra_acquisition_runs.each do |msrun|
       Spectra Acquisition Run #{msrun.id}: 
       %br
       Instrument: #{msrun.instrument}
       %br
       Ionization: #{msrun.ionization}
     
-%p   
-  =form_tag({:controller => "spectra_acquisition_runs", :action => "new"}, :method => "get") do
-    =submit_tag("New spectra acquisition run")
 
--if !@spectra_acquisition_runs.blank?
-
-  %b - OR -
-
-  %p
-    =form_tag({:controller => "mzid_files", :action => "new"}, :method => "get") do
-      =hidden_field_tag :sample_id, params[:sample_id]
-      =submit_tag("Upload mzid file")

@@ -18,7 +18,6 @@ class MzidFilesController < ApplicationController
 
   def create
   # Depending on the size of the uploaded file it may in fact be a StringIO or an instance of File backed by a temporary file- SEE guides/form_helpers
-    @sample_id = params[:sample_id]
     uploaded_io = params[:mzid_file][:uploaded_file]
     uploaded_io_filename = uploaded_io.original_filename
     File.open(Rails.root.join('public', 'uploaded_mzid_files', uploaded_io_filename), 'w') do |file|
@@ -32,6 +31,9 @@ class MzidFilesController < ApplicationController
     
     if @saved_mzid.valid?
       redirect_to mzid_file_spectra_acquisition_runs_path(@saved_mzid.id)
+    else
+      render :create
+      @errors = @saved_mzid.errors
     end
     
   
