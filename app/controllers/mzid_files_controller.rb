@@ -29,8 +29,15 @@ class MzidFilesController < ApplicationController
     name = uploaded_io_filename
     sha1 = Digest::SHA1.hexdigest("#{Rails.root}/public/uploaded_mzid_files/#{uploaded_io_filename}")
     @saved_mzid = MzidFile.find_or_create_by_sha1({:location => location, :sha1 => sha1, :name => name, :submission_date => Date.today})
+    
+    if @saved_mzid.valid?
+      redirect_to mzid_file_spectra_acquisition_runs_path(@saved_mzid.id)
+    end
+    
   
   end
+
+
   
   
   def load_mzid_data_into_tables

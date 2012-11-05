@@ -2,8 +2,10 @@ class SpectraAcquisitionRunsController < ApplicationController
 
 def index
 
-  if Sample.find(params[:sample_id])
-    @spectra_acquisition_runs = Sample.find(params[:sample_id]).spectra_acquisition_runs
+  @mzid_file_id = params[:mzid_file_id]
+
+  if MzidFile.find(@mzid_file_id)
+    @spectra_acquisition_runs = MzidFile.find(@mzid_file_id).spectra_acquisition_runs
   end
 
 end
