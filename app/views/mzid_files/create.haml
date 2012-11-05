@@ -7,7 +7,6 @@
 ="Submission Date: #{@saved_mzid.submission_date}"
 
 = form_tag new_mzid_file_spectra_acquisition_run_path  do
-  =hidden_field_tag :sample_id, @sample_id
   =hidden_field_tag :saved_mzid_id, @saved_mzid.id
   %br
   =submit_tag 'Go to Spectra Acq Data'

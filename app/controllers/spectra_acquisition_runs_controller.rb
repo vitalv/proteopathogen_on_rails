@@ -1,19 +1,30 @@
 class SpectraAcquisitionRunsController < ApplicationController
 
+require 'nokogiri'
+
 def index
-
   @mzid_file_id = params[:mzid_file_id]
-
   if MzidFile.find(@mzid_file_id)
     @spectra_acquisition_runs = MzidFile.find(@mzid_file_id).spectra_acquisition_runs
+    @mzid_file_name = MzidFile.find(@mzid_file_id).name
   end
-
 end
+
 
 def new
-  @sample_id = params[:sample_id]
-  @spectra_acquisition_run = SpectraAcquisitionRun.new
+  @mzid_file = MzidFile.find(params[:mzid_file_id])
+  
+  @mzid_file_name = @mzid_file.name
+  mzid_file_path = @mzid_file.location
+  @input_spectra_files = []
+  Nokogiri::XML(File.open(mzid_file_path)).xpath("//xmlns:SpectraData").each do |s|
+    @input_spectra_files << s.attr("location").split("/")[-1]
+  end
+  
+  @spectra_acquisition_runs = @mzid_file.spectra_acquisition_runs.build
+  
 end
+
 
 def create
   msrun_hash = params[:spectra_acquisition_run]

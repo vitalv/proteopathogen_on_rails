@@ -1,24 +1,25 @@
-%h2 Spectra acquisition run for Sample: #{@sample_id}
-=form_for :spectra_acquisition_run, :url => {:action => "create"} do |f|
-  %p
-    = f.label :fraction
-    %br
-    = f.text_field :fraction
-  %p
-    = f.label :instrument
-    %br
-    = f.text_field :instrument
-  %p
-    = f.label :ionization
-    %br
-    = f.text_field :ionization
-  %p
-    = f.label :analyzer
-    %br
-    = f.text_field :analyzer
-  %p
-    = f.label :spectra_file
-    %br
-    = f.text_field :spectra_file
+%h2 Spectra acquisition data for mzid file #{@mzid_file_name}
+%br
+=form_for ([@mzid_file, @spectra_acquisition_runs]) do |f|
+  - @input_spectra_files.each do |s|
+    %p 
+      Spectra acquisition data for #{s}
+    %p
+      = f.label :fraction
+      %br
+      = f.text_field :fraction
+    %p
+      = f.label :instrument
+      %br
+      = f.text_field :instrument
+    %p
+      = f.label :ionization
+      %br
+      = f.text_field :ionization
+    %p
+      = f.label :analyzer
+      %br
+      = f.text_field :analyzer
+    %p ----
   %p
     = f.submit
