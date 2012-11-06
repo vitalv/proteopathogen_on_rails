@@ -21,6 +21,13 @@ ProteopathogenOnRails::Application.routes.draw do
   resources :mzid_files
   resources :spectra_acquisition_runs
   
+  get "log_out" => "sessions#destroy", :as => "log_out"
+  get "log_in" => "sessions#new", :as => "log_in"
+  get "sign_up" => "users#new", :as => "sign_up"
+  #root :to => "users#new"
+  resources :users
+  resources :sessions  
+  
 
   # I don't want a resource for all of these bc I just want the 'show' action
   #resources :spectra_acquisition_runs
@@ -75,12 +82,7 @@ ProteopathogenOnRails::Application.routes.draw do
   match ':controller(/:action(/:id(.:format)))'
   
 
-  get "log_out" => "sessions#destroy", :as => "log_out"
-  get "log_in" => "sessions#new", :as => "log_in"
-  get "sign_up" => "users#new", :as => "sign_up"
-  root :to => "users#new"
-  resources :users
-  resources :sessions  
+
   
   
   
