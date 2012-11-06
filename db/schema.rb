@@ -11,12 +11,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121102100850) do
+ActiveRecord::Schema.define(:version => 20121106091832) do
 
   create_table "db_sequences", :force => true do |t|
     t.string "accession"
     t.string "description"
     t.text   "sequence"
+  end
+
+  create_table "experiments", :force => true do |t|
+    t.string "organism"
+    t.string "protocol"
+    t.string "date"
+    t.string "researcher"
   end
 
   create_table "fragments", :force => true do |t|
@@ -37,11 +44,12 @@ ActiveRecord::Schema.define(:version => 20121102100850) do
   end
 
   create_table "mzid_files", :force => true do |t|
-    t.string "location"
-    t.string "sha1"
-    t.string "creator"
-    t.string "submission_date"
-    t.string "name"
+    t.string  "location"
+    t.string  "sha1"
+    t.string  "creator"
+    t.string  "submission_date"
+    t.string  "name"
+    t.integer "experiment_id"
   end
 
   create_table "peptide_evidences", :force => true do |t|
@@ -98,13 +106,6 @@ ActiveRecord::Schema.define(:version => 20121102100850) do
   create_table "psi_ms_cv_terms", :force => true do |t|
     t.string "accession"
     t.string "name"
-  end
-
-  create_table "samples", :force => true do |t|
-    t.string "organism"
-    t.string "protocol"
-    t.string "date"
-    t.string "researcher"
   end
 
   create_table "search_databases", :force => true do |t|
@@ -189,7 +190,6 @@ ActiveRecord::Schema.define(:version => 20121102100850) do
     t.string  "instrument"
     t.string  "ionization"
     t.string  "analyzer"
-    t.integer "sample_id",    :null => false
     t.string  "spectra_file"
     t.integer "mzid_file_id"
   end
