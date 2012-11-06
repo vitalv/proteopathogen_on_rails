@@ -10,6 +10,8 @@ gem 'rails', '3.2.8'
  gem 'haml', '3.1.7'
  gem 'sass'
 
+ gem "bcrypt-ruby", :require => "bcrypt"
+
 # Use unicorn as the web server
 # gem 'unicorn'
 
