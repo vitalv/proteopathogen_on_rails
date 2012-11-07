@@ -24,15 +24,12 @@
           %li=link_to 'BROWSE', '/browsexperiment'
           %li=link_to 'SEARCH', '/search'
           %li=link_to 'CONTACT', '/contact'
-
-      - if current_user
-        Logged in as #{current_user.email} -
-        = link_to "log out", log_out_path
-      - else
-        = link_to "Sign up", sign_up_path 
-        or
-        = link_to "log in", log_in_path
-        
+          - if current_user
+            %li="logged in as #{current_user.email}"
+            %li= link_to 'log out', log_out_path
+          - else
+            %li=link_to 'log in', log_in_path
+             
       - flash.each do |name, msg|
         = content_tag :div, msg, :id => "flash_#{name}"
 

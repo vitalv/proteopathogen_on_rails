@@ -2,6 +2,9 @@ class SpectraAcquisitionRunsController < ApplicationController
 
 require 'nokogiri'
 
+before_filter :require_login, :only=> [:new, :create]
+
+
 def index
   @mzid_file_id = params[:mzid_file_id]
   if MzidFile.find(@mzid_file_id)

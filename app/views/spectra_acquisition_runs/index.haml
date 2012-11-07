@@ -3,7 +3,7 @@
   -if @spectra_acquisition_runs.blank?
     #{@mzid_file_name} has no associated spectra acquisition runs
     %p   
-      =form_tag({:controller => "spectra_acquisition_runs", :action => "new"}, :method => "get") do
+      =form_tag :action => "new", :method => "get", :params => {:mzid_file_id => @mzid_file_id} do
         =submit_tag("New spectra acquisition run")    
   -else 
     -@spectra_acquisition_runs.each do |msrun|

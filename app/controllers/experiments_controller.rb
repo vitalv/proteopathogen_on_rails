@@ -1,5 +1,7 @@
 class ExperimentsController < ApplicationController
 
+  before_filter :require_login, :only=> [:new, :create]
+  
   def index
  
     @all_experiments = Experiment.find(:all)
@@ -23,12 +25,9 @@ class ExperimentsController < ApplicationController
       render :action => "new"
     else
       saved_experiment_id = @saved_experiment.id
-      redirect_to experiment_spectra_acquisition_runs_path(saved_experiment_id) #this goes to experiment/:id/spectra_acquisition_runs/index
+      redirect_to mzid_files_path :params => {:experiment_id => saved_experiment_id}
     end
 
   end
-
-
-
 
 end

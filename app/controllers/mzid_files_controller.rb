@@ -1,8 +1,10 @@
 #require 'nokogiri'
-require 'mzid_parser'
-require 'mzid_2_db'
+#~ require 'mzid_parser'
+#~ require 'mzid_2_db'
 
 class MzidFilesController < ApplicationController
+
+  before_filter :require_login, :only=> [:index, :new, :create]
 
   def index 
   
@@ -30,7 +32,7 @@ class MzidFilesController < ApplicationController
     @saved_mzid = MzidFile.find_or_create_by_sha1({:location => location, :sha1 => sha1, :name => name, :submission_date => Date.today})
     
     if @saved_mzid.valid?
-      redirect_to mzid_file_spectra_acquisition_runs_path(@saved_mzid.id)
+      redirect_to spectra_acquisition_runs_path :params => {:mzid_file_id => @saved_mzid.id}
     else
       render :create
       @errors = @saved_mzid.errors
@@ -42,22 +44,22 @@ class MzidFilesController < ApplicationController
 
   
   
-  def load_mzid_data_into_tables
-  
-    @sample_id = params[:sample_id]
-    saved_mzid_id = params[:saved_mzid_id]
-    saved_mzid = MzidFile.find(saved_mzid_id)
-    location = saved_mzid.location
-    
-    mzid_object = Mzid.new(location)
- 
-    Mzid2db.new(mzid_object, saved_mzid_id).save2tables
-    rescue Exception => msg
-      @exc = msg
-      @trace = msg.backtrace.inspect
-      rollback(@sample_id) if Sample.exists? @sample_id #sometimes I might refresh the view with the "load .mzid file" button when the sample_id was already destroyed in rollback
-      render :rescue
-
-  end
+  #~ def load_mzid_data_into_tables
+  #~ 
+    #~ @sample_id = params[:sample_id]
+    #~ saved_mzid_id = params[:saved_mzid_id]
+    #~ saved_mzid = MzidFile.find(saved_mzid_id)
+    #~ location = saved_mzid.location
+    #~ 
+    #~ mzid_object = Mzid.new(location)
+ #~ 
+    #~ Mzid2db.new(mzid_object, saved_mzid_id).save2tables
+    #~ rescue Exception => msg
+      #~ @exc = msg
+      #~ @trace = msg.backtrace.inspect
+      #~ rollback(@sample_id) if Sample.exists? @sample_id #sometimes I might refresh the view with the "load .mzid file" button when the sample_id was already destroyed in rollback
+      #~ render :rescue
+#~ 
+  #~ end
 
 end

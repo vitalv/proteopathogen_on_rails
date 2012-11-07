@@ -1,6 +1,6 @@
 %h2 Spectra acquisition data for mzid file #{@mzid_file_name}
 %br
-=form_for ([@mzid_file, @spectra_acquisition_runs]) do |f|
+=form_for @spectra_acquisition_runs do |f|
   - @input_spectra_files.each do |s|
     %p 
       Spectra acquisition data for #{s}
