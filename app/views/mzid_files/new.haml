@@ -3,7 +3,7 @@
 %p
 = form_for @mzid_file, :url => {:action => "create"} do |f|
   =f.file_field 'uploaded_file'
-  =hidden_field_tag :sample_id, params[:sample_id]
+  =hidden_field_tag :mzid_file_id, params[:mzid_file_id]
   %br
   %p=f.submit
   

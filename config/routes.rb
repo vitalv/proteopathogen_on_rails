@@ -1,7 +1,4 @@
 ProteopathogenOnRails::Application.routes.draw do
-  get "sessions/new"
-
-  get "users/new"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -17,16 +14,17 @@ ProteopathogenOnRails::Application.routes.draw do
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
  
+  resources :users
+  resources :sessions   
   resources :experiments
   resources :mzid_files
   resources :spectra_acquisition_runs
   
   get "log_out" => "sessions#destroy", :as => "log_out"
   get "log_in" => "sessions#new", :as => "log_in"
-  get "sign_up" => "users#new", :as => "sign_up"
+  #get "sign_up" => "users#new", :as => "sign_up"
   #root :to => "users#new"
-  resources :users
-  resources :sessions  
+
   
 
   # I don't want a resource for all of these bc I just want the 'show' action
