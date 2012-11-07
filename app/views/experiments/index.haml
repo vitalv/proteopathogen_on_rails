@@ -1,14 +1,17 @@
--if @all_samples.blank?
-  no samples
+%h2 Experiments
+-if @experiments.blank?
+  no experiments
 -else 
-  -@all_samples.each do |s|
+  -@experiments.each do |e|
     %p
-      Sample #{s.id}: 
+      Experiment #{e.id}: 
       %br
-      Organism: #{s.organism}
+      Organism: #{e.organism}
       %br
-      Protocol: #{s.protocol}
-    
-%p   
-  =form_tag({:action => "new"}, :method => "get") do
-    =submit_tag("New sample")
+      Protocol: #{e.protocol}
+
+
+// NO!! This view does not require log in    
+//%p   
+//  =form_tag({:action => "new"}, :method => "get") do
+//    =submit_tag("New Experiment")

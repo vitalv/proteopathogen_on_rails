@@ -1,16 +1,18 @@
-%b= "Spectra acquisition runs for mzid file: #{@mzid_file_name}"
-%p
-  -if @spectra_acquisition_runs.blank?
-    #{@mzid_file_name} has no associated spectra acquisition runs
-    %p   
-      =form_tag :action => "new", :method => "get", :params => {:mzid_file_id => @mzid_file_id} do
-        =submit_tag("New spectra acquisition run")    
-  -else 
-    -@spectra_acquisition_runs.each do |msrun|
-      Spectra Acquisition Run #{msrun.id}: 
-      %br
-      Instrument: #{msrun.instrument}
-      %br
-      Ionization: #{msrun.ionization}
+- if !params[:mzid_file_id]
+  %b No mzid_file_id
+- else 
+  %b= "Spectra acquisition runs for mzid file: #{@mzid_file_name}"
+  %p
+    -if @spectra_acquisition_runs.blank?
+      #{@mzid_file_name} has no associated spectra acquisition runs
+      %p= link_to 'Add new spectra data', spectra_acquisition_run_path(@mzid_file_id)
+ 
+    -else
+      -@spectra_acquisition_runs.each do |msrun|
+        Spectra Acquisition Run #{msrun.id}: 
+        %br
+        Instrument: #{msrun.instrument}
+        %br
+        Ionization: #{msrun.ionization}
     
 

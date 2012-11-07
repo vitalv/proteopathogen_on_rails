@@ -1,6 +1,6 @@
 %h2 .mzid Files
 -if @all_mzid_files.blank?
-  No stored .mzid files
+  %p No stored .mzid files
 -else 
   -@all_mzid_files.each do |mzidf|
     %p
@@ -9,7 +9,11 @@
       sha-1: #{mzidf.sha1}
       %br
       submission date: #{mzidf.submission_date}
-    
-%p   
-  =form_tag({:action => "new"}, :method => "get") do
-    =submit_tag("New mzid file")
+
+//-if params[:experiment_id]
+//  %p= link_to "Add new mzid file to experiment #{@experiment_id}", new_mzid_file_path
+//-else
+//  %p No experiment defined. Select experiment to add a related mzid file
+
+%p= link_to "new", new_mzid_file_path
+

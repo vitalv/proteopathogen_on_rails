@@ -2,12 +2,11 @@ class SpectraAcquisitionRunsController < ApplicationController
 
 require 'nokogiri'
 
-before_filter :require_login, :only=> [:new, :create]
+before_filter :require_login
 
 
 def index
-  @mzid_file_id = params[:mzid_file_id]
-  if MzidFile.find(@mzid_file_id)
+  if @mzid_file_id = params[:mzid_file_id]
     @spectra_acquisition_runs = MzidFile.find(@mzid_file_id).spectra_acquisition_runs
     @mzid_file_name = MzidFile.find(@mzid_file_id).name
   end
@@ -24,7 +23,10 @@ def new
     @input_spectra_files << s.attr("location").split("/")[-1]
   end
   
-  @spectra_acquisition_runs = @mzid_file.spectra_acquisition_runs.build
+  #@spectra_acquisition_runs = @mzid_file.spectra_acquisition_runs.build
+  @input_spectra_files.each do |i|
+    render "form", :locals => {:input_spectra => i } #_form. partial under views/spectra_acquistition_runs
+  end
   
 end
 

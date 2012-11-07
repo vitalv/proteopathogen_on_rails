@@ -4,16 +4,20 @@
 
 class MzidFilesController < ApplicationController
 
-  before_filter :require_login, :only=> [:index, :new, :create]
+  before_filter :require_login
 
   def index 
-  
+
+    #@experiment_id ||= params[:experiment_id]
     @all_mzid_files = MzidFile.find(:all)
   
   end
 
   def new
-   
+  
+    #@experiment_id ||= params[:experiment_id] 
+    
+    @experiments = Experiment.find(:all)
     @mzid_file = MzidFile.new
    
   end
@@ -31,10 +35,10 @@ class MzidFilesController < ApplicationController
     sha1 = Digest::SHA1.hexdigest("#{Rails.root}/public/uploaded_mzid_files/#{uploaded_io_filename}")
     @saved_mzid = MzidFile.find_or_create_by_sha1({:location => location, :sha1 => sha1, :name => name, :submission_date => Date.today})
     
-    if @saved_mzid.valid?
+    if @saved_mzid.valid? #could add validation in the model to check file extension really is .mzid
       redirect_to spectra_acquisition_runs_path :params => {:mzid_file_id => @saved_mzid.id}
     else
-      render :create
+      render :new
       @errors = @saved_mzid.errors
     end
     
