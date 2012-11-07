@@ -4,7 +4,7 @@ class ExperimentsController < ApplicationController
   
   def index
  
-    @all_experiments = Experiment.find(:all)
+    @experiments = Experiment.find(:all)
  
   end
 
@@ -25,7 +25,8 @@ class ExperimentsController < ApplicationController
       render :action => "new"
     else
       saved_experiment_id = @saved_experiment.id
-      redirect_to mzid_files_path :params => {:experiment_id => saved_experiment_id}
+      #redirect_to mzid_files_path :params => {:experiment_id => saved_experiment_id}
+      redirect_to :action => "index"
     end
 
   end
