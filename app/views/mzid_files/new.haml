@@ -2,10 +2,12 @@
 
 %p
 = form_for @mzid_file, :url => {:action => "create"} do |f|
-
-  Select Experiment id 
+  - if @mzid_file.errors.any?
+    %ul
+      - for message in @mzid_file.errors.full_messages
+        %li= message
   %br
-  %p=select :experiment, :experiment_id, options_from_collection_for_select(@experiments, "id", "protocol")
+  %p=f.select :experiment_id, @experiments.collect { |e| [e.protocol, e.id] }
   %br
   =f.file_field 'uploaded_file'
   =hidden_field_tag :mzid_file_id, params[:mzid_file_id]

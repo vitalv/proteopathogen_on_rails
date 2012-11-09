@@ -16,7 +16,8 @@ class MzidFilesController < ApplicationController
   def new
   
     #@experiment_id ||= params[:experiment_id] 
-    
+    #@protocols = []
+    #Experiment.find(:all).each { |e| @protocols << e.protocol.slice(0..30) }
     @experiments = Experiment.find(:all)
     @mzid_file = MzidFile.new
    
@@ -24,6 +25,7 @@ class MzidFilesController < ApplicationController
 
   def create
   # Depending on the size of the uploaded file it may in fact be a StringIO or an instance of File backed by a temporary file- SEE guides/form_helpers
+    @experiment_id = params[:mzid_file][:experiment_id]
     uploaded_io = params[:mzid_file][:uploaded_file]
     uploaded_io_filename = uploaded_io.original_filename
     File.open(Rails.root.join('public', 'uploaded_mzid_files', uploaded_io_filename), 'w') do |file|
@@ -33,15 +35,17 @@ class MzidFilesController < ApplicationController
     location = File.absolute_path(uploaded_mzid_file)
     name = uploaded_io_filename
     sha1 = Digest::SHA1.hexdigest("#{Rails.root}/public/uploaded_mzid_files/#{uploaded_io_filename}")
-    @saved_mzid = MzidFile.find_or_create_by_sha1({:location => location, :sha1 => sha1, :name => name, :submission_date => Date.today})
+    @saved_mzid = MzidFile.find_or_create_by_sha1({:location => location, :sha1 => sha1, :name => name, :submission_date => Date.today, :experiment_id => @experiment_id})
+
     
-    if @saved_mzid.valid? #could add validation in the model to check file extension really is .mzid
-      redirect_to spectra_acquisition_runs_path :params => {:mzid_file_id => @saved_mzid.id}
+    if @saved_mzid.invalid? #could add validation in the model to check file extension really is .mzid
+      render "new"
     else
-      render :new
+      redirect_to :action =>  :index
       @errors = @saved_mzid.errors
     end
-    
+
+      
   
   end
 
