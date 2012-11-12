@@ -1,13 +1,15 @@
 %h2 new experiment
 =form_for @experiment do |f|
+  - if @experiment.errors.any?
+    %ul
+      - for message in @experiment.errors.full_messages
+        %li= message
   %p
     = f.label :organism
-    %b= @saving_experiment_errors[:organism] if @saving_experiment_errors
     %br
     = f.text_field :organism
   %p
     = f.label :protocol
-    %b=@saving_experiment_errors[:protocol] if @saving_experiment_errors
     %br
     = f.text_area :protocol
   %p    

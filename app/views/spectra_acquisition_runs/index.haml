@@ -1,18 +1,17 @@
-- if !params[:mzid_file_id]
-  %b No mzid_file_id
-- else 
-  %b= "Spectra acquisition runs for mzid file: #{@mzid_file_name}"
-  %p
-    -if @spectra_acquisition_runs.blank?
-      #{@mzid_file_name} has no associated spectra acquisition runs
-      %p= link_to 'Add new spectra data', spectra_acquisition_run_path(@mzid_file_id)
- 
-    -else
-      -@spectra_acquisition_runs.each do |msrun|
-        Spectra Acquisition Run #{msrun.id}: 
+%h2 Spectra Acquisition Runs
+%p
+  - @mzidf_input_spectra_files.each do |mzidf_input_spect_hash|
+    - mzidf_input_spect_hash.each do |mzidf_id, input_spect_files_arr|
+      %ul
+        %b= MzidFile.find(mzidf_id).name
+      %br
+      - input_spect_files_arr.each do |input_spectra_file|
+        %li= input_spectra_file 
+        - if !@stored_spectra_files.include? input_spectra_file
+          =link_to "add spectra acquisition data" , new_spectra_acquisition_run_path(:mzid_file_id => mzidf_id, :input_spectra_file => input_spectra_file)
+          %br
+        - else
+          %p
+            = "#{SpectraAcquisitionRun.find_by_spectra_file(input_spectra_file).fraction} - "
+            = SpectraAcquisitionRun.find_by_spectra_file(input_spectra_file).instrument      
         %br
-        Instrument: #{msrun.instrument}
-        %br
-        Ionization: #{msrun.ionization}
-    
-

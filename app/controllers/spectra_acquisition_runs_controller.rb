@@ -6,43 +6,64 @@ before_filter :require_login
 
 
 def index
-  if @mzid_file_id = params[:mzid_file_id]
-    @spectra_acquisition_runs = MzidFile.find(@mzid_file_id).spectra_acquisition_runs
-    @mzid_file_name = MzidFile.find(@mzid_file_id).name
+
+  #get this from the mzid file
+  input_spect_files = []
+  mzidf_input_spectra_files_hash = {}
+  @mzidf_input_spectra_files = [] #Array of hashes [ { mzidf_id => [Ati02.mzml, Elu1A.mzml, Elu2B.mzml] } , {} ...   ]
+
+  #get this from existing mzidfile.spectra_acquisition_runs
+  spect_acq_runs, @stored_spectra_files = [], []
+  
+  MzidFile.find(:all).each do |mzidf|
+    if File.exists? mzidf.location
+      spect_acq_runs = MzidFile.find(mzidf).spectra_acquisition_runs
+      if !spect_acq_runs.blank?
+        spect_acq_runs.each do |sar|
+          @stored_spectra_files << sar.spectra_file
+        end
+      end
+      Nokogiri::XML(File.open(mzidf.location)).xpath("//xmlns:SpectraData").each do |s|
+        input_spect_files << s.attr("location").split("/")[-1]
+      end
+      mzidf_input_spectra_files_hash[mzidf.id] = input_spect_files
+      @mzidf_input_spectra_files << mzidf_input_spectra_files_hash
+    end
+    
   end
+
 end
+
 
 
 def new
-  @mzid_file = MzidFile.find(params[:mzid_file_id])
   
-  @mzid_file_name = @mzid_file.name
-  mzid_file_path = @mzid_file.location
-  @input_spectra_files = []
-  Nokogiri::XML(File.open(mzid_file_path)).xpath("//xmlns:SpectraData").each do |s|
-    @input_spectra_files << s.attr("location").split("/")[-1]
-  end
+  if params[:mzid_file_id] and params[:input_spectra_file]
+    @mzid_file_id = params[:mzid_file_id] 
+    @mzid_file = MzidFile.find(params[:mzid_file_id])    
+    @input_spectra_file = params[:input_spectra_file]
+    @spectra_acquisition_run = SpectraAcquisitionRun.new
   
-  #@spectra_acquisition_runs = @mzid_file.spectra_acquisition_runs.build
-  @input_spectra_files.each do |i|
-    render "form", :locals => {:input_spectra => i } #_form. partial under views/spectra_acquistition_runs
+  else   
+    redirect_to :action => :index
   end
   
 end
 
 
+
 def create
-  msrun_hash = params[:spectra_acquisition_run]
-  msrun_hash[:sample_id] = params[:sample_id]
-  @saved_msrun = SpectraAcquisitionRun.create(msrun_hash)
-  if @saved_msrun.invalid?
-    @saving_msrun_errors = @saved_msrun.errors
-    @spectra_acquisition_run = @saved_msrun
-    render :action => "new"
+  spectra_data_hash = params[:spectra_acquisition_run]
+  spectra_data_hash[:spectra_file] = params[:spectra_acquisition_run][:spectra_file]
+  spectra_data_hash[:mzid_file_id] = params[:spectra_acquisition_run][:mzid_file_id]
+  @spectra_acquisition_run = SpectraAcquisitionRun.create(spectra_data_hash)
+  
+  if @spectra_acquisition_run.invalid?
+    render "new"
   else
-    @all_saved_msruns = Sample.find(params[:sample_id]).spectra_acquisition_runs
-        #en el view create pongo el recien salvado msrun y pregunto si crear nuevo msrun o, si ya no quiero mas msruns -> ir a load mzidentml
+    redirect_to :action => :index
   end
+  
 end
 
 

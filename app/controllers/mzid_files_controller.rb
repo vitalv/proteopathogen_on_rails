@@ -1,26 +1,15 @@
 #require 'nokogiri'
-#~ require 'mzid_parser'
-#~ require 'mzid_2_db'
-
 class MzidFilesController < ApplicationController
 
   before_filter :require_login
 
   def index 
-
-    #@experiment_id ||= params[:experiment_id]
     @all_mzid_files = MzidFile.find(:all)
-  
   end
 
   def new
-  
-    #@experiment_id ||= params[:experiment_id] 
-    #@protocols = []
-    #Experiment.find(:all).each { |e| @protocols << e.protocol.slice(0..30) }
     @experiments = Experiment.find(:all)
     @mzid_file = MzidFile.new
-   
   end
 
   def create
@@ -36,22 +25,16 @@ class MzidFilesController < ApplicationController
     name = uploaded_io_filename
     sha1 = Digest::SHA1.hexdigest("#{Rails.root}/public/uploaded_mzid_files/#{uploaded_io_filename}")
     @saved_mzid = MzidFile.find_or_create_by_sha1({:location => location, :sha1 => sha1, :name => name, :submission_date => Date.today, :experiment_id => @experiment_id})
-
     
     if @saved_mzid.invalid? #could add validation in the model to check file extension really is .mzid
       render "new"
     else
       redirect_to :action =>  :index
-      @errors = @saved_mzid.errors
     end
 
-      
-  
   end
 
-
-  
-  
+ 
   #~ def load_mzid_data_into_tables
   #~ 
     #~ @sample_id = params[:sample_id]
