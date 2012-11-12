@@ -10,10 +10,5 @@
       %br
       submission date: #{mzidf.submission_date}
 
-//-if params[:experiment_id]
-//  %p= link_to "Add new mzid file to experiment #{@experiment_id}", new_mzid_file_path
-//-else
-//  %p No experiment defined. Select experiment to add a related mzid file
-
 %p= link_to "new", new_mzid_file_path
 

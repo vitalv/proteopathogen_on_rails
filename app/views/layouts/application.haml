@@ -36,6 +36,12 @@
       %content
 
         =yield
+        
+        - if current_user
+          =link_to "Experiments", :experiments
+          =link_to "MzidFiles", :mzid_files
+          =link_to 'SpectraData', :spectra_acquisition_runs
+          =link_to "LoadMzid2DB"
       
       %div.push
       
