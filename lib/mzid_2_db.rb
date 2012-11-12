@@ -1,8 +1,8 @@
 class Mzid2db
 
-  def initialize(mzid_object, mzid_id)
+  def initialize(mzid_object)
     @mzid_obj = mzid_object
-    @mzid_file_id = mzid_id
+    @mzid_file_id = mzid_object.mzid_file_id
   end
 
 
@@ -89,16 +89,16 @@ class Mzid2db
 end
 
 
-  def rollback(sample_id)
-    if Sample.exists? sample_id
+  def rollback(mzid_file_id)
+    if MzidFile.exists? mzid_file_id
       puts "\n-Error saving data 2 tables. Rolling back -- \n\n"
-      Sample.find(sample_id).spectra_acquisition_runs.each do |sar|
+      MzidFile.find(mzid_file_id).spectra_acquisition_runs.each do |sar|
         sar.spectrum_identification_protocols.each do |sip|
           SpectrumIdentificationProtocol.destroy(sip.id)
         end
         SpectraAcquisitionRun.destroy(sar.id)
       end
-      Sample.destroy(sample_id)
+      Mzidfile.destroy(mzid_file_id)
     #else
     #  puts "Did you just refresh de web page with the Load .mzid file button? because" 
     end

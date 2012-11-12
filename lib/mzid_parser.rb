@@ -2,9 +2,12 @@ require 'nokogiri'
 
 class Mzid
 
+  attr_reader :mzid_file_id
+  
   def initialize(mzid_file)
-
+  
     @doc = Nokogiri::XML(File.open(mzid_file))
+    @mzid_file_id = MzidFile.find_by_location(mzid_file).id
     #@doc = Nokogiri::XML(File.open("/home/vital/pepXML_protXML_2_mzid_V/SILAC_phos_OrbitrapVelos_1_interact-ipro-filtered.mzid"))
     
     #save_all_cv_terms
