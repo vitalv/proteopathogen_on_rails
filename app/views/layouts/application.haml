@@ -21,9 +21,9 @@
       %nav_links
         %ul
           %li=link_to 'HOME', '/'
-          %li=link_to 'BROWSE', '/browsexperiment'
-          %li=link_to 'SEARCH', '/search'
-          %li=link_to 'CONTACT', '/contact'
+          %li=link_to 'BROWSE', '/'
+          %li=link_to 'SEARCH', '/'
+          %li=link_to 'CONTACT', '/'
           - if current_user
             %li="logged in as #{current_user.email}"
             %li= link_to 'log out', log_out_path
@@ -37,11 +37,12 @@
 
         =yield
         
-        - if current_user
-          =link_to "Experiments", :experiments
-          =link_to "MzidFiles", :mzid_files
-          =link_to 'SpectraData', :spectra_acquisition_runs
-          =link_to "LoadMzid2DB"
+        %p
+          - if current_user
+            =link_to "Experiments", :experiments
+            =link_to "MzidFiles", :mzid_files
+            =link_to 'SpectraData', :spectra_acquisition_runs
+            =link_to "LoadMzid2DB"
       
       %div.push
       
