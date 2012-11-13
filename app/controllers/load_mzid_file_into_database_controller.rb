@@ -30,10 +30,10 @@ class LoadMzidFileIntoDatabaseController < ApplicationController
     
     Mzid2db.new(mzid_object).save2tables
     rescue Exception => msg
-       @exc = msg
-       @trace = msg.backtrace.inspect
-       rollback(mzid_file_id) if MzidFile.exists? @mzid_file_id #sometimes I might refresh the view with the "load .mzid file" button when the mzid_file_id was already destroyed in rollback
-       render :rescue
+      @exc = msg
+      @trace = msg.backtrace.inspect
+      rollback(mzid_file_id) if MzidFile.exists? mzid_file_id #sometimes I might refresh the view with the "load .mzid file" button when the mzid_file_id was already destroyed in rollback
+      render :rescue
   
     
   end

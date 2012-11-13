@@ -122,9 +122,11 @@ class Mzid
       #sip_id = @doc.xpath("//xmlns:SpectrumIdentification").collect { |si| si.attr("spectrumIdentificationProtocol_ref") if si.attr("spectrumIdentificationList_ref") == sil_id }
       sis = @doc.xpath("//xmlns:SpectrumIdentification")
       si = sis.select { |si| si.attr("spectrumIdentificationList_ref") == sil_id }
-      sip_id = si[0].attr("spectrumIdentifcationList_ref") #I need sip_id here so I can insert it in the sil table
-
+      sip_id = si[0].attr("spectrumIdentifcationProtocol_ref") #I need sip_id here so I can insert it in the sil table
+      num_seq_searched ||= sil.attr("numSequencesSearched")
     end
+    sil = Sil.new(:sil_id, :sip_id, :num_seq_searched)
+    sils << sil
     return sils 
     #array de objetos SIL. el metodo results de la clase sil crea un arr de objs sir, y a su vez,  el método sir.items devuelve un array de objetos sii
   end
@@ -200,4 +202,23 @@ class Sip
      @psi_ms_terms = args_arr[9]
      @user_params = args_arr[10]
   end
+end
+
+
+
+class Sil
+
+  attr_reader :sil_id, :sip_id, :num_seq_searched
+
+  def initialize(sil_id, sip_id, num_seq_searched)
+    @sil_id = sil_id
+    @sip_id = sip_id
+  end
+
+
+  def results
+
+  end
+
+
 end
