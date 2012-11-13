@@ -7,7 +7,7 @@
       - for message in @mzid_file.errors.full_messages
         %li= message
   %br
-  %p=f.select :experiment_id, @experiments.collect { |e| [e.protocol, e.id] }
+  %p=f.select :experiment_id, @experiments.collect { |e| [e.protocol, e.id] } , :prompt => 'Select experiment'
   %br
   =f.file_field 'uploaded_file'
   %br

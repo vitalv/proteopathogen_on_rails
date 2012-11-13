@@ -13,5 +13,8 @@
         - else
           %p
             = "#{SpectraAcquisitionRun.find_by_spectra_file(input_spectra_file).fraction} - "
-            = SpectraAcquisitionRun.find_by_spectra_file(input_spectra_file).instrument      
+            = "#{SpectraAcquisitionRun.find_by_spectra_file(input_spectra_file).instrument} - "
+            = "#{SpectraAcquisitionRun.find_by_spectra_file(input_spectra_file).ionization} - " 
+            = SpectraAcquisitionRun.find_by_spectra_file(input_spectra_file).analyzer    
+
         %br

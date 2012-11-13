@@ -34,7 +34,7 @@ class Mzid2db
  
        #---- SAVE 2 spectrum_identification_protocols ----
       #this_sip = SpectrumIdentificationProtocol.find_or_create_by_sip_id_and_input_spectra_and_analysis_software_and_search_type_and_threshold(:sip_id => sip_id, :input_spectra => input_spectra, :analysis_software => analysis_software, :search_type => search_type, :threshold => threshold)
-      this_sip = SpectrumIdentificationProtocol.create(:sip_id => sip_id, :input_spectra => input_spectra, :spectra_acquisition_run_id => spectra_acquisition_run_id, :analysis_software => analysis_software, :search_type => search_type, :threshold => threshold, :parent_tol_plus_value => parent_tol_plus_value, :parent_tol_minus_value => parent_tol_minus_value, :fragment_tol_plus_value => fragment_tol_plus_value, :fragment_tol_minus_value => fragment_tol_minus_value, :mzid_file_id => @mzid_file_id)
+      this_sip = SpectrumIdentificationProtocol.create(:sip_id => sip_id, :input_spectra => input_spectra, :spectra_acquisition_run_id => spectra_acquisition_run_id, :analysis_software => analysis_software, :search_type => search_type, :threshold => threshold, :parent_tol_plus_value => parent_tol_plus_value, :parent_tol_minus_value => parent_tol_minus_value, :fragment_tol_plus_value => fragment_tol_plus_value, :fragment_tol_minus_value => fragment_tol_minus_value)
       #this_sip.create . Always . Don't have to check whether record exists bc even if all this_sip columns/attributes are found in a previous record, this_sip may be a completely new experiment (for instance repeating the search with a new DB)
       #well you could check just one thing: mzid file is the same and sip_id is the same, then DO check record exists and don't insert if true
       
@@ -73,7 +73,7 @@ class Mzid2db
     
     
     
-    #---- SAVE 2 SIP and associated tables -----#
+    #---- SAVE 2 SIL and associated tables -----#
     #-------------------------------------------#    
     @mzid_obj.sils.each do |sil|
      

@@ -104,8 +104,8 @@ class Mzid
       #---- user_params ----
       user_params = getuserParams(sip)
      
-      arguments_arr = [sip_id, search_type, threshold, analysis_software, input_spectra, search_db_arr, searched_modification_arr, parent_tolerance, fragment_tolerance, psi_ms_terms, user_params]
-      sips << Sip.new(arguments_arr)
+      sip_args_arr = [sip_id, search_type, threshold, analysis_software, input_spectra, search_db_arr, searched_modification_arr, parent_tolerance, fragment_tolerance, psi_ms_terms, user_params]
+      sips << Sip.new(sip_args_arr)
 
     end #@doc.xpath("//xmlns:SpectrumIdentificationProtocol").each do |sip|
     return sips #Array de objetos SIP     
@@ -124,11 +124,9 @@ class Mzid
       si = sis.select { |si| si.attr("spectrumIdentificationList_ref") == sil_id }
       sip_id = si[0].attr("spectrumIdentifcationList_ref") #I need sip_id here so I can insert it in the sil table
 
-      
-      
-      #Un SIL puede ser un array de objetos SIR: sil << Sir.new(arg, arg)
     end
-    return sils
+    return sils 
+    #array de objetos SIL. el metodo results de la clase sil crea un arr de objs sir, y a su vez,  el método sir.items devuelve un array de objetos sii
   end
   
   
@@ -189,17 +187,17 @@ SearchDB = Struct.new(:name, :location, :version, :releaseDate, :num_seq)
 class Sip
   attr_reader :sip_id, :search_type, :threshold, :analysis_software, :input_spectra, :search_db_arr, 
                :searched_modification_arr, :parent_tolerance, :fragment_tolerance, :psi_ms_terms, :user_params
-  def initialize(arguments_arr)  
-     @sip_id = arguments_arr[0] 
-     @search_type = arguments_arr[1]
-     @threshold = arguments_arr[2]
-     @analysis_software = arguments_arr[3]
-     @input_spectra = arguments_arr[4]
-     @search_db_arr = arguments_arr[5]
-     @searched_modification_arr = arguments_arr[6]
-     @parent_tolerance = arguments_arr[7]
-     @fragment_tolerance = arguments_arr[8]
-     @psi_ms_terms = arguments_arr[9]
-     @user_params = arguments_arr[10]
+  def initialize(args_arr)  
+     @sip_id = args_arr[0] 
+     @search_type = args_arr[1]
+     @threshold = args_arr[2]
+     @analysis_software = args_arr[3]
+     @input_spectra = args_arr[4]
+     @search_db_arr = args_arr[5]
+     @searched_modification_arr = args_arr[6]
+     @parent_tolerance = args_arr[7]
+     @fragment_tolerance = args_arr[8]
+     @psi_ms_terms = args_arr[9]
+     @user_params = args_arr[10]
   end
 end
