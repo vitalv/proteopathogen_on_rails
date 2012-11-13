@@ -16,6 +16,11 @@ class Mzid2db
     
     #---- SAVE 2 SIP and associated tables -----#
     #-------------------------------------------#
+    #stored_sips_for_current_mzid = []
+    #MzidFile.find(@mzid_file_id).spectra_acquisition_runs.each do |sar_id|
+    #  stored_sips_for_current_mzid << SpectraAcquisitionRun.find(sar_id).spectrum_identification_protocols
+    #end
+    
     @mzid_obj.sips.each do |sip|
     
       sip_id = sip.sip_id
@@ -33,8 +38,9 @@ class Mzid2db
       #these sips refer to an input_spectra (via 1:1 <SpectrumIdentification><InputSpectra>) that EXISTS in table Spectra_acquisition_runs.spectra_file
  
        #---- SAVE 2 spectrum_identification_protocols ----
-      #this_sip = SpectrumIdentificationProtocol.find_or_create_by_sip_id_and_input_spectra_and_analysis_software_and_search_type_and_threshold(:sip_id => sip_id, :input_spectra => input_spectra, :analysis_software => analysis_software, :search_type => search_type, :threshold => threshold)
-      this_sip = SpectrumIdentificationProtocol.create(:sip_id => sip_id, :input_spectra => input_spectra, :spectra_acquisition_run_id => spectra_acquisition_run_id, :analysis_software => analysis_software, :search_type => search_type, :threshold => threshold, :parent_tol_plus_value => parent_tol_plus_value, :parent_tol_minus_value => parent_tol_minus_value, :fragment_tol_plus_value => fragment_tol_plus_value, :fragment_tol_minus_value => fragment_tol_minus_value)
+      unless SpectraAcquisitionRun.find(spectra_acquisition_run_id).spectrum_identification_protocols.any?
+        this_sip = SpectrumIdentificationProtocol.create(:sip_id => sip_id, :input_spectra => input_spectra, :spectra_acquisition_run_id => spectra_acquisition_run_id, :analysis_software => analysis_software, :search_type => search_type, :threshold => threshold, :parent_tol_plus_value => parent_tol_plus_value, :parent_tol_minus_value => parent_tol_minus_value, :fragment_tol_plus_value => fragment_tol_plus_value, :fragment_tol_minus_value => fragment_tol_minus_value)
+      end
       #this_sip.create . Always . Don't have to check whether record exists bc even if all this_sip columns/attributes are found in a previous record, this_sip may be a completely new experiment (for instance repeating the search with a new DB)
       #well you could check just one thing: mzid file is the same and sip_id is the same, then DO check record exists and don't insert if true
       
@@ -91,16 +97,15 @@ end
 
   def rollback(mzid_file_id)
     if MzidFile.exists? mzid_file_id
-      puts "\n-Error saving data 2 tables. Rolling back -- \n\n"
+      #puts "\n-Error saving data 2 tables. Rolling back -- \n\n"
       MzidFile.find(mzid_file_id).spectra_acquisition_runs.each do |sar|
         sar.spectrum_identification_protocols.each do |sip|
           SpectrumIdentificationProtocol.destroy(sip.id)
         end
-        SpectraAcquisitionRun.destroy(sar.id)
+        #SpectraAcquisitionRun.destroy(sar.id)
       end
-      Mzidfile.destroy(mzid_file_id)
-    #else
-    #  puts "Did you just refresh de web page with the Load .mzid file button? because" 
+      #MzidFile.destroy(mzid_file_id)
+
     end
    
   end
