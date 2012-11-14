@@ -26,9 +26,9 @@ class LoadMzidFileIntoDatabaseController < ApplicationController
     mzid_file_id = params[:mzid_file_id]
     
     mzid_file = MzidFile.find(mzid_file_id)
-    mzid_object = Mzid.new(mzid_file.location)
+    mzid = Mzid.new(mzid_file.location)
     
-    Mzid2db.new(mzid_object).save2tables
+    Mzid2db.new(mzid).save2tables
     rescue Exception => msg
       @exc = msg
       @trace = msg.backtrace.inspect

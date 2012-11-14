@@ -15,6 +15,16 @@ class Mzid
   end
   
   
+  def spectrum_identifications
+  #por cada s_i tendre un sip. Eso es así
+  #por cada s_i tendre un sil. Eso también es así
+  #Por tanto por cada s_i puedo llamar al método getSip(sip_id) -> que devuelve un obj Sip; y al método getSil(sil_id)
+  #input_spectra_arr << guardo aqui los <InputSpectra spectraData_ref
+  
+  #spectrum_idents_arr << SpectrumIdentification.new(si_id, sip_id, sil_id, input_spectra_arr, search_db_arr)
+   
+  end
+  
   
   def sips
   
@@ -181,12 +191,23 @@ end #class Mzid
 
 
 
+
+
+
+class SpectrumIdentification
+
+
+end
+
 ##CLASE Sip SpectrumIdentificationProtocol 
 SearchedMod = Struct.new(:mass_delta, :fixedMod, :residue, :unimod_accession)
 SearchDB = Struct.new(:name, :location, :version, :releaseDate, :num_seq)
 #A Struct is a convinient way tu bundle a number of attributes together, using accessor methods, without having to write an explicit class
 
-class Sip
+class Sip < SpectrumIdentification
+
+  super
+
   attr_reader :sip_id, :search_type, :threshold, :analysis_software, :input_spectra, :search_db_arr, 
                :searched_modification_arr, :parent_tolerance, :fragment_tolerance, :psi_ms_terms, :user_params
   def initialize(args_arr)  
