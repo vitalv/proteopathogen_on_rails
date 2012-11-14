@@ -21,6 +21,9 @@ class Mzid2db
     #  stored_sips_for_current_mzid << SpectraAcquisitionRun.find(sar_id).spectrum_identification_protocols
     #end
     
+    #Aqui en lugar de recorrer los sips puedo recorrer los s_i
+    #y por cada uno llamar al metodo sip y al metodo sil y guardar TOOOODO ESo
+    
     @mzid_obj.sips.each do |sip|
     
       sip_id = sip.sip_id
