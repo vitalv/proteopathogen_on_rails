@@ -22,7 +22,7 @@ class Mzid2db
     #end
     
     #Aqui en lugar de recorrer los sips puedo recorrer los s_i
-    #y por cada uno llamar al metodo sip y al metodo sil y guardar TOOOODO ESo
+    #y por cada uno llamar al metodo sip y al metodo sil y guardar TOOOODO ESo, aawww yeah
     
     @mzid_obj.sips.each do |sip|
     

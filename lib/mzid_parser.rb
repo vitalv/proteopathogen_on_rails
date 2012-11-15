@@ -16,13 +16,30 @@ class Mzid
   
   
   def spectrum_identifications
-  #por cada s_i tendre un sip. Eso es así
-  #por cada s_i tendre un sil. Eso también es así
-  #Por tanto por cada s_i puedo llamar al método getSip(sip_id) -> que devuelve un obj Sip; y al método getSil(sil_id)
-  #input_spectra_arr << guardo aqui los <InputSpectra spectraData_ref
   
-  #spectrum_idents_arr << SpectrumIdentification.new(si_id, sip_id, sil_id, input_spectra_arr, search_db_arr)
-   
+    si_arr = []
+    @doc.xpath("//xmlns:SpectrumIdentification").each do |si|
+      si_id = si.attr("id")
+      sip_ref = si.attr("spectrumIdentificationProtocol_ref") 
+      sil_ref = si.attr("spectrumIdentificationList_ref")
+      input_spectra_ref_arr, search_db_ref_arr = [] , []
+      si.xpath(".//xmlns:InputSpectra").each do |i_s|
+        input_spectra_ref_arr << i_s.attr("spectraData_ref")
+      end
+      si.xpath(".//xmlns:SearchDatabaseRef").each do |sdb|
+        search_db_ref_arr << sdb.attr("searchDatabase_ref")
+      end    
+      si_arr << Si.new(si_id, sip_ref, sil_ref, input_spectra_ref_arr, search_db_ref_arr)    
+    end
+    return si_arr
+    #por cada s_i tendre un sip. Eso es así
+    #por cada s_i tendre un sil. Eso también es así
+    #Por tanto, en mzid_2_db,  por cada s_i puedo llamar al método Sip(sip_id) -> que devuelve un obj Sip; y al método Sil(sil_id)   
+  end
+  
+  def sip(sip_ref)
+    sip = @doc.xpath("//xmlns:SpectrumIdentificationProtocol[@id='#{sip_ref}']")
+    
   end
   
   
@@ -193,20 +210,32 @@ end #class Mzid
 
 
 
+#SpectrumIdentification.new(si_id, sip_id, sil_id, input_spectra_arr, search_db_arr)
+class Si
 
-class SpectrumIdentification
+  attr_reader :si_id, :sip_ref, :sil_ref, :input_spectra_ref_arr, :search_db_ref_arr
+  
+  def initialize(si_id, sip_ref, sil_ref, input_spectra_ref_arr, search_db_ref_arr)
+    @si_id = si_id
+    @sip_ref = sip_ref
+    @sil_ref = sil_ref
+    @input_spectra_ref_arr = input_spectra_ref_arr
+    @search_db_ref_arr = search_db_ref_arr  
+  end
 
 
 end
+
+
 
 ##CLASE Sip SpectrumIdentificationProtocol 
 SearchedMod = Struct.new(:mass_delta, :fixedMod, :residue, :unimod_accession)
 SearchDB = Struct.new(:name, :location, :version, :releaseDate, :num_seq)
 #A Struct is a convinient way tu bundle a number of attributes together, using accessor methods, without having to write an explicit class
 
-class Sip < SpectrumIdentification
+class Sip #< SpectrumIdentification
 
-  super
+  #super
 
   attr_reader :sip_id, :search_type, :threshold, :analysis_software, :input_spectra, :search_db_arr, 
                :searched_modification_arr, :parent_tolerance, :fragment_tolerance, :psi_ms_terms, :user_params
@@ -224,6 +253,7 @@ class Sip < SpectrumIdentification
      @user_params = args_arr[10]
   end
 end
+
 
 
 
