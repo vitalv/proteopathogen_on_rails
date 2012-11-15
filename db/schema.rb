@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121106121405) do
+ActiveRecord::Schema.define(:version => 20121115101437) do
 
   create_table "db_sequences", :force => true do |t|
     t.string "accession"
@@ -108,6 +108,20 @@ ActiveRecord::Schema.define(:version => 20121106121405) do
     t.string "name"
   end
 
+  create_table "sar_si_join_table", :id => false, :force => true do |t|
+    t.integer "spectra_acquisition_run_id"
+    t.integer "spectrum_identification_id"
+  end
+
+  add_index "sar_si_join_table", ["spectra_acquisition_run_id", "spectrum_identification_id"], :name => "index_sar_si"
+
+  create_table "sdb_si_join_table", :id => false, :force => true do |t|
+    t.integer "search_database_id"
+    t.integer "spectrum_identification_id"
+  end
+
+  add_index "sdb_si_join_table", ["search_database_id", "spectrum_identification_id"], :name => "index_sdb_si"
+
   create_table "search_databases", :force => true do |t|
     t.string  "name"
     t.string  "version"
@@ -152,13 +166,6 @@ ActiveRecord::Schema.define(:version => 20121106121405) do
     t.string  "psi_ms_cv_term_accession"
     t.string  "value"
   end
-
-  create_table "sip_sdb_join_table", :id => false, :force => true do |t|
-    t.integer "search_database_id"
-    t.integer "spectrum_identification_protocol_id"
-  end
-
-  add_index "sip_sdb_join_table", ["search_database_id", "spectrum_identification_protocol_id"], :name => "index_sip_sdb"
 
   create_table "sip_searched_mod_join_table", :id => false, :force => true do |t|
     t.integer "searched_modification_id"
@@ -206,21 +213,19 @@ ActiveRecord::Schema.define(:version => 20121106121405) do
   end
 
   create_table "spectrum_identification_lists", :force => true do |t|
-    t.string  "sil_id",                              :null => false
-    t.integer "spectrum_identification_protocol_id"
+    t.string  "sil_id",           :null => false
+    t.integer "num_seq_searched"
   end
 
   create_table "spectrum_identification_protocols", :force => true do |t|
-    t.string  "sip_id",                     :null => false
-    t.string  "input_spectra"
-    t.string  "analysis_software"
-    t.string  "search_type"
-    t.string  "threshold",                  :null => false
-    t.string  "parent_tol_plus_value"
-    t.string  "parent_tol_minus_value"
-    t.string  "fragment_tol_plus_value"
-    t.string  "fragment_tol_minus_value"
-    t.integer "spectra_acquisition_run_id"
+    t.string "sip_id",                   :null => false
+    t.string "analysis_software"
+    t.string "search_type"
+    t.string "threshold",                :null => false
+    t.string "parent_tol_plus_value"
+    t.string "parent_tol_minus_value"
+    t.string "fragment_tol_plus_value"
+    t.string "fragment_tol_minus_value"
   end
 
   create_table "spectrum_identification_results", :force => true do |t|
@@ -228,6 +233,11 @@ ActiveRecord::Schema.define(:version => 20121106121405) do
     t.integer "spectrum_identification_list_id"
     t.string  "spectrum_id"
     t.string  "spectrum_name"
+  end
+
+  create_table "spectrum_identifications", :force => true do |t|
+    t.integer "spectrum_identification_protocol_id"
+    t.integer "spectrum_identification_list_id"
   end
 
   create_table "users", :force => true do |t|
