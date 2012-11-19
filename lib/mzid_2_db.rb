@@ -24,6 +24,14 @@ class Mzid2db
     #Aqui en lugar de recorrer los sips puedo recorrer los s_i
     #y por cada uno llamar al metodo sip y al metodo sil y guardar TOOOODO ESo, aawww yeah
     
+    @mzid_obj.spectrum_identifications.each do |si|
+    #:si_id, :sip_ref, :sil_ref, :input_spectra_ref_arr, :search_db_ref_arr
+      SpectraAcquisitionRun.find_by_
+      Si.new(si.si_id, 
+    
+    end
+    
+    
     @mzid_obj.sips.each do |sip|
     
       sip_id = sip.sip_id
