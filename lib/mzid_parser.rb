@@ -15,21 +15,25 @@ class Mzid
   end
   
   
-  def spectrum_identifications
-  
+  def spectrum_identifications  
     si_arr = []
     @doc.xpath("//xmlns:SpectrumIdentification").each do |si|
       si_id = si.attr("id")
       sip_ref = si.attr("spectrumIdentificationProtocol_ref") 
       sil_ref = si.attr("spectrumIdentificationList_ref")
-      input_spectra_ref_arr, search_db_ref_arr = [] , []
+      input_spectra_ref_arr, search_db_ref_arr = [] , [] 
       si.xpath(".//xmlns:InputSpectra").each do |i_s|
         input_spectra_ref_arr << i_s.attr("spectraData_ref")
       end
       si.xpath(".//xmlns:SearchDatabaseRef").each do |sdb|
         search_db_ref_arr << sdb.attr("searchDatabase_ref")
       end    
-      si_arr << Si.new(si_id, sip_ref, sil_ref, input_spectra_ref_arr, search_db_ref_arr)    
+      si_arr << Si.new(si_id, sip_ref, sil_ref, input_spectra_ref_arr, input_spectra_file_arr,  search_db_ref_arr) 
+    end
+    @doc.xpath("xmlns:SpectraData").each do |sd|
+      input_spectra_file_arr = []
+      input_spectra_file_arr << spectra_data.attr("location").split("/")[-1]
+      
     end
     return si_arr
     #por cada s_i tendre un sip. Eso es así
@@ -39,6 +43,48 @@ class Mzid
   
   def sip(sip_ref)
     sip = @doc.xpath("//xmlns:SpectrumIdentificationProtocol[@id='#{sip_ref}']")
+    sip_id = sip_ref
+    
+    #<SearchType minOccurs:1 >
+    search_type = get_cvParam_and_or_userParam(sip.xpath(".//xmlns:SearchType"))
+    
+    #<Threshold minOccurs:1 >
+    threshold = get_cvParam_and_or_userParam(sip.xpath(".//xmlns:Threshold"))
+    
+    #<SpectrumIdentificationProtocol, attribute analysisSoftware_ref : required
+    analysisSoftware_ref, analysis_software = sip.attr("analysisSoftware_ref"), ""
+    @doc.xpath("//xmlns:AnalysisSoftware").each do |soft|
+      analysis_software = get_cvParam_and_or_userParam(soft.xpath(".//xmlns:SoftwareName")) if soft.attr("id") == analysisSoftware_ref
+    end
+    
+    #---- parent_tol_cv_terms & fragment_tol_cv_terms ----
+    parent_tolerance_node = sip.xpath(".//xmlns:ParentTolerance")[0] #<ParentTolerance maxOccurs: 1>
+    parent_tolerance = getcvParams(parent_tolerance_node) unless parent_tolerance_node.nil?
+    fragment_tolerance_node = sip.xpath(".//xmlns:FragmentTolerance")[0]
+    fragment_tolerance = getcvParams(fragment_tolerance_node) unless fragment_tolerance_node.nil?      
+    
+    #<ModificationParams minOccurs: 0> <SearchModification minOccurs: 1>
+    unless sip.xpath(".//xmlns:ModificationParams").empty?
+      searched_modification_arr = []
+      sip.xpath(".//xmlns:SearchModification").each do |search_mod|
+        mass_d, fixed = search_mod.attr("massDelta"), search_mod.attr("fixedMod")
+        residue = search_mod.attr("residues")
+        unimod_ac = getcvParams(search_mod)[0][:accession] #<cvParam minOccurs:1>
+        searched_modification_arr << SearchedMod.new(mass_d, fixed, residue, unimod_ac)        
+      end
+    end
+    
+    #---- psi_ms_terms ----
+    all_cvParams_per_sip = getcvParams(sip)
+    psi_ms_terms = all_cvParams_per_sip.delete_if { |h| h[:cvRef] != "PSI-MS"}
+    psi_ms_terms = all_cvParams_per_sip.delete_if { |h| h[:accession] =~ /MS:100141(2|3)/ } #tolerances already stored       
+    #---- user_params ----
+    user_params = getuserParams(sip)    
+
+    sip_args_arr = [sip_id, search_type, threshold, analysis_software, searched_modification_arr, parent_tolerance, fragment_tolerance, psi_ms_terms, user_params]
+    sip = Sip.new(sip_args_arr)
+
+    return sip    
     
   end
   
@@ -210,7 +256,6 @@ end #class Mzid
 
 
 
-#SpectrumIdentification.new(si_id, sip_id, sil_id, input_spectra_arr, search_db_arr)
 class Si
 
   attr_reader :si_id, :sip_ref, :sil_ref, :input_spectra_ref_arr, :search_db_ref_arr
@@ -223,34 +268,28 @@ class Si
     @search_db_ref_arr = search_db_ref_arr  
   end
 
-
 end
 
 
 
-##CLASE Sip SpectrumIdentificationProtocol 
 SearchedMod = Struct.new(:mass_delta, :fixedMod, :residue, :unimod_accession)
 SearchDB = Struct.new(:name, :location, :version, :releaseDate, :num_seq)
-#A Struct is a convinient way tu bundle a number of attributes together, using accessor methods, without having to write an explicit class
 
-class Sip #< SpectrumIdentification
+class Sip < Si
 
-  #super
+  super
 
-  attr_reader :sip_id, :search_type, :threshold, :analysis_software, :input_spectra, :search_db_arr, 
-               :searched_modification_arr, :parent_tolerance, :fragment_tolerance, :psi_ms_terms, :user_params
+  attr_reader :sip_id, :search_type, :threshold, :analysis_software, searched_modification_arr, :parent_tolerance, :fragment_tolerance, :psi_ms_terms, :user_params
   def initialize(args_arr)  
      @sip_id = args_arr[0] 
      @search_type = args_arr[1]
      @threshold = args_arr[2]
      @analysis_software = args_arr[3]
-     @input_spectra = args_arr[4]
-     @search_db_arr = args_arr[5]
-     @searched_modification_arr = args_arr[6]
-     @parent_tolerance = args_arr[7]
-     @fragment_tolerance = args_arr[8]
-     @psi_ms_terms = args_arr[9]
-     @user_params = args_arr[10]
+     @searched_modification_arr = args_arr[4]
+     @parent_tolerance = args_arr[5]
+     @fragment_tolerance = args_arr[6]
+     @psi_ms_terms = args_arr[7]
+     @user_params = args_arr[8]
   end
 end
 
