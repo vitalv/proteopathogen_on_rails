@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121115101437) do
+ActiveRecord::Schema.define(:version => 20121120164115) do
 
   create_table "db_sequences", :force => true do |t|
     t.string "accession"
@@ -213,19 +213,21 @@ ActiveRecord::Schema.define(:version => 20121115101437) do
   end
 
   create_table "spectrum_identification_lists", :force => true do |t|
-    t.string  "sil_id",           :null => false
+    t.string  "sil_id",                     :null => false
     t.integer "num_seq_searched"
+    t.integer "spectrum_identification_id"
   end
 
   create_table "spectrum_identification_protocols", :force => true do |t|
-    t.string "sip_id",                   :null => false
-    t.string "analysis_software"
-    t.string "search_type"
-    t.string "threshold",                :null => false
-    t.string "parent_tol_plus_value"
-    t.string "parent_tol_minus_value"
-    t.string "fragment_tol_plus_value"
-    t.string "fragment_tol_minus_value"
+    t.string  "sip_id",                     :null => false
+    t.string  "analysis_software"
+    t.string  "search_type"
+    t.string  "threshold",                  :null => false
+    t.string  "parent_tol_plus_value"
+    t.string  "parent_tol_minus_value"
+    t.string  "fragment_tol_plus_value"
+    t.string  "fragment_tol_minus_value"
+    t.integer "spectrum_identification_id"
   end
 
   create_table "spectrum_identification_results", :force => true do |t|
@@ -236,8 +238,9 @@ ActiveRecord::Schema.define(:version => 20121115101437) do
   end
 
   create_table "spectrum_identifications", :force => true do |t|
-    t.integer "spectrum_identification_protocol_id"
-    t.integer "spectrum_identification_list_id"
+    t.string "si_id",         :null => false
+    t.string "name"
+    t.string "activity_date"
   end
 
   create_table "users", :force => true do |t|
