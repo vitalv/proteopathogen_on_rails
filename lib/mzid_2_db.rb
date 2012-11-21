@@ -14,6 +14,8 @@ class Mzid2db
 
   def save2tables
 
+    spectrum_identification_lists_ids = []
+    
     @mzid_obj.spectrum_identifications.each do |si|
     
       mzid_si_id = si.si_id
@@ -70,12 +72,20 @@ class Mzid2db
       sil = @mzid_obj.sil(si.sil_ref)
       sil_id = sil.sil_id
       num_seq_searched = sil.num_seq_searched
-      this_sil = SpectrumIdentificationList.create(:sil_id => sil_id, :spectrum_identification_id => si_id, :num_seq_searched => num_seq_searched)
       
-
-
+      this_sil = SpectrumIdentificationList.create(:sil_id => sil_id, :spectrum_identification_id => si_id, :num_seq_searched => num_seq_searched)
+      spectrum_identification_lists_ids << this_sil.id
+      
     end #@mzid_obj.spectrum_identifications.each do |si|
 
+
+
+
+    spectrum_identification_lists_ids.each do |sil_id|
+      results_arr = spectrum_identification_results(sil_id)
+    
+    end
+   
 
   end # def save2tables
 
