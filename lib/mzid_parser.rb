@@ -94,7 +94,6 @@ class Mzid
   end
 
 
-
   def sil(sil_ref)
     sil = @doc.xpath("//xmlns:SpectrumIdentificationList[@id='#{sil_ref}']")[0]
     sil_id = sil.attr("id")
@@ -104,6 +103,23 @@ class Mzid
   end
   
   
+  def spectrum_identification_results(sil_ref)
+    sil = @doc.xpath("//xmlns:SpectrumIdentificationList[@id='#{sil_ref}']")
+    sil.xpath(".//xmlns:SpectrumIdentificationResult").each do |result|
+      #guardar array de objetos result:
+      #poner en la clase result(o sir) un metodo def items que devuelva un array de objetos item    
+      sir_id = result.attr("id")
+      spectrum_name = result.attr("name")
+      spectrum_id = result.attr("spectrumID")
+      result.xpath(".//SpectrumIdentificationItem").each do |sii|
+      
+      end
+      #guardar array de objetos result:
+      #poner en la clase result(o sir) un metodo def items que devuelva un array de objetos item
+    end
+  
+  end
+
 
 end #class Mzid
 
@@ -193,3 +209,13 @@ class Sip
   end
 end
 
+
+class Sir
+
+  attr_reader :sir_id, :spectrum_identification_list_id, :spectrum_id, :spectrum_name
+  
+  def initialize()
+  
+  end
+
+end
