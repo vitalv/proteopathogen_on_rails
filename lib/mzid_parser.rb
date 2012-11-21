@@ -21,7 +21,7 @@ class Mzid
       si_id = si.attr("id")
       sip_ref = si.attr("spectrumIdentificationProtocol_ref")
       sil_ref = si.attr("spectrumIdentificationList_ref")
-      name ||= si.attr("name")
+      si_name ||= si.attr("name")
       activity_date ||= si.attr("activityDate")
       input_spectra_files_arr, search_db_arr = [] , [] #input_spectra_ref_arr es un arr de input_spectra hashes  #input_spectra = {} #[ {"SID_AtiO2" => "AtiO2.mzML"}, {"SID_Elu1A" => "Elu1A.mzML"}, {"SID_Elu2A" => "Elu2A.mzML"} ]
       si.xpath(".//xmlns:InputSpectra").each do |i_s|
@@ -31,15 +31,15 @@ class Mzid
       end      
       si.xpath(".//xmlns:SearchDatabaseRef").each do |sdb|
         sdb_id = sdb.attr("searchDatabase_ref")
-        search_database = @doc.xpath("//xmlns:SearchDatabase[@id='#{sdb_id}']")
+        search_database = @doc.xpath("//xmlns:SearchDatabase[@id='#{sdb_id}']")[0]
         name = get_cvParam_and_or_userParam(search_database.xpath(".//xmlns:DatabaseName"))
         location, version = search_database.attr("location"), search_database.attr("version")
-        releaseDate, num_seq = search_database.attr("releaseDate"),  search_database.attr("numDatabaseSequences")        
+        releaseDate, num_seq = search_database.attr("releaseDate"),  search_database.attr("numDatabaseSequences")
         sdb = SearchDB.new(name, location, version, releaseDate, num_seq)
         search_db_arr << sdb if search_db_arr.empty?
         search_db_arr << sdb unless search_db_arr.include? sdb
       end      
-      si_arr << Si.new(si_id, sip_ref, sil_ref, name, activity_date, input_spectra_files_arr, search_db_arr)
+      si_arr << Si.new(si_id, sip_ref, sil_ref, si_name, activity_date, input_spectra_files_arr, search_db_arr)
     end
     return si_arr
   end
@@ -96,7 +96,7 @@ class Mzid
 
 
   def sil(sil_ref)
-    sil = @doc.xpath("//xmlns:SpectrumIdentificationList[@id='#{sil_ref}']")
+    sil = @doc.xpath("//xmlns:SpectrumIdentificationList[@id='#{sil_ref}']")[0]
     sil_id = sil.attr("id")
     num_seq_searched ||= sil.attr("numSequencesSearched")
     sil = Sil.new(:sil_id, :num_seq_searched)
@@ -157,13 +157,13 @@ end #class Mzid
 
 class Si
 
-  attr_reader :si_id, :sip_ref, :sil_ref, :name, :activity_date, :input_spectra_files_arr, :search_db_arr
+  attr_reader :si_id, :sip_ref, :sil_ref, :si_name, :activity_date, :input_spectra_files_arr, :search_db_arr
 
-  def initialize(si_id, sip_ref, sil_ref, name, activity_date, input_spectra_files_arr, search_db_arr)
+  def initialize(si_id, sip_ref, sil_ref, si_name, activity_date, input_spectra_files_arr, search_db_arr)
     @si_id = si_id
     @sip_ref = sip_ref
     @sil_ref = sil_ref
-    @name = name
+    @si_name = si_name
     @activity_date = activity_date
     @input_spectra_files_arr = input_spectra_files_arr
     @search_db_arr = search_db_arr

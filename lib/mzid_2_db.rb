@@ -16,14 +16,12 @@ class Mzid2db
 
     @mzid_obj.spectrum_identifications.each do |si|
     
-    
       mzid_si_id = si.si_id
-      this_si = SpectrumIdentification.create(:si_id => mzid_si_id, :name => si.name, :activity_date => si.activity_date)
+      this_si = SpectrumIdentification.create(:si_id => mzid_si_id, :name => si.si_name, :activity_date => si.activity_date)
 
       #--- save 2 sar_si_join_table. si.spectra_acquisition_runs
-      si.input_spectra_files_arr.each do |spectra_file|
-        sar_id = SpectraAcquisitionRun.find_by_spectra_file(spectra_file).id
-        this_si.spectra_acquisition_runs << sar_id
+      si.input_spectra_files_arr.each do |s_f|
+        this_si.spectra_acquisition_runs << SpectraAcquisitionRun.find_by_spectra_file(s_f)
       end
       
       #--- get si.sip and sip attributes and sip-related tables ---
@@ -91,8 +89,10 @@ end
     if MzidFile.exists? mzid_file_id
       #puts "\n-Error saving data 2 tables. Rolling back -- \n\n"
       MzidFile.find(mzid_file_id).spectra_acquisition_runs.each do |sar|
-        sar.spectrum_identification_protocols.each do |sip|
-          SpectrumIdentificationProtocol.destroy(sip.id)
+        sar.spectrum_identifications.each do |si|
+          sip_id = si.spectrum_identification_protocol
+          SpectrumIdentificationProtocol.destroy(sip_id)
+          SpectrumIdentification.destroy(si.id)
         end
         #SpectraAcquisitionRun.destroy(sar.id)
       end
