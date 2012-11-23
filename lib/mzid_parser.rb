@@ -47,7 +47,7 @@ class Mzid
 
   def sip(sip_ref)
 
-    sip = @doc.xpath("//xmlns:SpectrumIdentificationProtocol[@id='#{sip_ref}']")
+    sip = @doc.xpath("//xmlns:SpectrumIdentificationProtocol[@id='#{sip_ref}']")[0]
     sip_id = sip_ref
 
     #<SearchType minOccurs:1 >
@@ -57,10 +57,10 @@ class Mzid
     threshold = get_cvParam_and_or_userParam(sip.xpath(".//xmlns:Threshold"))
 
     #<SpectrumIdentificationProtocol, attribute analysisSoftware_ref : required
-    analysisSoftware_ref, analysis_software = sip.attr("analysisSoftware_ref"), ""
-    @doc.xpath("//xmlns:AnalysisSoftware").each do |soft|
-      analysis_software = get_cvParam_and_or_userParam(soft.xpath(".//xmlns:SoftwareName")) if soft.attr("id") == analysisSoftware_ref
-    end
+    analysisSoftware_ref = sip.attr("analysisSoftware_ref")
+    analysis_software_node = @doc.xpath("//xmlns:AnalysisSoftware[@id='#{analysisSoftware_ref}']")[0]
+    software_name_node = analysis_software_node.xpath("./xmlns:SoftwareName")
+    analysis_software = get_cvParam_and_or_userParam(software_name)
 
     #---- parent_tol_cv_terms & fragment_tol_cv_terms ----
     parent_tolerance_node = sip.xpath(".//xmlns:ParentTolerance")[0] #<ParentTolerance maxOccurs: 1>
@@ -79,13 +79,32 @@ class Mzid
       end
     end
 
-    #---- psi_ms_terms ----
-    all_cvParams_per_sip = getcvParams(sip)
+    #---- psi_ms_terms ---- ALL SIP children's cvParams go to sip_psi_ms_terms and sip_user_params
+    nodes_w_cvP, cvP_parent_names = [], []
+    sip.xpath(".//xmlns:cvParam").each do |cvP| # ".// means it searches in ALL nodes under current sip
+      nodes_w_cvP << cvP.parent  unless cvP_parent_names.include? cvP.parent.name #but I want only the parent node of the <cvParam to use in getcvParam
+      cvP_parent_names << cvP.parent.name
+    end
+    all_cvParams_per_sip = []
+    nodes_w_cvP.each do |n|
+      all_cvParams_per_sip << getcvParams(n)
+    end
+    all_cvParams_per_sip.flatten!
     psi_ms_terms = all_cvParams_per_sip.delete_if { |h| h[:cvRef] != "PSI-MS"}
     psi_ms_terms = all_cvParams_per_sip.delete_if { |h| h[:accession] =~ /MS:100141(2|3)/ } #tolerances already stored
-    #---- user_params ----
-    user_params = getuserParams(sip)
 
+    #---- user_params ----
+    nodes_w_uP, uP_parent_names = [], []
+    sip.xpath(".//xmlns:userParam").each do |uP|
+      nodes_w_uP << uP.parent unless uP_parent_names.include? uP.parent.name
+      uP_parent_names << uP.parent.name
+    end
+    user_params = []
+    nodes_w_uP.each do |n|
+      user_params << getuserParams(n)
+    end
+    user_params.flatten!
+    
     sip_args_arr = [sip_id, search_type, threshold, analysis_software, searched_modification_arr, parent_tolerance, fragment_tolerance, psi_ms_terms, user_params]
     sip = Sip.new(sip_args_arr)
 
@@ -104,19 +123,35 @@ class Mzid
   
   
   def spectrum_identification_results(sil_ref)
-    sil = @doc.xpath("//xmlns:SpectrumIdentificationList[@id='#{sil_ref}']")
-    sil.xpath(".//xmlns:SpectrumIdentificationResult").each do |result|
-      #guardar array de objetos result:
-      #poner en la clase result(o sir) un metodo def items que devuelva un array de objetos item    
-      sir_id = result.attr("id")
-      spectrum_name = result.attr("name")
-      spectrum_id = result.attr("spectrumID")
-      result.xpath(".//SpectrumIdentificationItem").each do |sii|
-      
+    results = []
+    sil = @doc.xpath("//xmlns:SpectrumIdentificationList[@id='#{sil_ref}']")[0]
+    sil.xpath(".//xmlns:SpectrumIdentificationResult").each do |sir|
+      sir_id = sir.attr("id")
+      spectrum_name = sir.attr("name")
+      spectrum_id = sir.attr("spectrumID")
+      sir_psi_ms_cv_terms = getcvParams(sir)
+      sir_user_params = getuserParams(sir)      
+      items_arr = []
+      sir.xpath(".//xmlns:SpectrumIdentificationItem").each do |sii|
+        sii_id = sii.attr("id")
+        calc_m2z = sii.attr("calculatedMassToCharge")
+        exp_m2z = sii.attr("experimentalMassToCharge")
+        rank = sii.attr("rank")
+        charge_state = sii.attr("chargeState")
+        pass_threshold = sii.attr("passThreshold")
+        pepEv_ref_arr = []
+        sii.xpath("./xmlns:PeptideEvidenceRef").each do |pepEvRef|
+          pepEv_ref_arr << pepEvRef.attr("peptideEvidence_ref")
+        end
+        sii_psi_ms_cv_terms = getcvParams(sii)
+        sii_user_params = getuserParams(sii)
+        items_arr << Sii.new(sii_id, calc_m2z, exp_m2z, rank, charge_state, pass_threshold, pepEv_ref_arr, sii_psi_ms_cv_terms, sii_user_params)
       end
-      #guardar array de objetos result:
-      #poner en la clase result(o sir) un metodo def items que devuelva un array de objetos item
+      results << Sir.new(sir_id, spectrum_name, spectrum_id, sir_psi_ms_cv_terms, sir_user_params, items_arr)
+      
     end
+    
+    return results
   
   end
 
@@ -149,7 +184,7 @@ end #class Mzid
 
   def getcvParams(parent_node)
     cvParams = []
-    parent_node.xpath(".//xmlns:cvParam").each do |cvP|
+    parent_node.xpath("./xmlns:cvParam").each do |cvP| #("./xmlns: searches in current node ; (".//xmlns: searches in all children !!
       cv_hash = {:name => cvP.attr("name"), :accession => cvP.attr("accession"), :value => cvP.attr("value"), :cvRef => cvP.attr("cvRef"),
       :unitAccession => cvP.attr("unitAccession"), :unitCvRef => cvP.attr("unitCvRef"), :unitName => cvP.attr("unitName")}
       cvParams << cv_hash
@@ -160,14 +195,12 @@ end #class Mzid
 
   def getuserParams(parent_node)
     userParams = []
-    parent_node.xpath(".//xmlns:userParam").each do |userP|
+    parent_node.xpath("./xmlns:userParam").each do |userP|
       user_hash = {:name => userP.attr("name"), :value => userP.attr("value")}
       userParams << user_hash
     end
     return userParams
   end
-
-
 
 
 
@@ -212,10 +245,36 @@ end
 
 class Sir
 
-  attr_reader :sir_id, :spectrum_identification_list_id, :spectrum_id, :spectrum_name
+  attr_reader :sir_id, :spectrum_id, :spectrum_name, :sir_psi_ms_cv_terms, :sir_user_params, :items_arr
   
-  def initialize()
-  
+  def initialize(sir_id, spectrum_id, spectrum_name, sir_psi_ms_cv_terms, sir_user_params, items_arr)
+    @sir_id = sir_id
+    @spectrum_id = spectrum_id
+    @spectrum_name = spectrum_name
+    @sir_psi_ms_cv_terms = sir_psi_ms_cv_terms
+    @sir_user_params = sir_user_params
+    @items_arr = items_arr  
   end
 
 end
+
+
+class Sii
+
+  attr_reader :sii_id, :calc_m2z, :exp_m2z, :rank, :charge_state, :pass_threshold, :pepEv_ref_arr, :sii_psi_ms_cv_terms, :sii_user_params
+  
+  def initialize(sii_id, calc_m2z, exp_m2z, rank, charge_state, pass_threshold, pepEv_ref_arr, sii_psi_ms_cv_terms, sii_user_params)
+    @sii_id = sii_id
+    @calc_m2z = calc_m2z
+    @exp_m2z = exp_m2z
+    @rank = rank
+    @charge_state = charge_state
+    @pass_threshold = pass_threshold 
+    @pepEv_ref_arr = pepEv_ref_arr
+    @sii_psi_ms_cv_terms = sii_psi_ms_cv_terms
+    @sii_user_params = sii_user_params
+  end
+
+end
+
+
