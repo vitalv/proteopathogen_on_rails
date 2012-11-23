@@ -41,24 +41,30 @@ class Mzid2db
       #--- save si.sip
       this_sip = SpectrumIdentificationProtocol.create(:spectrum_identification_id => si_id, :sip_id => sip_id, :analysis_software => analysis_software, :search_type => search_type, :threshold => threshold, :parent_tol_plus_value => parent_tol_plus_value, :parent_tol_minus_value => parent_tol_minus_value, :fragment_tol_plus_value => fragment_tol_plus_value, :fragment_tol_minus_value => fragment_tol_minus_value)      
       #---- save sip_psi_ms_cv_terms ---- sip_psi_ms_cv_term es SIP-scope ??
-      psi_ms_terms.each do |psi_ms_term|
-        this_psi_term = SipPsiMsCvTerm.find_or_initialize_by_spectrum_identification_protocol_id_and_psi_ms_cv_term_accession(:spectrum_identification_protocol_id => this_sip.id, :psi_ms_cv_term_accession => psi_ms_term[:accession])
-        this_psi_term.value = psi_ms_term[:value] if this_psi_term.new_record? unless psi_ms_term[:value].blank?
-        this_psi_term.save
+      unless psi_ms_terms.empty?
+        psi_ms_terms.each do |psi_ms_term|
+          this_psi_term = SipPsiMsCvTerm.find_or_initialize_by_spectrum_identification_protocol_id_and_psi_ms_cv_term_accession(:spectrum_identification_protocol_id => this_sip.id, :psi_ms_cv_term_accession => psi_ms_term[:accession])
+          this_psi_term.value = psi_ms_term[:value] if this_psi_term.new_record? unless psi_ms_term[:value].blank?
+          this_psi_term.save
+        end
       end
       #---- save sip_user_params ----
-      user_params.each do |userP|
-        this_userP = SipUserParam.find_or_initialize_by_spectrum_identification_protocol_id_and_name(:spectrum_identification_protocol_id => this_sip.id, :name => userP[:name])
-        this_userP.value = userP[:value] if this_userP.new_record? unless userP[:value].blank?
-        this_userP.save
+      unless user_params.empty?
+        user_params.each do |userP|
+          this_userP = SipUserParam.find_or_initialize_by_spectrum_identification_protocol_id_and_name(:spectrum_identification_protocol_id => this_sip.id, :name => userP[:name])
+          this_userP.value = userP[:value] if this_userP.new_record? unless userP[:value].blank?
+          this_userP.save
+        end
       end
       #---- save sip.searched_modifications ---- Global-scope
-      searched_mod_arr.each do |mod|
-        #Y ademas estoy insertando records que ya existian! Entonces pa que coño quiero la join table !!
-        #is_fixed boolean 'true' is saved as 1 in mysql -tinyint(1)-, so watch the fuck out
-        fixed = '1' if mod.fixedMod == 'true'; fixed = '0' if mod.fixedMod == 'false'
-        this_mod = SearchedModification.find_or_create_by_unimod_accession_and_mass_delta_and_residue_and_is_fixed(:unimod_accession => mod.unimod_accession, :mass_delta => mod.mass_delta, :residue => mod.residue, :is_fixed => fixed)
-        this_sip.searched_modifications << this_mod unless this_sip.searched_modifications.include? this_mod
+      unless searched_mod_arr.empty?
+        searched_mod_arr.each do |mod|
+          #Y ademas estoy insertando records que ya existian! Entonces pa que coño quiero la join table !!
+          #is_fixed boolean 'true' is saved as 1 in mysql -tinyint(1)-, so watch the fuck out
+          fixed = '1' if mod.fixedMod == 'true'; fixed = '0' if mod.fixedMod == 'false'
+          this_mod = SearchedModification.find_or_create_by_unimod_accession_and_mass_delta_and_residue_and_is_fixed(:unimod_accession => mod.unimod_accession, :mass_delta => mod.mass_delta, :residue => mod.residue, :is_fixed => fixed)
+          this_sip.searched_modifications << this_mod unless this_sip.searched_modifications.include? this_mod
+        end
       end
       
       #--- save si.search_databases ---
@@ -82,7 +88,24 @@ class Mzid2db
 
 
     spectrum_identification_lists_ids.each do |sil_id|
-      results_arr = spectrum_identification_results(sil_id)
+      sil_ref = sil_id.sil_id
+      results_arr = @mzid_obj.spectrum_identification_results(sil_ref)
+      results.each do |sir|
+        sir_id = sir.sir_id
+        spectrum_identification_list_id = sil_id
+        spectrum_id = sir.spectrum_id
+        spectrum_name = sir.spectrum_name
+        sir_psi_ms_cv_terms = sir.sir_psi_ms_cv_terms
+        sir_user_params = sir.sir_user_params
+        items_arr = sir.items_arr
+        this_sir = SpectrumIdentificationResult.create(:sir_id => sir_id, :spectrum_identification_list_id => sil_id, :spectrum_id => spectrum_id, :spectrum_name => spectrum_name)
+        unless sir_psi_ms_cv_terms.empty?
+          sir_psi_ms_cv_terms.each do |psi_ms_t|
+            SirPsiMsCvTerm.find_or_initialize_by_spectrum_identification_result_id()
+#SipPsiMsCvTerm.find_or_initialize_by_spectrum_identification_protocol_id_and_psi_ms_cv_term_accession(:spectrum_identification_protocol_id => this_sip.id, :psi_ms_cv_term_accession => psi_ms_term[:accession])                        
+          end
+        end
+      end
     
     end
    
