@@ -41,10 +41,13 @@ class Mzid2db
       #--- save si.sip
       this_sip = SpectrumIdentificationProtocol.create(:spectrum_identification_id => si_id, :sip_id => sip_id, :analysis_software => analysis_software, :search_type => search_type, :threshold => threshold, :parent_tol_plus_value => parent_tol_plus_value, :parent_tol_minus_value => parent_tol_minus_value, :fragment_tol_plus_value => fragment_tol_plus_value, :fragment_tol_minus_value => fragment_tol_minus_value)      
       #---- save sip_psi_ms_cv_terms ---- sip_psi_ms_cv_term es SIP-scope ??
+      #maybe create method to save psi_ms_cv_terms with args (model, psi_ms_terms_set) :
+      #save_psi_ms_cv_terms(SipPsiMsCvTerm, psi_ms_terms) unless psi_ms_terms.empty?
       unless psi_ms_terms.empty?
         psi_ms_terms.each do |psi_ms_term|
           this_psi_term = SipPsiMsCvTerm.find_or_initialize_by_spectrum_identification_protocol_id_and_psi_ms_cv_term_accession(:spectrum_identification_protocol_id => this_sip.id, :psi_ms_cv_term_accession => psi_ms_term[:accession])
           this_psi_term.value = psi_ms_term[:value] if this_psi_term.new_record? unless psi_ms_term[:value].blank?
+          #SipPsiMsCvTerm has a value so, shouldn't it be always a new record? If so, then I wouln't need to find_or_initialize, just create the thing
           this_psi_term.save
         end
       end
@@ -88,7 +91,7 @@ class Mzid2db
 
 
     spectrum_identification_lists_ids.each do |sil_id|
-      sil_ref = sil_id.sil_id
+      sil_ref = SpectrumIdentification.find(sil_id).sil_id
       results_arr = @mzid_obj.spectrum_identification_results(sil_ref)
       results.each do |sir|
         sir_id = sir.sir_id
@@ -101,13 +104,34 @@ class Mzid2db
         this_sir = SpectrumIdentificationResult.create(:sir_id => sir_id, :spectrum_identification_list_id => sil_id, :spectrum_id => spectrum_id, :spectrum_name => spectrum_name)
         unless sir_psi_ms_cv_terms.empty?
           sir_psi_ms_cv_terms.each do |psi_ms_t|
-            SirPsiMsCvTerm.find_or_initialize_by_spectrum_identification_result_id()
-#SipPsiMsCvTerm.find_or_initialize_by_spectrum_identification_protocol_id_and_psi_ms_cv_term_accession(:spectrum_identification_protocol_id => this_sip.id, :psi_ms_cv_term_accession => psi_ms_term[:accession])                        
+            this_psi_term = SirPsiMsCvTerm.find_or_initialize_by_spectrum_identification_result_id_and_psi_ms_cv_term_accession(:spectrum_identification_result_id => this_sir.id, :psi_ms_cv_term_accession => psi_ms_t[:accession])
+            this_psi_term.value = psi_ms_t[:value] if this_psi_term.new_record? unless psi_ms_t[:value].blank?
+            this_psi_term.save           
           end
         end
-      end
+        unless user_params.empty?
+          sir_user_params.each do |userP|
+            this_userP = SirUserParam.find_or_initialize_by_spectrum_identification_result_id_and_name(:spectrum_identification_result_id => this_sir.id, :name => userP[:name])
+            this_userP.value = userP[:value] if this_userP.new_record? unless userP[:value].blank?
+            this_userP.save
+          end
+        end
+        items_arr.each do |item|
+          sii_id = item.sii_id
+          calc_m2z = item.calc_m2z
+          exp_m2z = item.exp_m2z
+          rank = item.rank
+          charge_state = item.charge_state
+          pass_threshold = item.pass_threshold
+          pepEv_ref_arr = item.pepEv_ref_arr
+          sii_psi_ms_cv_terms = item.sii_psi_ms_cv_terms
+          sii_user_params = item.sii_user_params
+          this_item = SpectrumIdentificationItem.create(:sii_id => sii_id, :calc_m2z => calc_m2z, :exp_m2z => exp_m2z, :rank => rank, :charge_state => charge_state, :pass_threshold => pass_threshold ) 
+        end #items_arr.each do |item|
+        
+      end #results.each do |sir|
     
-    end
+    end #spectrum_identification_lists_ids.each do |sil_id|
    
 
   end # def save2tables
@@ -116,6 +140,20 @@ class Mzid2db
 
 
 end
+
+
+#maybe create method to save psi_ms_cv_terms with args (model, psi_ms_terms_set) :
+#  def save_psi_ms_cv_terms(model, psi_ms_terms)
+#    psi_ms_terms.each do |psi_ms_term|
+#      this_psi_term = model.find_or_initialize_by_spectrum_identification_protocol_id_and_psi_ms_cv_term_accession(:spectrum_identification_protocol_id => this_sip.id, :psi_ms_cv_term_accession => psi_ms_term[:accession])
+#      this_psi_term.value = psi_ms_term[:value] if this_psi_term.new_record? unless psi_ms_term[:value].blank?
+#      this_psi_term.save
+#    end  
+#  end
+  
+#  def save_user_params
+  
+#  end
 
 
   def rollback(mzid_file_id)
@@ -135,3 +173,13 @@ end
 
   end
 
+
+class String
+  def camelcase2underscore
+    self.gsub(/::/, '/').
+    gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
+    gsub(/([a-z\d])([A-Z])/,'\1_\2').
+    tr("-", "_").
+    downcase
+  end
+end
