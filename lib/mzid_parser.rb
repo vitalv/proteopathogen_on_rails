@@ -60,7 +60,7 @@ class Mzid
     analysisSoftware_ref = sip.attr("analysisSoftware_ref")
     analysis_software_node = @doc.xpath("//xmlns:AnalysisSoftware[@id='#{analysisSoftware_ref}']")[0]
     software_name_node = analysis_software_node.xpath("./xmlns:SoftwareName")
-    analysis_software = get_cvParam_and_or_userParam(software_name)
+    analysis_software = get_cvParam_and_or_userParam(software_name_node)
 
     #---- parent_tol_cv_terms & fragment_tol_cv_terms ----
     parent_tolerance_node = sip.xpath(".//xmlns:ParentTolerance")[0] #<ParentTolerance maxOccurs: 1>
