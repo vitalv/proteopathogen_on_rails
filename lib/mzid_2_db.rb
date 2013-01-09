@@ -88,19 +88,16 @@ class Mzid2db
     end #@mzid_obj.spectrum_identifications.each do |si|
 
 
-
-
     spectrum_identification_lists_ids.each do |sil_id|
-      sil_ref = SpectrumIdentification.find(sil_id).sil_id
+      sil_ref = SpectrumIdentificationList.find(sil_id).sil_id
       results_arr = @mzid_obj.spectrum_identification_results(sil_ref)
-      results.each do |sir|
+      results_arr.each do |sir|
         sir_id = sir.sir_id
         spectrum_identification_list_id = sil_id
         spectrum_id = sir.spectrum_id
         spectrum_name = sir.spectrum_name
         sir_psi_ms_cv_terms = sir.sir_psi_ms_cv_terms
         sir_user_params = sir.sir_user_params
-        items_arr = sir.items_arr
         this_sir = SpectrumIdentificationResult.create(:sir_id => sir_id, :spectrum_identification_list_id => sil_id, :spectrum_id => spectrum_id, :spectrum_name => spectrum_name)
         unless sir_psi_ms_cv_terms.empty?
           sir_psi_ms_cv_terms.each do |psi_ms_t|
@@ -109,14 +106,14 @@ class Mzid2db
             this_psi_term.save           
           end
         end
-        unless user_params.empty?
+        unless sir_user_params.empty?
           sir_user_params.each do |userP|
             this_userP = SirUserParam.find_or_initialize_by_spectrum_identification_result_id_and_name(:spectrum_identification_result_id => this_sir.id, :name => userP[:name])
             this_userP.value = userP[:value] if this_userP.new_record? unless userP[:value].blank?
             this_userP.save
           end
         end
-        items_arr.each do |item|
+        sir.items_arr.each do |item|
           sii_id = item.sii_id
           calc_m2z = item.calc_m2z
           exp_m2z = item.exp_m2z
@@ -127,6 +124,22 @@ class Mzid2db
           sii_psi_ms_cv_terms = item.sii_psi_ms_cv_terms
           sii_user_params = item.sii_user_params
           this_item = SpectrumIdentificationItem.create(:sii_id => sii_id, :calc_m2z => calc_m2z, :exp_m2z => exp_m2z, :rank => rank, :charge_state => charge_state, :pass_threshold => pass_threshold ) 
+          #otra vez esto: (??) No puedes secarlo un poco?? (Sí, "secarlo", ya sabes, ;-) , ;-)  )
+          unless sii_psi_ms_cv_terms.empty?
+            sii_psi_ms_cv_terms.each do |psi_ms_t|
+              this_psi_term = SiiPsiMsCvTerm.find_or_initialize_by_spectrum_identification_item_id_and_psi_ms_cv_term_accession(:spectrum_identification_item_id => this_item.id, :psi_ms_cv_term_accession => psi_ms_t[:accession])
+              this_psi_term.value = psi_ms_t[:value] if this_psi_term.new_record? unless psi_ms_t[:value].blank?
+              this_psi_term.save           
+            end
+          end
+          unless sii_user_params.empty?
+            sii_user_params.each do |userP|
+              this_userP = SiiUserParam.find_or_initialize_by_spectrum_identification_item_id_and_name(:spectrum_identification_item_id => this_item.id, :name => userP[:name])
+              this_userP.value = userP[:value] if this_userP.new_record? unless userP[:value].blank?
+              this_userP.save
+            end
+          end
+          
         end #items_arr.each do |item|
         
       end #results.each do |sir|
