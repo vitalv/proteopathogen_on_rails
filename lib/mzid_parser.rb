@@ -117,7 +117,7 @@ class Mzid
     sil = @doc.xpath("//xmlns:SpectrumIdentificationList[@id='#{sil_ref}']")[0]
     sil_id = sil.attr("id")
     num_seq_searched ||= sil.attr("numSequencesSearched")
-    sil = Sil.new(:sil_id, :num_seq_searched)
+    sil = Sil.new(sil_id, num_seq_searched)
     return sil
   end
   
