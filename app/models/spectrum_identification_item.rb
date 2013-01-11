@@ -5,6 +5,7 @@ class SpectrumIdentificationItem < ActiveRecord::Base
   belongs_to :spectrum_identification_result
   has_many :sii_psi_ms_cv_terms, :dependent => :destroy
   has_many :fragments, :dependent => :destroy
-  belongs_to :peptide
-  has_and_belongs_to_many :peptide_evidences, :join_table => 'sii_pepevidence_join_table'
+  #belongs_to :peptide #Un-comment when I get the peptides table done
+  #un-comment following line when i get the peptide_evidences table done
+  #has_and_belongs_to_many :peptide_evidences, :join_table => 'sii_pepevidence_join_table' 
 end
