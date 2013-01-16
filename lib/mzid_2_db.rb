@@ -13,6 +13,22 @@ class Mzid2db
 
 
   def save2tables
+  
+      #ATENÇAO ! Aqui para guardar un peptide, tengo que buscar primero sus modif. Si esa seq. con esas modif ya existen en la bd entonces no lo guardo sino que cogo su id y listo!
+    @mzid_obj.peptides.each do |pep|
+      peptide_id = pep.pep_id
+      sequence = pep.sequence
+      #si this_pep es un new_record guardo sus modificaciones sin más
+      #si this_pep no es un new_record busco sus modificaciones para ver si realmente es      
+      this_pep =  Peptide.find_or_create_by_sequence(:peptide_id => peptide_id, :sequence => sequence)
+      if !pep.modif_arr.empty?
+        modif_arr.each do |pep_mod|
+          Modification.create
+        end
+      end
+      
+    end
+  
 
     spectrum_identification_lists_ids = []
     

@@ -15,6 +15,27 @@ class Mzid
   end
 
 
+  def peptides
+    #This must have a global scope. Peptide is an entity defined by its sequence and modification. One peptide can be identified across experiments / msruns
+    pep_arr = []
+    @doc.xpath("//xmlns:Peptide").each do |pep|
+      pep_id = pep.attr("id")
+      sequence = pep.xpath(".//xmlns:PeptideSequence").text
+      modif_arr = [] #Array de Structs PeptideMod (que a su vez es un attr del objeto de la clase 
+      pep.xpath(".//xmlns:Modification").each do |mod| #:unimod_acc
+        residue = mod.attr("residues")
+        avg_mass_delta = mod.attr("avgMassDelta")
+        location = mod.attr("location")
+        cv_params = getcvParams(mod)
+        modif_arr << PeptideMod.new(residue, avg_mass_delta, location, cv_params)
+      end
+      pep_arr << Peptide.new(pep_id, sequence, modif_arr)
+    end
+    return pep_arr  
+  end
+  
+  
+
   def spectrum_identifications
     si_arr = []
     @doc.xpath("//xmlns:SpectrumIdentification").each do |si|
@@ -201,6 +222,23 @@ end #class Mzid
     end
     return userParams
   end
+
+
+
+PeptideMod = Struct.new(:residue, :avg_mass_delta, :location, :cv_params)
+
+class Peptide
+
+  attr_reader :pep_id, :sequence, :modif_arr
+  
+  def initialize(pep_id, sequence, modif_arr)
+    @pep_id = pep_id
+    @sequence = sequence
+    @modif_arr = modif_arr
+  end
+  
+end
+
 
 
 
