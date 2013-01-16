@@ -202,14 +202,16 @@ ActiveRecord::Schema.define(:version => 20121120164115) do
   end
 
   create_table "spectrum_identification_items", :force => true do |t|
-    t.string  "sii_id",                            :null => false
-    t.integer "spectrum_identification_result_id"
-    t.string  "calc_m2z"
-    t.string  "exp_m2z",                           :null => false
-    t.integer "rank",                              :null => false
-    t.integer "charge_state",                      :null => false
-    t.string  "pass_threshold",                    :null => false
-    t.integer "peptide_id",                        :null => false
+    t.string   "sii_id",                            :null => false
+    t.integer  "spectrum_identification_result_id"
+    t.string   "calc_m2z"
+    t.string   "exp_m2z",                           :null => false
+    t.integer  "rank",                              :null => false
+    t.integer  "charge_state",                      :null => false
+    t.string   "pass_threshold",                    :null => false
+    t.datetime "created_at",                        :null => false
+    t.datetime "updated_at",                        :null => false
+    t.integer  "peptide_id"
   end
 
   create_table "spectrum_identification_lists", :force => true do |t|
