@@ -128,8 +128,9 @@ class Mzid2db
           sii_user_params = item.sii_user_params
           
           
-          #ATENÇAO!! No puedo crear el sii porque he puesto que peptide_id no sea null. Pero yo no tengo peptide ninguno aún !!
-          # a lo mejor puedo desvincular sii con peptide y dejar la relacion solo a traves de peptide evidence (?)
+          #ATENÇAO!! No puedo crear el sii porque he puesto que peptide_id no sea null. 
+          # Pero yo no tengo peptide ninguno aún !! Tengo que buscarlo: sii tiene un attribute que es el peptide_ref! -> PERO ES OPTIONAL!!! (JARL!)
+          # 
           this_item = SpectrumIdentificationItem.create(:sii_id => sii_id, :spectrum_identification_result_id => sir_id, :calc_m2z => calc_m2z, :exp_m2z => exp_m2z, :rank => rank, :charge_state => charge_state, :pass_threshold => pass_threshold ) 
          
           #otra vez esto: (??) No puedes secarlo un poco?? (Sí, "secarlo", ya sabes, ;-) , ;-)  )

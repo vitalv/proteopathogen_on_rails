@@ -1,5 +1,13 @@
 class AddPeptideIdToSpectrumIdentificationItem < ActiveRecord::Migration
-  def change
-    add_column :spectrum_identification_items, :peptide_id, :integer, :null => false
+  def up
+    change_table :spectrum_identification_items do |t|
+      t.references :peptide
+    end
+  end
+  def down
+    change_table :spectrum_identification_items do |t|
+      
+    
+    end
   end
 end
