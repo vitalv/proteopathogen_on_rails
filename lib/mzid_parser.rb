@@ -29,7 +29,7 @@ class Mzid
         cv_params = getcvParams(mod)
         modif_arr << PeptideMod.new(residue, avg_mass_delta, location, cv_params)
       end
-      pep_arr << Peptide.new(pep_id, sequence, modif_arr)
+      pep_arr << Pep.new(pep_id, sequence, modif_arr)
     end
     return pep_arr  
   end
@@ -227,7 +227,7 @@ end #class Mzid
 
 PeptideMod = Struct.new(:residue, :avg_mass_delta, :location, :cv_params)
 
-class Peptide
+class Pep #No puedo llamarlo Peptide igual que mi modelo !!
 
   attr_reader :pep_id, :sequence, :modif_arr
   
