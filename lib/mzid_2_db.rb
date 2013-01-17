@@ -14,13 +14,26 @@ class Mzid2db
 
   def save2tables
   
-      #ATENÇAO ! Aqui para guardar un peptide, tengo que buscar primero sus modif. Si esa seq. con esas modif ya existen en la bd entonces no lo guardo sino que cogo su id y listo!
+    #ATENÇAO ! Aqui para guardar un peptide, tengo que buscar primero sus modif. Si esa seq. con esas modif ya existen en la bd entonces no lo guardo sino que cogo su id y listo!
+    #UN PEPTIDO es su seq y sus modif
     @mzid_obj.peptides.each do |pep|
       peptide_id = pep.pep_id
       sequence = pep.sequence
-      #si this_pep es un new_record guardo sus modificaciones sin más
-      #si this_pep no es un new_record busco sus modificaciones para ver si realmente es      
-      this_pep =  Peptide.find_or_create_by_sequence(:peptide_id => peptide_id, :sequence => sequence)
+
+      if Peptide.find_by_sequence(sequence).nil? #guardar este pep sin más 
+      
+      else 
+        #Vale, la seq de este pep (de este experimento) ya esta guardada. Ahora mirar si pep.modif_arr coincide con las modifications guardadas de ese pep para saber si el PEPTIDO es EL MISMO
+        saving_pep_mods = pep.modif_arr #es el de este experimento
+        saved_pep_mods = Peptide.find_by_sequence(sequence).modif #
+      end
+      
+
+      #si this_pep es un new_record lo guardo con sus modificaciones sin más!
+      #si this_pep no es un new_record busco sus modificaciones para ver si realmente es 
+      
+      Peptide.find(this_pep).modifications
+      
       if !pep.modif_arr.empty?
         modif_arr.each do |pep_mod|
           Modification.create
