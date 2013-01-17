@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130116152856) do
+ActiveRecord::Schema.define(:version => 20130117094425) do
 
   create_table "db_sequences", :force => true do |t|
     t.string "accession"
@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(:version => 20130116152856) do
     t.string "sequence"
     t.string "molecular_weight"
     t.string "isoelectric_point"
+    t.string "peptide_id"
   end
 
   create_table "protein_ambiguity_groups", :force => true do |t|
