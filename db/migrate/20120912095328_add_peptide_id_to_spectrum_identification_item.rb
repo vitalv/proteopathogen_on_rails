@@ -5,9 +5,6 @@ class AddPeptideIdToSpectrumIdentificationItem < ActiveRecord::Migration
     end
   end
   def down
-    change_table :spectrum_identification_items do |t|
-      
-    
-    end
+    remove_column :spectrum_identification_items, :peptide_id
   end
 end

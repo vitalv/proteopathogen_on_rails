@@ -34,6 +34,17 @@ class Mzid
     return pep_arr  
   end
   
+  def pep_evidences
+    pep_ev_arr = []
+    @doc.xpath("//xmlns:PeptideEvidence").each do |pepEv|
+      pepEv_id, name = pepEv.attr("id"), pepEv.attr("name")
+      start_pos, end_pos = pepEv.attr("start"), pepEv.attr("end")
+      pre, post = pepEv.attr("pre"), pepEv.attr("post")
+      pep_ref = pepEv.attr("peptide_ref")
+      pep_ev_arr << PepEv.new(id, start_pos, end_pos, pre, post)#PepEv = Struct.new(:id, :start, :end, :pre, :post, :is_decoy, :db_seq_ref, :name, :pep_ref)
+    end
+  
+  end  
   
 
   def spectrum_identifications
@@ -224,6 +235,7 @@ end #class Mzid
   end
 
 
+PepEv = Struct.new(:id, :start, :end, :pre, :post, :is_decoy, :db_seq_ref, :name, :pep_ref)
 
 PeptideMod = Struct.new(:residue, :avg_mass_delta, :location, :cv_params)
 
