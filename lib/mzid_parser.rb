@@ -156,7 +156,9 @@ class Mzid
   
   def spectrum_identification_results(sil_ref)
     results = []
+    #example_file = Nokogiri::XML(File.open("/home/vital/pepXML_protXML_2_mzid_V/examplefile.mzid"))
     sil = @doc.xpath("//xmlns:SpectrumIdentificationList[@id='#{sil_ref}']")[0]
+    #sil = example_file.xpath("//xmlns:SpectrumIdentificationList[@id='SIL_1']")
     sil.xpath(".//xmlns:SpectrumIdentificationResult").each do |sir|
       sir_id = sir.attr("id")
       spectrum_name = sir.attr("name")
@@ -175,6 +177,23 @@ class Mzid
         sii.xpath("./xmlns:PeptideEvidenceRef").each do |pepEvRef|
           pepEv_ref_arr << pepEvRef.attr("peptideEvidence_ref")
         end
+        fragments_arr = [] #Array de Fragments        
+        frgmnttn = sii.xpath("./xmlns:Fragmentation")[0] #maxOccurs = 1
+        frgmnttn.xpath("./xmlns:IonType").each |ion|
+          if !ion.xpath("./xmlns:FragmentArray").empty? #minOccurs = 0
+            ion.xpath(".xmlns:FragmentArray").each do |frg_arr|
+              mz_values_arr = frg_arr.attr("values").split("\s") if frg_arr.attr("measure_ref") == "m_mz"
+              m_intensity_arr = frg_arr.attr("values").split("\s") if frg_arr.attr("measure_ref") == "m_intensity"
+              m_err = frg_arr.attr("values").split("\s") if frg_arr.attr("measure_ref") == "m_error"
+            end
+          end
+          ion.attr("index").split("\s").each do |i| #por cada uno de estos creo lo que yo llamo un fragmento
+            index = i
+
+            fragments_arr << Frg.new(index, ) 
+          end
+        end
+        
         sii_psi_ms_cv_terms = getcvParams(sii)
         sii_user_params = getuserParams(sii)
         items_arr << Sii.new(sii_id, calc_m2z, exp_m2z, rank, charge_state, pass_threshold, pepEv_ref_arr, sii_psi_ms_cv_terms, sii_user_params)
