@@ -27,8 +27,7 @@ class Mzid2db
         #~ modif_arr.each do |pep_mod|
           #~ Modification.create
         #~ end
-      #~ end
-      
+      #~ end      
     end
   
 
