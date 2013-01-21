@@ -15,41 +15,25 @@ class Mzid2db
   def save2tables
   
     @mzid_obj.peptides.each do |pep|
-      peptide_id = pep.pep_id
-      sequence = pep.sequence
-      
-      Peptide.find_or_create_by_sequence(sequence)
-      #if p = Peptide.find_by_sequence(sequence)
-      #  pmods = p.modifications
-      #else
-     # 
-     # end
+      #~ peptide_id = pep.pep_id
+      #~ sequence = pep.sequence
+      #~ 
+      #~ Peptide.find_or_create_by_sequence(sequence)
 
-     # if Peptide.find_by_sequence(sequence).nil? #guardar este pep (y sus modif, si tiene)  sin más 
-        
-     # else 
-        #Vale, la seq de este pep (de este experimento) ya esta guardada. Ahora mirar si pep.modif_arr coincide con las modifications guardadas de ese pep para saber si el PEPTIDO es EL MISMO
-    #    saving_pep_mods = pep.modif_arr #es el de este experimento
-    #    saved_pep_mods = Peptide.find_by_sequence(sequence).modif #
-     # end
-      
-
-      #si this_pep es un new_record lo guardo con sus modificaciones sin más!
-      #si this_pep no es un new_record busco sus modificaciones para ver si realmente es 
-      
-      Peptide.find(this_pep).modifications
-      
-      if !pep.modif_arr.empty?
-        modif_arr.each do |pep_mod|
-          Modification.create
-        end
-      end
+      #~ 
+      #~ Peptide.find(this_pep).modifications
+      #~ 
+      #~ if !pep.modif_arr.empty?
+        #~ modif_arr.each do |pep_mod|
+          #~ Modification.create
+        #~ end
+      #~ end
       
     end
   
 
-    spectrum_identification_lists_ids = []
-    
+
+    spectrum_identification_lists_ids = []    
     @mzid_obj.spectrum_identifications.each do |si|
     
       mzid_si_id = si.si_id
@@ -127,13 +111,12 @@ class Mzid2db
       @results_arr = @mzid_obj.spectrum_identification_results(sil_ref)
       @results_arr.each do |sir|
         sir_id = sir.sir_id
-        #puts sir_id
-        spectrum_identification_list_id = sil_id
+        spectrum_identification_list_id = SpectrumIdentificationList.find_by_sil_id(sil_ref).id
         spectrum_id = sir.spectrum_id
         spectrum_name = sir.spectrum_name
         sir_psi_ms_cv_terms = sir.sir_psi_ms_cv_terms
         sir_user_params = sir.sir_user_params
-        this_sir = SpectrumIdentificationResult.create(:sir_id => sir_id, :spectrum_identification_list_id => sil_id, :spectrum_id => spectrum_id, :spectrum_name => spectrum_name)
+        this_sir = SpectrumIdentificationResult.create(:sir_id => sir_id, :spectrum_identification_list_id => spectrum_identification_list_id, :spectrum_id => spectrum_id, :spectrum_name => spectrum_name)
         unless sir_psi_ms_cv_terms.empty?
           sir_psi_ms_cv_terms.each do |psi_ms_t|
             this_psi_term = SirPsiMsCvTerm.find_or_initialize_by_spectrum_identification_result_id_and_psi_ms_cv_term_accession(:spectrum_identification_result_id => this_sir.id, :psi_ms_cv_term_accession => psi_ms_t[:accession])
@@ -151,7 +134,7 @@ class Mzid2db
         #puts sir.items_arr[0]
         sir.items_arr.each do |item|
           sii_id = item.sii_id
-          #puts sii_id
+          spectrum_identification_result_id = SpectrumIdentificationResult.find_by_sir_id(this_sir.sir_id).id
           calc_m2z = item.calc_m2z
           exp_m2z = item.exp_m2z
           rank = item.rank
@@ -161,11 +144,7 @@ class Mzid2db
           sii_psi_ms_cv_terms = item.sii_psi_ms_cv_terms
           sii_user_params = item.sii_user_params
           
-          
-          #ATENÇAO!! No puedo crear el sii porque he puesto que peptide_id no sea null. 
-          # Pero yo no tengo peptide ninguno aún !! Tengo que buscarlo: sii tiene un attribute que es el peptide_ref! -> PERO ES OPTIONAL!!! (JARL!)
-          # 
-          this_item = SpectrumIdentificationItem.create(:sii_id => sii_id, :spectrum_identification_result_id => sir_id, :calc_m2z => calc_m2z, :exp_m2z => exp_m2z, :rank => rank, :charge_state => charge_state, :pass_threshold => pass_threshold ) 
+          this_item = SpectrumIdentificationItem.create(:sii_id => sii_id, :spectrum_identification_result_id => spectrum_identification_result_id, :calc_m2z => calc_m2z, :exp_m2z => exp_m2z, :rank => rank, :charge_state => charge_state, :pass_threshold => pass_threshold ) 
          
           #otra vez esto: (??) No puedes secarlo un poco?? (Sí, "secarlo", ya sabes, ;-) , ;-)  )
           unless sii_psi_ms_cv_terms.empty?
@@ -217,8 +196,11 @@ end
       #puts "\n-Error saving data 2 tables. Rolling back -- \n\n"
       MzidFile.find(mzid_file_id).spectra_acquisition_runs.each do |sar|
         sar.spectrum_identifications.each do |si|
-          sip_id = si.spectrum_identification_protocol
+          sip_id = si.spectrum_identification_protocol.id
           SpectrumIdentificationProtocol.destroy(sip_id)
+          si.spectrum_identification_results.each do |sir|
+            SpectrumIdentificationResult.destroy(sir.id)
+          end
           SpectrumIdentification.destroy(si.id)
         end
         #SpectraAcquisitionRun.destroy(sar.id)
@@ -230,12 +212,12 @@ end
   end
 
 
-class String
-  def camelcase2underscore
-    self.gsub(/::/, '/').
-    gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
-    gsub(/([a-z\d])([A-Z])/,'\1_\2').
-    tr("-", "_").
-    downcase
-  end
-end
+#~ class String
+  #~ def camelcase2underscore
+    #~ self.gsub(/::/, '/').
+    #~ gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
+    #~ gsub(/([a-z\d])([A-Z])/,'\1_\2').
+    #~ tr("-", "_").
+    #~ downcase
+  #~ end
+#~ end
