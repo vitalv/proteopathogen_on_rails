@@ -7,7 +7,7 @@ class Mzid
   def initialize(mzid_file)
 
     @doc = Nokogiri::XML(File.open(mzid_file))
-    @mzid_file_id = MzidFile.find_by_location(mzid_file).id
+    @mzid_file_id = MzidFile.find_by_location(mzid_file).id 
     #@doc = Nokogiri::XML(File.open("/home/vital/pepXML_protXML_2_mzid_V/SILAC_phos_OrbitrapVelos_1_interact-ipro-filtered.mzid"))
 
     #save_all_cv_terms
@@ -178,31 +178,37 @@ class Mzid
           pepEv_ref_arr << pepEvRef.attr("peptideEvidence_ref")
         end
         fragments_arr = [] #Array de Fragments        
-        frgmnttn = sii.xpath("./xmlns:Fragmentation")[0] #maxOccurs = 1
-        frgmnttn.xpath("./xmlns:IonType").each |ion|
+        fragmentation = sii.xpath("./xmlns:Fragmentation")[0] #maxOccurs = 1
+        fragmentation.xpath("./xmlns:IonType").each do |ion|
+          mz_values_arr, m_intensity_arr, m_err_arr = [], [], []
           if !ion.xpath("./xmlns:FragmentArray").empty? #minOccurs = 0
-            ion.xpath(".xmlns:FragmentArray").each do |frg_arr|
+            ion.xpath("./xmlns:FragmentArray").each do |frg_arr|
               mz_values_arr = frg_arr.attr("values").split("\s") if frg_arr.attr("measure_ref") == "m_mz"
               m_intensity_arr = frg_arr.attr("values").split("\s") if frg_arr.attr("measure_ref") == "m_intensity"
-              m_err = frg_arr.attr("values").split("\s") if frg_arr.attr("measure_ref") == "m_error"
+              m_err_arr = frg_arr.attr("values").split("\s") if frg_arr.attr("measure_ref") == "m_error"
             end
           end
-          ion.attr("index").split("\s").each do |i| #por cada uno de estos creo lo que yo llamo un fragmento
-            index = i
-
-            fragments_arr << Frg.new(index, ) 
+          fragment_name = getcvParams(ion)[0][:name]
+          fragment_psi_ms_cv_acc = getcvParams(ion)[0][:accession]
+          charge = ion.attr("charge")
+          ion_index_arr = ion.attr("index").to_s.split("\s")
+          ion_index_arr.each_with_index do |ion_index, i| #por cada uno de estos creo lo que yo llamo un Fragment (modelo)
+            mz_value = mz_values_arr[i] unless mz_values_arr.empty?
+            m_intensity = m_intensity_arr[i] unless m_intensity_arr.empty?
+            m_err = m_err_arr[i] unless m_err_arr.empty?
+            fragments_arr << FragmentIon.new(ion_index, fragment_name, fragment_psi_ms_cv_acc, charge, mz_value, m_intensity, m_err ) 
           end
         end
         
         sii_psi_ms_cv_terms = getcvParams(sii)
         sii_user_params = getuserParams(sii)
-        items_arr << Sii.new(sii_id, calc_m2z, exp_m2z, rank, charge_state, pass_threshold, pepEv_ref_arr, sii_psi_ms_cv_terms, sii_user_params)
+        items_arr << Sii.new(sii_id, calc_m2z, exp_m2z, rank, charge_state, pass_threshold, pepEv_ref_arr, sii_psi_ms_cv_terms, sii_user_params, fragments_arr)
       end
       results << Sir.new(sir_id, spectrum_name, spectrum_id, sir_psi_ms_cv_terms, sir_user_params, items_arr)
       
     end
     
-    return results
+    return results #Array of Result objects
   
   end
 
@@ -314,9 +320,9 @@ end
 
 class Sir
 
-  attr_reader :sir_id, :spectrum_id, :spectrum_name, :sir_psi_ms_cv_terms, :sir_user_params, :items_arr
+  attr_reader :sir_id, :spectrum_name, :spectrum_id, :sir_psi_ms_cv_terms, :sir_user_params, :items_arr
   
-  def initialize(sir_id, spectrum_id, spectrum_name, sir_psi_ms_cv_terms, sir_user_params, items_arr)
+  def initialize(sir_id, spectrum_name, spectrum_id, sir_psi_ms_cv_terms, sir_user_params, items_arr)
     @sir_id = sir_id
     @spectrum_id = spectrum_id
     @spectrum_name = spectrum_name
@@ -328,11 +334,13 @@ class Sir
 end
 
 
+FragmentIon = Struct.new(:ion_index, :fragment_name, :fragment_psi_ms_cv_acc, :charge, :mz_value, :m_intensity, :m_err ) 
+
 class Sii
 
-  attr_reader :sii_id, :calc_m2z, :exp_m2z, :rank, :charge_state, :pass_threshold, :pepEv_ref_arr, :sii_psi_ms_cv_terms, :sii_user_params
+  attr_reader :sii_id, :calc_m2z, :exp_m2z, :rank, :charge_state, :pass_threshold, :pepEv_ref_arr, :sii_psi_ms_cv_terms, :sii_user_params, :fragments_arr
   
-  def initialize(sii_id, calc_m2z, exp_m2z, rank, charge_state, pass_threshold, pepEv_ref_arr, sii_psi_ms_cv_terms, sii_user_params)
+  def initialize(sii_id, calc_m2z, exp_m2z, rank, charge_state, pass_threshold, pepEv_ref_arr, sii_psi_ms_cv_terms, sii_user_params, fragments_arr)
     @sii_id = sii_id
     @calc_m2z = calc_m2z
     @exp_m2z = exp_m2z
@@ -342,6 +350,7 @@ class Sii
     @pepEv_ref_arr = pepEv_ref_arr
     @sii_psi_ms_cv_terms = sii_psi_ms_cv_terms
     @sii_user_params = sii_user_params
+    @fragments_arr = fragments_arr
   end
 
 end
