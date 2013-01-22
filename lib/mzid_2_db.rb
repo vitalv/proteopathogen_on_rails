@@ -78,7 +78,7 @@ class Mzid2db
         end
       end
       #---- save sip.searched_modifications ---- Global-scope
-      unless searched_mod_arr.empty?
+      unless searched_mod_arr.nil?
         searched_mod_arr.each do |mod|
           #Y ademas estoy insertando records que ya existian! Entonces pa que coño quiero la join table !!
           #is_fixed boolean 'true' is saved as 1 in mysql -tinyint(1)-, so watch the fuck out
@@ -119,16 +119,18 @@ class Mzid2db
         this_sir = SpectrumIdentificationResult.create(:sir_id => sir_id, :spectrum_identification_list_id => spectrum_identification_list_id, :spectrum_id => spectrum_id, :spectrum_name => spectrum_name)
         unless sir_psi_ms_cv_terms.empty?
           sir_psi_ms_cv_terms.each do |psi_ms_t|
-            this_psi_term = SirPsiMsCvTerm.find_or_initialize_by_spectrum_identification_result_id_and_psi_ms_cv_term_accession(:spectrum_identification_result_id => this_sir.id, :psi_ms_cv_term_accession => psi_ms_t[:accession])
-            this_psi_term.value = psi_ms_t[:value] if this_psi_term.new_record? unless psi_ms_t[:value].blank?
-            this_psi_term.save           
+            #this_psi_term = SirPsiMsCvTerm.find_or_initialize_by_spectrum_identification_result_id_and_psi_ms_cv_term_accession(:spectrum_identification_result_id => this_sir.id, :psi_ms_cv_term_accession => psi_ms_t[:accession])
+            #this_psi_term.value = psi_ms_t[:value] if this_psi_term.new_record? unless psi_ms_t[:value].blank?
+            SirPsiMsCvTerm.create(:spectrum_identification_result_id => this_sir.id, :psi_ms_cv_term => psi_ms_t[:accession], :value => psi_ms_t[:value])
+            #this_psi_term.save           
           end
         end
         unless sir_user_params.empty?
           sir_user_params.each do |userP|
-            this_userP = SirUserParam.find_or_initialize_by_spectrum_identification_result_id_and_name(:spectrum_identification_result_id => this_sir.id, :name => userP[:name])
-            this_userP.value = userP[:value] if this_userP.new_record? unless userP[:value].blank?
-            this_userP.save
+            #this_userP = SirUserParam.find_or_initialize_by_spectrum_identification_result_id_and_name(:spectrum_identification_result_id => this_sir.id, :name => userP[:name])
+            #this_userP.value = userP[:value] if this_userP.new_record? unless userP[:value].blank?
+            SirUserParam.create(:spectrum_identification_result_id => this_sir.id, :name => userP[:name], :value => userP[:value])
+            #this_userP.save
           end
         end
         #puts sir.items_arr[0]
@@ -146,22 +148,25 @@ class Mzid2db
           #otra vez esto: (??) No puedes secarlo un poco?? (Sí, "secarlo", ya sabes, ;-) , ;-)  )
           unless sii_psi_ms_cv_terms.empty?
             sii_psi_ms_cv_terms.each do |psi_ms_t|
-              this_psi_term = SiiPsiMsCvTerm.find_or_initialize_by_spectrum_identification_item_id_and_psi_ms_cv_term_accession(:spectrum_identification_item_id => this_item.id, :psi_ms_cv_term_accession => psi_ms_t[:accession])
-              this_psi_term.value = psi_ms_t[:value] if this_psi_term.new_record? unless psi_ms_t[:value].blank?
-              this_psi_term.save
+              #this_psi_term = SiiPsiMsCvTerm.find_or_initialize_by_spectrum_identification_item_id_and_psi_ms_cv_term_accession(:spectrum_identification_item_id => this_item.id, :psi_ms_cv_term_accession => psi_ms_t[:accession])
+              #this_psi_term.value = psi_ms_t[:value] if this_psi_term.new_record? unless psi_ms_t[:value].blank?
+              #this_psi_term.save
+              #This is more local-scope
+              SiiPsiMsCvTerm.create(:spectrum_identification_item_id => this_item.id, :psi_ms_cv_term_accession => psi_ms_t[:accession], :value => psi_ms_t[:value])
             end
           end
           unless sii_user_params.empty?
             sii_user_params.each do |userP|
-              this_userP = SiiUserParam.find_or_initialize_by_spectrum_identification_item_id_and_name(:spectrum_identification_item_id => this_item.id, :name => userP[:name])
-              this_userP.value = userP[:value] if this_userP.new_record? unless userP[:value].blank?
-              this_userP.save
+              #this_userP = SiiUserParam.find_or_initialize_by_spectrum_identification_item_id_and_name(:spectrum_identification_item_id => this_item.id, :name => userP[:name])
+              #this_userP.value = userP[:value] if this_userP.new_record? unless userP[:value].blank?
+              #this_userP.save
+              SiiUserParam.create(:spectrum_identification_item_id => this_item.id, :name => userP[:name], :value => userP[:value])
             end
           end
           
-          unless this_item.fragments_arr.empty?
-            this_item.fragments_arr.each do |f|
-              f.create(:spectrum_identification_id => this_item.id, :charge => f.charge, :index => f.ion_index, :m_mz => f.mz_value, :m_intensity => f.m_intensity, :m_error => f.m_err, :f_type => f.f_name, :psi_ms_cv_f_type_accession => f.f_psi_ms_cv_acc)
+          unless item.fragments_arr.empty?
+            item.fragments_arr.each do |f|
+              Fragment.create(:spectrum_identification_item_id => this_item.id, :charge => f.charge, :index => f.ion_index, :m_mz => f.mz_value, :m_intensity => f.m_intensity, :m_error => f.m_err, :fragment_type => f.fragment_name, :psi_ms_cv_fragment_type_accession => f.fragment_psi_ms_cv_acc)
             end
           end
           

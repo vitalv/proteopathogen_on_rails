@@ -1,20 +1,19 @@
 %h2 Spectra Acquisition Runs
 %p
-  - @mzidf_input_spectra_files.each do |mzidf_input_spect_hash|
-    - mzidf_input_spect_hash.each do |mzidf_id, input_spect_files_arr|
-      %ul
-        %b= MzidFile.find(mzidf_id).name
+  - @mzidf_input_spectra_files.each do |mzidf_id, input_spect_files_arr|
+    %ul
       %br
-      - input_spect_files_arr.each do |input_spectra_file|
-        %li= input_spectra_file 
-        - if !@stored_spectra_files.include? input_spectra_file
-          =link_to "add spectra acquisition data" , new_spectra_acquisition_run_path(:mzid_file_id => mzidf_id, :input_spectra_file => input_spectra_file)
-          %br
-        - else
-          %p
-            = "#{SpectraAcquisitionRun.find_by_spectra_file(input_spectra_file).fraction} - "
-            = "#{SpectraAcquisitionRun.find_by_spectra_file(input_spectra_file).instrument} - "
-            = "#{SpectraAcquisitionRun.find_by_spectra_file(input_spectra_file).ionization} - " 
-            = SpectraAcquisitionRun.find_by_spectra_file(input_spectra_file).analyzer    
-
+      %b= MzidFile.find(mzidf_id).name
+    %br
+    - input_spect_files_arr.each do |input_spectra_file|
+      %li= input_spectra_file 
+      - if !@stored_spectra_files.include? input_spectra_file
+        =link_to "add spectra acquisition data" , new_spectra_acquisition_run_path(:mzid_file_id => mzidf_id, :input_spectra_file => input_spectra_file)
         %br
+      - else
+        %p
+          = "#{SpectraAcquisitionRun.find_by_spectra_file(input_spectra_file).fraction} - "
+          = "#{SpectraAcquisitionRun.find_by_spectra_file(input_spectra_file).instrument} - "
+          = "#{SpectraAcquisitionRun.find_by_spectra_file(input_spectra_file).ionization} - " 
+          = SpectraAcquisitionRun.find_by_spectra_file(input_spectra_file).analyzer    
+      %br
