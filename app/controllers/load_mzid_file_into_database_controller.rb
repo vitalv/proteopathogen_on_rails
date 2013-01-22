@@ -28,6 +28,7 @@ class LoadMzidFileIntoDatabaseController < ApplicationController
     mzid_file = MzidFile.find(mzid_file_id)
     mzid = Mzid.new(mzid_file.location)
     #mzid = Mzid.new("/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/public/uploaded_mzid_files/SILAC_phos_OrbitrapVelos_1_interact-ipro-filtered.mzid")
+    #mzid = Mzid.new("/home/vital/pepXML_protXML_2_mzid_V/examplefile.mzid")
      
     Mzid2db.new(mzid).save2tables
     rescue Exception => msg

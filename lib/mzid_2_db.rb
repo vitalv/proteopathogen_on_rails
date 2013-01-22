@@ -14,6 +14,7 @@ class Mzid2db
 
   def save2tables
   
+    ##SAVE PEPTIDES ##-------------------------------
     @mzid_obj.peptides.each do |pep|
       #~ peptide_id = pep.pep_id
       #~ sequence = pep.sequence
@@ -31,7 +32,7 @@ class Mzid2db
     end
   
 
-
+    ##SAVE SI, SIP and SIP-related STUFF##-------------------------------
     spectrum_identification_lists_ids = []    
     @mzid_obj.spectrum_identifications.each do |si|
     
@@ -104,7 +105,7 @@ class Mzid2db
       
     end #@mzid_obj.spectrum_identifications.each do |si|
 
-
+    ##SAVE SILs, SIRs, SIIs and STUFF##-------------------------------
     spectrum_identification_lists_ids.each do |sil_id|
       sil_ref = SpectrumIdentificationList.find(sil_id).sil_id
       @results_arr = @mzid_obj.spectrum_identification_results(sil_ref)
@@ -134,14 +135,11 @@ class Mzid2db
         sir.items_arr.each do |item|
           sii_id = item.sii_id
           spectrum_identification_result_id = SpectrumIdentificationResult.find_by_sir_id(this_sir.sir_id).id
-          calc_m2z = item.calc_m2z
-          exp_m2z = item.exp_m2z
-          rank = item.rank
-          charge_state = item.charge_state
+          calc_m2z, exp_m2z = item.calc_m2z, item.exp_m2z
+          rank, charge_state  = item.rank, item.charge_state
           pass_threshold = item.pass_threshold
           pepEv_ref_arr = item.pepEv_ref_arr
-          sii_psi_ms_cv_terms = item.sii_psi_ms_cv_terms
-          sii_user_params = item.sii_user_params
+          sii_psi_ms_cv_terms, sii_user_params = item.sii_psi_ms_cv_terms, item.sii_user_params
           
           this_item = SpectrumIdentificationItem.create(:sii_id => sii_id, :spectrum_identification_result_id => spectrum_identification_result_id, :calc_m2z => calc_m2z, :exp_m2z => exp_m2z, :rank => rank, :charge_state => charge_state, :pass_threshold => pass_threshold ) 
          
@@ -158,6 +156,12 @@ class Mzid2db
               this_userP = SiiUserParam.find_or_initialize_by_spectrum_identification_item_id_and_name(:spectrum_identification_item_id => this_item.id, :name => userP[:name])
               this_userP.value = userP[:value] if this_userP.new_record? unless userP[:value].blank?
               this_userP.save
+            end
+          end
+          
+          unless this_item.fragments_arr.empty?
+            this_item.fragments_arr.each do |f|
+              f.create(:spectrum_identification_id => this_item.id, :charge => f.charge, :index => f.ion_index, :m_mz => f.mz_value, :m_intensity => f.m_intensity, :m_error => f.m_err, :f_type => f.f_name, :psi_ms_cv_f_type_accession => f.f_psi_ms_cv_acc)
             end
           end
           
