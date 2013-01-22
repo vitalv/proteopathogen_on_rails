@@ -25,7 +25,7 @@ begin
     
   rescue Exception => msg
     puts "\n#{msg}"
-    rollback(saved_sip_ids)
+    rollback
   
   #~ rescue Exception => msg
   #~ puts msg

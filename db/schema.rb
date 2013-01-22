@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -10,12 +11,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121019084932) do
+
+ActiveRecord::Schema.define(:version => 20130121135619) do
 
   create_table "db_sequences", :force => true do |t|
     t.string "accession"
     t.string "description"
     t.text   "sequence"
+  end
+
+  create_table "experiments", :force => true do |t|
+    t.string "organism"
+    t.string "protocol"
+    t.string "date"
+    t.string "researcher"
   end
 
   create_table "fragments", :force => true do |t|
@@ -30,13 +39,23 @@ ActiveRecord::Schema.define(:version => 20121019084932) do
   end
 
   create_table "modifications", :force => true do |t|
-    t.string "residue"
-    t.string "location"
-    t.string "avg_mass_delta"
+    t.string  "residue"
+    t.string  "location"
+    t.string  "avg_mass_delta"
+    t.integer "peptide_id"
+  end
+
+  create_table "mzid_files", :force => true do |t|
+    t.string  "location"
+    t.string  "sha1"
+    t.string  "creator"
+    t.string  "submission_date"
+    t.string  "name"
+    t.integer "experiment_id"
   end
 
   create_table "peptide_evidences", :force => true do |t|
-    t.integer "peptide_id",       :null => false
+    t.integer "peptide_id"
     t.integer "start"
     t.integer "end"
     t.string  "pre"
@@ -50,6 +69,7 @@ ActiveRecord::Schema.define(:version => 20121019084932) do
     t.string "sequence"
     t.string "molecular_weight"
     t.string "isoelectric_point"
+    t.string "peptide_id"
   end
 
   create_table "protein_ambiguity_groups", :force => true do |t|
@@ -81,10 +101,29 @@ ActiveRecord::Schema.define(:version => 20121019084932) do
 
   add_index "protein_hypothesis_pepevidence_join_table", ["protein_detection_hypothesis_id", "peptide_evidence_id"], :name => "index_proteinhypothesis_pepevidence"
 
+  create_table "protein_hypothesis_peptide_evidences", :force => true do |t|
+    t.integer "peptide_evidence_id"
+    t.integer "protein_detection_hypothesis_id"
+  end
+
   create_table "psi_ms_cv_terms", :force => true do |t|
     t.string "accession"
     t.string "name"
   end
+
+  create_table "sar_si_join_table", :id => false, :force => true do |t|
+    t.integer "spectra_acquisition_run_id"
+    t.integer "spectrum_identification_id"
+  end
+
+  add_index "sar_si_join_table", ["spectra_acquisition_run_id", "spectrum_identification_id"], :name => "index_sar_si"
+
+  create_table "sdb_si_join_table", :id => false, :force => true do |t|
+    t.integer "search_database_id"
+    t.integer "spectrum_identification_id"
+  end
+
+  add_index "sdb_si_join_table", ["search_database_id", "spectrum_identification_id"], :name => "index_sdb_si"
 
   create_table "search_databases", :force => true do |t|
     t.string  "name"
@@ -108,6 +147,11 @@ ActiveRecord::Schema.define(:version => 20121019084932) do
 
   add_index "sii_pepevidence_join_table", ["spectrum_identification_item_id", "peptide_evidence_id"], :name => "index_sii_pepevidence"
 
+  create_table "sii_peptide_evidences", :force => true do |t|
+    t.integer "spectrum_identification_item_id"
+    t.integer "peptide_evidence_id"
+  end
+
   create_table "sii_psi_ms_cv_terms", :force => true do |t|
     t.integer "spectrum_identification_item_id"
     t.string  "psi_ms_cv_term_accession"
@@ -115,11 +159,9 @@ ActiveRecord::Schema.define(:version => 20121019084932) do
   end
 
   create_table "sii_user_params", :force => true do |t|
-    t.integer  "spectrum_identification_item_id"
-    t.string   "name"
-    t.string   "value"
-    t.datetime "created_at",                      :null => false
-    t.datetime "updated_at",                      :null => false
+    t.integer "spectrum_identification_item_id"
+    t.string  "name"
+    t.string  "value"
   end
 
   create_table "sip_psi_ms_cv_terms", :force => true do |t|
@@ -127,13 +169,6 @@ ActiveRecord::Schema.define(:version => 20121019084932) do
     t.string  "psi_ms_cv_term_accession"
     t.string  "value"
   end
-
-  create_table "sip_sdb_join_table", :id => false, :force => true do |t|
-    t.integer "search_database_id"
-    t.integer "spectrum_identification_protocol_id"
-  end
-
-  add_index "sip_sdb_join_table", ["search_database_id", "spectrum_identification_protocol_id"], :name => "index_sip_sdb"
 
   create_table "sip_searched_mod_join_table", :id => false, :force => true do |t|
     t.integer "searched_modification_id"
@@ -160,6 +195,15 @@ ActiveRecord::Schema.define(:version => 20121019084932) do
     t.string  "value"
   end
 
+  create_table "spectra_acquisition_runs", :force => true do |t|
+    t.string  "fraction"
+    t.string  "instrument"
+    t.string  "ionization"
+    t.string  "analyzer"
+    t.string  "spectra_file"
+    t.integer "mzid_file_id"
+  end
+
   create_table "spectrum_identification_items", :force => true do |t|
     t.string  "sii_id",                            :null => false
     t.integer "spectrum_identification_result_id"
@@ -168,24 +212,24 @@ ActiveRecord::Schema.define(:version => 20121019084932) do
     t.integer "rank",                              :null => false
     t.integer "charge_state",                      :null => false
     t.string  "pass_threshold",                    :null => false
-    t.integer "peptide_id",                        :null => false
   end
 
   create_table "spectrum_identification_lists", :force => true do |t|
-    t.string  "sil_id",                              :null => false
-    t.integer "spectrum_identification_protocol_id"
+    t.string  "sil_id",                     :null => false
+    t.integer "num_seq_searched"
+    t.integer "spectrum_identification_id"
   end
 
   create_table "spectrum_identification_protocols", :force => true do |t|
-    t.string "sip_id",                   :null => false
-    t.string "input_spectra"
-    t.string "analysis_software"
-    t.string "search_type"
-    t.string "threshold",                :null => false
-    t.string "parent_tol_plus_value"
-    t.string "parent_tol_minus_value"
-    t.string "fragment_tol_plus_value"
-    t.string "fragment_tol_minus_value"
+    t.string  "sip_id",                     :null => false
+    t.string  "analysis_software"
+    t.string  "search_type"
+    t.string  "threshold",                  :null => false
+    t.string  "parent_tol_plus_value"
+    t.string  "parent_tol_minus_value"
+    t.string  "fragment_tol_plus_value"
+    t.string  "fragment_tol_minus_value"
+    t.integer "spectrum_identification_id"
   end
 
   create_table "spectrum_identification_results", :force => true do |t|
@@ -193,6 +237,20 @@ ActiveRecord::Schema.define(:version => 20121019084932) do
     t.integer "spectrum_identification_list_id"
     t.string  "spectrum_id"
     t.string  "spectrum_name"
+  end
+
+  create_table "spectrum_identifications", :force => true do |t|
+    t.string "si_id",         :null => false
+    t.string "name"
+    t.string "activity_date"
+  end
+
+  create_table "users", :force => true do |t|
+    t.string   "email"
+    t.string   "password_hash"
+    t.string   "password_salt"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
 
 end

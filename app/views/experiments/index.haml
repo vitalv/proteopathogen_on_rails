@@ -1,0 +1,17 @@
+%h2 Experiments
+-if @experiments.blank?
+  no experiments
+-else 
+  -@experiments.each do |e|
+    %p
+      Experiment #{e.id}: 
+      %br
+      Organism: #{e.organism}
+      %br
+      Protocol: #{e.protocol}
+
+
+// NO!! This view does not require log in    
+//%p   
+//  =form_tag({:action => "new"}, :method => "get") do
+//    =submit_tag("New Experiment")
