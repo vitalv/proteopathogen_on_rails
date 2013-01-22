@@ -6,4 +6,5 @@ class SpectrumIdentificationResult < ActiveRecord::Base
     has_many :spectrum_identification_items, :dependent => :destroy
     validates_associated :spectrum_identification_items
     has_many :sir_psi_ms_cv_terms, :dependent => :destroy
+    has_many :sir_user_param, :dependent => :destroy
 end
