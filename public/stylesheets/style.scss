@@ -2,18 +2,36 @@ $proteopath_light_green: #DEEAEA;
 $blue_font_color: #0A2747;
 $gray: #B6B5B0;
 
+
+/*----- sticky footer thing ------*/
+* { margin: 0; }
+html, body { height: 100%; }
+.wrapper {
+  min-height:100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -5.5em;
+}
+.footer, .push {
+  height: 5.5em;
+
+}
+/*----- sticky footer thing ------*/
+
+
 body {
   background-color: white; 
-  margin: 0% 12% 0% 12%;
+  padding: 0% 12% 0% 12%;
   font-family: arial;
   font-size: 9pt;
   color: $blue_font_color;
 }
 
+  
+p {padding: 8px 0;} /* this is bc of the sticky footer thing */ 
 
 nav_links {
   padding: 5px;
-  margin: 0 0 20px 0;
   float: right;
   ul { list-style-type: none; }
   li {
@@ -23,7 +41,7 @@ nav_links {
 	  font-size: 10pt;
 	  text-decoration: none;
 	  font-weight: bold;
-	  color: #008080;
+	  color: #924C4C;
 	  &:hover{ color: #ACABAC; }
     }
   }
@@ -34,7 +52,7 @@ nav_links {
 content {
   display:block;
   clear: both;
-  border: solid $gray 1px;
+  border-top: solid $gray 2px;
   padding: 20px;
 
 }
