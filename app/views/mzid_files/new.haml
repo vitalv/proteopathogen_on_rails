@@ -1,0 +1,16 @@
+%h2 Upload .mzid File
+
+%p
+= form_for @mzid_file, :url => {:action => "create"} do |f|
+  - if @mzid_file.errors.any?
+    %ul
+      - for message in @mzid_file.errors.full_messages
+        %li= message
+  %br
+  %p=f.select :experiment_id, @experiments.collect { |e| [e.protocol, e.id] } , :prompt => 'Select experiment'
+  %br
+  =f.file_field 'uploaded_file'
+  %br
+  %p=f.submit
+  
+//%p= select_date Date.today, :prefix => :start_date

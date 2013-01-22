@@ -1,0 +1,16 @@
+%h2 .mzid Files
+-if @all_mzid_files.blank?
+  %p No stored .mzid files
+-else 
+  -@all_mzid_files.each do |mzidf|
+    %p
+      %b= "Experiment: #{Experiment.find(mzidf.experiment_id).protocol}"
+      %br
+      mzid file: #{mzidf.name}
+      %br
+      sha-1: #{mzidf.sha1}
+      %br
+      submission date: #{mzidf.submission_date}
+
+%p= link_to "new mzid file", new_mzid_file_path
+

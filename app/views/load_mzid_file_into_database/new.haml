@@ -1,0 +1,10 @@
+%h2 Select .mzid File
+
+
+%p
+= form_tag(:controller => "load_mzid_file_into_database", :action => "create", :method => "get") do
+
+  %br
+  %p=select_tag(:mzid_file_id, options_for_select(@options_for_select), {:prompt => 'Select .mzid file'})
+
+  %p=submit_tag "load this mzid file into db"

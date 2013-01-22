@@ -1,4 +1,5 @@
 ProteopathogenOnRails::Application.routes.draw do
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
@@ -12,6 +13,28 @@ ProteopathogenOnRails::Application.routes.draw do
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
+ 
+  resources :users
+  resources :sessions   
+  resources :experiments
+  resources :mzid_files
+  resources :spectra_acquisition_runs
+  
+  get "log_out" => "sessions#destroy", :as => "log_out"
+  get "log_in" => "sessions#new", :as => "log_in"
+  get "sign_up" => "users#new", :as => "sign_up"
+  #root :to => "users#new"
+
+  
+
+  # I don't want a resource for all of these bc I just want the 'show' action
+  #resources :spectra_acquisition_runs
+  #resources :spectrum_identification_protocols
+  #resources :spectrum_identification_lists
+  #resources 
+
+     
+  #resources :mzid_files
 
   # Sample resource route with options:
   #   resources :products do
@@ -54,5 +77,11 @@ ProteopathogenOnRails::Application.routes.draw do
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
-  # match ':controller(/:action(/:id(.:format)))'
+  match ':controller(/:action(/:id(.:format)))'
+  
+
+
+  
+  
+  
 end

@@ -2,6 +2,7 @@ class Mzid2db
 
   def initialize(mzid_object)
     @mzid_obj = mzid_object
+    @mzid_file_id = mzid_object.mzid_file_id
   end
 
 
@@ -9,91 +10,222 @@ class Mzid2db
   #La idea es que una vez que se empieza a insertar datos (un experimento/busqueda) se llenen TOODAS las tablas y que no se quede a medias. Y si no se completa el proceso hacer un rollback automatico
   #ENtonces tendría que controlar que no se vuelve a insertar el mismo experimento para
   #usar  find_or_create SOLO en aquellas tablas con Global-scope  (que pueden tener records iguales en distintos SIP:experimentos/busquedas) como search_databases o peptides, etc..
-  @@saved_sip_ids
 
 
   def save2tables
+  
+    ##SAVE PEPTIDES ##-------------------------------
+    @mzid_obj.peptides.each do |pep|
+      #~ peptide_id = pep.pep_id
+      #~ sequence = pep.sequence
+      #~ 
+      #~ Peptide.find_or_create_by_sequence(sequence)
 
-    saved_sip_ids = []
-    @mzid_obj.sips.each do |sip|
+      #~ 
+      #~ Peptide.find(this_pep).modifications
+      #~ 
+      #~ if !pep.modif_arr.empty?
+        #~ modif_arr.each do |pep_mod|
+          #~ Modification.create
+        #~ end
+      #~ end      
+    end
+  
+
+    ##SAVE SI, SIP and SIP-related STUFF##-------------------------------
+    spectrum_identification_lists_ids = []    
+    @mzid_obj.spectrum_identifications.each do |si|
     
+      mzid_si_id = si.si_id
+      this_si = SpectrumIdentification.create(:si_id => mzid_si_id, :name => si.si_name, :activity_date => si.activity_date)
+
+      #--- save 2 sar_si_join_table. si.spectra_acquisition_runs
+      si.input_spectra_files_arr.each do |s_f|
+        this_si.spectra_acquisition_runs << SpectraAcquisitionRun.find_by_spectra_file(s_f)
+      end
+      
+      #--- get si.sip and sip attributes and sip-related tables ---
+      sip = @mzid_obj.sip(si.sip_ref)
+      si_id = this_si.id
       sip_id = sip.sip_id
-      input_spectra = sip.input_spectra
       analysis_software = sip.analysis_software
       search_type = sip.search_type
-      threshold = sip.threshold      
-      search_db_arr = sip.search_db_arr
+      threshold = sip.threshold
       searched_mod_arr = sip.searched_modification_arr
-      psi_ms_terms = sip.psi_ms_terms
       parent_tol_plus_value, parent_tol_minus_value = sip.parent_tolerance[0][:value], sip.parent_tolerance[1][:value]
       fragment_tol_plus_value, fragment_tol_minus_value = sip.fragment_tolerance[0][:value], sip.fragment_tolerance[1][:value]
+      psi_ms_terms = sip.psi_ms_terms
       user_params = sip.user_params
+      #--- save si.sip
+      this_sip = SpectrumIdentificationProtocol.create(:spectrum_identification_id => si_id, :sip_id => sip_id, :analysis_software => analysis_software, :search_type => search_type, :threshold => threshold, :parent_tol_plus_value => parent_tol_plus_value, :parent_tol_minus_value => parent_tol_minus_value, :fragment_tol_plus_value => fragment_tol_plus_value, :fragment_tol_minus_value => fragment_tol_minus_value)      
+      #---- save sip_psi_ms_cv_terms ---- sip_psi_ms_cv_term es SIP-scope ??
+      #maybe create method to save psi_ms_cv_terms with args (model, psi_ms_terms_set) :
+      #save_psi_ms_cv_terms(SipPsiMsCvTerm, psi_ms_terms) unless psi_ms_terms.empty?
+      unless psi_ms_terms.empty?
+        psi_ms_terms.each do |psi_ms_term|
+          this_psi_term = SipPsiMsCvTerm.find_or_initialize_by_spectrum_identification_protocol_id_and_psi_ms_cv_term_accession(:spectrum_identification_protocol_id => this_sip.id, :psi_ms_cv_term_accession => psi_ms_term[:accession])
+          this_psi_term.value = psi_ms_term[:value] if this_psi_term.new_record? unless psi_ms_term[:value].blank?
+          #SipPsiMsCvTerm has a value so, shouldn't it be always a new record? If so, then I wouln't need to find_or_initialize, just create the thing
+          this_psi_term.save
+        end
+      end
+      #---- save sip_user_params ----
+      unless user_params.empty?
+        user_params.each do |userP|
+          this_userP = SipUserParam.find_or_initialize_by_spectrum_identification_protocol_id_and_name(:spectrum_identification_protocol_id => this_sip.id, :name => userP[:name])
+          this_userP.value = userP[:value] if this_userP.new_record? unless userP[:value].blank?
+          this_userP.save
+        end
+      end
+      #---- save sip.searched_modifications ---- Global-scope
+      unless searched_mod_arr.nil?
+        searched_mod_arr.each do |mod|
+          #Y ademas estoy insertando records que ya existian! Entonces pa que coño quiero la join table !!
+          #is_fixed boolean 'true' is saved as 1 in mysql -tinyint(1)-, so watch the fuck out
+          fixed = '1' if mod.fixedMod == 'true'; fixed = '0' if mod.fixedMod == 'false'
+          this_mod = SearchedModification.find_or_create_by_unimod_accession_and_mass_delta_and_residue_and_is_fixed(:unimod_accession => mod.unimod_accession, :mass_delta => mod.mass_delta, :residue => mod.residue, :is_fixed => fixed)
+          this_sip.searched_modifications << this_mod unless this_sip.searched_modifications.include? this_mod
+        end
+      end
       
-      #---- SAVE 2 spectrum_identification_protocols ----
-      #this_sip = SpectrumIdentificationProtocol.find_or_create_by_sip_id_and_input_spectra_and_analysis_software_and_search_type_and_threshold(:sip_id => sip_id, :input_spectra => input_spectra, :analysis_software => analysis_software, :search_type => search_type, :threshold => threshold)
-      this_sip = SpectrumIdentificationProtocol.create(:sip_id => sip_id, :input_spectra => input_spectra, :analysis_software => analysis_software, :search_type => search_type, :threshold => threshold, :parent_tol_plus_value => parent_tol_plus_value, :parent_tol_minus_value => parent_tol_minus_value, :fragment_tol_plus_value => fragment_tol_plus_value, :fragment_tol_minus_value => fragment_tol_minus_value)
-      saved_sip_ids << this_sip.id
-      #this_sip.create . Always . Don't have to check whether record exists bc even if all this_sip columns/attributes are found in a previous record, this_sip may be a completely new experiment (for instance repeating the search with a new DB)
-      #well you could check just one thing: mzid file is the same and sip_id is the same, then DO check record exists and don't insert if true
-      
-      #---- SAVE 2 search_databases AND sip_sdb_join_table ----   ##STILL HAVE 2 CREATE INDEX IN JOIN TABLE##
-      search_db_arr.each do |sdb|
-        this_sdb = SearchDatabase.find_gr_create_by_name_and_version_and_release_date_and_number_of_sequences_and_location(:name => sdb.name, :version => sdb.version, :release_date => sdb.releaseDate, :number_of_sequences => sdb.num_seq, :location => sdb.location)
+      #--- save si.search_databases ---
+      si.search_db_arr.each do |sdb|
+        this_sdb = SearchDatabase.find_or_create_by_name_and_version_and_release_date_and_number_of_sequences_and_location(:name => sdb.name, :version => sdb.version, :release_date => sdb.releaseDate, :number_of_sequences => sdb.num_seq, :location => sdb.location)
         #Aqui SÍ debo usar find_or_create porque es Global-scope. De hecho muchas veces irá a la parte "find"
-        this_sip.search_databases << this_sdb unless this_sip.search_databases.include? this_sdb
+        this_si.search_databases << this_sdb unless this_si.search_databases.include? this_sdb
       end
+
+      #--- save si.sil ---
+      sil = @mzid_obj.sil(si.sil_ref)
+      sil_id = sil.sil_id
+      num_seq_searched = sil.num_seq_searched
       
-      #---- SAVE 2 sip_psi_ms_cv_terms ---- sip_psi_ms_cv_term es SIP-scope ??
-      psi_ms_terms.each do |psi_ms_term|
-        this_psi_term = SipPsiMsCvTerm.find_or_initialize_by_spectrum_identification_protocol_id_and_psi_ms_cv_term_accession(:spectrum_identification_protocol_id => this_sip.id, :psi_ms_cv_term_accession => psi_ms_term[:accession])
-        this_psi_term.value = psi_ms_term[:value] if this_psi_term.new_record? unless psi_ms_term[:value].blank?
-        this_psi_term.save        
-      end
+      this_sil = SpectrumIdentificationList.create(:sil_id => sil_id, :spectrum_identification_id => si_id, :num_seq_searched => num_seq_searched)
+      spectrum_identification_lists_ids << this_sil.id
       
-      #---- SAVE 2 sip_user_params ----
-      user_params.each do |userP|
-        this_userP = SipUserParam.find_or_initialize_by_spectrum_identification_protocol_id_and_name(:spectrum_identification_protocol_id => this_sip.id, :name => userP[:name])
-        this_userP.value = userP[:value] if this_userP.new_record? unless userP[:value].blank?
-        this_userP.save
-      end
-      
-      #---- SAVE 2 searched_modifications ---- Global-scope
-      searched_mod_arr.each do |mod|
-        #Y ademas estoy insertando records que ya existian! Entonces pa que coño quiero la join table !!
-        #is_fixed boolean 'true' is saved as 1 in mysql -tinyint(1)-, so watch the fuck out
-        fixed = '1' if mod.fixedMod == 'true'; fixed = '0' if mod.fixedMod == 'false'
-        this_mod = SearchedModification.find_or_create_by_unimod_accession_and_mass_delta_and_residue_and_is_fixed(:unimod_accession => mod.unimod_accession, :mass_delta => mod.mass_delta, :residue => mod.residue, :is_fixed => fixed)
-        this_sip.searched_modifications << this_mod unless this_sip.searched_modifications.include? this_mod
-      end
-      
+    end #@mzid_obj.spectrum_identifications.each do |si|
+
+    ##SAVE SILs, SIRs, SIIs and STUFF##-------------------------------
+    spectrum_identification_lists_ids.each do |sil_id|
+      sil_ref = SpectrumIdentificationList.find(sil_id).sil_id
+      @results_arr = @mzid_obj.spectrum_identification_results(sil_ref)
+      @results_arr.each do |sir|
+        sir_id = sir.sir_id
+        spectrum_identification_list_id = SpectrumIdentificationList.find_by_sil_id(sil_ref).id
+        spectrum_id = sir.spectrum_id
+        spectrum_name = sir.spectrum_name
+        sir_psi_ms_cv_terms = sir.sir_psi_ms_cv_terms
+        sir_user_params = sir.sir_user_params
+        this_sir = SpectrumIdentificationResult.create(:sir_id => sir_id, :spectrum_identification_list_id => spectrum_identification_list_id, :spectrum_id => spectrum_id, :spectrum_name => spectrum_name)
+        unless sir_psi_ms_cv_terms.empty?
+          sir_psi_ms_cv_terms.each do |psi_ms_t|
+            #this_psi_term = SirPsiMsCvTerm.find_or_initialize_by_spectrum_identification_result_id_and_psi_ms_cv_term_accession(:spectrum_identification_result_id => this_sir.id, :psi_ms_cv_term_accession => psi_ms_t[:accession])
+            #this_psi_term.value = psi_ms_t[:value] if this_psi_term.new_record? unless psi_ms_t[:value].blank?
+            SirPsiMsCvTerm.create(:spectrum_identification_result_id => this_sir.id, :psi_ms_cv_term => psi_ms_t[:accession], :value => psi_ms_t[:value])
+            #this_psi_term.save           
+          end
+        end
+        unless sir_user_params.empty?
+          sir_user_params.each do |userP|
+            #this_userP = SirUserParam.find_or_initialize_by_spectrum_identification_result_id_and_name(:spectrum_identification_result_id => this_sir.id, :name => userP[:name])
+            #this_userP.value = userP[:value] if this_userP.new_record? unless userP[:value].blank?
+            SirUserParam.create(:spectrum_identification_result_id => this_sir.id, :name => userP[:name], :value => userP[:value])
+            #this_userP.save
+          end
+        end
+        #puts sir.items_arr[0]
+        sir.items_arr.each do |item|
+          sii_id = item.sii_id
+          spectrum_identification_result_id = SpectrumIdentificationResult.find_by_sir_id(this_sir.sir_id).id
+          calc_m2z, exp_m2z = item.calc_m2z, item.exp_m2z
+          rank, charge_state  = item.rank, item.charge_state
+          pass_threshold = item.pass_threshold
+          pepEv_ref_arr = item.pepEv_ref_arr
+          sii_psi_ms_cv_terms, sii_user_params = item.sii_psi_ms_cv_terms, item.sii_user_params
+          
+          this_item = SpectrumIdentificationItem.create(:sii_id => sii_id, :spectrum_identification_result_id => spectrum_identification_result_id, :calc_m2z => calc_m2z, :exp_m2z => exp_m2z, :rank => rank, :charge_state => charge_state, :pass_threshold => pass_threshold ) 
+         
+          #otra vez esto: (??) No puedes secarlo un poco?? (Sí, "secarlo", ya sabes, ;-) , ;-)  )
+          unless sii_psi_ms_cv_terms.empty?
+            sii_psi_ms_cv_terms.each do |psi_ms_t|
+              #this_psi_term = SiiPsiMsCvTerm.find_or_initialize_by_spectrum_identification_item_id_and_psi_ms_cv_term_accession(:spectrum_identification_item_id => this_item.id, :psi_ms_cv_term_accession => psi_ms_t[:accession])
+              #this_psi_term.value = psi_ms_t[:value] if this_psi_term.new_record? unless psi_ms_t[:value].blank?
+              #this_psi_term.save
+              #This is more local-scope
+              SiiPsiMsCvTerm.create(:spectrum_identification_item_id => this_item.id, :psi_ms_cv_term_accession => psi_ms_t[:accession], :value => psi_ms_t[:value])
+            end
+          end
+          unless sii_user_params.empty?
+            sii_user_params.each do |userP|
+              #this_userP = SiiUserParam.find_or_initialize_by_spectrum_identification_item_id_and_name(:spectrum_identification_item_id => this_item.id, :name => userP[:name])
+              #this_userP.value = userP[:value] if this_userP.new_record? unless userP[:value].blank?
+              #this_userP.save
+              SiiUserParam.create(:spectrum_identification_item_id => this_item.id, :name => userP[:name], :value => userP[:value])
+            end
+          end
+          
+          unless item.fragments_arr.empty?
+            item.fragments_arr.each do |f|
+              Fragment.create(:spectrum_identification_item_id => this_item.id, :charge => f.charge, :index => f.ion_index, :m_mz => f.mz_value, :m_intensity => f.m_intensity, :m_error => f.m_err, :fragment_type => f.fragment_name, :psi_ms_cv_fragment_type_accession => f.fragment_psi_ms_cv_acc)
+            end
+          end
+          
+        end #items_arr.each do |item|
+        
+      end #results.each do |sir|
+    
+    end #spectrum_identification_lists_ids.each do |sil_id|
    
-    end # @mzid_obj.sips.each do |sip|
-    
-    puts "saved_sip_ids: #{saved_sip_ids}"
-    
-    return saved_sip_ids #ESTO NO se returna si el error que rescato al llamar a save2tables ha ocurrido antes!!
-    
+
   end # def save2tables
 
 
 
 
-  def rollback(saved_sip_ids)
-    puts "\n-Error saving data 2 tables. Rolling back -- \n\n"
-    
-    SpectrumIdentificationProtocol.destroy(saved_sip_ids)
-    
-    
-#    unless SpectrumIdentificationProtocol.find(:all).empty?
-#		mzid_object.sips.each do |sip|
-#        db_sip_id = SpectrumIdentificationProtocol.find_by_sip_id(sip.sip_id)
-#        SpectrumIdentificationProtocol.destroy(db_sip_id)
-#      end   
-#   end
-   
-  end
-
-
 end
 
 
+#maybe create method to save psi_ms_cv_terms with args (model, psi_ms_terms_set) :
+#  def save_psi_ms_cv_terms(model, psi_ms_terms)
+#    psi_ms_terms.each do |psi_ms_term|
+#      this_psi_term = model.find_or_initialize_by_spectrum_identification_protocol_id_and_psi_ms_cv_term_accession(:spectrum_identification_protocol_id => this_sip.id, :psi_ms_cv_term_accession => psi_ms_term[:accession])
+#      this_psi_term.value = psi_ms_term[:value] if this_psi_term.new_record? unless psi_ms_term[:value].blank?
+#      this_psi_term.save
+#    end  
+#  end
+  
+#  def save_user_params
+  
+#  end
+
+
+  def rollback(mzid_file_id)
+    if MzidFile.exists? mzid_file_id
+      #puts "\n-Error saving data 2 tables. Rolling back -- \n\n"
+      MzidFile.find(mzid_file_id).spectra_acquisition_runs.each do |sar|
+        sar.spectrum_identifications.each do |si|
+          sip_id = si.spectrum_identification_protocol.id
+          SpectrumIdentificationProtocol.destroy(sip_id)
+          si.spectrum_identification_results.each do |sir|
+            SpectrumIdentificationResult.destroy(sir.id)
+          end
+          SpectrumIdentification.destroy(si.id)
+        end
+        #SpectraAcquisitionRun.destroy(sar.id)
+      end
+      #MzidFile.destroy(mzid_file_id)
+
+    end
+
+  end
+
+
+#~ class String
+  #~ def camelcase2underscore
+    #~ self.gsub(/::/, '/').
+    #~ gsub(/([A-Z]+)([A-Z][a-z])/,'\1_\2').
+    #~ gsub(/([a-z\d])([A-Z])/,'\1_\2').
+    #~ tr("-", "_").
+    #~ downcase
+  #~ end
+#~ end
