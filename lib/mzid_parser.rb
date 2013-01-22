@@ -34,7 +34,7 @@ class Mzid
     return pep_arr  
   end
   
-  def pep_evidences
+  def pep_evidences(sii)
     pep_ev_arr = []
     @doc.xpath("//xmlns:PeptideEvidence").each do |pepEv|
       pepEv_id, name = pepEv.attr("id"), pepEv.attr("name")
