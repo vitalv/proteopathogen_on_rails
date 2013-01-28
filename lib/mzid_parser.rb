@@ -178,25 +178,26 @@ class Mzid
           pepEv_ref_arr << pepEvRef.attr("peptideEvidence_ref")
         end
         fragments_arr = [] #Array de Fragments        
-        fragmentation = sii.xpath("./xmlns:Fragmentation")[0] #maxOccurs = 1
-        fragmentation.xpath("./xmlns:IonType").each do |ion|
-          mz_values_arr, m_intensity_arr, m_err_arr = [], [], []
-          if !ion.xpath("./xmlns:FragmentArray").empty? #minOccurs = 0
-            ion.xpath("./xmlns:FragmentArray").each do |frg_arr|
-              mz_values_arr = frg_arr.attr("values").split("\s") if frg_arr.attr("measure_ref") == "m_mz"
-              m_intensity_arr = frg_arr.attr("values").split("\s") if frg_arr.attr("measure_ref") == "m_intensity"
-              m_err_arr = frg_arr.attr("values").split("\s") if frg_arr.attr("measure_ref") == "m_error"
+        if fragmentation = sii.xpath("./xmlns:Fragmentation")[0] #maxOccurs = 1
+          fragmentation.xpath("./xmlns:IonType").each do |ion|
+            mz_values_arr, m_intensity_arr, m_err_arr = [], [], []
+            if !ion.xpath("./xmlns:FragmentArray").empty? #minOccurs = 0
+              ion.xpath("./xmlns:FragmentArray").each do |frg_arr|
+                mz_values_arr = frg_arr.attr("values").split("\s") if frg_arr.attr("measure_ref") == "m_mz"
+                m_intensity_arr = frg_arr.attr("values").split("\s") if frg_arr.attr("measure_ref") == "m_intensity"
+                m_err_arr = frg_arr.attr("values").split("\s") if frg_arr.attr("measure_ref") == "m_error"
+              end
             end
-          end
-          fragment_name = getcvParams(ion)[0][:name]
-          fragment_psi_ms_cv_acc = getcvParams(ion)[0][:accession]
-          charge = ion.attr("charge")
-          ion_index_arr = ion.attr("index").to_s.split("\s")
-          ion_index_arr.each_with_index do |ion_index, i| #por cada uno de estos creo lo que yo llamo un Fragment (modelo)
-            mz_value = mz_values_arr[i] unless mz_values_arr.empty?
-            m_intensity = m_intensity_arr[i] unless m_intensity_arr.empty?
-            m_err = m_err_arr[i] unless m_err_arr.empty?
-            fragments_arr << FragmentIon.new(ion_index, fragment_name, fragment_psi_ms_cv_acc, charge, mz_value, m_intensity, m_err ) 
+            fragment_name = getcvParams(ion)[0][:name]
+            fragment_psi_ms_cv_acc = getcvParams(ion)[0][:accession]
+            charge = ion.attr("charge")
+            ion_index_arr = ion.attr("index").to_s.split("\s")
+            ion_index_arr.each_with_index do |ion_index, i| #por cada uno de estos creo lo que yo llamo un Fragment (modelo)
+              mz_value = mz_values_arr[i] unless mz_values_arr.empty?
+              m_intensity = m_intensity_arr[i] unless m_intensity_arr.empty?
+              m_err = m_err_arr[i] unless m_err_arr.empty?
+              fragments_arr << FragmentIon.new(ion_index, fragment_name, fragment_psi_ms_cv_acc, charge, mz_value, m_intensity, m_err ) 
+            end
           end
         end
         
