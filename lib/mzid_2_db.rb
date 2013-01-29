@@ -1,5 +1,7 @@
 class Mzid2db
 
+#mzid = Mzid.new("/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/public/uploaded_mzid_files/SILAC_phos_OrbitrapVelos_1_interact-ipro-filtered.mzid"); nil;
+
   def initialize(mzid_object)
     @mzid_obj = mzid_object
     @mzid_file_id = mzid_object.mzid_file_id
@@ -16,23 +18,20 @@ class Mzid2db
   
     ##SAVE PEPTIDES ##-------------------------------
     @mzid_obj.peptides.each do |pep|
-      #~ peptide_id = pep.pep_id
-      #~ sequence = pep.sequence
-      #~ 
-      #~ Peptide.find_or_create_by_sequence(sequence)
-
-      #~ 
-      #~ Peptide.find(this_pep).modifications
-      #~ 
-      #~ if !pep.modif_arr.empty?
-        #~ modif_arr.each do |pep_mod|
-          #~ Modification.create
-        #~ end
-      #~ end      
+      #peptide_id = pep.pep_id
+      sequence = pep.sequence
+      Peptide.find_or_create_by_sequence(sequence)
+      
+      #Peptide.find(this_pep).modifications
+       #if !pep.modif_arr.empty?
+        #modif_arr.each do |pep_mod|
+          #Modification.create
+        #end
+      #end      
     end
   
 
-    ##SAVE SI, SIP and SIP-related STUFF##-------------------------------
+    ##SAVE SI, SIP and SIP-related STUFF##------------------------------- #Elements <AnalysisCollection> and <AnalysisProtocolCollection>
     spectrum_identification_lists_ids = []    
     @mzid_obj.spectrum_identifications.each do |si|
     
@@ -105,7 +104,8 @@ class Mzid2db
       
     end #@mzid_obj.spectrum_identifications.each do |si|
 
-    ##SAVE SILs, SIRs, SIIs and STUFF##-------------------------------
+    ##SAVE SILs, SIRs, SIIs and STUFF##---------------------------------- #Elements <AnalysisData><SpectrumIdentificationList>
+    #spectrum_identification_items_ids = []
     spectrum_identification_lists_ids.each do |sil_id|
       sil_ref = SpectrumIdentificationList.find(sil_id).sil_id
       @results_arr = @mzid_obj.spectrum_identification_results(sil_ref)
@@ -142,8 +142,30 @@ class Mzid2db
           pass_threshold = item.pass_threshold
           pepEv_ref_arr = item.pepEv_ref_arr
           sii_psi_ms_cv_terms, sii_user_params = item.sii_psi_ms_cv_terms, item.sii_user_params
-          
+
           this_item = SpectrumIdentificationItem.create(:sii_id => sii_id, :spectrum_identification_result_id => spectrum_identification_result_id, :calc_m2z => calc_m2z, :exp_m2z => exp_m2z, :rank => rank, :charge_state => charge_state, :pass_threshold => pass_threshold ) 
+
+          #Save Peptide_Evidences ---------
+          #NOTE: OK, this goes here but I NEED a peptide_id and a dbSeq_id to save this here!!
+          #2 options here:
+          #A: with my pep_evidence I get a dBSEq_ref and a peptide_ref
+          #B: Previously save ALL peptides and ALL dbseqs and then figure out how to relate pep <-> pep_evidence
+          
+          pepEv_ref_arr.each do |pepEv_ref|
+            pepEv = @mzid_obj.pep_evidence(pepEv_ref)
+            pep_ref = pepEv.pep_ref
+            pep = @mzid_obj.peptide(pep_ref)
+            pep_seq = pep.seq
+            this_pep = Peptide.find_or_create_by_sequence(pep_seq)
+            PeptideEvidence.create
+            
+          end
+         
+          unless item.fragments_arr.empty?
+            item.fragments_arr.each do |f|
+              Fragment.create(:spectrum_identification_item_id => this_item.id, :charge => f.charge, :index => f.ion_index, :m_mz => f.mz_value, :m_intensity => f.m_intensity, :m_error => f.m_err, :fragment_type => f.fragment_name, :psi_ms_cv_fragment_type_accession => f.fragment_psi_ms_cv_acc)
+            end
+          end         
          
           #otra vez esto: (??) No puedes secarlo un poco?? (Sí, "secarlo", ya sabes, ;-) , ;-)  )
           unless sii_psi_ms_cv_terms.empty?
@@ -164,11 +186,8 @@ class Mzid2db
             end
           end
           
-          unless item.fragments_arr.empty?
-            item.fragments_arr.each do |f|
-              Fragment.create(:spectrum_identification_item_id => this_item.id, :charge => f.charge, :index => f.ion_index, :m_mz => f.mz_value, :m_intensity => f.m_intensity, :m_error => f.m_err, :fragment_type => f.fragment_name, :psi_ms_cv_fragment_type_accession => f.fragment_psi_ms_cv_acc)
-            end
-          end
+
+
           
         end #items_arr.each do |item|
         
