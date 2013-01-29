@@ -1,5 +1,8 @@
 require 'nokogiri'
 
+#mzid = Mzid.new("/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/public/uploaded_mzid_files/SILAC_phos_OrbitrapVelos_1_interact-ipro-filtered.mzid")
+
+
 class Mzid
 
   attr_reader :mzid_file_id
@@ -15,9 +18,9 @@ class Mzid
   end
 
 
-  def peptides
+  def pep(pep_ref)
     #This must have a global scope. Peptide is an entity defined by its sequence and modification. One peptide can be identified across experiments / msruns
-    pep_arr = []
+    #pep_arr = []
     @doc.xpath("//xmlns:Peptide").each do |pep|
       pep_id = pep.attr("id")
       sequence = pep.xpath(".//xmlns:PeptideSequence").text
@@ -29,22 +32,34 @@ class Mzid
         cv_params = getcvParams(mod)
         modif_arr << PeptideMod.new(residue, avg_mass_delta, location, cv_params)
       end
-      pep_arr << Pep.new(pep_id, sequence, modif_arr)
+      pep_arr << Pep.new(sequence, modif_arr)
     end
     return pep_arr  
   end
   
-  def pep_evidences(sii)
-    pep_ev_arr = []
-    @doc.xpath("//xmlns:PeptideEvidence").each do |pepEv|
-      pepEv_id, name = pepEv.attr("id"), pepEv.attr("name")
-      start_pos, end_pos = pepEv.attr("start"), pepEv.attr("end")
-      pre, post = pepEv.attr("pre"), pepEv.attr("post")
-      pep_ref = pepEv.attr("peptide_ref")
-      pep_ev_arr << PepEv.new(id, start_pos, end_pos, pre, post)#PepEv = Struct.new(:id, :start, :end, :pre, :post, :is_decoy, :db_seq_ref, :name, :pep_ref)
+  def pep_evidence(pep_ev_ref) #
+    #sii = @doc.xpath("//xmlns:SpectrumIdentificationItem[@id='#{sii_ref}']")
+    #sii.xpath(".//xmlns:PeptideEvidenceRef").each do |pep_ev_ref_element|
+    #  pepev_ref = pep_ev_ref_element.attr("peptideEvidence_ref")
+    pepEv = @doc.xpath("//xmlns:PeptideEvidence[@id='#{pepev_ref}']")
+    pepEv_id, name = pepEv.attr("id"), pepEv.attr("name")
+    start_pos, end_pos = pepEv.attr("start"), pepEv.attr("end")
+    pre, post = pepEv.attr("pre"), pepEv.attr("post")
+    is_decoy, name = pepEv.attr("isDecoy"), pepEv.attr("name")
+    db_seq_ref, pep_ref = pepEv.attr("dBSequence_ref"), pepEv.attr("peptide_ref")
+    pep_ev = PepEv.new(id, start_pos, end_pos, pre, post, is_decoy, db_seq_ref, name, pep_ref)#PepEv = Struct.new(:id, :start, :end, :pre, :post, :is_decoy, :db_seq_ref, :name, :pep_ref)
+    return pep_ev
+    #end
+  end  
+  
+  
+  def db_sequences
+    db_seqs = []
+    @doc.xpath("//xmlns:DBSequence").each do |dbseq|
+      
     end
   
-  end  
+  end
   
 
   def spectrum_identifications
@@ -214,6 +229,7 @@ class Mzid
   end
 
 
+
 end #class Mzid
 
 
@@ -267,10 +283,10 @@ PeptideMod = Struct.new(:residue, :avg_mass_delta, :location, :cv_params)
 
 class Pep #No puedo llamarlo Peptide igual que mi modelo !!
 
-  attr_reader :pep_id, :sequence, :modif_arr
+  attr_reader :sequence, :modif_arr #, :pep_id
   
-  def initialize(pep_id, sequence, modif_arr)
-    @pep_id = pep_id
+  def initialize(sequence, modif_arr)
+    #@pep_id = pep_id
     @sequence = sequence
     @modif_arr = modif_arr
   end
