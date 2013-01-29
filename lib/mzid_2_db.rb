@@ -154,9 +154,11 @@ class Mzid2db
           pepEv_ref_arr.each do |pepEv_ref|
             pepEv = @mzid_obj.pep_evidence(pepEv_ref)
             pep_ref = pepEv.pep_ref
-            pep = @mzid_obj.peptide(pep_ref)
+            pep = @mzid_obj.pep(pep_ref)
             pep_seq = pep.seq
             this_pep = Peptide.find_or_create_by_sequence(pep_seq)
+            dbseq_ref = pepEv.db_seq_ref
+            db_seq = @mzid_obj.db_seq
             PeptideEvidence.create
             
           end
