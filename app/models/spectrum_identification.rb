@@ -1,5 +1,7 @@
 class SpectrumIdentification < ActiveRecord::Base
   # attr_accessible :title, :body
+  validates :si_id, :presence => true
+  
   has_and_belongs_to_many :spectra_acquisition_runs, :join_table => :sar_si_join_table
   has_and_belongs_to_many :search_databases, :join_table => :sdb_si_join_table
   

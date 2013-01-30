@@ -1,7 +1,7 @@
 class PeptideEvidence < ActiveRecord::Base
   # attr_accessible :title, :body
   validates :peptide_id, :presence => true 
-  validates_uniqueness_of :peptide_evidence, :scope => {:peptide_id, :db_sequence_id, :start, :end}
+  validates_uniqueness_of :peptide_evidence, :scope => [:peptide_id, :db_sequence_id, :start, :end]
   #There MUST only be one PeptideEvidence item per Peptide-to-DBSequence-position
   belongs_to :peptide
   belongs_to :db_squence

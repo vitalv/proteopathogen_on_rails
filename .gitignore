@@ -5,6 +5,7 @@ tmp/
 *~
 *~~
 *.kate-swp
+*.bak
 rvm_use_1.9.3@rails3gemset
 proteopathogen3.geany
 nokogiri
