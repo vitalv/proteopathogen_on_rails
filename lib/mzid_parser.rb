@@ -10,48 +10,48 @@ class Mzid
   def initialize(mzid_file)
 
     @doc = Nokogiri::XML(File.open(mzid_file))
-    @mzid_file_id = MzidFile.find_by_location(mzid_file).id 
+    @mzid_file_id ||= MzidFile.find_by_location(mzid_file).id  
     #@doc = Nokogiri::XML(File.open("/home/vital/pepXML_protXML_2_mzid_V/SILAC_phos_OrbitrapVelos_1_interact-ipro-filtered.mzid"))
-
+    #@doc = Nokogiri::XML(File.open("/home/vital/pepXML_protXML_2_mzid_V/examplefile.mzid"))
     #save_all_cv_terms
 
   end
 
 
   def pep(pep_ref)
-    pep = @doc.xpath("//xmlns:Peptide[@id='#{pep_ref}']")
+    pep = @doc.xpath("//xmlns:Peptide[@id='#{pep_ref}']")[0]
     sequence = pep.xpath("./xmlns:PeptideSequence").text
     pep_id = pep.attr("id")
     modif_arr = [] #Array de Structs PeptideMod (que a su vez es un attr del objeto de la clase 
-      pep.xpath(".//xmlns:Modification").each do |mod| #:unimod_acc
-        residue = mod.attr("residues")
-        avg_mass_delta = mod.attr("avgMassDelta")
-        location = mod.attr("location")
-        cv_params = getcvParams(mod)
-        modif_arr << PeptideMod.new(residue, avg_mass_delta, location, cv_params)
-      end
-      Pep.new(sequence, modif_arr)
+    pep.xpath(".//xmlns:Modification").each do |mod| #:unimod_acc
+      residue = mod.attr("residues")
+      avg_mass_delta = mod.attr("avgMassDelta")
+      location = mod.attr("location")
+      cv_params = getcvParams(mod)
+      modif_arr << PeptideMod.new(residue, avg_mass_delta, location, cv_params)
     end
+    Pep.new(sequence, modif_arr)
   end
   
   
-  def pep_evidence(pep_ev_ref) #
-    pepEv = @doc.xpath("//xmlns:PeptideEvidence[@id='#{pepev_ref}']")
-    pepEv_id, name = pepEv.attr("id"), pepEv.attr("name")
+  def pep_evidence(pepEv_ref) 
+    pepEv = @doc.xpath("//xmlns:PeptideEvidence[@id='#{pepEv_ref}']")[0] #There is only ONE peptideEvidence per id, so it's ok I get [0]
+    pepEv_id = pepEv.attr("id")
+    name = pepEv.attr("name")
     start_pos, end_pos = pepEv.attr("start"), pepEv.attr("end")
     pre, post = pepEv.attr("pre"), pepEv.attr("post")
     is_decoy, name = pepEv.attr("isDecoy"), pepEv.attr("name")
     db_seq_ref, pep_ref = pepEv.attr("dBSequence_ref"), pepEv.attr("peptide_ref")
-    pep_ev = PepEv.new(id, start_pos, end_pos, pre, post, is_decoy, db_seq_ref, name, pep_ref)#PepEv = Struct.new(:id, :start, :end, :pre, :post, :is_decoy, :db_seq_ref, :name, :pep_ref)
+    pep_ev = PepEv.new(pepEv_id, start_pos, end_pos, pre, post, is_decoy, db_seq_ref, name, pep_ref)#PepEv = Struct.new(:pepEv_id, :start, :end, :pre, :post, :is_decoy, :db_seq_ref, :name, :pep_ref)
     return pep_ev
   end  
   
   
-  def db_seq(db_seq_ref)    
-    dBSeq = @doc.xpath("//xmlns:DBSequence[@id='#{db_seq_ref}']")
-    db_seq_id = dBSeq.attr("id").to_s
-    search_db_ref = dBSeq.attr("searchDatabase_ref").to_s
-    accession = dBSeq.attr("accession").to_s
+  def db_seq(dbseq_ref)    
+    dBSeq = @doc.xpath("//xmlns:DBSequence[@id='#{dbseq_ref}']")[0]
+    db_seq_id = dBSeq.attr("id")
+    search_db_ref = dBSeq.attr("searchDatabase_ref")
+    accession = dBSeq.attr("accession")
     sequence = dBSeq.xpath("./xmlns:Seq").text
     description = nil
     getcvParams(dBSeq).each { |cvP|  description = cvP[:value] if cvP[:accession] == "MS:1001088" }
@@ -81,7 +81,7 @@ class Mzid
         name = get_cvParam_and_or_userParam(search_database.xpath(".//xmlns:DatabaseName"))
         location, version = search_database.attr("location"), search_database.attr("version")
         releaseDate, num_seq = search_database.attr("releaseDate"),  search_database.attr("numDatabaseSequences")
-        sdb = SearchDB.new(name, location, version, releaseDate, num_seq)
+        sdb = SearchDB.new(name, sdb_id, location, version, releaseDate, num_seq)
         search_db_arr << sdb if search_db_arr.empty?
         search_db_arr << sdb unless search_db_arr.include? sdb
       end      
@@ -278,7 +278,7 @@ end #class Mzid
 
 DBSeq = Struct.new(:id, :search_db_ref, :accession, :sequence, :description)
 
-PepEv = Struct.new(:id, :start, :end, :pre, :post, :is_decoy, :db_seq_ref, :name, :pep_ref)
+PepEv = Struct.new(:pepEv_id, :start, :end, :pre, :post, :is_decoy, :db_seq_ref, :name, :pep_ref)
 
 PeptideMod = Struct.new(:residue, :avg_mass_delta, :location, :cv_params)
 
@@ -316,7 +316,7 @@ end
 
 Sil = Struct.new(:sil_id, :num_seq_searched)
 SearchedMod = Struct.new(:mass_delta, :fixedMod, :residue, :unimod_accession)
-SearchDB = Struct.new(:name, :location, :version, :releaseDate, :num_seq)
+SearchDB = Struct.new(:name, :sdb_id, :location, :version, :releaseDate, :num_seq)
 
 class Sip 
 

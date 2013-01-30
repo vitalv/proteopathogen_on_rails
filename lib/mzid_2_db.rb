@@ -1,6 +1,7 @@
 class Mzid2db
 
 #mzid = Mzid.new("/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/public/uploaded_mzid_files/SILAC_phos_OrbitrapVelos_1_interact-ipro-filtered.mzid"); nil;
+#mzid = Mzid.new("/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/public/uploaded_mzid_files/examplefile.mzid"), nil;
 
   def initialize(mzid_object)
     @mzid_obj = mzid_object
@@ -16,31 +17,34 @@ class Mzid2db
 
   def save2tables
   
-    ##SAVE PEPTIDES ##-------------------------------
-    @mzid_obj.peptides.each do |pep|
-      #peptide_id = pep.pep_id
-      sequence = pep.sequence
-      Peptide.find_or_create_by_sequence(sequence)
-      
-      #Peptide.find(this_pep).modifications
-       #if !pep.modif_arr.empty?
-        #modif_arr.each do |pep_mod|
-          #Modification.create
-        #end
-      #end      
-    end
-  
 
     ##SAVE SI, SIP and SIP-related STUFF##------------------------------- #Elements <AnalysisCollection> and <AnalysisProtocolCollection>
     spectrum_identification_lists_ids = []    
     @mzid_obj.spectrum_identifications.each do |si|
     
       mzid_si_id = si.si_id
-      this_si = SpectrumIdentification.create(:si_id => mzid_si_id, :name => si.si_name, :activity_date => si.activity_date)
+      
+      #WATCH OUT! #DON'T SAVE the same si multiple times!! How could that ever happen? Only in dev mode when I'm resubmitting the same mzid file continously...
 
+      #production should look like: (always create)
+      #this_si = SpectrumIdentification.create(:si_id => mzid_si_id, :name => si.si_name, :activity_date => si.activity_date)
+
+      #dev mode :  #Check if current mzid_file_id  has an already stored si with same si_id (through sar)      
+      this_mzid_stored_sis = []
+      MzidFile.find(@mzid_file_id).spectra_acquisition_runs.each do |stored_sar|
+        stored_sar.spectrum_identifications.each do |stored_si|
+          this_mzid_stored_sis << stored_si.si_id
+        end
+      end
+      this_si = SpectrumIdentification.find_by_si_id(mzid_si_id) if this_mzid_stored_sis.include? mzid_si_id
+      this_si = SpectrumIdentification.create(:si_id => mzid_si_id, :name => si.si_name, :activity_date => si.activity_date)  unless this_mzid_stored_sis.include? mzid_si_id
+      
       #--- save 2 sar_si_join_table. si.spectra_acquisition_runs
       si.input_spectra_files_arr.each do |s_f|
-        this_si.spectra_acquisition_runs << SpectraAcquisitionRun.find_by_spectra_file(s_f)
+        #Aqui (ya que esto no tiene modelo) tengo que validar que existe un spectrum_identification_id y un spectra_acquisition_run_id
+        if SpectraAcquisitionRun.exists? s_f and SpectrumIdentification.exists? this_si.id
+          this_si.spectra_acquisition_runs << SpectraAcquisitionRun.find_by_spectra_file(s_f)
+        end
       end
       
       #--- get si.sip and sip attributes and sip-related tables ---
@@ -89,7 +93,7 @@ class Mzid2db
       
       #--- save si.search_databases ---
       si.search_db_arr.each do |sdb|
-        this_sdb = SearchDatabase.find_or_create_by_name_and_version_and_release_date_and_number_of_sequences_and_location(:name => sdb.name, :version => sdb.version, :release_date => sdb.releaseDate, :number_of_sequences => sdb.num_seq, :location => sdb.location)
+        this_sdb = SearchDatabase.find_or_create_by_name_and_sdb_id_and_version_and_release_date_and_number_of_sequences_and_location(:name => sdb.name, :sdb_id => sdb.sdb_id, :version => sdb.version, :release_date => sdb.releaseDate, :number_of_sequences => sdb.num_seq, :location => sdb.location)
         #Aqui SÍ debo usar find_or_create porque es Global-scope. De hecho muchas veces irá a la parte "find"
         this_si.search_databases << this_sdb unless this_si.search_databases.include? this_sdb
       end
@@ -121,6 +125,10 @@ class Mzid2db
           sir_psi_ms_cv_terms.each do |psi_ms_t|
             #this_psi_term = SirPsiMsCvTerm.find_or_initialize_by_spectrum_identification_result_id_and_psi_ms_cv_term_accession(:spectrum_identification_result_id => this_sir.id, :psi_ms_cv_term_accession => psi_ms_t[:accession])
             #this_psi_term.value = psi_ms_t[:value] if this_psi_term.new_record? unless psi_ms_t[:value].blank?
+            
+            
+            ##WATCH OUT: SAVE ONLY IF NEW (that is, NEW in GLOBAL scope, the whole table) RECORD 
+            
             SirPsiMsCvTerm.create(:spectrum_identification_result_id => this_sir.id, :psi_ms_cv_term => psi_ms_t[:accession], :value => psi_ms_t[:value])
             #this_psi_term.save           
           end
@@ -133,7 +141,7 @@ class Mzid2db
             #this_userP.save
           end
         end
-        #puts sir.items_arr[0]
+ 
         sir.items_arr.each do |item|
           sii_id = item.sii_id
           spectrum_identification_result_id = SpectrumIdentificationResult.find_by_sir_id(this_sir.sir_id).id
@@ -142,27 +150,46 @@ class Mzid2db
           pass_threshold = item.pass_threshold
           pepEv_ref_arr = item.pepEv_ref_arr
           sii_psi_ms_cv_terms, sii_user_params = item.sii_psi_ms_cv_terms, item.sii_user_params
-
+ 
+          #--- save SpectrumIdentificationItem ---
           this_item = SpectrumIdentificationItem.create(:sii_id => sii_id, :spectrum_identification_result_id => spectrum_identification_result_id, :calc_m2z => calc_m2z, :exp_m2z => exp_m2z, :rank => rank, :charge_state => charge_state, :pass_threshold => pass_threshold ) 
-
-          #Save Peptide_Evidences ---------
-          #NOTE: OK, this goes here but I NEED a peptide_id and a dbSeq_id to save this here!!
-          #2 options here:
-          #A: with my pep_evidence I get a dBSEq_ref and a peptide_ref
-          #B: Previously save ALL peptides and ALL dbseqs and then figure out how to relate pep <-> pep_evidence
-          
+          #Save Peptide_Evidences, Peptides And DbSequences ---------
+          #OptionA: with my pep_evidence I get a dBSEq_ref and a peptide_ref
           pepEv_ref_arr.each do |pepEv_ref|
-            pepEv = @mzid_obj.pep_evidence(pepEv_ref)
-            pep_ref = pepEv.pep_ref
+            #get mzid.pep_evidence:  PepEv = #<struct PepEv pepEv_id=nil, start=nil, end=nil, pre=nil, post=nil, is_decoy=nil, db_seq_ref=nil, name=nil, pep_ref=nil>
+            pep_ev = @mzid_obj.pep_evidence(pepEv_ref)
+            pep_ref = pep_ev.pep_ref
+            #get mzid.pep: Object Pep ( 
             pep = @mzid_obj.pep(pep_ref)
-            pep_seq = pep.seq
-            this_pep = Peptide.find_or_create_by_sequence(pep_seq)
-            dbseq_ref = pepEv.db_seq_ref
-            db_seq = @mzid_obj.db_seq
-            PeptideEvidence.create
+            pep_seq = pep.sequence
+      
+            #--- save Peptide ---
+            this_Peptide = Peptide.find_or_create_by_sequence(:sequence => pep_seq, :peptide_id => pep_ref)
             
-          end
-         
+            dbseq_ref = pep_ev.db_seq_ref
+            db_seq = @mzid_obj.db_seq(dbseq_ref)
+            db_seq_accession, db_seq_description = db_seq.accession, db_seq.description
+            db_seq_sequence = db_seq.sequence
+            search_db_ref = db_seq.search_db_ref
+            
+            #get search_db_id(s) (through sil_id):
+            si_id = SpectrumIdentificationList.find(sil_id).spectrum_identification_id
+            search_db_id = nil #validate presence in model 
+            SpectrumIdentification.find(si_id).search_databases.each { |sdb| search_db_id = sdb.id if sdb.sdb_id == search_db_ref }
+
+            #--- save DbSequence ---
+            this_DbSequence = DbSequence.find_or_initialize_by_accession_and_sequence(:accession => db_seq_accession, :sequence => db_seq_sequence)
+            if this_DbSequence.new_record?
+              this_DbSequence.description  = db_seq_description
+              this_DbSequence.search_database_id = search_db_id 
+              this_DbSequence.save
+            end
+            #--- save Peptide_Evidence
+            PeptideEvidence.create(:peptide_id => this_Peptide.id, :db_sequence_id => this_DbSequence.id, :start => pep_ev.start, :end => pep_ev.end, :pre => pep_ev.pre, :post => pep_ev.post, :is_decoy => pep_ev.is_decoy)
+            
+          end #pepEv_ref_arr.each do |pepEv_ref|
+          
+          #--- save Fragments -----------------------------------------
           unless item.fragments_arr.empty?
             item.fragments_arr.each do |f|
               Fragment.create(:spectrum_identification_item_id => this_item.id, :charge => f.charge, :index => f.ion_index, :m_mz => f.mz_value, :m_intensity => f.m_intensity, :m_error => f.m_err, :fragment_type => f.fragment_name, :psi_ms_cv_fragment_type_accession => f.fragment_psi_ms_cv_acc)

@@ -11,13 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-
-ActiveRecord::Schema.define(:version => 20130121135619) do
+ActiveRecord::Schema.define(:version => 20130130170612) do
 
   create_table "db_sequences", :force => true do |t|
-    t.string "accession"
-    t.string "description"
-    t.text   "sequence"
+    t.string  "accession"
+    t.string  "description"
+    t.text    "sequence"
+    t.integer "search_database_id"
   end
 
   create_table "experiments", :force => true do |t|
@@ -61,7 +61,6 @@ ActiveRecord::Schema.define(:version => 20130121135619) do
     t.string  "pre"
     t.string  "post"
     t.boolean "is_decoy"
-    t.string  "missed_cleavages"
     t.integer "db_sequence_id"
   end
 
@@ -131,6 +130,7 @@ ActiveRecord::Schema.define(:version => 20130121135619) do
     t.string  "release_date"
     t.integer "number_of_sequences"
     t.string  "location"
+    t.string  "sdb_id",              :null => false
   end
 
   create_table "searched_modifications", :force => true do |t|
