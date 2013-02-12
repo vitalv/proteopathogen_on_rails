@@ -42,7 +42,7 @@ class Mzid2db
       #--- save 2 sar_si_join_table. si.spectra_acquisition_runs
       si.input_spectra_files_arr.each do |s_f|
         #Aqui (ya que esto no tiene modelo) tengo que validar que existe un spectrum_identification_id y un spectra_acquisition_run_id
-        if SpectraAcquisitionRun.exists? s_f and SpectrumIdentification.exists? this_si.id
+        if !SpectraAcquisitionRun.find_by_spectra_file(s_f).nil? and SpectrumIdentification.exists? this_si.id
           this_si.spectra_acquisition_runs << SpectraAcquisitionRun.find_by_spectra_file(s_f)
         end
       end
@@ -185,7 +185,12 @@ class Mzid2db
               this_DbSequence.save
             end
             #--- save Peptide_Evidence
-            PeptideEvidence.create(:peptide_id => this_Peptide.id, :db_sequence_id => this_DbSequence.id, :start => pep_ev.start, :end => pep_ev.end, :pre => pep_ev.pre, :post => pep_ev.post, :is_decoy => pep_ev.is_decoy)
+            this_PeptideEvidence = PeptideEvidence.find_or_create_by_peptide_id_and_db_sequence_id_and_start_and_end(:peptide_id => this_Peptide.id, :db_sequence_id => this_DbSequence.id, :start => pep_ev.start, :end => pep_ev.end)
+            if this_PeptideEvidence.new_record?
+              this_PeptideEvidence.pre, this_PeptideEvidence.post = pep_ev.pre, pep_ev.post
+              this_PeptideEvidence.is_decoy = pep_ev.is_decoy
+            end
+            this_item.peptide_evidences << this_PeptideEvidence unless this_item.peptide_evidences.include? this_PeptideEvidence
             
           end #pepEv_ref_arr.each do |pepEv_ref|
           
@@ -255,6 +260,11 @@ end
           sip_id = si.spectrum_identification_protocol.id
           SpectrumIdentificationProtocol.destroy(sip_id)
           si.spectrum_identification_results.each do |sir|
+            sir.spectrum_identification_items.each do |sii|
+              sii.peptide_evidences.each do |pep_ev|
+                PeptideEvidence.destroy(pep_ev.id)
+              end
+            end
             SpectrumIdentificationResult.destroy(sir.id)
           end
           SpectrumIdentification.destroy(si.id)
