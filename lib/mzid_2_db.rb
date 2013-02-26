@@ -108,6 +108,9 @@ class Mzid2db
       
     end #@mzid_obj.spectrum_identifications.each do |si|
 
+
+
+
     ##SAVE SILs, SIRs, SIIs and STUFF##---------------------------------- #Elements <AnalysisData><SpectrumIdentificationList>
     #spectrum_identification_items_ids = []
     spectrum_identification_lists_ids.each do |sil_id|
@@ -199,7 +202,7 @@ class Mzid2db
             item.fragments_arr.each do |f|
               Fragment.create(:spectrum_identification_item_id => this_item.id, :charge => f.charge, :index => f.ion_index, :m_mz => f.mz_value, :m_intensity => f.m_intensity, :m_error => f.m_err, :fragment_type => f.fragment_name, :psi_ms_cv_fragment_type_accession => f.fragment_psi_ms_cv_acc)
             end
-          end         
+          end
          
           #otra vez esto: (??) No puedes secarlo un poco?? (Sí, "secarlo", ya sabes, ;-) , ;-)  )
           unless sii_psi_ms_cv_terms.empty?
