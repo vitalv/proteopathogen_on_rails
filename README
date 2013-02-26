@@ -1,11 +1,9 @@
 == Proteopathogen is a Rails Application On Protein Identification Data From Candida albicans
 
 
-
 Database accomodates protein identification data stored in the HUPO-PSI xml-based standard file mzIdentML
 (http://www.psidev.info/mzidentml)
 
-
-Some additional information on spectra acquistion run can also be made stored through input forms.
+Some additional information on spectra acquistion run can also be stored through input forms.
 
 Database Schema : public/proteopathogen.png
