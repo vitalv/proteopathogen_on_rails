@@ -14,6 +14,12 @@ class Mzid2db
   #(i.e. Create Sip object from @mzid_obj.sip object)
   #objects from mzid_parser are prefixed mzid_  ;  objects created here to be saved are prefixed my_
 
+  #See DB Schema ../public/images/proteopathogen.png
+  #Some tables are inter-search scope. Peptide for instance. No need to save a new object for every search/experiment
+  #use .find_or_create methods to save these models/tables 
+  #Tables in #08080 color(whatever that is called) are search-scope. Do save these things every time for every search/mzid file
+  #Fragment for instance. These are always new stuff. Use .create methods. 
+
   def save2tables
   
     spectrum_identification_lists_ids = []
@@ -205,8 +211,40 @@ class Mzid2db
     pep_ref = pep_ev.pep_ref
     pep = @mzid_obj.pep(pep_ref)
     pep_seq = pep.sequence  
-    this_Peptide = Peptide.find_or_create_by_sequence(:sequence => pep_seq, :peptide_id => pep_ref)
+    modif_arr = pep.modif_arr
+    #this_Peptide = Peptide.find_or_create_by_sequence(:sequence => pep_seq, :peptide_id => pep_ref)
+    this_Peptide = Peptide.find_or_initialize_by_sequence(:sequence => pep_seq, :peptide_id => pep_ref)
+    if this_Peptide.new_record?
+      unless modif_arr.empty?
+        this_Peptide_Modifications = saveModifications(modif_arr) #saveModifications must return arr of Modification objs
+        this_Peptide.modifications = this_Peptide_Modifications
+      end
+    else
+           
+      #comparar this_Peptide.modifications con modif_arr
+      #Si es lo mismo entonces No guardo el peptide, solo cojo su peptide.id
+      #si es distinto sí que salvo el peptide
+    end
     return this_Peptide.id
+  end
+
+  def saveModifications(modif_arr)
+    modif_arr.each do |m|
+    
+      unless m.cv_params.empty?
+        unimod_acc = m.cv_params.map { |cvP| cvP[:accession] if cvP[:cvRef] == "UNIMOD" }[0] unless m.cv_params.empty?
+        if unimod_acc
+          #Add unimod_acc column to Modification model, vale?
+          #And remove peptide_id !! (Bc I'm going to do the join table thing, right?)
+          this_Modification = Modification.find_or_create_by_unimod_acc_and_location_and_residue(
+          :residue => m.residue, 
+          :location => m.location,
+          :avg_mass_delta => m.avg_mass_delta,
+          :unimod_accession => unimod_acc)
+        end
+      end
+      
+    end    
   end
 
 
@@ -231,12 +269,18 @@ class Mzid2db
 
 
   def savePeptideEvidence(pep_ev_ref, pep_id, dbseq_id)  
-    #Esto no guardarlo siempre. P.ej:
-    #peptide_1_1_SDB_1_orf19.1086_554_569 se refiere al sii: "SIL_AtiO2_SII_1_1" y también al sii: "SIL_Elu1A_SII_2_1"
+    #Within search/experiment/mzid: peptide_1_1_SDB_1_orf19.1086_554_569 refers to sii: "SIL_AtiO2_SII_1_1" and sii: "SIL_Elu1A_SII_2_1"
+    #But this table/model is inter-search scope, so I don't give shit
     pep_ev = @mzid_obj.pep_evidence(pep_ev_ref)
-    my_PeptideEvidence = PeptideEvidence.find_or_initialize_by_peptide_id_and_db_sequence_id_and_start_and_end_and_is_decoy(:peptide_id => pep_id, :db_sequence_id => dbseq_id, :start => pep_ev.start, :end => pep_ev.end, :is_decoy => pep_ev.is_decoy)
-    my_PeptideEvidence.pre, my_PeptideEvidence.post = pep_ev.pre, pep_ev.post if my_PeptideEvidence.new_record?
-    my_PeptideEvidence.save if my_PeptideEvidence.new_record?
+    my_PeptideEvidence = PeptideEvidence.find_or_initialize_by_peptide_id_and_db_sequence_id_and_start_and_end(
+    :peptide_id => pep_id,
+    :db_sequence_id => dbseq_id,
+    :start => pep_ev.start,
+    :end => pep_ev.end,
+    :is_decoy => pep_ev.is_decoy,
+    :pre => pep_ev.pre,
+    :post => pep_ev.post)
+    my_PeptideEvidence.save if my_PeptideEvidence.new_record?    
     return my_PeptideEvidence
   end
   
