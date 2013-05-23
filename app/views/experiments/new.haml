@@ -5,17 +5,16 @@
       - for message in @experiment.errors.full_messages
         %li= message
   %p
-    = f.label :organism
-    %br
-    = f.text_field :organism
+    = f.select :organism, options_for_select([['Candida albicans (strain SC5314 / ATCC MYA-2876) Taxonomy ID: 237561', 1]]), :prompt => 'Select species'
+    
   %p
     = f.label :protocol
     %br
     = f.text_area :protocol
+    
   %p    
-    = f.label :date
-    %br
-    = f.text_field :date
+    = f.date_select :date, :order => [:month, :year]
+
   %p    
     = f.label :researcher
     %br
