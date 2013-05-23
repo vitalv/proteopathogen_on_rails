@@ -11,6 +11,11 @@
       sha-1: #{mzidf.sha1}
       %br
       submission date: #{mzidf.submission_date}
+      %br
+      //-if !mzidf.spectra_acquisition_runs.blank
+      =link_to ">>load 2 DB", :action => :load, :mzid_file_id => mzidf
+      //-else
+      //No information on spectra acquisition runs for this mzidfile
 
-%p= link_to "new mzid file", new_mzid_file_path
+%p= link_to "New mzid file", new_mzid_file_path
 
