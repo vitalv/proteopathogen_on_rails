@@ -33,16 +33,16 @@ class MzidFilesController < ApplicationController
 
   end
 
-  def load
+  def load_into_db
     
     load 'mzid_parser.rb' #this goes here so I can make changes to this file and see results after require this file just once
     load 'mzid_2_db.rb'
     mzid_file_id = params[:mzid_file_id]
-    
     mzid_file = MzidFile.find(mzid_file_id)
     mzid = Mzid.new(mzid_file.location)
     #mzid = Mzid.new("/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/public/uploaded_mzid_files/SILAC_phos_OrbitrapVelos_1_interact-ipro-filtered.mzid")
     #mzid = Mzid.new("/home/vital/pepXML_protXML_2_mzid_V/examplefile.mzid")
+    #mzid = Mzid.new("/home/vital/SeattleThings/PeptideAtlasExperiments_mzIdentML/CandidaRotofor-1.pep.mzid")
      
     Mzid2db.new(mzid).save2tables
     rescue Exception => msg
