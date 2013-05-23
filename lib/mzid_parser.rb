@@ -1,7 +1,7 @@
 require 'nokogiri'
 
 #mzid = Mzid.new("/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/public/uploaded_mzid_files/SILAC_phos_OrbitrapVelos_1_interact-ipro-filtered.mzid")
-
+#mzid = Mzid.new("/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/public/uploaded_mzid_files/CandidaRotofor-1.pep.mzid")
 
 class Mzid
 
@@ -250,7 +250,9 @@ end #class Mzid
       name = getuserParams(node)[0][:name] if name == ""
     else
       #break
-      puts "there must be at least cvParam and/or userParam under #{node.node_name}"
+      puts node.class 
+      puts node.inspect
+      #puts "there must be at least cvParam and/or userParam under #{node.node_name}"
     end
   end
 

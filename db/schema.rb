@@ -115,7 +115,7 @@ ActiveRecord::Schema.define(:version => 20130130170612) do
     t.integer "spectrum_identification_id"
   end
 
-  add_index "sar_si_join_table", ["spectra_acquisition_run_id", "spectrum_identification_id"], :name => "index_sar_si"
+  add_index "sar_si_join_table", ["spectra_acquisition_run_id", "spectrum_identification_id"], :name => "index_sar_si", :unique => true
 
   create_table "sdb_si_join_table", :id => false, :force => true do |t|
     t.integer "search_database_id"

@@ -2,6 +2,8 @@ class Mzid2db
 
 #mzid = Mzid.new("/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/public/uploaded_mzid_files/SILAC_phos_OrbitrapVelos_1_interact-ipro-filtered.mzid"); nil;
 #mzid = Mzid.new("/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/public/uploaded_mzid_files/examplefile.mzid"); nil;
+#mzid = Mzid.new("/home/vital/SeattleThings/PeptideAtlasExperiments_mzIdentML/CandidaRotofor-1.pep.mzid")
+#mzid = Mzid.new("/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/public/uploaded_mzid_files/CandidaRotofor-1.pep.mzid")
 
   def initialize(mzid_object)
     @mzid_obj = mzid_object
@@ -82,10 +84,19 @@ class Mzid2db
   
   
   def saveSarSiJoinTable(mzid_si, my_si)  
+    
+    #OJO CON ESTE SISTEMA DE ASEGURARME QUE CADA ENTRADA EN sar_si_join_table ES ÚNICA (combinacion sar -  si)
+    
+    sar_si_pairs = []
+    
+    
     mzid_si.input_spectra_files_arr.each do |s_f|
-      #Aqui (ya que esto no tiene modelo) tengo que validar que existe un spectrum_identification_id y un spectra_acquisition_run_id
       if !SpectraAcquisitionRun.find_by_spectra_file(s_f).nil? and SpectrumIdentification.exists? my_si.id
-        my_si.spectra_acquisition_runs << SpectraAcquisitionRun.find_by_spectra_file(s_f)
+        sar_si_pair = [my_si.id, SpectraAcquisitionRun.find_by_spectra_file(s_f).id]
+        if !sar_si_pairs.include? sar_si_pair 
+          my_si.spectra_acquisition_runs << SpectraAcquisitionRun.find_by_spectra_file(s_f)
+        end
+        sar_si_pairs << sar_si_pair
       end
     end
   end
