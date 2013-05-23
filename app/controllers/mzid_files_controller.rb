@@ -33,23 +33,27 @@ class MzidFilesController < ApplicationController
 
   end
 
- 
-  #~ def load_mzid_data_into_tables
-  #~ 
-    #~ @sample_id = params[:sample_id]
-    #~ saved_mzid_id = params[:saved_mzid_id]
-    #~ saved_mzid = MzidFile.find(saved_mzid_id)
-    #~ location = saved_mzid.location
-    #~ 
-    #~ mzid_object = Mzid.new(location)
- #~ 
-    #~ Mzid2db.new(mzid_object, saved_mzid_id).save2tables
-    #~ rescue Exception => msg
-      #~ @exc = msg
-      #~ @trace = msg.backtrace.inspect
-      #~ rollback(@sample_id) if Sample.exists? @sample_id #sometimes I might refresh the view with the "load .mzid file" button when the sample_id was already destroyed in rollback
-      #~ render :rescue
-#~ 
-  #~ end
+  def load
+    
+    load 'mzid_parser.rb' #this goes here so I can make changes to this file and see results after require this file just once
+    load 'mzid_2_db.rb'
+    mzid_file_id = params[:mzid_file_id]
+    
+    mzid_file = MzidFile.find(mzid_file_id)
+    mzid = Mzid.new(mzid_file.location)
+    #mzid = Mzid.new("/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/public/uploaded_mzid_files/SILAC_phos_OrbitrapVelos_1_interact-ipro-filtered.mzid")
+    #mzid = Mzid.new("/home/vital/pepXML_protXML_2_mzid_V/examplefile.mzid")
+     
+    Mzid2db.new(mzid).save2tables
+    rescue Exception => msg
+      @exc = msg
+      @trace = msg.backtrace.inspect
+      rollback(mzid_file_id) if MzidFile.exists? mzid_file_id #sometimes I might refresh the view with the "load .mzid file" button when the mzid_file_id was already destroyed in rollback
+      render :rescue
+  
+    
+  end
+
+  
 
 end

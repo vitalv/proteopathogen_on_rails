@@ -17,7 +17,7 @@ ProteopathogenOnRails::Application.routes.draw do
   resources :users
   resources :sessions   
   resources :experiments
-  resources :mzid_files
+  #resources :mzid_files
   resources :spectra_acquisition_runs
   
   get "log_out" => "sessions#destroy", :as => "log_out"
