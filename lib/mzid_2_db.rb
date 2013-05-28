@@ -84,19 +84,11 @@ class Mzid2db
   
   
   def saveSarSiJoinTable(mzid_si, my_si)  
-    
-    #OJO CON ESTE SISTEMA DE ASEGURARME QUE CADA ENTRADA EN sar_si_join_table ES ÚNICA (combinacion sar -  si)
-    
-    sar_si_pairs = []
-    
-    
-    mzid_si.input_spectra_files_arr.each do |s_f|
-      if !SpectraAcquisitionRun.find_by_spectra_file(s_f).nil? and SpectrumIdentification.exists? my_si.id
-        sar_si_pair = [my_si.id, SpectraAcquisitionRun.find_by_spectra_file(s_f).id]
-        if !sar_si_pairs.include? sar_si_pair 
-          my_si.spectra_acquisition_runs << SpectraAcquisitionRun.find_by_spectra_file(s_f)
-        end
-        sar_si_pairs << sar_si_pair
+    mzid_si.input_spectra_files_arr.each do |s_f|    
+      if  SpectraAcquisitionRun.exists? SpectraAcquisitionRun.find_by_spectra_file(s_f) and SpectrumIdentification.exists? my_si.id
+        new_sars = SpectraAcquisitionRun.find(:all, :conditions => ['id NOT IN (?)', SpectraAcquisitionRun.find_by_spectra_file(s_f).spectrum_identifications])
+        my_si.spectra_acquisition_runs << new_sars
+
       end
     end
   end
