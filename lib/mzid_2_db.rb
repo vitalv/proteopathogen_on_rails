@@ -222,8 +222,8 @@ class Mzid2db
     this_Peptide = Peptide.find_or_initialize_by_sequence(:sequence => pep_seq, :peptide_id => pep_ref)
     if this_Peptide.new_record?
       unless modif_arr.empty?
-        this_Peptide_Modifications = saveModifications(modif_arr) #saveModifications must return arr of Modification objs
-        this_Peptide.modifications = this_Peptide_Modifications
+        #this_Peptide_Modifications = saveModifications(modif_arr) #saveModifications must return arr of Modification objs
+        #this_Peptide.modifications = this_Peptide_Modifications
       end
     else
            
@@ -242,11 +242,8 @@ class Mzid2db
         if unimod_acc
           #Add unimod_acc column to Modification model, vale?
           #And remove peptide_id !! (Bc I'm going to do the join table thing, right?)
-          this_Modification = Modification.find_or_create_by_unimod_acc_and_location_and_residue(
-          :residue => m.residue, 
-          :location => m.location,
-          :avg_mass_delta => m.avg_mass_delta,
-          :unimod_accession => unimod_acc)
+          #this_Modification = Modification.find_or_create_by_unimod_acc_and_location_and_residue(:residue => m.residue, :location => m.location, :avg_mass_delta => m.avg_mass_delta, :unimod_accession => unimod_acc)
+          #this_Modification = Modification.find_or_create_by_location_and_residue(:residue => m.residue, :location => m.location, :avg_mass_delta => m.avg_mass_delta)
         end
       end
       
