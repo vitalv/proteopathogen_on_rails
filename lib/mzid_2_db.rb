@@ -57,7 +57,7 @@ class Mzid2db
           end          
           saveFragments(mzid_item, my_item) 
           saveSiiPsiMsCvTerms(mzid_item, my_item)
-          saveSiiPsiMsCvTerms(mzid_item, my_item)
+          #saveSiiPsiMsCvTerms(mzid_item, my_item)
         end
       end
     end
