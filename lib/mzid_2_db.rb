@@ -86,9 +86,12 @@ class Mzid2db
   def saveSarSiJoinTable(mzid_si, my_si)  
     mzid_si.input_spectra_files_arr.each do |s_f|    
       if  SpectraAcquisitionRun.exists? SpectraAcquisitionRun.find_by_spectra_file(s_f) and SpectrumIdentification.exists? my_si.id
-        new_sars = SpectraAcquisitionRun.find(:all, :conditions => ['id NOT IN (?)', SpectraAcquisitionRun.find_by_spectra_file(s_f).spectrum_identifications])
-        my_si.spectra_acquisition_runs << new_sars
-
+        if SpectrumIdentification.find(my_si.id).spectra_acquisition_run_ids.empty?
+          my_si.spectra_acquisition_runs << SpectraAcquisitionRun.find_by_spectra_file(s_f)
+        else
+          new_sars = SpectraAcquisitionRun.find(:all, :conditions => ['mzid_file_id = ? AND id NOT IN (?)', @mzid_file_id, SpectrumIdentification.find(my_si.id).spectra_acquisition_run_ids])
+          my_si.spectra_acquisition_runs << new_sars
+        end
       end
     end
   end
@@ -361,6 +364,7 @@ end
           SpectrumIdentificationProtocol.destroy(sip_id) if sip_id #SipPsiMsCvTerms and SipUserParams are :dependent => :destroy on sip.destroy
           si.spectrum_identification_results.each do |sir|
             sir.spectrum_identification_items.each do |sii|
+              sii.fragments{ |fragment|Fragment.destroy(fragment.id) }
               sii.peptide_evidences.each do |pep_ev| #habtm association btwn sii and pep_ev does not support :dependent => :destroy so do it here:
                 PeptideEvidence.destroy(pep_ev.id) #peptide is dependent so destroyed here as well
               end
@@ -368,6 +372,7 @@ end
             end
             SpectrumIdentificationResult.destroy(sir.id)
           end
+          SpectrumIdentificationList.destroy(SpectrumIdentificationList.find_by_spectrum_identification_id(si).id)
           SpectrumIdentification.destroy(si.id) if SpectrumIdentification.exists? (si.id)
         end
         #SpectraAcquisitionRun.destroy(sar.id)
