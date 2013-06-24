@@ -4,4 +4,6 @@ class SpectraAcquisitionRun < ActiveRecord::Base
   before_destroy { |sar| sar.spectrum_identifications.clear }
   validates :spectra_file, :uniqueness => true
   belongs_to :mzid_file
+  validates :mzid_file_id, :presence => true
+  validates :fraction, :presence => true
 end
