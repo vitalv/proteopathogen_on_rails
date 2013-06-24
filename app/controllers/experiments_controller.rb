@@ -13,7 +13,14 @@ class ExperimentsController < ApplicationController
 
 
   def create
-    @experiment = Experiment.create(params[:experiment])
+    #@experiment = Experiment.create(params[:experiment])
+    organism = params[:experiment][:organism]
+    protocol = params[:experiment][:protocol]
+    researcher = params[:experiment][:researcher]
+    date = "#{params[:experiment]['date(2i)']} - #{params[:experiment]['date(1i)']}"
+    
+    @experiment = Experiment.create({:organism => organism, :protocol => protocol, :date => date, :researcher => researcher})
+    
     if @experiment.invalid?
       render :action => "new"
     else
