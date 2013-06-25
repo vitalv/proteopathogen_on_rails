@@ -12,7 +12,7 @@ class Mzid2db
   
   #Note on Variable naming :
   #This script deals with the objects from mzid_parser (@mzid_obj) 
-  #used to create new objects (to be saved to the db) that refer to the same concept
+  #used to create new objects (to be saved to the db, i.e. models) that refer to the same concept
   #(i.e. Create Sip object from @mzid_obj.sip object)
   #objects from mzid_parser are prefixed mzid_  ;  objects created here to be saved are prefixed my_
 
@@ -29,8 +29,8 @@ class Mzid2db
     @mzid_obj.spectrum_identifications.each do |mzid_si|
       my_si = saveSpectrumIdentification(mzid_si)
       saveSarSiJoinTable(mzid_si, my_si)
-      my_sip = saveSip(mzid_si, my_si)
       mzid_sip = @mzid_obj.sip(mzid_si.sip_ref)
+      my_sip = saveSip(mzid_sip, my_si)      
       saveSipPsiMsTerms(mzid_sip, my_sip)
       saveSipUserParams(mzid_sip, my_sip)
       saveSearchedModifications(mzid_sip, my_sip)
@@ -53,7 +53,7 @@ class Mzid2db
             pep_id = savePeptide(pep_ev_ref)
             dbseq_id = saveDbSequence(pep_ev_ref, sil_id)
             my_PeptideEvidence = savePeptideEvidence(pep_ev_ref, pep_id, dbseq_id)
-            saveSiiPepEvidences(my_item, my_PeptideEvidence)            
+            saveSiiPepEvidences(my_item, my_PeptideEvidence)          
           end          
           saveFragments(mzid_item, my_item) 
           saveSiiPsiMsCvTerms(mzid_item, my_item)
@@ -67,7 +67,7 @@ class Mzid2db
   
   def saveSpectrumIdentification(mzid_si)
     mzid_si_id = mzid_si.si_id
-    #WATCH OUT! #DON'T SAVE the same si multiple times!! How could that ever happen? Only in dev mode when I'm resubmitting the same mzid file continously...
+    #WATCH OUT! #DON'T SAVE the same si multiple times!! How could that ever happen? Only in dev mode when I'm resubmitting the same mzid file continuously...
     #production should look like: (always create)
     #my_si = SpectrumIdentification.create(:si_id => mzid_si_id, :name => si.si_name, :activity_date => si.activity_date)
     #dev mode :  #Check if current mzid_file_id  has an already stored si with same si_id (through sar)
@@ -77,8 +77,12 @@ class Mzid2db
         this_mzid_stored_sis << stored_si.si_id
       end
     end
-    my_si = SpectrumIdentification.find_by_si_id(mzid_si_id) if this_mzid_stored_sis.include? mzid_si_id
-    my_si = SpectrumIdentification.create(:si_id => mzid_si_id, :name => mzid_si.si_name, :activity_date => mzid_si.activity_date)  unless this_mzid_stored_sis.include? mzid_si_id
+    my_si = nil
+    if this_mzid_stored_sis.include? mzid_si_id
+      my_si = SpectrumIdentification.find_by_si_id(mzid_si_id) 
+	else
+      my_si = SpectrumIdentification.create(:si_id => mzid_si_id, :name => mzid_si.si_name, :activity_date => mzid_si.activity_date)  
+	end
     return my_si
   end
   
@@ -97,14 +101,13 @@ class Mzid2db
   end
   
   
-  def saveSip(mzid_si, my_si)
-    sip = @mzid_obj.sip(mzid_si.sip_ref)
-    sip_id = sip.sip_id
-    analysis_software = sip.analysis_software
-    search_type = sip.search_type
-    threshold = sip.threshold
-    parent_tol_plus_value, parent_tol_minus_value = sip.parent_tolerance[0][:value], sip.parent_tolerance[1][:value]
-    fragment_tol_plus_value, fragment_tol_minus_value = sip.fragment_tolerance[0][:value], sip.fragment_tolerance[1][:value]
+  def saveSip(mzid_sip, my_si)
+    sip_id = mzid_sip.sip_id
+    analysis_software = mzid_sip.analysis_software
+    search_type = mzid_sip.search_type
+    threshold = mzid_sip.threshold
+    parent_tol_plus_value, parent_tol_minus_value = mzid_sip.parent_tolerance[0][:value], mzid_sip.parent_tolerance[1][:value]
+    fragment_tol_plus_value, fragment_tol_minus_value = mzid_sip.fragment_tolerance[0][:value], mzid_sip.fragment_tolerance[1][:value]
     my_sip = SpectrumIdentificationProtocol.create(:spectrum_identification_id => my_si.id, :sip_id => sip_id, :analysis_software => analysis_software, :search_type => search_type, :threshold => threshold, :parent_tol_plus_value => parent_tol_plus_value, :parent_tol_minus_value => parent_tol_minus_value, :fragment_tol_plus_value => fragment_tol_plus_value, :fragment_tol_minus_value => fragment_tol_minus_value)
     return my_sip
   end
@@ -152,7 +155,6 @@ class Mzid2db
   def saveSearchDatabases(mzid_si, my_si)
     mzid_si.search_db_arr.each do |sdb|
       this_sdb = SearchDatabase.find_or_create_by_name_and_sdb_id_and_version_and_release_date_and_number_of_sequences_and_location(:name => sdb.name, :sdb_id => sdb.sdb_id, :version => sdb.version, :release_date => sdb.releaseDate, :number_of_sequences => sdb.num_seq, :location => sdb.location)
-      #Aqui SÍ debo usar find_or_create porque es Global-scope. De hecho muchas veces irá a la parte "find"
       my_si.search_databases << this_sdb unless my_si.search_databases.include? this_sdb
     end  
   end
@@ -167,7 +169,6 @@ class Mzid2db
     return my_sil.id
   end 
  
-
 
   def saveSpectrumIdentificationResult(mzid_sir, sil_id) 
     sir_id = mzid_sir.sir_id
@@ -213,25 +214,35 @@ class Mzid2db
 
 
   def savePeptide(pep_ev_ref)
-    pep_ev = @mzid_obj.pep_evidence(pep_ev_ref)
-    pep_ref = pep_ev.pep_ref
-    pep = @mzid_obj.pep(pep_ref)
-    pep_seq = pep.sequence  
-    modif_arr = pep.modif_arr
-    #this_Peptide = Peptide.find_or_create_by_sequence(:sequence => pep_seq, :peptide_id => pep_ref)
-    this_Peptide = Peptide.find_or_initialize_by_sequence(:sequence => pep_seq, :peptide_id => pep_ref)
-    if this_Peptide.new_record?
-      unless modif_arr.empty?
+    mzid_pep_ev = @mzid_obj.pep_evidence(pep_ev_ref)
+    mzid_pep_ref = mzid_pep_ev.pep_ref
+    mzid_pep = @mzid_obj.pep(mzid_pep_ref)
+    pep_seq = mzid_pep.sequence  
+    mzid_modif_arr = mzid_pep.modif_arr
+    
+    
+    
+    #my_Peptide = Peptide.find_or_create_by_sequence(:sequence => pep_seq, :peptide_id => pep_ref)
+    my_Peptide = Peptide.find_or_initialize_by_sequence(:sequence => pep_seq, :peptide_id => mzid_pep_ref)
+    
+    
+    if my_Peptide.new_record?
+      my_peptide_modifications = []
+      unless mzid_modif_arr.empty?
+        mzid_modif_arr.each do |m|
+          my_peptide_modifications << Modification.new(:residue => m.residue, :avg_mass_delta => m.avg_mass_delta, :location => m.location )
+        end
         #this_Peptide_Modifications = saveModifications(modif_arr) #saveModifications must return arr of Modification objs
         #this_Peptide.modifications = this_Peptide_Modifications
       end
-    else
+      #Peptide.save
+    else #Peptide already stored (sequence)
            
       #comparar this_Peptide.modifications con modif_arr
       #Si es lo mismo entonces No guardo el peptide, solo cojo su peptide.id
       #si es distinto sí que salvo el peptide
     end
-    return this_Peptide.id
+    return my_Peptide.id
   end
 
   def saveModifications(modif_arr)
