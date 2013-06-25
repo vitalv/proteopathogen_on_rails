@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130130170612) do
+ActiveRecord::Schema.define(:version => 20130625134859) do
 
   create_table "db_sequences", :force => true do |t|
     t.string  "accession"
@@ -43,6 +43,7 @@ ActiveRecord::Schema.define(:version => 20130130170612) do
     t.string  "location"
     t.string  "avg_mass_delta"
     t.integer "peptide_id"
+    t.string  "unimod_accession"
   end
 
   create_table "mzid_files", :force => true do |t|
