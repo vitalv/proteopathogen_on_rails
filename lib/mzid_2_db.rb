@@ -219,46 +219,64 @@ class Mzid2db
     mzid_pep = @mzid_obj.pep(mzid_pep_ref)
     pep_seq = mzid_pep.sequence  
     mzid_modif_arr = mzid_pep.modif_arr
-    
-    
-    
-    #my_Peptide = Peptide.find_or_create_by_sequence(:sequence => pep_seq, :peptide_id => pep_ref)
-    my_Peptide = Peptide.find_or_initialize_by_sequence(:sequence => pep_seq, :peptide_id => mzid_pep_ref)
-    
+
+    #Guardar solo el peptide(entendido como seq+modifs) "nuevo"
+    my_Peptide = Peptide.find_or_initialize_by_sequence_and_peptide_id(:sequence => pep_seq, :peptide_id => mzid_pep_ref)
     
     if my_Peptide.new_record?
-      my_peptide_modifications = []
-      unless mzid_modif_arr.empty?
-        mzid_modif_arr.each do |m|
-          my_peptide_modifications << Modification.new(:residue => m.residue, :avg_mass_delta => m.avg_mass_delta, :location => m.location )
-        end
-        #this_Peptide_Modifications = saveModifications(modif_arr) #saveModifications must return arr of Modification objs
-        #this_Peptide.modifications = this_Peptide_Modifications
-      end
-      #Peptide.save
-    else #Peptide already stored (sequence)
+      my_peptide_modifications = saveModifications(mzid_modif_arr) unless mzid_modif_arr.empty?
+      my_Peptide.save
+      my_Peptide.modifications = my_peptide_modifications
+    
+    else #Peptide already stored (sequence) #comparar my_Peptide.modifications con mzid_modif_arr:
+      my_peptide_modifications = my_Peptide.modifications
+      
+      if my_peptide_modifications.count != mzid_modif_arr.count      
+        my_peptide_modifications = saveModifications(mzid_modif_arr) unless mzid_modif_arr.empty?
+        my_Peptide.save
+        my_Peptide.modifications = my_peptide_modifications 
            
-      #comparar this_Peptide.modifications con modif_arr
-      #Si es lo mismo entonces No guardo el peptide, solo cojo su peptide.id
-      #si es distinto sí que salvo el peptide
-    end
+      else # vale, el peptido es la misma seq e = num de modifs, comprobar si las modifs son las mismas
+        my_mods_a, mzid_mods_a = [], []
+        my_mod_h, mzid_mod_h = {}, {} #key => location, value => unimod_acc
+        my_peptide_modifications.each do |my_modif|
+          my_mod_h[my_modif.location] = my_modif.unimod_accession
+          my_mods_a << my_mod_h        
+        end
+        mzid_modif_arr.each do |mzid_modif|
+          unimod_acc = nil
+          mzid_modif.cv_params.each { |cvP| unimod_acc = cvP[:accession] if cvP[:cvRef] == "UNIMOD" }
+          mzid_mod_h[mzid_modif.location] = unimod_acc
+          mzid_mods_a << mzid_mod_h
+        end
+        diff_mods = my_mods_a - mzid_mods_a
+        if !diff_mods.blank? #vale, el peptido es la misma seq e = num de modifs PERO son distintas. SAVE!
+          my_peptide_modifications = saveModifications(mzid_modif_arr) unless mzid_modif_arr.empty?
+          my_Peptide.save
+          my_Peptide.modifications = my_peptide_modifications 
+        
+        else  #vale, el peptido es la misma seq con = num de modifs Y son las mismas. FIND!
+          #encontrar el peptido por su seq y sus modifs
+          #my_Peptide = Peptide.find         
+        end
+      end
+    end    
+    
+    
     return my_Peptide.id
   end
 
+
+
   def saveModifications(modif_arr)
+    modifications = []
     modif_arr.each do |m|
-    
       unless m.cv_params.empty?
         unimod_acc = m.cv_params.map { |cvP| cvP[:accession] if cvP[:cvRef] == "UNIMOD" }[0] unless m.cv_params.empty?
-        if unimod_acc
-          #Add unimod_acc column to Modification model, vale?
-          #And remove peptide_id !! (Bc I'm going to do the join table thing, right?)
-          #this_Modification = Modification.find_or_create_by_unimod_acc_and_location_and_residue(:residue => m.residue, :location => m.location, :avg_mass_delta => m.avg_mass_delta, :unimod_accession => unimod_acc)
-          #this_Modification = Modification.find_or_create_by_location_and_residue(:residue => m.residue, :location => m.location, :avg_mass_delta => m.avg_mass_delta)
-        end
+        modifications << Modification.new(:residue => m.residue, :avg_mass_delta => m.avg_mass_delta, :location => m.location, :unimod_accession => unimod_acc )
       end
-      
-    end    
+    end
+    return modifications
   end
 
 
