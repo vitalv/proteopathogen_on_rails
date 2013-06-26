@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130625134859) do
+ActiveRecord::Schema.define(:version => 20130626114435) do
 
   create_table "db_sequences", :force => true do |t|
     t.string  "accession"
@@ -147,11 +147,6 @@ ActiveRecord::Schema.define(:version => 20130625134859) do
   end
 
   add_index "sii_pepevidence_join_table", ["spectrum_identification_item_id", "peptide_evidence_id"], :name => "index_sii_pepevidence"
-
-  create_table "sii_peptide_evidences", :force => true do |t|
-    t.integer "spectrum_identification_item_id"
-    t.integer "peptide_evidence_id"
-  end
 
   create_table "sii_psi_ms_cv_terms", :force => true do |t|
     t.integer "spectrum_identification_item_id"

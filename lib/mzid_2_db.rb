@@ -219,24 +219,17 @@ class Mzid2db
     mzid_pep = @mzid_obj.pep(mzid_pep_ref)
     pep_seq = mzid_pep.sequence  
     mzid_modif_arr = mzid_pep.modif_arr
-
-    #Guardar solo el peptide(entendido como seq+modifs) "nuevo"
-    my_Peptide = Peptide.find_or_initialize_by_sequence_and_peptide_id(:sequence => pep_seq, :peptide_id => mzid_pep_ref)
-    
+    #Save only my_peptide if its really new (in table scope)
+    my_Peptide = Peptide.find_or_initialize_by_sequence(:sequence => pep_seq, :peptide_id => mzid_pep_ref)    
     if my_Peptide.new_record?
-      my_peptide_modifications = saveModifications(mzid_modif_arr) unless mzid_modif_arr.empty?
-      my_Peptide.save
-      my_Peptide.modifications = my_peptide_modifications
-    
-    else #Peptide already stored (sequence) #comparar my_Peptide.modifications con mzid_modif_arr:
-      my_peptide_modifications = my_Peptide.modifications
-      
-      if my_peptide_modifications.count != mzid_modif_arr.count      
-        my_peptide_modifications = saveModifications(mzid_modif_arr) unless mzid_modif_arr.empty?
-        my_Peptide.save
-        my_Peptide.modifications = my_peptide_modifications 
-           
-      else # vale, el peptido es la misma seq e = num de modifs, comprobar si las modifs son las mismas
+      my_Peptide.modifications = saveModifications(mzid_modif_arr) unless mzid_modif_arr.empty?
+      my_Peptide.save  #SAVE
+    else #Peptide already stored (sequence) #Compare my_Peptide.modifications with mzid_modif_arr:
+      my_peptide_modifications = my_Peptide.modifications      
+      if my_peptide_modifications.count != mzid_modif_arr.count  # Num modifs is different. Save the my_Peptide and its modifs    
+        my_Peptide.modifications = saveModifications(mzid_modif_arr) unless mzid_modif_arr.empty?
+        my_Peptide.save #SAVE
+      else # Same peptide seq and same num modifs, check whether modifs are the same:
         my_mods_a, mzid_mods_a = [], []
         my_mod_h, mzid_mod_h = {}, {} #key => location, value => unimod_acc
         my_peptide_modifications.each do |my_modif|
@@ -251,21 +244,13 @@ class Mzid2db
         end
         diff_mods = my_mods_a - mzid_mods_a
         if !diff_mods.blank? #vale, el peptido es la misma seq e = num de modifs PERO son distintas. SAVE!
-          my_peptide_modifications = saveModifications(mzid_modif_arr) unless mzid_modif_arr.empty?
-          my_Peptide.save
-          my_Peptide.modifications = my_peptide_modifications 
-        
-        else  #vale, el peptido es la misma seq con = num de modifs Y son las mismas. FIND!
-          #encontrar el peptido por su seq y sus modifs
-          #my_Peptide = Peptide.find         
+          my_Peptide.modifications = saveModifications(mzid_modif_arr) unless mzid_modif_arr.empty?
+          my_Peptide.save #SAVE
         end
       end
-    end    
-    
-    
+    end     
     return my_Peptide.id
   end
-
 
 
   def saveModifications(modif_arr)
@@ -282,21 +267,20 @@ class Mzid2db
 
   def saveDbSequence(pep_ev_ref, sil_id)
     dbseq_ref = @mzid_obj.pep_evidence(pep_ev_ref).db_seq_ref
-    db_seq = @mzid_obj.db_seq(dbseq_ref)
-    db_seq_accession, db_seq_description = db_seq.accession, db_seq.description
-    db_seq_sequence = db_seq.sequence
-    search_db_ref = db_seq.search_db_ref
+    mzid_db_seq = @mzid_obj.db_seq(dbseq_ref)
+    db_seq_accession, db_seq_description = mzid_db_seq.accession, mzid_db_seq.description
+    db_seq_sequence = mzid_db_seq.sequence
+    search_db_ref = mzid_db_seq.search_db_ref
     #get search_db_id(s) (through sil_id):
     si_id = SpectrumIdentificationList.find(sil_id).spectrum_identification_id
-    search_db_id = nil #validate presence in model 
-    SpectrumIdentification.find(si_id).search_databases.each { |sdb| search_db_id = sdb.id if sdb.sdb_id == search_db_ref }
-    this_DbSequence = DbSequence.find_or_initialize_by_accession_and_sequence(:accession => db_seq_accession, :sequence => db_seq_sequence)
-    if this_DbSequence.new_record?
-       this_DbSequence.description  = db_seq_description
-       this_DbSequence.search_database_id = search_db_id 
-       this_DbSequence.save
-    end  
-    return this_DbSequence.id
+    search_db_id = SpectrumIdentification.find(si_id).search_databases.map { |sdb| sdb.id if sdb.sdb_id == search_db_ref }[0]
+    my_DbSequence = DbSequence.find_or_initialize_by_description_and_search_database_id(
+    :accession => db_seq_accession, 
+    :sequence => db_seq_sequence, 
+    :description => db_seq_description, 
+    :search_database_id => search_db_id)
+    my_DbSequence.save if my_DbSequence.new_record?
+    return my_DbSequence.id
   end
 
 
@@ -393,6 +377,9 @@ end
               sii.fragments{ |fragment|Fragment.destroy(fragment.id) }
               sii.peptide_evidences.each do |pep_ev| #habtm association btwn sii and pep_ev does not support :dependent => :destroy so do it here:
                 PeptideEvidence.destroy(pep_ev.id) #peptide is dependent so destroyed here as well
+                
+                #Peptide is not dependent-destroying! (?) Neither is Modification !
+                
               end
               #sii.fragments #fragments are :dependent => :destroy on sii so don't have to destroy 
             end
