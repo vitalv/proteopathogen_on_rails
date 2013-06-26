@@ -108,7 +108,17 @@ class Mzid2db
     threshold = mzid_sip.threshold
     parent_tol_plus_value, parent_tol_minus_value = mzid_sip.parent_tolerance[0][:value], mzid_sip.parent_tolerance[1][:value]
     fragment_tol_plus_value, fragment_tol_minus_value = mzid_sip.fragment_tolerance[0][:value], mzid_sip.fragment_tolerance[1][:value]
-    my_sip = SpectrumIdentificationProtocol.create(:spectrum_identification_id => my_si.id, :sip_id => sip_id, :analysis_software => analysis_software, :search_type => search_type, :threshold => threshold, :parent_tol_plus_value => parent_tol_plus_value, :parent_tol_minus_value => parent_tol_minus_value, :fragment_tol_plus_value => fragment_tol_plus_value, :fragment_tol_minus_value => fragment_tol_minus_value)
+    #Check Sip model : (validates_uniqueness)
+    my_sip = SpectrumIdentificationProtocol.find_or_create_by_sip_id_and_spectrum_identification_id(
+    :spectrum_identification_id => my_si.id, 
+    :sip_id => sip_id, 
+    :analysis_software => analysis_software, 
+    :search_type => search_type, 
+    :threshold => threshold, 
+    :parent_tol_plus_value => parent_tol_plus_value, 
+    :parent_tol_minus_value => parent_tol_minus_value, 
+    :fragment_tol_plus_value => fragment_tol_plus_value, 
+    :fragment_tol_minus_value => fragment_tol_minus_value)
     return my_sip
   end
  
@@ -274,12 +284,12 @@ class Mzid2db
     #get search_db_id(s) (through sil_id):
     si_id = SpectrumIdentificationList.find(sil_id).spectrum_identification_id
     search_db_id = SpectrumIdentification.find(si_id).search_databases.map { |sdb| sdb.id if sdb.sdb_id == search_db_ref }[0]
-    my_DbSequence = DbSequence.find_or_initialize_by_description_and_search_database_id(
+    my_DbSequence = DbSequence.find_or_create_by_accession_and_search_database_id(
     :accession => db_seq_accession, 
     :sequence => db_seq_sequence, 
     :description => db_seq_description, 
     :search_database_id => search_db_id)
-    my_DbSequence.save if my_DbSequence.new_record?
+    #my_DbSequence.save if my_DbSequence.new_record?
     return my_DbSequence.id
   end
 
