@@ -252,7 +252,7 @@ class Mzid2db
     pep_seq = mzid_pep.sequence  
     mzid_modif_arr = mzid_pep.modif_arr
     #Save only my_peptide if its really new (in table scope)
-    my_Peptide = Peptide.find_or_initialize_by_sequence(:sequence => pep_seq, :peptide_id => mzid_pep_ref)    
+    my_Peptide = Peptide.find_or_initialize_by_sequence_and_peptide_id(:sequence => pep_seq, :peptide_id => mzid_pep_ref)    
     if my_Peptide.new_record?
       my_Peptide.modifications = saveModifications(mzid_modif_arr) unless mzid_modif_arr.empty?
       my_Peptide.save  #SAVE
