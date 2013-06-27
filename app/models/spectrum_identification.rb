@@ -10,14 +10,10 @@ class SpectrumIdentification < ActiveRecord::Base
   
   has_one :spectrum_identification_protocol, :dependent => :destroy
   validates_associated :spectrum_identification_protocol
-  validates_uniqueness_of :sepctrum_identification_protocol
   
   has_one :spectrum_identification_list, :dependent => :destroy
   validates_associated :spectrum_identification_list
-  validates_uniqueness_of :spectrum_identification_list
   
   has_many :spectrum_identification_results, :through => :spectrum_identification_list, :dependent => :destroy
-  
-  
   
 end
