@@ -5,10 +5,6 @@ class SpectrumIdentificationProtocol < ActiveRecord::Base
   before_destroy { |sip| sip.searched_modifications.clear } #avoids orphans in join table
   has_many :sip_psi_ms_cv_terms, :dependent => :destroy
   has_many :sip_user_params, :dependent => :destroy
-  belongs_to :spectrum_identification
-  
-  
-  validates_uniqueness_of :sip_id, :scope => :spectrum_identification_id
-
-  
+  belongs_to :spectrum_identification  
+  validates_uniqueness_of :spectrum_identification_id
 end
