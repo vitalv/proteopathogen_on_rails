@@ -81,7 +81,10 @@ class Mzid2db
     if this_mzid_stored_sis.include? mzid_si_id
       my_si = SpectrumIdentification.find_by_si_id(mzid_si_id) 
 	else
-      my_si = SpectrumIdentification.create(:si_id => mzid_si_id, :name => mzid_si.si_name, :activity_date => mzid_si.activity_date)  
+      my_si = SpectrumIdentification.create(
+      :si_id => mzid_si_id, 
+      :name => mzid_si.si_name, 
+      :activity_date => mzid_si.activity_date)  
 	end
     return my_si
   end
@@ -109,7 +112,7 @@ class Mzid2db
     parent_tol_plus_value, parent_tol_minus_value = mzid_sip.parent_tolerance[0][:value], mzid_sip.parent_tolerance[1][:value]
     fragment_tol_plus_value, fragment_tol_minus_value = mzid_sip.fragment_tolerance[0][:value], mzid_sip.fragment_tolerance[1][:value]
     #Check Sip model : (validates_uniqueness)
-    my_sip = SpectrumIdentificationProtocol.find_or_create_by_sip_id_and_spectrum_identification_id(
+    my_sip = SpectrumIdentificationProtocol.find_or_create_by_spectrum_identification_id(
     :spectrum_identification_id => my_si.id, 
     :sip_id => sip_id, 
     :analysis_software => analysis_software, 
@@ -118,19 +121,19 @@ class Mzid2db
     :parent_tol_plus_value => parent_tol_plus_value, 
     :parent_tol_minus_value => parent_tol_minus_value, 
     :fragment_tol_plus_value => fragment_tol_plus_value, 
-    :fragment_tol_minus_value => fragment_tol_minus_value)
+    :fragment_tol_minus_value => fragment_tol_minus_value) 
     return my_sip
   end
  
   
   def saveSipPsiMsTerms(mzid_sip, my_sip)
-    psi_ms_terms = mzid_sip.psi_ms_terms
-    unless psi_ms_terms.empty?
-      psi_ms_terms.each do |psi_ms_term|
-        this_psi_term = SipPsiMsCvTerm.find_or_initialize_by_spectrum_identification_protocol_id_and_psi_ms_cv_term_accession(:spectrum_identification_protocol_id => my_sip.id, :psi_ms_cv_term_accession => psi_ms_term[:accession])
-        this_psi_term.value = psi_ms_term[:value] if this_psi_term.new_record? unless psi_ms_term[:value].blank?
+    mzid_psi_ms_terms = mzid_sip.psi_ms_terms
+    unless mzid_psi_ms_terms.empty?
+      mzid_psi_ms_terms.each do |psi_ms_term|
+        my_psi_term = SipPsiMsCvTerm.find_or_initialize_by_spectrum_identification_protocol_id_and_psi_ms_cv_term_accession(:spectrum_identification_protocol_id => my_sip.id, :psi_ms_cv_term_accession => psi_ms_term[:accession])
+        my_psi_term.value = psi_ms_term[:value] if this_psi_term.new_record? unless psi_ms_term[:value].blank?
         #SipPsiMsCvTerm has a value so, shouldn't it be always a new record? If so, then I wouln't need to find_or_initialize, just create the thing
-        this_psi_term.save
+        my_psi_term.save if my_psi_term.new_record?
       end
     end    
   end
@@ -171,11 +174,14 @@ class Mzid2db
 
  
   def saveSpectrumIdentificationList(mzid_si, my_si)
-    sil = @mzid_obj.sil(mzid_si.sil_ref)
+    mzid_sil = @mzid_obj.sil(mzid_si.sil_ref)
     si_id = my_si.id
-    sil_id = sil.sil_id
-    num_seq_searched = sil.num_seq_searched
-    my_sil = SpectrumIdentificationList.create(:sil_id => sil_id, :spectrum_identification_id => si_id, :num_seq_searched => num_seq_searched)
+    sil_id = mzid_sil.sil_id
+    num_seq_searched = mzid_sil.num_seq_searched
+    my_sil = SpectrumIdentificationList.find_or_create_by_spectrum_identification_id(
+    :sil_id => sil_id,
+    :spectrum_identification_id => si_id,
+    :num_seq_searched => num_seq_searched) 
     return my_sil.id
   end 
  
@@ -184,7 +190,11 @@ class Mzid2db
     sir_id = mzid_sir.sir_id
     spectrum_id = mzid_sir.spectrum_id
     spectrum_name = mzid_sir.spectrum_name
-    my_sir = SpectrumIdentificationResult.create(:sir_id => sir_id, :spectrum_identification_list_id => sil_id, :spectrum_id => spectrum_id, :spectrum_name => spectrum_name)  
+    my_sir = SpectrumIdentificationResult.create(
+    :sir_id => sir_id,
+    :spectrum_identification_list_id => sil_id,
+    :spectrum_id => spectrum_id, 
+    :spectrum_name => spectrum_name)  
     return my_sir
   end
 
@@ -195,7 +205,9 @@ class Mzid2db
       #this_psi_term = SirPsiMsCvTerm.find_or_initialize_by_spectrum_identification_result_id_and_psi_ms_cv_term_accession(:spectrum_identification_result_id => this_sir.id, :psi_ms_cv_term_accession => psi_ms_t[:accession])
       #this_psi_term.value = psi_ms_t[:value] if this_psi_term.new_record? unless psi_ms_t[:value].blank?
       ##WATCH OUT: SAVE ONLY IF NEW (that is, NEW in GLOBAL scope, the whole table) RECORD 
-      SirPsiMsCvTerm.create(:spectrum_identification_result_id => my_sir.id, :psi_ms_cv_term => psi_ms_t[:accession], :value => psi_ms_t[:value])
+      SirPsiMsCvTerm.create(
+      :spectrum_identification_result_id => my_sir.id, 
+      :psi_ms_cv_term => psi_ms_t[:accession], :value => psi_ms_t[:value])
       #this_psi_term.save            
     end
   end
@@ -206,7 +218,10 @@ class Mzid2db
     sir_user_params.each do |userP|
       #this_userP = SirUserParam.find_or_initialize_by_spectrum_identification_result_id_and_name(:spectrum_identification_result_id => this_sir.id, :name => userP[:name])
       #this_userP.value = userP[:value] if this_userP.new_record? unless userP[:value].blank?
-      SirUserParam.create(:spectrum_identification_result_id => my_sir.id, :name => userP[:name], :value => userP[:value])
+      SirUserParam.create(
+      :spectrum_identification_result_id => my_sir.id, 
+      :name => userP[:name], 
+      :value => userP[:value])
       #this_userP.save
     end
   end
@@ -218,7 +233,14 @@ class Mzid2db
     calc_m2z, exp_m2z = mzid_item.calc_m2z, mzid_item.exp_m2z
     rank, charge_state  = mzid_item.rank, mzid_item.charge_state
     pass_threshold = mzid_item.pass_threshold    
-    my_item = SpectrumIdentificationItem.create(:sii_id => sii_id, :spectrum_identification_result_id => spectrum_identification_result_id, :calc_m2z => calc_m2z, :exp_m2z => exp_m2z, :rank => rank, :charge_state => charge_state, :pass_threshold => pass_threshold )   
+    my_item = SpectrumIdentificationItem.create(
+    :sii_id => sii_id, 
+    :spectrum_identification_result_id => spectrum_identification_result_id, 
+    :calc_m2z => calc_m2z, 
+    :exp_m2z => exp_m2z, 
+    :rank => rank, 
+    :charge_state => charge_state, 
+    :pass_threshold => pass_threshold )   
     return my_item
   end
 
@@ -268,7 +290,11 @@ class Mzid2db
     modif_arr.each do |m|
       unless m.cv_params.empty?
         unimod_acc = m.cv_params.map { |cvP| cvP[:accession] if cvP[:cvRef] == "UNIMOD" }[0] unless m.cv_params.empty?
-        modifications << Modification.new(:residue => m.residue, :avg_mass_delta => m.avg_mass_delta, :location => m.location, :unimod_accession => unimod_acc )
+        modifications << Modification.new(
+        :residue => m.residue, 
+        :avg_mass_delta => m.avg_mass_delta, 
+        :location => m.location, 
+        :unimod_accession => unimod_acc )
       end
     end
     return modifications
@@ -321,7 +347,15 @@ class Mzid2db
   def saveFragments(mzid_item, my_item)
     unless mzid_item.fragments_arr.empty?
       mzid_item.fragments_arr.each do |f|
-        Fragment.create(:spectrum_identification_item_id => my_item.id, :charge => f.charge, :index => f.ion_index, :m_mz => f.mz_value, :m_intensity => f.m_intensity, :m_error => f.m_err, :fragment_type => f.fragment_name, :psi_ms_cv_fragment_type_accession => f.fragment_psi_ms_cv_acc)
+        Fragment.create(
+        :spectrum_identification_item_id => my_item.id, 
+        :charge => f.charge, 
+        :index => f.ion_index, 
+        :m_mz => f.mz_value, 
+        :m_intensity => f.m_intensity, 
+        :m_error => f.m_err, 
+        :fragment_type => f.fragment_name, 
+        :psi_ms_cv_fragment_type_accession => f.fragment_psi_ms_cv_acc)
       end
     end
   end
@@ -337,7 +371,10 @@ class Mzid2db
         #this_psi_term.value = psi_ms_t[:value] if this_psi_term.new_record? unless psi_ms_t[:value].blank?
         #this_psi_term.save
         #This is more local-scope
-        SiiPsiMsCvTerm.create(:spectrum_identification_item_id => my_item.id, :psi_ms_cv_term_accession => psi_ms_t[:accession], :value => psi_ms_t[:value])
+        SiiPsiMsCvTerm.create(
+        :spectrum_identification_item_id => my_item.id, 
+        :psi_ms_cv_term_accession => psi_ms_t[:accession], 
+        :value => psi_ms_t[:value])
       end
     end
   end 
@@ -349,7 +386,10 @@ class Mzid2db
         #this_userP = SiiUserParam.find_or_initialize_by_spectrum_identification_item_id_and_name(:spectrum_identification_item_id => this_item.id, :name => userP[:name])
         #this_userP.value = userP[:value] if this_userP.new_record? unless userP[:value].blank?
         #this_userP.save
-        SiiUserParam.create(:spectrum_identification_item_id => this_item.id, :name => userP[:name], :value => userP[:value])
+        SiiUserParam.create(
+        :spectrum_identification_item_id => this_item.id, 
+        :name => userP[:name], 
+        :value => userP[:value])
       end
     end  
   end
