@@ -6,5 +6,5 @@ class PeptideEvidence < ActiveRecord::Base
   belongs_to :peptide
   belongs_to :db_squence
   has_and_belongs_to_many :spectrum_identification_items, :join_table => 'sii_pepevidence_join_table'
-  #has_and_belongs_to_many :protein_detection_hypothesis, :join_table => 'protein_hypothesis_pepevidence_join_table'
+  has_many :peptide_hypothesis
 end

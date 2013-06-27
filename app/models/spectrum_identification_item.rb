@@ -8,4 +8,5 @@ class SpectrumIdentificationItem < ActiveRecord::Base
   has_many :fragments, :dependent => :destroy
   #un-comment following line when i get the peptide_evidences table done
   has_and_belongs_to_many :peptide_evidences, :join_table => 'sii_pepevidence_join_table', :uniq => true
+  has_many :peptide_hypothesis
 end
