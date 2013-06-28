@@ -190,7 +190,7 @@ class Mzid2db
     sir_id = mzid_sir.sir_id
     spectrum_id = mzid_sir.spectrum_id
     spectrum_name = mzid_sir.spectrum_name
-    my_sir = SpectrumIdentificationResult.create(
+    my_sir = SpectrumIdentificationResult.find_or_create_by_spectrum_identification_list_id_and_sir_id(
     :sir_id => sir_id,
     :spectrum_identification_list_id => sil_id,
     :spectrum_id => spectrum_id, 
@@ -233,7 +233,7 @@ class Mzid2db
     calc_m2z, exp_m2z = mzid_item.calc_m2z, mzid_item.exp_m2z
     rank, charge_state  = mzid_item.rank, mzid_item.charge_state
     pass_threshold = mzid_item.pass_threshold    
-    my_item = SpectrumIdentificationItem.create(
+    my_item = SpectrumIdentificationItem.find_or_create_by_sii_id_and_spectrum_identification_result_id(
     :sii_id => sii_id, 
     :spectrum_identification_result_id => spectrum_identification_result_id, 
     :calc_m2z => calc_m2z, 
@@ -254,19 +254,19 @@ class Mzid2db
     #Save only my_peptide if its really new (in table scope)
     my_Peptide = Peptide.find_or_initialize_by_sequence_and_peptide_id(:sequence => pep_seq, :peptide_id => mzid_pep_ref)    
     if my_Peptide.new_record?
-      my_Peptide.modifications = saveModifications(mzid_modif_arr) unless mzid_modif_arr.empty?
       my_Peptide.save  #SAVE
+      my_Peptide.modifications = saveModifications(mzid_modif_arr) unless mzid_modif_arr.empty?
     else #Peptide already stored (sequence) #Compare my_Peptide.modifications with mzid_modif_arr:
       my_peptide_modifications = my_Peptide.modifications      
       if my_peptide_modifications.count != mzid_modif_arr.count  # Num modifs is different. Save the my_Peptide and its modifs    
-        my_Peptide.modifications = saveModifications(mzid_modif_arr) unless mzid_modif_arr.empty?
         my_Peptide.save #SAVE
+        my_Peptide.modifications = saveModifications(mzid_modif_arr) unless mzid_modif_arr.empty?
       else # Same peptide seq and same num modifs, check whether modifs are the same:
         my_mods_a, mzid_mods_a = [], []
         my_mod_h, mzid_mod_h = {}, {} #key => location, value => unimod_acc
         my_peptide_modifications.each do |my_modif|
           my_mod_h[my_modif.location] = my_modif.unimod_accession
-          my_mods_a << my_mod_h        
+          my_mods_a << my_mod_h
         end
         mzid_modif_arr.each do |mzid_modif|
           unimod_acc = nil
@@ -276,8 +276,8 @@ class Mzid2db
         end
         diff_mods = my_mods_a - mzid_mods_a
         if !diff_mods.blank? #vale, el peptido es la misma seq e = num de modifs PERO son distintas. SAVE!
-          my_Peptide.modifications = saveModifications(mzid_modif_arr) unless mzid_modif_arr.empty?
           my_Peptide.save #SAVE
+          my_Peptide.modifications = saveModifications(mzid_modif_arr) unless mzid_modif_arr.empty?
         end
       end
     end     
@@ -371,7 +371,7 @@ class Mzid2db
         #this_psi_term.value = psi_ms_t[:value] if this_psi_term.new_record? unless psi_ms_t[:value].blank?
         #this_psi_term.save
         #This is more local-scope
-        SiiPsiMsCvTerm.create(
+        SiiPsiMsCvTerm.find_or_create_by_spectrum_identification_item_id_and_psi_ms_cv_term_accession(
         :spectrum_identification_item_id => my_item.id, 
         :psi_ms_cv_term_accession => psi_ms_t[:accession], 
         :value => psi_ms_t[:value])
