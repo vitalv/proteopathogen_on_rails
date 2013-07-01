@@ -50,10 +50,10 @@ class Mzid2db
           pepEv_ref_arr = mzid_item.pepEv_ref_arr
           pepEv_ref_arr.each do |pep_ev_ref|
             #Por cada peptideEvidence tengo un Peptide y un dBSequence que tengo que guardar primero porque necesito sus ids para guardar peptideEvidence
-            pep_id = savePeptide(pep_ev_ref)
+            pep_seq_id = savePeptideSequence(pep_ev_ref)
             dbseq_id = saveDbSequence(pep_ev_ref, sil_id)
-            my_PeptideEvidence = savePeptideEvidence(pep_ev_ref, pep_id, dbseq_id)
-            #savePeptideModifications(pep_ev_ref, pep_id)
+            my_PeptideEvidence = savePeptideEvidence(pep_ev_ref, pep_seq_id, dbseq_id)
+            savePeptideModifications(pep_ev_ref, my_PeptideEvidence.id, pep_seq_id) if PeptideEvidence.find(my_PeptideEvidence.id).modifications.blank?
             saveSiiPepEvidences(my_item, my_PeptideEvidence)          
           end          
           saveFragments(mzid_item, my_item) 
@@ -246,36 +246,14 @@ class Mzid2db
   end
 
 
-  def savePeptide(pep_ev_ref)
+  def savePeptideSequence(pep_ev_ref)
     mzid_pep_ev = @mzid_obj.pep_evidence(pep_ev_ref)
     mzid_pep_ref = mzid_pep_ev.pep_ref
     mzid_pep = @mzid_obj.pep(mzid_pep_ref)
     pep_seq = mzid_pep.sequence  
-    mzid_modif_arr = mzid_pep.modif_arr
-    
-    my_Peptide = Peptide.find_or_initialize_by_sequence(:sequence => pep_seq)
-    
-
-    
-    return my_Peptide.id
-  end
-
-
-  def saveModifications(pep_ev_ref, pep_id)
-  
-    #get modif_arr_from_pep_id  
-    modifications = []
-    modif_arr.each do |m|
-      unless m.cv_params.empty?
-        unimod_acc = m.cv_params.map { |cvP| cvP[:accession] if cvP[:cvRef] == "UNIMOD" }[0] unless m.cv_params.empty?
-        modifications << Modification.new(
-        :residue => m.residue, 
-        :avg_mass_delta => m.avg_mass_delta, 
-        :location => m.location, 
-        :unimod_accession => unimod_acc )
-      end
-    end
-    return modifications
+    #mzid_modif_arr = mzid_pep.modif_arr    
+    my_peptide_sequence = PeptideSequence.find_or_create_by_sequence(:sequence => pep_seq)    
+    return my_peptide_sequence.id
   end
 
 
@@ -298,22 +276,45 @@ class Mzid2db
   end
 
 
-  def savePeptideEvidence(pep_ev_ref, pep_id, dbseq_id)  
+  def savePeptideEvidence(pep_ev_ref, pep_seq_id, dbseq_id)  
     #Within search/experiment/mzid: peptide_1_1_SDB_1_orf19.1086_554_569 refers to sii: "SIL_AtiO2_SII_1_1" and sii: "SIL_Elu1A_SII_2_1"
     #But this table/model is inter-search scope, so I don't give shit
     pep_ev = @mzid_obj.pep_evidence(pep_ev_ref)
-    my_PeptideEvidence = PeptideEvidence.find_or_initialize_by_peptide_id_and_db_sequence_id_and_start_and_end(
-    :peptide_id => pep_id,
+    my_PeptideEvidence = PeptideEvidence.find_or_create_by_peptide_sequence_id_and_db_sequence_id_and_start_and_end(
+    :peptide_sequence_id => pep_seq_id,
     :db_sequence_id => dbseq_id,
     :start => pep_ev.start,
     :end => pep_ev.end,
     :is_decoy => pep_ev.is_decoy,
     :pre => pep_ev.pre,
     :post => pep_ev.post)
-    my_PeptideEvidence.save if my_PeptideEvidence.new_record?    
+    #my_PeptideEvidence.save if my_PeptideEvidence.new_record?    
     return my_PeptideEvidence
   end
   
+
+
+  def savePeptideModifications(pep_ev_ref, pep_ev_id, pep_seq_id)
+    mzid_pep_ev = @mzid_obj.pep_evidence(pep_ev_ref)
+    mzid_pep_ref = mzid_pep_ev.pep_ref
+    mzid_pep = @mzid_obj.pep(mzid_pep_ref)
+    mzid_modif_arr = mzid_pep.modif_arr  
+    my_modifications = []
+    mzid_modif_arr.each do |m|
+      unless m.cv_params.empty?
+        unimod_acc = m.cv_params.map { |cvP| cvP[:accession] if cvP[:cvRef] == "UNIMOD" }[0] unless m.cv_params.empty?
+        my_modifications << Modification.find_or_create_by_peptide_evidence_id_and_peptide_sequence_id_and_unimod_accession_and_location(
+        :residue => m.residue, 
+        :avg_mass_delta => m.avg_mass_delta, 
+        :location => m.location, 
+        :unimod_accession => unimod_acc,
+        :peptide_evidence_id => pep_ev_id,
+        :peptide_sequence_id => pep_seq_id)
+      end
+    end
+    my_modifications.each { |mod|  mod.save if mod.new_record?}
+  end
+
   
   def saveSiiPepEvidences(my_item, my_PeptideEvidence)
     unless my_item.peptide_evidences.include? my_PeptideEvidence 
