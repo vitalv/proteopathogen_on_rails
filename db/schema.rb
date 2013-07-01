@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130701143800) do
+ActiveRecord::Schema.define(:version => 20130701153414) do
 
   create_table "db_sequences", :force => true do |t|
     t.string  "accession"
@@ -42,9 +42,9 @@ ActiveRecord::Schema.define(:version => 20130701143800) do
     t.string  "residue"
     t.string  "location"
     t.string  "avg_mass_delta"
-    t.integer "peptide_id"
     t.string  "unimod_accession"
-    t.integer "peptide_evidences_id"
+    t.integer "peptide_evidence_id"
+    t.integer "peptide_sequence_id"
   end
 
   create_table "mzid_files", :force => true do |t|
@@ -57,13 +57,13 @@ ActiveRecord::Schema.define(:version => 20130701143800) do
   end
 
   create_table "peptide_evidences", :force => true do |t|
-    t.integer "peptide_id"
     t.integer "start"
     t.integer "end"
     t.string  "pre"
     t.string  "post"
     t.boolean "is_decoy"
     t.integer "db_sequence_id"
+    t.integer "peptide_sequence_id"
   end
 
   create_table "peptide_hypotheses", :force => true do |t|
