@@ -53,6 +53,7 @@ class Mzid2db
             pep_id = savePeptide(pep_ev_ref)
             dbseq_id = saveDbSequence(pep_ev_ref, sil_id)
             my_PeptideEvidence = savePeptideEvidence(pep_ev_ref, pep_id, dbseq_id)
+            #savePeptideModifications(pep_ev_ref, pep_id)
             saveSiiPepEvidences(my_item, my_PeptideEvidence)          
           end          
           saveFragments(mzid_item, my_item) 
@@ -71,14 +72,14 @@ class Mzid2db
     #production should look like: (always create)
     #my_si = SpectrumIdentification.create(:si_id => mzid_si_id, :name => si.si_name, :activity_date => si.activity_date)
     #dev mode :  #Check if current mzid_file_id  has an already stored si with same si_id (through sar)
-    this_mzid_stored_sis = []
+    this_mzid_stored_si_ids = []
     MzidFile.find(@mzid_file_id).spectra_acquisition_runs.each do |stored_sar|
       stored_sar.spectrum_identifications.each do |stored_si|
-        this_mzid_stored_sis << stored_si.si_id
+        this_mzid_stored_si_ids << stored_si.si_id
       end
     end
     my_si = nil
-    if this_mzid_stored_sis.include? mzid_si_id
+    if this_mzid_stored_si_ids.include? mzid_si_id
       my_si = SpectrumIdentification.find_by_si_id(mzid_si_id) 
 	else
       my_si = SpectrumIdentification.create(
@@ -92,7 +93,7 @@ class Mzid2db
   
   def saveSarSiJoinTable(mzid_si, my_si)  
     mzid_si.input_spectra_files_arr.each do |s_f|    
-      if  SpectraAcquisitionRun.exists? SpectraAcquisitionRun.find_by_spectra_file(s_f) and SpectrumIdentification.exists? my_si.id
+      if SpectraAcquisitionRun.exists? SpectraAcquisitionRun.find_by_spectra_file(s_f) and SpectrumIdentification.exists? my_si.id
         if SpectrumIdentification.find(my_si.id).spectra_acquisition_run_ids.empty?
           my_si.spectra_acquisition_runs << SpectraAcquisitionRun.find_by_spectra_file(s_f)
         else
@@ -251,41 +252,18 @@ class Mzid2db
     mzid_pep = @mzid_obj.pep(mzid_pep_ref)
     pep_seq = mzid_pep.sequence  
     mzid_modif_arr = mzid_pep.modif_arr
-    #Save only my_peptide if its really new (in table scope)
-    my_Peptide = Peptide.find_or_initialize_by_sequence_and_peptide_id(:sequence => pep_seq, :peptide_id => mzid_pep_ref)    
-    if my_Peptide.new_record?
-      my_Peptide.save  #SAVE
-      my_Peptide.modifications = saveModifications(mzid_modif_arr) unless mzid_modif_arr.empty?
-    else #Peptide already stored (sequence) #Compare my_Peptide.modifications with mzid_modif_arr:
-      my_peptide_modifications = my_Peptide.modifications      
-      if my_peptide_modifications.count != mzid_modif_arr.count  # Num modifs is different. Save the my_Peptide and its modifs    
-        my_Peptide.save #SAVE
-        my_Peptide.modifications = saveModifications(mzid_modif_arr) unless mzid_modif_arr.empty?
-      else # Same peptide seq and same num modifs, check whether modifs are the same:
-        my_mods_a, mzid_mods_a = [], []
-        my_mod_h, mzid_mod_h = {}, {} #key => location, value => unimod_acc
-        my_peptide_modifications.each do |my_modif|
-          my_mod_h[my_modif.location] = my_modif.unimod_accession
-          my_mods_a << my_mod_h
-        end
-        mzid_modif_arr.each do |mzid_modif|
-          unimod_acc = nil
-          mzid_modif.cv_params.each { |cvP| unimod_acc = cvP[:accession] if cvP[:cvRef] == "UNIMOD" }
-          mzid_mod_h[mzid_modif.location] = unimod_acc
-          mzid_mods_a << mzid_mod_h
-        end
-        diff_mods = my_mods_a - mzid_mods_a
-        if !diff_mods.blank? #vale, el peptido es la misma seq e = num de modifs PERO son distintas. SAVE!
-          my_Peptide.save #SAVE
-          my_Peptide.modifications = saveModifications(mzid_modif_arr) unless mzid_modif_arr.empty?
-        end
-      end
-    end     
+    
+    my_Peptide = Peptide.find_or_initialize_by_sequence(:sequence => pep_seq)
+    
+
+    
     return my_Peptide.id
   end
 
 
-  def saveModifications(modif_arr)
+  def saveModifications(pep_ev_ref, pep_id)
+  
+    #get modif_arr_from_pep_id  
     modifications = []
     modif_arr.each do |m|
       unless m.cv_params.empty?
