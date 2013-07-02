@@ -45,20 +45,27 @@ class Mzid2db
         my_sir = saveSpectrumIdentificationResult(mzid_sir, sil_id)
         saveSirPsiMsCvTerms(mzid_sir, my_sir)
         saveSirUserParams(mzid_sir, my_sir)
+        pep_ev_refs = []
+        #hash: key => my_PepEv.id , value => hash{pep_ev_ref, sii_id} o bien crear un Arr of Structs
+        #{my_PeptideEvidence.id => {} }
         mzid_sir.items_arr.each do |mzid_item|
           my_item = saveSpectrumIdentificationItem(mzid_item, my_sir)
-          pepEv_ref_arr = mzid_item.pepEv_ref_arr
-          pepEv_ref_arr.each do |pep_ev_ref|
-            #Por cada peptideEvidence tengo un Peptide y un dBSequence que tengo que guardar primero porque necesito sus ids para guardar peptideEvidence
-            pep_seq_id = savePeptideSequence(pep_ev_ref)
-            dbseq_id = saveDbSequence(pep_ev_ref, sil_id)
-            my_PeptideEvidence = savePeptideEvidence(pep_ev_ref, pep_seq_id, dbseq_id)
-            savePeptideModifications(pep_ev_ref, my_PeptideEvidence.id, pep_seq_id) if PeptideEvidence.find(my_PeptideEvidence.id).modifications.blank?
-            saveSiiPepEvidences(my_item, my_PeptideEvidence)          
-          end          
           saveFragments(mzid_item, my_item) 
           saveSiiPsiMsCvTerms(mzid_item, my_item)
-          #saveSiiPsiMsCvTerms(mzid_item, my_item)
+          mzid_item.pepEv_ref_arr.each do |pep_ev_ref|
+            unless pep_ev_refs.include? pep_ev_ref
+              pep_seq_id = savePeptideSequence(pep_ev_ref) 
+              dbseq_id = saveDbSequence(pep_ev_ref, sil_id) 
+              my_PeptideEvidence = savePeptideEvidence(pep_ev_ref, pep_seq_id, dbseq_id)
+              savePeptideModifications(pep_ev_ref, my_PeptideEvidence.id, pep_seq_id)
+              saveSiiPepEvidences(my_item, my_PeptideEvidence)
+              
+              #savePag
+              #newPeptideHypothesis(my_PeptideEvidence.id, my_item.id) #protein_detection_hypothesis_id
+              
+            end
+            pep_ev_refs << pep_ev_ref
+          end
         end
       end
     end
@@ -266,7 +273,8 @@ class Mzid2db
     #get search_db_id(s) (through sil_id):
     si_id = SpectrumIdentificationList.find(sil_id).spectrum_identification_id
     search_db_id = SpectrumIdentification.find(si_id).search_databases.map { |sdb| sdb.id if sdb.sdb_id == search_db_ref }[0]
-    my_DbSequence = DbSequence.find_or_create_by_accession_and_search_database_id(
+    #watch out searching by accession, it may change in different mzid files
+    my_DbSequence = DbSequence.find_or_create_by_accession_and_search_database_id( 
     :accession => db_seq_accession, 
     :sequence => db_seq_sequence, 
     :description => db_seq_description, 
@@ -292,7 +300,6 @@ class Mzid2db
     return my_PeptideEvidence
   end
   
-
 
   def savePeptideModifications(pep_ev_ref, pep_ev_id, pep_seq_id)
     mzid_pep_ev = @mzid_obj.pep_evidence(pep_ev_ref)
