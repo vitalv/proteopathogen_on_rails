@@ -229,6 +229,31 @@ class Mzid
 
 
 
+
+ def protein_ambigroups
+   pag_arr = []
+   @doc.xpath("//xmlns:ProteinAmbiguityGroup").each do |pag|
+     protein_hypothesis_arr = []
+     pag_id = pag.attr("id")
+     pag.xpath(".//xmlns:ProteinDetectionHypothesis").each do |prot_hyp|
+       pass_thr = prot_hyp.attr("passThreshold")
+       name ||= prot_hyp.attr("name")
+       prot_hyp_id = prot_hyp.attr("id")
+       pep_hyp_arr = []
+       prot_hyp.xpath(".//xmlns:PeptideHypothesis").each do |pep_hyp|
+         pep_ev_ref_sii_arr = []
+         pep_hyp_arr << PepHyp.new(pep_ev_ref, pep_ev_ref_sii_arr)
+       end
+       prot_hyp_psi_ms_cv_terms = getcvParams(prot_hyp)
+       prot_hyp_user_params = getuserParams(prot_hyp)
+       protein_hypothesis_arr << ProtHyp.new(pass_thr, name, prot_hyp_id, pep_hyp_arr, prot_hyp_psi_ms_cv_terms, prot_hyp_user_params )
+     end
+     pag_arr << Pag.new(pag_id, protein_hypothesis_arr)  
+   end 
+ end
+
+
+
 end #class Mzid
 
 
@@ -374,5 +399,42 @@ class Sii
   end
 
 end
+
+
+class Pag 
+
+  attr_reader :pag_id, :prot_hyp_arr
+  
+  def initialize
+  
+  end
+  
+end
+
+
+class ProtHyp 
+
+  attr_reader :pass_thr, :name, :prot_hyp_id, :pep_hyp_arr, :prot_hyp_psi_ms_cv_terms, :prot_hyp_user_params
+
+  def initialize(pass_thr, name, prot_hyp
+
+  end
+  
+end
+
+class PepHyp
+
+  attr_reader :pep_ev_ref, :pep_ev_ref_sii_arr
+  
+  def initialize(pep_ev_ref, pep_ev_ref_sii_arr
+     @pep_ev_ref = pep_ev_ref
+     @sii_arr = pep_ev_ref_sii_arr
+  end
+
+end
+
+
+
+
 
 
