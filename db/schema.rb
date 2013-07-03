@@ -91,13 +91,14 @@ ActiveRecord::Schema.define(:version => 20130701153414) do
 
   create_table "protein_detection_hypothesis_psi_ms_cv_terms", :force => true do |t|
     t.integer "protein_detection_hypothesis_id"
-    t.string  "name"
+    t.string  "psi_ms_cv_term_accession"
     t.string  "value"
   end
 
   create_table "protein_detection_hypothesis_user_params", :force => true do |t|
     t.integer "protein_detection_hypothesis_id"
-    t.string  "psi_ms_cv_term_accession"
+    t.string  "name"
+    t.string  "value"
   end
 
   create_table "psi_ms_cv_terms", :force => true do |t|
