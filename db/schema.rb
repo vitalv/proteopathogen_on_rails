@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130701153414) do
+ActiveRecord::Schema.define(:version => 20130703141014) do
 
   create_table "db_sequences", :force => true do |t|
     t.string  "accession"
@@ -67,15 +67,19 @@ ActiveRecord::Schema.define(:version => 20130701153414) do
   end
 
   create_table "peptide_hypotheses", :force => true do |t|
-    t.integer "peptide_evidence_id",             :null => false
-    t.integer "spectrum_identification_item_id", :null => false
     t.integer "protein_detection_hypothesis_id", :null => false
+    t.integer "peptide_spectrum_assignment_id"
   end
 
   create_table "peptide_sequences", :force => true do |t|
     t.string "sequence"
     t.string "molecular_weight"
     t.string "isoelectric_point"
+  end
+
+  create_table "peptide_spectrum_assignments", :force => true do |t|
+    t.integer "spectrum_identification_item_id"
+    t.integer "peptide_evidence_id"
   end
 
   create_table "protein_ambiguity_groups", :force => true do |t|
@@ -135,13 +139,6 @@ ActiveRecord::Schema.define(:version => 20130701153414) do
     t.string  "residue"
     t.string  "unimod_accession"
   end
-
-  create_table "sii_pepevidence_join_table", :id => false, :force => true do |t|
-    t.integer "spectrum_identification_item_id"
-    t.integer "peptide_evidence_id"
-  end
-
-  add_index "sii_pepevidence_join_table", ["spectrum_identification_item_id", "peptide_evidence_id"], :name => "index_sii_pepevidence"
 
   create_table "sii_psi_ms_cv_terms", :force => true do |t|
     t.integer "spectrum_identification_item_id"

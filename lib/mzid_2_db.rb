@@ -8,6 +8,10 @@ class Mzid2db
   def initialize(mzid_object)
     @mzid_obj = mzid_object
     @mzid_file_id = mzid_object.mzid_file_id
+    
+    #@psm_arr = [] #arr of hashes: {"pepEv_id" => my_PeptideEvidence.id, "pep_ev_ref" => pep_ev_ref, "sii_ref" => mzid_item.sii_id}
+    #need it bc I need a connection between table peptide_hypotheses and 
+    
   end
   
   #Note on Variable naming :
@@ -38,7 +42,6 @@ class Mzid2db
       spectrum_identification_lists_ids << saveSpectrumIdentificationList(mzid_si, my_si)
     end
     
-    #sii_pep_evs = [] #arr of hashes: {"pepEv_id" => my_PeptideEvidence.id, "pep_ev_ref" => pep_ev_ref, "sii_ref" => mzid_item.sii_id}
     
     spectrum_identification_lists_ids.each do |sil_id|
       sil_ref = SpectrumIdentificationList.find(sil_id).sil_id
@@ -57,29 +60,42 @@ class Mzid2db
             pep_seq_id = savePeptideSequence(pep_ev_ref)  unless pep_ev_refs.include? pep_ev_ref
             dbseq_id = saveDbSequence(pep_ev_ref, sil_id) unless pep_ev_refs.include? pep_ev_ref
             my_PeptideEvidence = savePeptideEvidence(pep_ev_ref, pep_seq_id, dbseq_id)# unless pep_ev_refs.include? pep_ev_ref
-            savePeptideModifications(pep_ev_ref, my_PeptideEvidence.id, pep_seq_id)
+            savePeptideModifications(pep_ev_ref, my_PeptideEvidence.id, pep_seq_id) unless pep_ev_refs.include? pep_ev_ref
             
             #debo tener tantos de estos como elementos en la tabla sii_pepevidences
             #sii_pep_evs << {"pepEv_id" => my_PeptideEvidence.id, "pep_ev_ref" => pep_ev_ref, "sii_ref" => mzid_item.sii_id}
            
-            saveSiiPepEvidences(my_item, my_PeptideEvidence)
-            pep_ev_refs << pep_ev_ref
+            #saveSiiPepEvidences(my_item, my_PeptideEvidence) #ahora se llama peptide_spectrum_assignments amigo!
+            
+            savePeptideSpectrumAssignments(my_item, my_PeptideEvidence)
+            
+            pep_ev_refs << pep_ev_ref #this is to avoid going to savePeptideSequence and saveDbSequence for peptide evidences that have already been saved
           end
           
         end
-      end
+      end     
     end
     
-    @mzid_obj.protein_ambigroups.each do |pag|
-      pag_id = pag.pag_id
-      my_pag_id = saveProteinAmbiguityGroup(pag_id)
-      pag.prot_hyp_arr.each do |mzid_prot_hyp|
-        my_Protein_hypothesis_id = saveProteinDetectionHypothesis(mzid_prot_hyp, my_pag_id) 
-        saveProtHypPsiMsTerms(mzid_prot_hyp, my_Protein_hypothesis_id)
-        saveProtHypUserParams(mzid_prot_hyp, my_Protein_hypothesis_id)
     
-      end
-    end
+    #~ @mzid_obj.protein_ambigroups.each do |pag|
+      #~ pag_id = pag.pag_id
+      #~ my_pag_id = saveProteinAmbiguityGroup(pag_id)
+      #~ pag.prot_hyp_arr.each do |mzid_prot_hyp|
+        #~ my_Protein_hypothesis_id = saveProteinDetectionHypothesis(mzid_prot_hyp, my_pag_id) 
+        #~ saveProtHypPsiMsTerms(mzid_prot_hyp, my_Protein_hypothesis_id)
+        #~ saveProtHypUserParams(mzid_prot_hyp, my_Protein_hypothesis_id)
+        #~ 
+        #~ #mzid_prot_hyp.pep_hyp_arr.each do |mzid_pep_hyp|
+          #~ #mzid_pep_ev_ref
+          #~ #mzid_pep_hyp.sii_arr.each do |mzid_sii|
+            #~ #mzid_sii
+          #~ #end
+        #~ #end
+        #~ #ahora para poder salvar PeptideHypothesis necesito primero un PepEvidence id y un SII id
+        #~ #y yo lo que tengo del mzid es pep_ev_ref y para cada uno su(s) sii_ref
+    #~ 
+      #~ end
+    #~ end
     
     
   end
@@ -333,12 +349,21 @@ class Mzid2db
   end
 
   
-  def saveSiiPepEvidences(my_item, my_PeptideEvidence)
-    unless my_item.peptide_evidences.include? my_PeptideEvidence 
-      my_item.peptide_evidences << my_PeptideEvidence 
+  #~ def saveSiiPepEvidences(my_item, my_PeptideEvidence)
+    #~ unless my_item.peptide_evidences.include? my_PeptideEvidence 
+      #~ my_item.peptide_evidences << my_PeptideEvidence 
+    #~ end
+  #~ end
+  
+  
+  def savePeptideSpectrumAssignments(my_item, my_PeptideEvidence)
+    unless my_item.peptide_evidences.include? my_PeptideEvidence
+      PeptideSpectrumAssignment.find_or_create_by_spectrum_identification_item_id_and_peptide_evidence_id(
+      :spectrum_identification_item_id => my_item.id,
+      :peptide_evidence_id => my_PeptideEvidence.id)
     end
   end
-  
+
 
   def saveFragments(mzid_item, my_item)
     unless mzid_item.fragments_arr.empty?
@@ -384,7 +409,7 @@ class Mzid2db
         #this_userP.value = userP[:value] if this_userP.new_record? unless userP[:value].blank?
         #this_userP.save
         SiiUserParam.create(
-        :spectrum_identification_item_id => this_item.id, 
+        :spectrum_identification_item_id => my_item.id, 
         :name => userP[:name], 
         :value => userP[:value])
       end
@@ -413,38 +438,32 @@ class Mzid2db
   
   
   def saveProtHypPsiMsTerms(mzid_prot_hyp, my_prot_hyp_id)
-    ##MIGRATION -> nombres de las columnas   
     prot_hyp_psi_ms_cv_terms = mzid_prot_hyp.prot_hyp_psi_ms_cv_terms
     unless prot_hyp_psi_ms_cv_terms.empty?
       prot_hyp_psi_ms_cv_terms.each do |psi_ms_t|
         ProteinDetectionHypothesisPsiMsCvTerm.find_or_create_by_protein_detection_hypothesis_id_and_psi_ms_cv_term_accession(
         :protein_detection_hypothesis_id => my_prot_hyp_id, 
-        #esto dara error porque en la tabla se llama name -> hacer la migracion
         :psi_ms_cv_term_accession => psi_ms_t[:accession], 
         :value => psi_ms_t[:value])
       end
-    end  
-  
+    end    
   end
   
   
   def saveProtHypUserParams(mzid_prot_hyp, my_prot_hyp_id)
-     ##MIGRATION -> nombres de las columnas   
     prot_hyp_user_params = mzid_prot_hyp.prot_hyp_user_params
-    unless sii_user_params.empty?
-      sii_user_params.each do |userP|
-        SiiUserParam.create(
-        :spectrum_identification_item_id => this_item.id, 
+    unless prot_hyp_user_params.empty?
+      prot_hyp_user_params.each do |userP|
+        ProteinDetectionHypothesisUserParam.create(
+        :protein_detection_hypothesis_id => my_prot_hyp_id, 
         :name => userP[:name], 
         :value => userP[:value])
       end
     end  
-
-
   end
   
   
-  def savePeptideHypothesis
+  def savePeptideHypothesis(prot_hyp_id)
   
   
   end
@@ -483,13 +502,7 @@ end
           si.spectrum_identification_results.each do |sir|
             sir.spectrum_identification_items.each do |sii|
               sii.fragments{ |fragment|Fragment.destroy(fragment.id) }
-              sii.peptide_evidences.each do |pep_ev| #habtm association btwn sii and pep_ev does not support :dependent => :destroy so do it here:
-                PeptideEvidence.destroy(pep_ev.id) #peptide is dependent so destroyed here as well
-                
-                #Peptide is not dependent-destroying! (?) Neither is Modification !
-                
-              end
-              #sii.fragments #fragments are :dependent => :destroy on sii so don't have to destroy 
+              SpectrumIdentificationItem.destroy(sii.id)
             end
             SpectrumIdentificationResult.destroy(sir.id)
           end
