@@ -38,6 +38,8 @@ class Mzid2db
       spectrum_identification_lists_ids << saveSpectrumIdentificationList(mzid_si, my_si)
     end
     
+    #sii_pep_evs = [] #arr of hashes: {"pepEv_id" => my_PeptideEvidence.id, "pep_ev_ref" => pep_ev_ref, "sii_ref" => mzid_item.sii_id}
+    
     spectrum_identification_lists_ids.each do |sil_id|
       sil_ref = SpectrumIdentificationList.find(sil_id).sil_id
       results_arr = @mzid_obj.spectrum_identification_results(sil_ref)
@@ -46,29 +48,39 @@ class Mzid2db
         saveSirPsiMsCvTerms(mzid_sir, my_sir)
         saveSirUserParams(mzid_sir, my_sir)
         pep_ev_refs = []
-        #hash: key => my_PepEv.id , value => hash{pep_ev_ref, sii_id} o bien crear un Arr of Structs
-        #{my_PeptideEvidence.id => {} }
         mzid_sir.items_arr.each do |mzid_item|
           my_item = saveSpectrumIdentificationItem(mzid_item, my_sir)
           saveFragments(mzid_item, my_item) 
           saveSiiPsiMsCvTerms(mzid_item, my_item)
+          saveSiiUserParams(mzid_item, my_item)
           mzid_item.pepEv_ref_arr.each do |pep_ev_ref|
-            unless pep_ev_refs.include? pep_ev_ref
-              pep_seq_id = savePeptideSequence(pep_ev_ref) 
-              dbseq_id = saveDbSequence(pep_ev_ref, sil_id) 
-              my_PeptideEvidence = savePeptideEvidence(pep_ev_ref, pep_seq_id, dbseq_id)
-              savePeptideModifications(pep_ev_ref, my_PeptideEvidence.id, pep_seq_id)
-              saveSiiPepEvidences(my_item, my_PeptideEvidence)
-              
-              #savePag
-              #newPeptideHypothesis(my_PeptideEvidence.id, my_item.id) #protein_detection_hypothesis_id
-              
-            end
+            pep_seq_id = savePeptideSequence(pep_ev_ref)  unless pep_ev_refs.include? pep_ev_ref
+            dbseq_id = saveDbSequence(pep_ev_ref, sil_id) unless pep_ev_refs.include? pep_ev_ref
+            my_PeptideEvidence = savePeptideEvidence(pep_ev_ref, pep_seq_id, dbseq_id)# unless pep_ev_refs.include? pep_ev_ref
+            savePeptideModifications(pep_ev_ref, my_PeptideEvidence.id, pep_seq_id)
+            
+            #debo tener tantos de estos como elementos en la tabla sii_pepevidences
+            #sii_pep_evs << {"pepEv_id" => my_PeptideEvidence.id, "pep_ev_ref" => pep_ev_ref, "sii_ref" => mzid_item.sii_id}
+           
+            saveSiiPepEvidences(my_item, my_PeptideEvidence)
             pep_ev_refs << pep_ev_ref
           end
+          
         end
       end
     end
+    
+    @mzid_obj.protein_ambigroups.each do |pag|
+      pag_id = pag.pag_id
+      my_pag_id = saveProteinAmbiguityGroup(pag_id)
+      pag.prot_hyp_arr.each do |mzid_prot_hyp|
+        my_Protein_hypothesis_id = saveProteinDetectionHypothesis(mzid_prot_hyp, my_pag_id) 
+        saveProtHypPsiMsTerms(mzid_prot_hyp, my_Protein_hypothesis_id)
+        saveProtHypUserParams(mzid_prot_hyp, my_Protein_hypothesis_id)
+    
+      end
+    end
+    
     
   end
   
@@ -285,8 +297,6 @@ class Mzid2db
 
 
   def savePeptideEvidence(pep_ev_ref, pep_seq_id, dbseq_id)  
-    #Within search/experiment/mzid: peptide_1_1_SDB_1_orf19.1086_554_569 refers to sii: "SIL_AtiO2_SII_1_1" and sii: "SIL_Elu1A_SII_2_1"
-    #But this table/model is inter-search scope, so I don't give shit
     pep_ev = @mzid_obj.pep_evidence(pep_ev_ref)
     my_PeptideEvidence = PeptideEvidence.find_or_create_by_peptide_sequence_id_and_db_sequence_id_and_start_and_end(
     :peptide_sequence_id => pep_seq_id,
@@ -367,6 +377,7 @@ class Mzid2db
  
 
   def saveSiiUserParams(mzid_item, my_item)
+    sii_user_params = mzid_item.sii_user_params
     unless sii_user_params.empty?
       sii_user_params.each do |userP|
         #this_userP = SiiUserParam.find_or_initialize_by_spectrum_identification_item_id_and_name(:spectrum_identification_item_id => this_item.id, :name => userP[:name])
@@ -381,8 +392,69 @@ class Mzid2db
   end
     
     
+  def saveProteinAmbiguityGroup(pag_id)
+    pag_id = pag_id + "_Mzid_" + @mzid_file_id
+    my_Pag = ProteinAmbiguityGroup.create(:pag_id => pag_id)
+    return my_Pag.id
+  end
   
+  
+  def saveProteinDetectionHypothesis(mzid_prot_hyp, my_pag_id)
+    mzid_prot_hyp_id = mzid_prot_hyp.prot_hyp_id
+    pass_threshold = mzid_prot_hyp.pass_thr
+    name ||= mzid_prot_hyp.name
+    my_Protein_hypothesis = ProteinDetectionHypothesis.find_or_create_by_protein_detection_hypothesis_id_and_protein_ambiguity_group_id(
+    :protein_ambiguity_group_id => my_pag_id,
+    :protein_detection_hypothesis_id => mzid_prot_hyp_id,
+    :pass_threshold => pass_threshold,
+    :name => name)
+    return my_Protein_hypothesis.id
+  end
+  
+  
+  def saveProtHypPsiMsTerms(mzid_prot_hyp, my_prot_hyp_id)
+    ##MIGRATION -> nombres de las columnas   
+    prot_hyp_psi_ms_cv_terms = mzid_prot_hyp.prot_hyp_psi_ms_cv_terms
+    unless prot_hyp_psi_ms_cv_terms.empty?
+      prot_hyp_psi_ms_cv_terms.each do |psi_ms_t|
+        ProteinDetectionHypothesisPsiMsCvTerm.find_or_create_by_protein_detection_hypothesis_id_and_psi_ms_cv_term_accession(
+        :protein_detection_hypothesis_id => my_prot_hyp_id, 
+        #esto dara error porque en la tabla se llama name -> hacer la migracion
+        :psi_ms_cv_term_accession => psi_ms_t[:accession], 
+        :value => psi_ms_t[:value])
+      end
+    end  
+  
+  end
+  
+  
+  def saveProtHypUserParams(mzid_prot_hyp, my_prot_hyp_id)
+     ##MIGRATION -> nombres de las columnas   
+    prot_hyp_user_params = mzid_prot_hyp.prot_hyp_user_params
+    unless sii_user_params.empty?
+      sii_user_params.each do |userP|
+        SiiUserParam.create(
+        :spectrum_identification_item_id => this_item.id, 
+        :name => userP[:name], 
+        :value => userP[:value])
+      end
+    end  
 
+
+  end
+  
+  
+  def savePeptideHypothesis
+  
+  
+  end
+  
+  
+  def savePsiMsCvTerms
+  
+  
+  end
+  
 
 end
 
