@@ -5,7 +5,7 @@ class PeptideEvidence < ActiveRecord::Base
   #There MUST only be one PeptideEvidence item per Peptide-to-DBSequence-position
   belongs_to :peptide_sequence
   belongs_to :db_sequence
-  has_and_belongs_to_many :spectrum_identification_items, :join_table => 'sii_pepevidence_join_table'
-  has_many :peptide_hypothesis
+  has_many :peptide_spectrum_assignments, :dependent => :destroy
+  has_many :spectrum_identification_items, :through => :peptide_spectrum_assignments, :uniq => true
   has_many :modifications
 end
