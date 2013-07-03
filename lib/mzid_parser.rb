@@ -11,7 +11,7 @@ class Mzid
 
     @doc = Nokogiri::XML(File.open(mzid_file))
     @mzid_file_id ||= MzidFile.find_by_location(mzid_file).id  
-    #@doc = Nokogiri::XML(File.open("/home/vital/pepXML_protXML_2_mzid_V/SILAC_phos_OrbitrapVelos_1_interact-ipro-filtered.mzid"))
+    #
     #@doc = Nokogiri::XML(File.open("/home/vital/pepXML_protXML_2_mzid_V/examplefile.mzid"))
     #save_all_cv_terms
 
@@ -223,7 +223,7 @@ class Mzid
       
     end
     
-    return results #Array of Result objects
+    return results #Array of Result objects (that will be related to one sil)
   
   end
 
@@ -241,8 +241,12 @@ class Mzid
        prot_hyp_id = prot_hyp.attr("id")
        pep_hyp_arr = []
        prot_hyp.xpath(".//xmlns:PeptideHypothesis").each do |pep_hyp|
-         pep_ev_ref_sii_arr = []
-         pep_hyp_arr << PepHyp.new(pep_ev_ref, pep_ev_ref_sii_arr)
+         pepEv_ref = pep_hyp.attr("peptideEvidence_ref")
+         pepEv_ref_sii_arr = []
+         pep_hyp.xpath(".//xmlns:SpectrumIdentificationItemRef").each do |sii_ref|
+           pepEv_ref_sii_arr << sii_ref.attr("spectrumIdentificationItem_ref")
+         end         
+         pep_hyp_arr << PepHyp.new(pepEv_ref, pepEv_ref_sii_arr)
        end
        prot_hyp_psi_ms_cv_terms = getcvParams(prot_hyp)
        prot_hyp_user_params = getuserParams(prot_hyp)
@@ -250,6 +254,7 @@ class Mzid
      end
      pag_arr << Pag.new(pag_id, protein_hypothesis_arr)  
    end 
+   return pag_arr
  end
 
 
@@ -405,8 +410,9 @@ class Pag
 
   attr_reader :pag_id, :prot_hyp_arr
   
-  def initialize
-  
+  def initialize(pag_id, prot_hyp_arr)
+    @pag_id = pag_id
+    @prot_hyp_arr = prot_hyp_arr
   end
   
 end
@@ -416,19 +422,25 @@ class ProtHyp
 
   attr_reader :pass_thr, :name, :prot_hyp_id, :pep_hyp_arr, :prot_hyp_psi_ms_cv_terms, :prot_hyp_user_params
 
-  def initialize(pass_thr, name, prot_hyp
-
+  def initialize(pass_thr, name, prot_hyp_id, pep_hyp_arr, prot_hyp_psi_ms_cv_terms, prot_hyp_user_params)
+    @pass_thr = pass_thr
+    @name = name
+    @prot_hyp_id = prot_hyp_id
+    @pep_hyp_arr = pep_hyp_arr
+    @prot_hyp_psi_ms_cv_terms = prot_hyp_psi_ms_cv_terms
+    @prot_hyp_user_params = prot_hyp_user_params
   end
   
 end
+
 
 class PepHyp
 
   attr_reader :pep_ev_ref, :pep_ev_ref_sii_arr
   
-  def initialize(pep_ev_ref, pep_ev_ref_sii_arr
-     @pep_ev_ref = pep_ev_ref
-     @sii_arr = pep_ev_ref_sii_arr
+  def initialize(pepEv_ref, pepEv_ref_sii_arr)
+     @pep_ev_ref = pepEv_ref
+     @sii_arr = pepEv_ref_sii_arr
   end
 
 end
