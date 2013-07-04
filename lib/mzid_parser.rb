@@ -11,12 +11,14 @@ class Mzid
 
     @doc = Nokogiri::XML(File.open(mzid_file))
     @mzid_file_id ||= MzidFile.find_by_location(mzid_file).id  
-    #
     #@doc = Nokogiri::XML(File.open("/home/vital/pepXML_protXML_2_mzid_V/examplefile.mzid"))
-    #save_all_cv_terms
+    #get_all_cv_terms
 
   end
 
+
+#<SequenceCollection> ------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------
 
   def pep(pep_ref)
     pep = @doc.xpath("//xmlns:Peptide[@id='#{pep_ref}']")[0]
@@ -59,7 +61,9 @@ class Mzid
     return db_seq
   end
   
-  
+
+#<AnalysisCollection> ------------------------------------------------------------------  
+#------------------------------------------------------------------------------------------------------
 
   def spectrum_identifications
     si_arr = []
@@ -91,7 +95,26 @@ class Mzid
   end
   
 
-  def sip(sip_ref)
+  def protein_detection #max_occurs = 1
+    if pd = @doc.xpath("//xmlns:ProteinDetection")[0]
+      pd_id = pd.attr("id")
+      pd_name = pd.attr("name")
+      pdp_ref = pd.attr("proteinDetectionProtocol_ref")
+      pdl_ref = pd.attr("proteinDetectionList_ref")
+      sil_ref_arr = []
+      pd.xpath(".//xmlns:InputSpectrumIdentifications").each do |sil_ref|
+        sil_ref_arr << sil_ref.attr("spectrumIdentificationList_ref")
+      end
+      return ProtDetection.new(:pd_id, :pd_name, :pdp_ref, :pdl_ref, :sil_ref_arr) 
+    end
+  end
+
+
+
+#<AnalysisProtocolCollection> ------------------------------------------------------------------  
+#------------------------------------------------------------------------------------------------------
+
+  def sip(sip_ref) #<SpectrumIdentificationProtcol> minOccurs:1; maxOccurs: unbounded
 
     sip = @doc.xpath("//xmlns:SpectrumIdentificationProtocol[@id='#{sip_ref}']")[0]
     sip_id = sip_ref
@@ -158,6 +181,23 @@ class Mzid
 
   end
 
+
+  def pdp(pdp_ref)  #<ProteinDetectionProtocol> minOccurs:0; maxOccurs: 1
+    #<AnalysisParams>  #minOccurs:0; maxOccurs: 1
+    #<Threshold>  #minOccurs:1; maxOccurs: 1
+    pdp = @doc.xpath("//xmlns:ProteinDetectionProtocol[@id='#{pdp_ref}']")[0]
+    pdp_id = pdp_ref
+    analysis_software = pdp.attr("analysisSoftware_ref")
+    name = pdp.attr("name")
+    thr = pdp.xpath(".//xmlns:Threshold")
+    psi_ms_terms = getcvParams(thr)
+    user_params = getuserParams(thr)
+    return Pdp.new(:pdp_id => pdp_id, :analysis_software => analysis_software, :name => name, :psi_ms_terms => psi_ms_terms, :user_params => user_params)
+  end
+
+
+#<DataCollection><AnalysisData> ------------------------------------------------------------------  
+#------------------------------------------------------------------------------------------------------
 
   def sil(sil_ref)
     sil = @doc.xpath("//xmlns:SpectrumIdentificationList[@id='#{sil_ref}']")[0]
@@ -228,6 +268,9 @@ class Mzid
   end
 
 
+  def pdl(pdl_ref)
+  
+  end
 
 
  def protein_ambigroups
@@ -309,30 +352,21 @@ end #class Mzid
 
 
 DBSeq = Struct.new(:id, :search_db_ref, :accession, :sequence, :description)
-
 PepEv = Struct.new(:pepEv_id, :start, :end, :pre, :post, :is_decoy, :db_seq_ref, :name, :pep_ref)
-
 PeptideMod = Struct.new(:residue, :avg_mass_delta, :location, :cv_params)
 
-class Pep #No puedo llamarlo Peptide igual que mi modelo !!
 
-  attr_reader :sequence, :modif_arr #, :pep_id
-  
+class Pep 
+  attr_reader :sequence, :modif_arr #, :pep_id  
   def initialize(sequence, modif_arr)
-    #@pep_id = pep_id
     @sequence = sequence
     @modif_arr = modif_arr
-  end
-  
+  end  
 end
 
 
-
-
 class Si
-
   attr_reader :si_id, :sip_ref, :sil_ref, :si_name, :activity_date, :input_spectra_files_arr, :search_db_arr
-
   def initialize(si_id, sip_ref, sil_ref, si_name, activity_date, input_spectra_files_arr, search_db_arr)
     @si_id = si_id
     @sip_ref = sip_ref
@@ -342,7 +376,6 @@ class Si
     @input_spectra_files_arr = input_spectra_files_arr
     @search_db_arr = search_db_arr
   end
-
 end
 
 
@@ -350,10 +383,9 @@ Sil = Struct.new(:sil_id, :num_seq_searched)
 SearchedMod = Struct.new(:mass_delta, :fixedMod, :residue, :unimod_accession)
 SearchDB = Struct.new(:name, :sdb_id, :location, :version, :releaseDate, :num_seq)
 
-class Sip 
 
-  attr_reader :sip_id, :search_type, :threshold, :analysis_software, :searched_modification_arr, :parent_tolerance, :fragment_tolerance, :psi_ms_terms, :user_params
-  
+class Sip 
+  attr_reader :sip_id, :search_type, :threshold, :analysis_software, :searched_modification_arr, :parent_tolerance, :fragment_tolerance, :psi_ms_terms, :user_params  
   def initialize(args_arr)
      @sip_id = args_arr[0]
      @search_type = args_arr[1]
@@ -369,9 +401,7 @@ end
 
 
 class Sir
-
-  attr_reader :sir_id, :spectrum_name, :spectrum_id, :sir_psi_ms_cv_terms, :sir_user_params, :items_arr
-  
+  attr_reader :sir_id, :spectrum_name, :spectrum_id, :sir_psi_ms_cv_terms, :sir_user_params, :items_arr  
   def initialize(sir_id, spectrum_name, spectrum_id, sir_psi_ms_cv_terms, sir_user_params, items_arr)
     @sir_id = sir_id
     @spectrum_id = spectrum_id
@@ -380,16 +410,13 @@ class Sir
     @sir_user_params = sir_user_params
     @items_arr = items_arr  
   end
-
 end
 
 
 FragmentIon = Struct.new(:ion_index, :fragment_name, :fragment_psi_ms_cv_acc, :charge, :mz_value, :m_intensity, :m_err ) 
 
 class Sii
-
   attr_reader :sii_id, :calc_m2z, :exp_m2z, :rank, :charge_state, :pass_threshold, :pepEv_ref_arr, :sii_psi_ms_cv_terms, :sii_user_params, :fragments_arr
-  
   def initialize(sii_id, calc_m2z, exp_m2z, rank, charge_state, pass_threshold, pepEv_ref_arr, sii_psi_ms_cv_terms, sii_user_params, fragments_arr)
     @sii_id = sii_id
     @calc_m2z = calc_m2z
@@ -402,26 +429,20 @@ class Sii
     @sii_user_params = sii_user_params
     @fragments_arr = fragments_arr
   end
-
 end
 
 
 class Pag 
-
   attr_reader :pag_id, :prot_hyp_arr
-  
   def initialize(pag_id, prot_hyp_arr)
     @pag_id = pag_id
     @prot_hyp_arr = prot_hyp_arr
   end
-  
 end
 
 
 class ProtHyp 
-
   attr_reader :pass_thr, :name, :prot_hyp_id, :pep_hyp_arr, :prot_hyp_psi_ms_cv_terms, :prot_hyp_user_params
-
   def initialize(pass_thr, name, prot_hyp_id, pep_hyp_arr, prot_hyp_psi_ms_cv_terms, prot_hyp_user_params)
     @pass_thr = pass_thr
     @name = name
@@ -429,21 +450,62 @@ class ProtHyp
     @pep_hyp_arr = pep_hyp_arr
     @prot_hyp_psi_ms_cv_terms = prot_hyp_psi_ms_cv_terms
     @prot_hyp_user_params = prot_hyp_user_params
-  end
-  
+  end  
 end
 
 
 class PepHyp
-
-  attr_reader :pep_ev_ref, :pep_ev_ref_sii_arr
-  
+  attr_reader :pep_ev_ref, :pep_ev_ref_sii_arr  
   def initialize(pepEv_ref, pepEv_ref_sii_arr)
      @pep_ev_ref = pepEv_ref
      @sii_arr = pepEv_ref_sii_arr
   end
+end
+
+
+class ProtDetection  
+  attr_reader :pd_id, :pd_name, :pdp_ref, :pdl_ref, :sil_ref_arr  
+  def initialize(pd_id, pd_name, pdp_ref, pdl_ref, sil_ref_arr)
+    @pd_id = pd_id
+    @name = pd_name
+    @pdp_ref = pdp_ref
+    @pdl_ref = pdl_ref
+    @sil_ref_arr = sil_ref_arr
+  end
+end
+
+
+class Pdp
+  attr_reader :pdp_id, :analysis_software, :name, :psi_ms_terms, :user_params
+  def initialize(pdp_id, analysis_software, name)
+    @pdp_id = pdp_id
+    @analysis_software = analysis_software
+    @name = name
+    @psi_ms_terms = psi_ms_terms
+    @user_params = user_params
+  end
+end
+
+
+class Pdl
+
+
 
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
