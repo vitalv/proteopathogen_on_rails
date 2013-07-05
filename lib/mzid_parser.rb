@@ -105,7 +105,7 @@ class Mzid
       pd.xpath(".//xmlns:InputSpectrumIdentifications").each do |sil_ref|
         sil_ref_arr << sil_ref.attr("spectrumIdentificationList_ref")
       end
-      return ProtDetection.new(:pd_id, :pd_name, :pdp_ref, :pdl_ref, :sil_ref_arr) 
+      return ProtDetection.new(pd_id, pd_name, pdp_ref, pdl_ref, sil_ref_arr) 
     end
   end
 
@@ -188,11 +188,11 @@ class Mzid
     pdp = @doc.xpath("//xmlns:ProteinDetectionProtocol[@id='#{pdp_ref}']")[0]
     pdp_id = pdp_ref
     analysis_software = pdp.attr("analysisSoftware_ref")
-    name = pdp.attr("name")
+    pdp_name = pdp.attr("name")
     thr = pdp.xpath(".//xmlns:Threshold")
     psi_ms_terms = getcvParams(thr)
     user_params = getuserParams(thr)
-    return Pdp.new(:pdp_id => pdp_id, :analysis_software => analysis_software, :name => name, :psi_ms_terms => psi_ms_terms, :user_params => user_params)
+    return Pdp.new(pdp_id, analysis_software, pdp_name, psi_ms_terms, user_params)
   end
 
 
@@ -269,13 +269,14 @@ class Mzid
 
 
   def pdl(pdl_ref)
-  
+    #no necesito un metodo para esto, bueno podría coger el name
   end
 
 
- def protein_ambigroups
+ def protein_ambigroups(pdl_ref)
    pag_arr = []
-   @doc.xpath("//xmlns:ProteinAmbiguityGroup").each do |pag|
+   pdl = @doc.xpath("//xmlns:ProteinDetectionList[@id='#{pdl_ref}']")[0]
+   pdl.xpath("//xmlns:ProteinAmbiguityGroup").each do |pag|
      protein_hypothesis_arr = []
      pag_id = pag.attr("id")
      pag.xpath(".//xmlns:ProteinDetectionHypothesis").each do |prot_hyp|
@@ -455,7 +456,7 @@ end
 
 
 class PepHyp
-  attr_reader :pep_ev_ref, :pep_ev_ref_sii_arr  
+  attr_reader :pep_ev_ref, :sii_arr  
   def initialize(pepEv_ref, pepEv_ref_sii_arr)
      @pep_ev_ref = pepEv_ref
      @sii_arr = pepEv_ref_sii_arr
@@ -467,7 +468,7 @@ class ProtDetection
   attr_reader :pd_id, :pd_name, :pdp_ref, :pdl_ref, :sil_ref_arr  
   def initialize(pd_id, pd_name, pdp_ref, pdl_ref, sil_ref_arr)
     @pd_id = pd_id
-    @name = pd_name
+    @pd_name = pd_name
     @pdp_ref = pdp_ref
     @pdl_ref = pdl_ref
     @sil_ref_arr = sil_ref_arr
@@ -476,11 +477,11 @@ end
 
 
 class Pdp
-  attr_reader :pdp_id, :analysis_software, :name, :psi_ms_terms, :user_params
-  def initialize(pdp_id, analysis_software, name)
+  attr_reader :pdp_id, :analysis_software, :pdp_name, :psi_ms_terms, :user_params
+  def initialize(pdp_id, analysis_software, pdp_name, psi_ms_terms, user_params)
     @pdp_id = pdp_id
     @analysis_software = analysis_software
-    @name = name
+    @pdp_name = pdp_name
     @psi_ms_terms = psi_ms_terms
     @user_params = user_params
   end

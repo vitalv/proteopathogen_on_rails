@@ -4,6 +4,7 @@ class CreateProteinDetectionProtocols < ActiveRecord::Migration
       t.references :protein_detection
       t.string :pdp_id
       t.string :name
+      t.string :analysis_software
     end
     add_index :protein_detection_protocols, :protein_detection_id
   end

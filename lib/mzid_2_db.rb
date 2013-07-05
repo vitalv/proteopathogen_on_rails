@@ -10,6 +10,8 @@ class Mzid2db
     @mzid_file_id = mzid_object.mzid_file_id
   end
   
+  #Note to myself: revisar todos los metodos savePsiMsTerms y saveUserParams. (Estoy guardando bien? Hacer un metodo comun?) 
+  
   #Note on Variable naming :
   #This script deals with the objects from mzid_parser (@mzid_obj) 
   #used to create new objects (to be saved to the db, i.e. models) that refer to the same concept
@@ -24,7 +26,7 @@ class Mzid2db
 
   def save2tables
   
-    spectrum_identification_lists_ids = []  
+    spectrum_identification_lists_ids, my_Pd = [], nil
     @mzid_obj.spectrum_identifications.each do |mzid_si|
       my_si = saveSpectrumIdentification(mzid_si)
       saveSarSiJoinTable(mzid_si, my_si)
@@ -33,14 +35,18 @@ class Mzid2db
       saveSipPsiMsTerms(mzid_sip, my_sip)
       saveSipUserParams(mzid_sip, my_sip)
       saveSearchedModifications(mzid_sip, my_sip)
-      saveSearchDatabases(mzid_si, my_si)
-      spectrum_identification_lists_ids << saveSpectrumIdentificationList(mzid_si, my_si)
+      saveSearchDatabases(mzid_si, my_si)      
+      if @mzid_obj.protein_detection
+        mzid_pd = @mzid_obj.protein_detection
+        my_Pd = saveProteinDetection(mzid_pd) if mzid_pd.sil_ref_arr.include? mzid_si.sil_ref       
+      end
+      spectrum_identification_lists_ids << saveSpectrumIdentificationList(mzid_si, my_Pd, my_si) #Ojo! my_Pd puede ser null
     end
 
     protein_detection_list = nil
-    unless @mzid_obj.protein_detection.nil?
+    if my_Pd
       mzid_pd = @mzid_obj.protein_detection #protein_detection (singular) maxOccurs: 1
-      my_Pd_id = saveProteinDetection(mzid_pd)
+      my_Pd_id = my_Pd.id
       pdp_ref = mzid_pd.pdp_ref
       mzid_pdp = @mzid_obj.pdp(pdp_ref)
       my_Pdp_id = saveProteinDetectionProtocol(mzid_pdp, my_Pd_id) #get pdp from pdp_rf attr of pd. So 1 Occur as well
@@ -75,13 +81,14 @@ class Mzid2db
         end
       end     
     end
+
     
-    #TO DO : -----------------------------------------------------
     if protein_detection_list
       pdl_id = protein_detection_list.id
-      pdl_ref = ProteinDetectionList.find(ProteinDetectionList.find(pdl_id).pdl_id
-      pags_arr = @mzid_obj.protein_ambigroups(pdl_ref)
-      @mzid_obj.protein_ambigroups.each do |pag|
+      #prot_sil_ids = ProteinDetectionList.find(pdl_id).protein_detection.spectrum_identification_list_ids
+      pdl_ref = ProteinDetectionList.find(pdl_id).pdl_id
+      pag_arr = @mzid_obj.protein_ambigroups(pdl_ref)
+      pag_arr.each do |pag|
         pag_id = pag.pag_id
         my_pag_id = saveProteinAmbiguityGroup(pag_id)
         pag.prot_hyp_arr.each do |mzid_prot_hyp|
@@ -144,7 +151,7 @@ class Mzid2db
   
   
   def saveSip(mzid_sip, my_si)
-    sip_id = mzid_sip.sip_id
+    sip_id = mzid_sip.sip_id + "_Mzid_#{@mzid_file_id}"
     analysis_software = mzid_sip.analysis_software
     search_type = mzid_sip.search_type
     threshold = mzid_sip.threshold
@@ -169,10 +176,10 @@ class Mzid2db
     mzid_psi_ms_terms = mzid_sip.psi_ms_terms
     unless mzid_psi_ms_terms.empty?
       mzid_psi_ms_terms.each do |psi_ms_term|
-        my_psi_term = SipPsiMsCvTerm.find_or_initialize_by_spectrum_identification_protocol_id_and_psi_ms_cv_term_accession(:spectrum_identification_protocol_id => my_sip.id, :psi_ms_cv_term_accession => psi_ms_term[:accession])
-        my_psi_term.value = psi_ms_term[:value] if my_psi_term.new_record? unless psi_ms_term[:value].blank?
-        #SipPsiMsCvTerm has a value so, shouldn't it be always a new record? If so, then I wouln't need to find_or_initialize, just create the thing
-        my_psi_term.save if my_psi_term.new_record?
+        my_psi_term = SipPsiMsCvTerm.find_or_create_by_spectrum_identification_protocol_id_and_psi_ms_cv_term_accession(
+        :spectrum_identification_protocol_id => my_sip.id, 
+        :psi_ms_cv_term_accession => psi_ms_term[:accession],
+        :value => psi_ms_term[:value])
       end
     end    
   end
@@ -182,9 +189,10 @@ class Mzid2db
     user_params = mzid_sip.user_params
     unless user_params.empty?
       user_params.each do |userP|
-        my_userP = SipUserParam.find_or_initialize_by_spectrum_identification_protocol_id_and_name(:spectrum_identification_protocol_id => my_sip.id, :name => userP[:name])
-        my_userP.value = userP[:value] if my_userP.new_record? unless userP[:value].blank?
-        my_userP.save
+        my_userP = SipUserParam.find_or_create_by_spectrum_identification_protocol_id_and_name(
+        :spectrum_identification_protocol_id => my_sip.id, 
+        :name => userP[:name],
+        :value => userP[:value])
       end
     end    
   end
@@ -194,11 +202,9 @@ class Mzid2db
     searched_mod_arr = mzid_sip.searched_modification_arr
     unless searched_mod_arr.nil?
       searched_mod_arr.each do |mod|
-        #Y ademas estoy insertando records que ya existian! Entonces pa que coño quiero la join table !!
-        #is_fixed boolean 'true' is saved as 1 in mysql -tinyint(1)-, so watch the fuck out
         fixed = '1' if mod.fixedMod == 'true'; fixed = '0' if mod.fixedMod == 'false'
-        this_mod = SearchedModification.find_or_create_by_unimod_accession_and_mass_delta_and_residue_and_is_fixed(:unimod_accession => mod.unimod_accession, :mass_delta => mod.mass_delta, :residue => mod.residue, :is_fixed => fixed)
-        my_sip.searched_modifications << this_mod unless my_sip.searched_modifications.include? this_mod
+        my_mod = SearchedModification.find_or_create_by_unimod_accession_and_mass_delta_and_residue_and_is_fixed(:unimod_accession => mod.unimod_accession, :mass_delta => mod.mass_delta, :residue => mod.residue, :is_fixed => fixed)
+        my_sip.searched_modifications << this_mod unless my_sip.searched_modifications.include? ny_mod
       end
     end  
   end
@@ -212,13 +218,15 @@ class Mzid2db
   end
 
  
-  def saveSpectrumIdentificationList(mzid_si, my_si)
+  def saveSpectrumIdentificationList(mzid_si, my_Pd, my_si)
     mzid_sil = @mzid_obj.sil(mzid_si.sil_ref)
     si_id = my_si.id
+    pd_id = my_Pd.id if my_Pd
     sil_id = mzid_sil.sil_id
     num_seq_searched = mzid_sil.num_seq_searched
     my_sil = SpectrumIdentificationList.find_or_create_by_spectrum_identification_id(
     :sil_id => sil_id,
+    :protein_detection_id => pd_id, #puede ser null
     :spectrum_identification_id => si_id,
     :num_seq_searched => num_seq_searched) 
     return my_sil.id
@@ -323,7 +331,8 @@ class Mzid2db
     :end => pep_ev.end,
     :is_decoy => pep_ev.is_decoy,
     :pre => pep_ev.pre,
-    :post => pep_ev.post)
+    :post => pep_ev.post,
+    :pepev_id => pep_ev_ref)
     #my_PeptideEvidence.save if my_PeptideEvidence.new_record?    
     return my_PeptideEvidence
   end
@@ -406,8 +415,8 @@ class Mzid2db
     
     
   def saveProteinAmbiguityGroup(pag_id)
-    pag_id = pag_id + "_Mzid_" + @mzid_file_id
-    my_Pag = ProteinAmbiguityGroup.create(:pag_id => pag_id)
+    pag_id = pag_id
+    my_Pag = ProteinAmbiguityGroup.create(:protein_ambiguity_group_id => pag_id)
     return my_Pag.id
   end
   
@@ -452,26 +461,27 @@ class Mzid2db
   
   
   def savePeptideHypothesis(my_Protein_hypothesis_id, mzid_pep_ev_ref, mzid_sii_ref)
-    pepEv_id = PeptideEvidence.find_by_peptide_evidence_id(mzid_pep_ev_ref).id
+    #OJO!! Puede haber mas de un peptide evidence que se se hayan llamado con el mismo pep_ev_id (pep_ev_ref)
+    pepEv_id = PeptideEvidence.find_by_pepev_id(mzid_pep_ev_ref).id
     sii_id = SpectrumIdentificationItem.find_by_sii_id(mzid_sii_ref).id
-    psa_id = PeptideSpectrumAssignment.find_by_spectrum_identification_item_id_and_peptide_evidence_id(:spectrum_identification_item_id => sii_id, :peptide_evidence_id => pepEv_id).id
+    psa_id = PeptideSpectrumAssignment.where(:spectrum_identification_item_id => sii_id, :peptide_evidence_id => pepEv_id)[0].id
     PeptideHypothesis.find_or_create_by_protein_detection_hypothesis_id_and_peptide_spectrum_assignment_id(:protein_detection_hypothesis_id => my_Protein_hypothesis_id, :peptide_spectrum_assignment_id => psa_id)
   end
   
   
   def saveProteinDetection(mzid_pd)
-    pd_id = mzid_pd.id + "_Mzid_" + @mzid_file_id
-    pd_name = mzid_pd.name
-    my_Pd = ProteinDetection.create(:protein_detection_id => pd_id, :name => pd_name)
-    return my_Pd.id
+    pd_id = mzid_pd.pd_id
+    pd_name = mzid_pd.pd_name
+    my_Pd = ProteinDetection.find_or_create_by_protein_detection_id(:protein_detection_id => pd_id, :name => pd_name)
+    return my_Pd
   end
   
   
   def saveProteinDetectionProtocol(mzid_pdp, my_pd_id)
     pdp_id = mzid_pdp.pdp_id
-    pdp_name = mzid_pdp.name
+    pdp_name = mzid_pdp.pdp_name
     analysis_software = mzid_pdp.analysis_software
-    my_Pdp = ProteinDetectionProtocol.create(:protein_detection_id => my_pd_id, :pdp_id => pdp_id, :pdp_name => pdp_name, :analysis_software => analysis_software)
+    my_Pdp = ProteinDetectionProtocol.create(:protein_detection_id => my_pd_id, :pdp_id => pdp_id, :name => pdp_name, :analysis_software => analysis_software)
     return my_Pdp.id
   end
   
@@ -480,30 +490,30 @@ class Mzid2db
     mzid_psi_ms_terms = mzid_pdp.psi_ms_terms
     unless mzid_psi_ms_terms.empty?
       mzid_psi_ms_terms.each do |psi_ms_term|
-        my_psi_term = PdpPsiMsCvTerm.find_or_initialize_by_protein_detection_protocol_id_and_psi_ms_cv_term_accession(:protein_detection_protocol_id => my_pdp_id, :psi_ms_cv_term_accession => psi_ms_term[:accession])
-        my_psi_term.value = psi_ms_term[:value] if my_psi_term.new_record? unless psi_ms_term[:value].blank?
-        #PsiMsCvTerm has a value so, shouldn't it be always a new record? If so, then I wouln't need to find_or_initialize, just create the thing
-        my_psi_term.save if my_psi_term.new_record?
+        my_psi_term = PdpPsiMsCvTerm.find_or_create_by_protein_detection_protocol_id_and_psi_ms_cv_term_accession(
+        :protein_detection_protocol_id => my_pdp_id, 
+        :psi_ms_cv_term_accession => psi_ms_term[:accession],
+        :value => psi_ms_term[:value])        
       end
     end   
   end
   
   
   def savePdpUserParams(mzid_pdp, my_pdp_id)
-    user_params = mzid_sip.user_params
+    user_params = mzid_pdp.user_params
     unless user_params.empty?
       user_params.each do |userP|
-        my_userP = PdpUserParam.find_or_initialize_by_protein_detection_protocol_id_and_name(:protein_detection_protocol_id => my_sip.id, :name => userP[:name])
-        my_userP.value = userP[:value] if my_userP.new_record? unless userP[:value].blank?
-        my_userP.save
+        my_userP = PdpUserParam.find_or_create_by_protein_detection_protocol_id_and_name(
+        :protein_detection_protocol_id => my_pdp_id, 
+        :name => userP[:name],
+        :value => userP[:value])
       end
-    end    
-  
+    end
   end
   
   
-  def saveProteinDetectionList(mzid_pdl, my_pd_id)
-    pdl_id = mzid_pdl
+  def saveProteinDetectionList(pdl_ref, my_pd_id)
+    pdl_id = pdl_ref
     pdl = ProteinDetectionList.create(:protein_detection_id => my_pd_id, :pdl_id => pdl_id)
     return pdl
   end
@@ -542,12 +552,12 @@ end
           si.spectrum_identification_results.each do |sir|
             sir.spectrum_identification_items.each do |sii|
               sii.fragments{ |fragment|Fragment.destroy(fragment.id) }
-              SpectrumIdentificationItem.destroy(sii.id)
+              #SpectrumIdentificationItem.destroy(sii.id)
             end
             SpectrumIdentificationResult.destroy(sir.id)
           end
-          SpectrumIdentificationList.destroy(SpectrumIdentificationList.find_by_spectrum_identification_id(si).id)
-          SpectrumIdentification.destroy(si.id) if SpectrumIdentification.exists? (si.id)
+          #SpectrumIdentificationList.destroy(SpectrumIdentificationList.find_by_spectrum_identification_id(si).id)
+          #SpectrumIdentification.destroy(si.id) if SpectrumIdentification.exists? (si.id)
         end
         #SpectraAcquisitionRun.destroy(sar.id)
       end
