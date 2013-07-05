@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130703141014) do
+ActiveRecord::Schema.define(:version => 20130705113626) do
 
   create_table "db_sequences", :force => true do |t|
     t.string  "accession"
@@ -56,6 +56,22 @@ ActiveRecord::Schema.define(:version => 20130703141014) do
     t.integer "experiment_id"
   end
 
+  create_table "pdp_psi_ms_cv_terms", :force => true do |t|
+    t.integer "protein_detection_protocol_id"
+    t.string  "psi_ms_cv_term_accession"
+    t.string  "value"
+  end
+
+  add_index "pdp_psi_ms_cv_terms", ["protein_detection_protocol_id"], :name => "index_pdp_psi_ms_cv_terms_on_protein_detection_protocol_id"
+
+  create_table "pdp_user_params", :force => true do |t|
+    t.integer "protein_detection_protocol_id"
+    t.string  "name"
+    t.string  "value"
+  end
+
+  add_index "pdp_user_params", ["protein_detection_protocol_id"], :name => "index_pdp_user_params_on_protein_detection_protocol_id"
+
   create_table "peptide_evidences", :force => true do |t|
     t.integer "start"
     t.integer "end"
@@ -64,6 +80,7 @@ ActiveRecord::Schema.define(:version => 20130703141014) do
     t.boolean "is_decoy"
     t.integer "db_sequence_id"
     t.integer "peptide_sequence_id"
+    t.string  "pepev_id"
   end
 
   create_table "peptide_hypotheses", :force => true do |t|
@@ -103,6 +120,27 @@ ActiveRecord::Schema.define(:version => 20130703141014) do
     t.integer "protein_detection_hypothesis_id"
     t.string  "name"
     t.string  "value"
+  end
+
+  create_table "protein_detection_lists", :force => true do |t|
+    t.integer "protein_detection_id"
+    t.string  "pdl_id"
+  end
+
+  add_index "protein_detection_lists", ["protein_detection_id"], :name => "index_protein_detection_lists_on_protein_detection_id"
+
+  create_table "protein_detection_protocols", :force => true do |t|
+    t.integer "protein_detection_id"
+    t.string  "pdp_id"
+    t.string  "name"
+    t.string  "analysis_software"
+  end
+
+  add_index "protein_detection_protocols", ["protein_detection_id"], :name => "index_protein_detection_protocols_on_protein_detection_id"
+
+  create_table "protein_detections", :force => true do |t|
+    t.string "protein_detection_id"
+    t.string "name"
   end
 
   create_table "psi_ms_cv_terms", :force => true do |t|
@@ -206,6 +244,7 @@ ActiveRecord::Schema.define(:version => 20130703141014) do
     t.string  "sil_id",                     :null => false
     t.integer "num_seq_searched"
     t.integer "spectrum_identification_id"
+    t.string  "protein_detection_id"
   end
 
   create_table "spectrum_identification_protocols", :force => true do |t|
