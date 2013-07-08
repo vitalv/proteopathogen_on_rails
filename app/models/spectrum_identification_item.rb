@@ -7,6 +7,6 @@ class SpectrumIdentificationItem < ActiveRecord::Base
   has_many :sii_user_params, :dependent => :destroy
   has_many :fragments, :dependent => :destroy  
   has_many :peptide_spectrum_assignments, :dependent => :destroy
-  has_many :peptide_evidences, :through => :peptide_spectrum_assignments, :uniq => true 
+  has_many :peptide_evidences, :through => :peptide_spectrum_assignments,  :dependent => :destroy #:uniq => true,
   validates_uniqueness_of :sii_id, :scope => :spectrum_identification_result_id
 end

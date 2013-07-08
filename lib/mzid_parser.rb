@@ -190,8 +190,9 @@ class Mzid
     analysis_software = pdp.attr("analysisSoftware_ref")
     pdp_name = pdp.attr("name")
     thr = pdp.xpath(".//xmlns:Threshold")
-    psi_ms_terms = getcvParams(thr)
-    user_params = getuserParams(thr)
+    analysis_params = pdp.xpath(".//xmlns:AnalysisParams")
+    psi_ms_terms = getcvParams(thr) + getcvParams(analysis_params)
+    user_params = getuserParams(thr) + getuserParams(analysis_params)
     return Pdp.new(pdp_id, analysis_software, pdp_name, psi_ms_terms, user_params)
   end
 
