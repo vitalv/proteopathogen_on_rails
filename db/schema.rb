@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130705113626) do
+ActiveRecord::Schema.define(:version => 20130708095205) do
 
   create_table "db_sequences", :force => true do |t|
     t.string  "accession"
@@ -100,7 +100,8 @@ ActiveRecord::Schema.define(:version => 20130705113626) do
   end
 
   create_table "protein_ambiguity_groups", :force => true do |t|
-    t.string "protein_ambiguity_group_id"
+    t.string  "protein_ambiguity_group_id"
+    t.integer "protein_detection_list_id"
   end
 
   create_table "protein_detection_hypotheses", :force => true do |t|
@@ -244,7 +245,7 @@ ActiveRecord::Schema.define(:version => 20130705113626) do
     t.string  "sil_id",                     :null => false
     t.integer "num_seq_searched"
     t.integer "spectrum_identification_id"
-    t.string  "protein_detection_id"
+    t.integer "protein_detection_id"
   end
 
   create_table "spectrum_identification_protocols", :force => true do |t|
