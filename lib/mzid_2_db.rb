@@ -8,6 +8,8 @@ class Mzid2db
   def initialize(mzid_object)
     @mzid_obj = mzid_object
     @mzid_file_id = mzid_object.mzid_file_id
+    @psi_ms_cv_terms = mzid_object.psi_ms_cv_terms
+    @unimod_cv_terms = mzid_object.unimod_cv_terms
   end
 
   #Note to myself: revisar todos los metodos savePsiMsTerms y saveUserParams. (Estoy guardando bien? Hacer un metodo comun?)
@@ -25,6 +27,9 @@ class Mzid2db
   #Fragment for instance. These are always new stuff. Use .create methods.
 
   def save2tables
+  
+    savePsiMsCvTerms(@psi_ms_cv_terms)
+    saveUnimodCvTerms(@unimod_cv_terms)
 
     my_spectrum_identification_lists_ids = []
     my_Protein_detection = nil #<ProteinDetection> may not be present (minOccurs: 0)
@@ -65,7 +70,6 @@ class Mzid2db
         my_sir = saveSpectrumIdentificationResult(mzid_sir, sil_id)
         saveSirPsiMsCvTerms(mzid_sir, my_sir)
         saveSirUserParams(mzid_sir, my_sir)
-       #pep_ev_refs = []
         mzid_sir.items_arr.each do |mzid_item|
           my_item = saveSpectrumIdentificationItem(mzid_item, my_sir)
           saveFragments(mzid_item, my_item.id)
@@ -77,7 +81,6 @@ class Mzid2db
             my_PeptideEvidence = savePeptideEvidence(pep_ev_ref, pep_seq.id, dbseq.id) # if pep_seq and dbseq
             savePeptideModifications(pep_ev_ref, my_PeptideEvidence.id, pep_seq.id) #unless pep_ev_refs.include? pep_ev_ref
             savePeptideSpectrumAssignments(my_item.id, my_PeptideEvidence.id)
-            #pep_ev_refs << pep_ev_ref #this is to avoid going to savePeptideSequence and saveDbSequence for peptide evidences that have already been saved
           end
         end
       end
@@ -109,6 +112,24 @@ class Mzid2db
   end
 
 #-----------------------------------------------------------------------------------------------
+
+
+  def savePsiMsCvTerms(psi_ms_cv_terms)
+    psi_ms_cv_terms.each do |acc, name|
+      PsiMsCvTerm.find_or_create_by_accession(:accession => acc, :name => name)
+    end
+  end
+
+
+  def saveUnimodCvTerms(unimod_cv_terms)
+    unimod_cv_terms.each do |acc, name|
+      UnimodCvTerm.find_or_create_by_accession(:accession => acc, :name => name)
+    end
+  end
+
+
+
+
 
 
   def saveSpectrumIdentification(mzid_si)
@@ -316,7 +337,7 @@ class Mzid2db
 
   def savePeptideEvidence(pep_ev_ref, pep_seq_id, dbseq_id)
     pep_ev = @mzid_obj.pep_evidence(pep_ev_ref)
-    my_PeptideEvidence = PeptideEvidence.find_or_create_by_peptide_sequence_id_and_db_sequence_id_and_start_and_end(
+    my_PeptideEvidence = PeptideEvidence.find_or_create_by_pepev_id_and_peptide_sequence_id_and_db_sequence_id_and_start_and_end(    
     :peptide_sequence_id => pep_seq_id,
     :db_sequence_id => dbseq_id,
     :start => pep_ev.start,
@@ -509,12 +530,6 @@ class Mzid2db
   end
 
 
-  def savePsiMsCvTerms
-
-
-  end
-
-
 end
 
 
@@ -549,13 +564,13 @@ end
             #SpectrumIdentificationResult.destroy(sir.id)
           end
           #SpectrumIdentificationList.destroy(SpectrumIdentificationList.find_by_spectrum_identification_id(si).id)
-          #ProteinDetection.destroy(pd_id) if pd_id
+          ProteinDetection.destroy(pd_id) if pd_id
           SpectrumIdentification.destroy(si.id) if SpectrumIdentification.exists? (si.id)
         end
         #SpectraAcquisitionRun.destroy(sar.id)
       end
       #MzidFile.destroy(mzid_file_id)
-
+#~ 
     end
 
   end
