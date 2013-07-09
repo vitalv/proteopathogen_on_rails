@@ -2,6 +2,7 @@ require 'nokogiri'
 
 #mzid = Mzid.new("/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/public/uploaded_mzid_files/SILAC_phos_OrbitrapVelos_1_interact-ipro-filtered.mzid")
 #mzid = Mzid.new("/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/public/uploaded_mzid_files/CandidaRotofor-1.pep.mzid")
+#@doc = Nokogiri::XML(File.open("/home/vital/pepXML_protXML_2_mzid_V/examplefile.mzid"))
 
 class Mzid
 
@@ -11,10 +12,38 @@ class Mzid
 
     @doc = Nokogiri::XML(File.open(mzid_file))
     @mzid_file_id ||= MzidFile.find_by_location(mzid_file).id  
-    #@doc = Nokogiri::XML(File.open("/home/vital/pepXML_protXML_2_mzid_V/examplefile.mzid"))
-    #get_all_cv_terms
-
+    @psi_ms_cv_terms = psi_ms_cv_terms
+    @unimod_cv_terms = unimod_cv_terms
+    
   end
+  
+  
+  
+  def psi_ms_cv_terms
+    psi_t = {}
+    accessions = []
+    @doc.xpath("//xmlns:cvParam[@cvRef='PSI-MS']").each do |psiterm|
+      ac = psiterm.attr("accession")
+      name = psiterm.attr("name")
+      psi_t[ac] = name unless accessions.include? ac
+      accessions << ac
+    end
+    return psi_t
+  end
+
+
+  def unimod_cv_terms
+    unimod_t = {}
+    accessions = []
+    @doc.xpath("//xmlns:cvParam[@cvRef='UNIMOD']").each do |uniterm|
+      ac = uniterm.attr("accession")
+      name = uniterm.attr("name")
+      unimod_t[ac] = name unless accessions.include? ac
+      accessions << ac
+    end
+    return unimod_t
+  end
+
 
 
 #<SequenceCollection> ------------------------------------------------------------------
@@ -115,28 +144,22 @@ class Mzid
 #------------------------------------------------------------------------------------------------------
 
   def sip(sip_ref) #<SpectrumIdentificationProtcol> minOccurs:1; maxOccurs: unbounded
-
     sip = @doc.xpath("//xmlns:SpectrumIdentificationProtocol[@id='#{sip_ref}']")[0]
     sip_id = sip_ref
-
     #<SearchType minOccurs:1 >
     search_type = get_cvParam_and_or_userParam(sip.xpath(".//xmlns:SearchType"))
-
     #<Threshold minOccurs:1 >
     threshold = get_cvParam_and_or_userParam(sip.xpath(".//xmlns:Threshold"))
-
     #<SpectrumIdentificationProtocol, attribute analysisSoftware_ref : required
     analysisSoftware_ref = sip.attr("analysisSoftware_ref")
     analysis_software_node = @doc.xpath("//xmlns:AnalysisSoftware[@id='#{analysisSoftware_ref}']")[0]
     software_name_node = analysis_software_node.xpath("./xmlns:SoftwareName")
     analysis_software = get_cvParam_and_or_userParam(software_name_node)
-
     #---- parent_tol_cv_terms & fragment_tol_cv_terms ----
     parent_tolerance_node = sip.xpath(".//xmlns:ParentTolerance")[0] #<ParentTolerance maxOccurs: 1>
     parent_tolerance = getcvParams(parent_tolerance_node) unless parent_tolerance_node.nil?
     fragment_tolerance_node = sip.xpath(".//xmlns:FragmentTolerance")[0]
     fragment_tolerance = getcvParams(fragment_tolerance_node) unless fragment_tolerance_node.nil?
-
     #<ModificationParams minOccurs: 0> <SearchModification minOccurs: 1>
     unless sip.xpath(".//xmlns:ModificationParams").empty?
       searched_modification_arr = []
@@ -147,7 +170,6 @@ class Mzid
         searched_modification_arr << SearchedMod.new(mass_d, fixed, residue, unimod_ac)
       end
     end
-
     #---- psi_ms_terms ---- ALL SIP children's cvParams go to sip_psi_ms_terms and sip_user_params
     nodes_w_cvP, cvP_parent_names = [], []
     sip.xpath(".//xmlns:cvParam").each do |cvP| # ".// means it searches in ALL nodes under current sip
@@ -159,9 +181,8 @@ class Mzid
       all_cvParams_per_sip << getcvParams(n)
     end
     all_cvParams_per_sip.flatten!
-    psi_ms_terms = all_cvParams_per_sip.delete_if { |h| h[:cvRef] != "PSI-MS"}
+    psi_ms_terms = all_cvParams_per_sip.delete_if { |h| h[:cvRef] != "PSI-MS"} #i.e. cvRef == "UNIMOD"
     psi_ms_terms = all_cvParams_per_sip.delete_if { |h| h[:accession] =~ /MS:100141(2|3)/ } #tolerances already stored
-
     #---- user_params ----
     nodes_w_uP, uP_parent_names = [], []
     sip.xpath(".//xmlns:userParam").each do |uP|
@@ -172,13 +193,10 @@ class Mzid
     nodes_w_uP.each do |n|
       user_params << getuserParams(n)
     end
-    user_params.flatten!
-    
+    user_params.flatten!    
     sip_args_arr = [sip_id, search_type, threshold, analysis_software, searched_modification_arr, parent_tolerance, fragment_tolerance, psi_ms_terms, user_params]
     sip = Sip.new(sip_args_arr)
-
     return sip
-
   end
 
 
@@ -211,9 +229,7 @@ class Mzid
   
   def spectrum_identification_results(sil_ref)
     results = []
-    #example_file = Nokogiri::XML(File.open("/home/vital/pepXML_protXML_2_mzid_V/examplefile.mzid"))
     sil = @doc.xpath("//xmlns:SpectrumIdentificationList[@id='#{sil_ref}']")[0]
-    #sil = example_file.xpath("//xmlns:SpectrumIdentificationList[@id='SIL_1']")
     sil.xpath(".//xmlns:SpectrumIdentificationResult").each do |sir|
       sir_id = sir.attr("id")
       spectrum_name = sir.attr("name")
@@ -255,17 +271,13 @@ class Mzid
             end
           end
         end
-        
         sii_psi_ms_cv_terms = getcvParams(sii)
         sii_user_params = getuserParams(sii)
         items_arr << Sii.new(sii_id, calc_m2z, exp_m2z, rank, charge_state, pass_threshold, pepEv_ref_arr, sii_psi_ms_cv_terms, sii_user_params, fragments_arr)
       end
       results << Sir.new(sir_id, spectrum_name, spectrum_id, sir_psi_ms_cv_terms, sir_user_params, items_arr)
-      
-    end
-    
-    return results #Array of Result objects (that will be related to one sil)
-  
+    end    
+    return results #Array of Result objects (that will be related to one sil)  
   end
 
 

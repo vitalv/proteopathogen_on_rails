@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130708095205) do
+ActiveRecord::Schema.define(:version => 20130709160254) do
 
   create_table "db_sequences", :force => true do |t|
     t.string  "accession"
@@ -271,6 +271,11 @@ ActiveRecord::Schema.define(:version => 20130708095205) do
     t.string "si_id",         :null => false
     t.string "name"
     t.string "activity_date"
+  end
+
+  create_table "unimod_cv_terms", :force => true do |t|
+    t.string "accession"
+    t.string "name"
   end
 
   create_table "users", :force => true do |t|

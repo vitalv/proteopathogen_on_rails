@@ -1,6 +1,10 @@
 %h2 Experiments
 -if @experiments.blank?
-  no experiments
+  %p
+    no experiments
+  -if current_user
+    %p
+      = link_to "New experiment", new_experiment_path
 -else 
   -@experiments.each do |e|
     %p
