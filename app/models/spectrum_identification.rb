@@ -9,10 +9,10 @@ class SpectrumIdentification < ActiveRecord::Base
   before_destroy { |si| si.search_databases.clear } #avoids orphans in join table
   
   has_one :spectrum_identification_protocol, :dependent => :destroy
-  validates_associated :spectrum_identification_protocol
+  validates_associated :spectrum_identification_protocol #<SpectrumIdentification spectrumIdentificationProtocol_ref: required > 
   
   has_one :spectrum_identification_list, :dependent => :destroy
-  validates_associated :spectrum_identification_list
+  validates_associated :spectrum_identification_list  #<SpectrumIdentification spectrumIdentificationList_ref: required > 
   
   has_many :spectrum_identification_results, :through => :spectrum_identification_list, :dependent => :destroy
   

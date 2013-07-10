@@ -21,9 +21,8 @@ class Mzid2db
   #objects from mzid_parser are prefixed mzid_  ;  objects created here to be saved are prefixed my_
 
   #See DB Schema ../public/images/proteopathogen.png
-  #Some tables are inter-search scope. Peptide for instance. No need to save a new object for every search/experiment
+  #Some tables are inter-search scope. peptide_sequences for instance. No need to save a new object for every search/experiment
   #use .find_or_create methods to save these models/tables
-  #Tables in #08080 color(whatever that is called) are search-scope. Do save these things every time for every search/mzid file
   #Fragment for instance. These are always new stuff. Use .create methods.
 
   def save2tables
@@ -76,10 +75,10 @@ class Mzid2db
           saveSiiPsiMsCvTerms(mzid_item, my_item.id)
           saveSiiUserParams(mzid_item, my_item.id)
           mzid_item.pepEv_ref_arr.each do |pep_ev_ref|
-            pep_seq = savePeptideSequence(pep_ev_ref) #unless pep_ev_refs.include? pep_ev_ref
-            dbseq = saveDbSequence(pep_ev_ref, sil_id) #unless pep_ev_refs.include? pep_ev_ref
-            my_PeptideEvidence = savePeptideEvidence(pep_ev_ref, pep_seq.id, dbseq.id) # if pep_seq and dbseq
-            savePeptideModifications(pep_ev_ref, my_PeptideEvidence.id, pep_seq.id) #unless pep_ev_refs.include? pep_ev_ref
+            pep_seq = savePeptideSequence(pep_ev_ref)
+            dbseq = saveDbSequence(pep_ev_ref, sil_id)
+            my_PeptideEvidence = savePeptideEvidence(pep_ev_ref, pep_seq.id, dbseq.id) 
+            savePeptideModifications(pep_ev_ref, my_PeptideEvidence.id, pep_seq.id) 
             savePeptideSpectrumAssignments(my_item.id, my_PeptideEvidence.id)
           end
         end
@@ -413,7 +412,7 @@ class Mzid2db
     sii_user_params = mzid_item.sii_user_params
     unless sii_user_params.empty?
       sii_user_params.each do |userP|
-        SiiUserParam.find_or_create_by_spectrum_identification_item_id(
+        SiiUserParam.find_or_create_by_spectrum_identification_item_id_and_name(
         :spectrum_identification_item_id => my_item_id,
         :name => userP[:name],
         :value => userP[:value])
@@ -561,10 +560,10 @@ end
               sii.fragments{ |fragment|Fragment.destroy(fragment.id) }
               SpectrumIdentificationItem.destroy(sii.id)
             end
-            #SpectrumIdentificationResult.destroy(sir.id)
+            SpectrumIdentificationResult.destroy(sir.id)
           end
-          #SpectrumIdentificationList.destroy(SpectrumIdentificationList.find_by_spectrum_identification_id(si).id)
           ProteinDetection.destroy(pd_id) if pd_id
+          SpectrumIdentificationList.destroy(SpectrumIdentificationList.find_by_spectrum_identification_id(si).id)
           SpectrumIdentification.destroy(si.id) if SpectrumIdentification.exists? (si.id)
         end
         #SpectraAcquisitionRun.destroy(sar.id)
