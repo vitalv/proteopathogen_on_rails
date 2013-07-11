@@ -12,7 +12,7 @@ def index
   #get this from existing mzidfile.spectra_acquisition_runs
   spect_acq_runs, @stored_spectra_files = [], []
   
-  MzidFile.find(:all).each do |mzidf|
+  MzidFile.all.each do |mzidf|
     #get this from the mzid file
     input_spect_files = []  
     if File.exists? mzidf.location

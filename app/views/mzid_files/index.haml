@@ -13,9 +13,8 @@
       submission date: #{mzidf.submission_date}
       %br
       -unless mzidf.spectra_acquisition_runs.blank?
-        =link_to ">>load 2 DB", :action => :load_into_db, :mzid_file_id => mzidf
-      //-else
-      //No information on spectra acquisition runs for this mzidfile
+        =link_to ">>load 2 DB", :action => :load,  :id => mzidf.id
+
 
 %p= link_to "New mzid file", :controller => :mzid_files, :action => :new
 
