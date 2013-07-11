@@ -17,7 +17,9 @@ ProteopathogenOnRails::Application.routes.draw do
   resources :users
   resources :sessions   
   resources :experiments
-  #resources :mzid_files
+  resources :mzid_files do 
+    get 'load', on: :member
+  end
   resources :spectra_acquisition_runs
   
   get "log_out" => "sessions#destroy", :as => "log_out"
@@ -26,7 +28,6 @@ ProteopathogenOnRails::Application.routes.draw do
   #root :to => "users#new"
 
   
-
   # I don't want a resource for all of these bc I just want the 'show' action
   #resources :spectra_acquisition_runs
   #resources :spectrum_identification_protocols
@@ -77,7 +78,7 @@ ProteopathogenOnRails::Application.routes.draw do
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
-  match ':controller(/:action(/:id(.:format)))'
+  #match ':controller(/:action(/:id(.:format)))'
   
 
 

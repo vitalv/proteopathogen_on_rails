@@ -3,11 +3,11 @@ class MzidFilesController < ApplicationController
   before_filter :require_login
 
   def index 
-    @all_mzid_files = MzidFile.find(:all)
+    @all_mzid_files = MzidFile.all
   end
 
   def new
-    @experiments = Experiment.find(:all)
+    @experiments = Experiment.all
     @mzid_file = MzidFile.new
   end
 
@@ -33,7 +33,7 @@ class MzidFilesController < ApplicationController
 
   end
 
-  def load_into_db
+  def load
     
     load 'mzid_parser.rb' #this goes here so I can make changes to this file and see results after require this file just once
     load 'mzid_2_db.rb'
