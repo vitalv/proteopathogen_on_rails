@@ -1,6 +1,6 @@
 %h2 Sign Up
 
-= form_for @user do |f|
+= form_for [:admin, @user] do |f|
   -if @user.errors.any?
     %b Form is invalid
     %ul

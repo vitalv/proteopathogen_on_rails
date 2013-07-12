@@ -14,18 +14,16 @@ ProteopathogenOnRails::Application.routes.draw do
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
  
-  resources :users
-  resources :sessions   
-  resources :experiments
-  resources :mzid_files do 
-    get 'load', on: :member
+ 
+  namespace :admin do 
+    resources :users, :experiments, :mzid_files, :spectra_acquisition_runs
   end
-  resources :spectra_acquisition_runs
-  
+ 
+  resources :sessions
+
   get "log_out" => "sessions#destroy", :as => "log_out"
   get "log_in" => "sessions#new", :as => "log_in"
-  get "sign_up" => "users#new", :as => "sign_up"
-  #root :to => "users#new"
+  get "sign_up" => "admin/users#new", :as => "sign_up"
 
   
   # I don't want a resource for all of these bc I just want the 'show' action
@@ -34,7 +32,6 @@ ProteopathogenOnRails::Application.routes.draw do
   #resources :spectrum_identification_lists
   #resources 
 
-     
   # Sample resource route with options:
   #   resources :products do
   #     member do
