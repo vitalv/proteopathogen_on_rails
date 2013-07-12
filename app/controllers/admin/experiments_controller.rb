@@ -1,6 +1,6 @@
-class ExperimentsController < ApplicationController
+class Admin::ExperimentsController < ApplicationController
 
-  before_filter :require_login, :only=> [:new, :create]
+  before_filter :require_login #, :only=> [:new, :create]
   
   def index 
     @experiments = Experiment.find(:all) 

@@ -1,4 +1,4 @@
-class SpectraAcquisitionRunsController < ApplicationController
+class Admin::SpectraAcquisitionRunsController < ApplicationController
 
 require 'nokogiri'
 
