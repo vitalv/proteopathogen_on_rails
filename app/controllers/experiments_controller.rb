@@ -3,7 +3,7 @@ class ExperimentsController < ApplicationController
   before_filter :require_login, :only=> [:new, :create]
   
   def index 
-    @experiments = Experiment.:all
+    @experiments = Experiment.all
   end
 
 
