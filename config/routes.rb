@@ -35,8 +35,6 @@ ProteopathogenOnRails::Application.routes.draw do
   #resources 
 
      
-  #resources :mzid_files
-
   # Sample resource route with options:
   #   resources :products do
   #     member do
