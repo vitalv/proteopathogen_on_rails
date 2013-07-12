@@ -1,4 +1,4 @@
-class MzidFilesController < ApplicationController
+class Admin::MzidFilesController < ApplicationController
 
   before_filter :require_login
 
