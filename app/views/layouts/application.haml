@@ -18,20 +18,20 @@
       %header
         =image_tag 'proteopathogen_logo.png'
 
-      %nav_links
-        %ul
-          %li=link_to 'HOME', '/'
-          %li=link_to 'BROWSE', '/'
-          %li=link_to 'SEARCH', '/'
-          %li=link_to 'CONTACT', '/'
-          - if current_user
-            %li="logged in as #{current_user.email}"
-            %li= link_to 'log out', log_out_path
-          - else
-            %li=link_to 'log in', log_in_path
+        %nav_links
+          %ul
+            %li=link_to 'home', '/'
+            %li=link_to 'browse', experiments_path
+            %li=link_to 'search', '/'
+            %li=link_to 'contact', '/'
+            - if current_user
+              %li="logged in as #{current_user.email}"
+              %li= link_to 'log out', log_out_path
+            - else
+              %li=link_to 'log in', log_in_path
              
-      - flash.each do |name, msg|
-        = content_tag :div, msg, :id => "flash_#{name}"
+        - flash.each do |name, msg|
+          = content_tag :div, msg, :id => "flash_#{name}"
 
       %content
 

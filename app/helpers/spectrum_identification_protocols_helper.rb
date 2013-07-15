@@ -1,0 +1,2 @@
+module SpectrumIdentificationProtocolsHelper
+end
