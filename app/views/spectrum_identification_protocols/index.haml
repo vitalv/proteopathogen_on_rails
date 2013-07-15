@@ -1,0 +1,14 @@
+%h2 Spectrum Identification Protocols And Spectra Acquisition Runs
+%p
+%b= "Experiment: #{@protocol}"
+-@spectra_acquisition_runs.each do |sar|
+  %p
+  = "Input Spectra File: #{sar.spectra_file}"
+  %br
+  = "Fraction: #{sar.fraction}"
+  %br
+  = "Instrument: #{sar.instrument}"  
+  %br
+  = "Ionization: #{sar.ionization}"  
+  %br
+  = "Analyzer: #{sar.analyzer}"

@@ -24,17 +24,24 @@ ProteopathogenOnRails::Application.routes.draw do
  
   resources :sessions
 
-  get "log_out" => "sessions#destroy", :as => "log_out"
-  get "log_in" => "sessions#new", :as => "log_in"
-  get "sign_up" => "admin/users#new", :as => "sign_up"
-
+  get 'log_out', to: 'sessions#destroy', as: :log_out
+  get 'log_in', to: 'sessions#new', as:  :log_in
+  get 'sign_up', to: 'admin/users#new', as: :sign_up
   
-  # I don't want a resource for all of these bc I just want the 'show' action
-  #resources :spectra_acquisition_runs
-  #resources :spectrum_identification_protocols
-  #resources :spectrum_identification_lists
-  #resources 
+  ActiveSupport::Inflector.inflections do |inflect|
+    inflect.irregular 'spectrum', 'spectra'
+  end
 
+
+  resources :mzid_files, path: 'experiments', as: 'experiments' do
+    resources :spectrum_identification_protocols, path: 'protocols', as: 'protocols'
+    resources :spectrum_identification_results, path: 'spectra', as: 'spectra'
+    #resources :peptide_spectrum_assignments
+    #resources :peptide_evidences
+    #resources :protein_detection_hypothesis
+  end
+  
+  
   # Sample resource route with options:
   #   resources :products do
   #     member do

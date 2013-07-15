@@ -4,8 +4,13 @@ $gray: #B6B5B0;
 
 
 /*----- sticky footer thing ------*/
-* { margin: 0; }
-html, body { height: 100%; }
+* { 
+  margin: 0; 
+  }
+html, body { 
+ height: 100%;
+
+ }
 .wrapper {
   min-height:100%;
   height: auto !important;
@@ -36,9 +41,9 @@ nav_links {
   ul { list-style-type: none; }
   li {
     float: left;
-    padding: 0 20px;
+    padding: 25px 0px 0px 40px;
     a {
-	  font-size: 10pt;
+	  font-size: 11pt;
 	  text-decoration: none;
 	  font-weight: bold;
 	  color: #924C4C;
@@ -52,7 +57,7 @@ nav_links {
 content {
   display:block;
   clear: both;
-  border-top: solid $gray 2px;
+  border-top: solid #924C4C 2px;
   padding: 20px;
 
 }

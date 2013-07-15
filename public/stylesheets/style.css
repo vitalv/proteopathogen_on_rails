@@ -33,9 +33,9 @@ nav_links {
     list-style-type: none; }
   nav_links li {
     float: left;
-    padding: 0 20px; }
+    padding: 25px 0px 0px 40px; }
     nav_links li a {
-      font-size: 10pt;
+      font-size: 11pt;
       text-decoration: none;
       font-weight: bold;
       color: #924C4C; }
@@ -45,5 +45,5 @@ nav_links {
 content {
   display: block;
   clear: both;
-  border-top: solid #b6b5b0 2px;
+  border-top: solid #924C4C 2px;
   padding: 20px; }

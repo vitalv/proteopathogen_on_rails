@@ -1,0 +1,21 @@
+%h2 Experiments
+-if @all_mzid_files.blank?
+  %p No stored .mzid files
+-else 
+  -@all_mzid_files.each do |mzidf|
+    %p
+      %b= "Experiment: #{Experiment.find(mzidf.experiment_id).protocol}"
+      %br
+      mzid file: #{mzidf.name}
+      %br
+      sha-1: #{mzidf.sha1}
+      %br
+      submission date: #{mzidf.submission_date}
+    
+    %p
+      %b= link_to 'Protocols', experiment_protocols_path(mzidf.id)
+      //%b= link_to 'Spectra', experiment_spectra_path(mzidf.id)
+      //%b= link_to 'Peptides', experiment_peptides_path(mzidf.id)
+      //%b= link_to 'Proteins', 'experiment#proteins_path'
+
+
