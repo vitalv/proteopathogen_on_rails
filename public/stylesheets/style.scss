@@ -16,6 +16,8 @@ html, body {
   height: auto !important;
   height: 100%;
   margin: 0 auto -5.5em;
+  background-color: white; 
+
 }
 .footer, .push {
   height: 5.5em;
@@ -25,9 +27,9 @@ html, body {
 
 
 body {
-  background-color: white; 
-  padding: 0% 12% 0% 12%;
-  font-family: arial;
+  /*background-color: #FAFAFA; #poner una imagen de fondo?*/
+  padding: 0% 16% 0% 16%;
+  font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
   font-size: 9pt;
   color: $blue_font_color;
 }
@@ -59,5 +61,36 @@ content {
   clear: both;
   border-top: solid #924C4C 2px;
   padding: 20px;
-
 }
+
+
+.my_table {
+  margin: 2% auto;
+  table-layout: fixed;
+  width: 90%;
+  border:solid 1px #E1E1E1;
+  tr:nth-of-type(odd){
+    background-color:#F1F1F1;
+  }
+  tr:nth-of-type(even){
+    background-color:#F8F8F8;
+  } 
+  td {
+    padding: 3px 6px;
+  }
+  td.title {
+    width: 200px;
+    font-weight: bold;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+

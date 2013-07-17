@@ -3,17 +3,17 @@
   %p No stored .mzid files
 -else 
   -@all_mzid_files.each do |mzidf|
-    %p
-      %b= "Experiment: #{Experiment.find(mzidf.experiment_id).protocol}"
+    %box
+      Experiment: #{Experiment.find(mzidf.experiment_id).protocol}
       %br
-      mzid file: #{mzidf.name}
+      Mzid file: #{mzidf.name}      
       %br
-      sha-1: #{mzidf.sha1}
+      Sha-1: #{mzidf.sha1}
       %br
-      submission date: #{mzidf.submission_date}
+      Submission date: #{mzidf.submission_date}
       %br
       -unless mzidf.spectra_acquisition_runs.blank?
-        =link_to ">>load 2 DB", :action => :load,  :id => mzidf.id
+        =button_to 'Load 2 DB', action: :load, :id => mzidf.id
 
 
 %p= link_to "New mzid file", :controller => :mzid_files, :action => :new
