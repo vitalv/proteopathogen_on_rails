@@ -1,5 +1,5 @@
 %h2 new experiment
-=form_for @experiment do |f|
+=form_for [:admin, @experiment] do |f|
   - if @experiment.errors.any?
     %ul
       - for message in @experiment.errors.full_messages

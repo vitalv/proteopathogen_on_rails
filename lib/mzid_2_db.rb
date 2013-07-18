@@ -34,7 +34,7 @@ class Mzid2db
     my_Protein_detection = nil #<ProteinDetection> may not be present (minOccurs: 0)
     @mzid_obj.spectrum_identifications.each do |mzid_si|
       my_si = saveSpectrumIdentification(mzid_si)
-      saveSarSiJoinTable(mzid_si, my_si)
+      #saveSarSiJoinTable(mzid_si, my_si)
       mzid_sip = @mzid_obj.sip(mzid_si.sip_ref)
       my_sip = saveSip(mzid_sip, my_si)
       saveSipPsiMsTerms(mzid_sip, my_sip)

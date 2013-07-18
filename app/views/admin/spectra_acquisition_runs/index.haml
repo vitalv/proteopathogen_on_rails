@@ -8,7 +8,7 @@
     - input_spect_files_arr.each do |input_spectra_file|
       %li= input_spectra_file 
       - if !@stored_spectra_files.include? input_spectra_file
-        =link_to "add spectra acquisition data" , new_spectra_acquisition_run_path(:mzid_file_id => mzidf_id, :input_spectra_file => input_spectra_file)
+        =link_to "add spectra acquisition data" , new_admin_spectra_acquisition_run_path(:mzid_file_id => mzidf_id, :input_spectra_file => input_spectra_file)
         %br
       - else
         %p

@@ -1,7 +1,7 @@
 %h2 Upload .mzid File
 
 %p
-= form_for @mzid_file, :url => {:action => "create"} do |f|
+= form_for [:admin, @mzid_file], :url => {:action => "create"} do |f|
   - if @mzid_file.errors.any?
     %ul
       - for message in @mzid_file.errors.full_messages
