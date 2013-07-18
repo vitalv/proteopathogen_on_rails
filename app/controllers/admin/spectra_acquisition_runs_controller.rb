@@ -7,6 +7,7 @@ before_filter :require_login
 
 def index
 
+  #do a method and put it in model!!!
   @mzidf_input_spectra_files = {} #HASH: {4=>["AtiO2.mzML", "Elu1A.mzML", "Elu2A.mzML"], 5=>["MYOGLOBIN_ECD.mgf"]}
  
   #get this from existing mzidfile.spectra_acquisition_runs
@@ -51,10 +52,12 @@ end
 
 
 def create
-  spectra_data_hash = params[:spectra_acquisition_run]
-  spectra_data_hash[:spectra_file] = params[:spectra_acquisition_run][:spectra_file]
-  spectra_data_hash[:mzid_file_id] = params[:spectra_acquisition_run][:mzid_file_id]
-  @spectra_acquisition_run = SpectraAcquisitionRun.create(spectra_data_hash)
+  #params = (sar_params)
+  #spectra_data_hash = params[:spectra_acquisition_run]
+  #spectra_data_hash[:spectra_file] = params[:spectra_acquisition_run][:spectra_file]
+  #spectra_data_hash[:mzid_file_id] = params[:spectra_acquisition_run][:mzid_file_id]
+  #@spectra_acquisition_run = SpectraAcquisitionRun.create(spectra_data_hash)
+  @spectra_acquisition_run = SpectraAcquisitionRun.create(sar_params)
   
   if @spectra_acquisition_run.invalid?
     render "new"
@@ -63,6 +66,12 @@ def create
   end
   
 end
+
+private
+
+  def sar_params
+    params.require(:spectra_acquisition_run).permit(:fraction, :instrument, :ionization, :analyzer, :spectra_file, :mzid_file_id)
+  end
 
 
 end
