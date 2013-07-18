@@ -1,6 +1,6 @@
 %h2 Spectra acquisition data for mzid file #{@mzid_file_name}
 %br
-=form_for @spectra_acquisition_run do |f|
+=form_for [:admin, @spectra_acquisition_run] do |f|
 
   - if @spectra_acquisition_run.errors.any?
     %ul
