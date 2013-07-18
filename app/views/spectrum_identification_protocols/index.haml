@@ -16,14 +16,15 @@
       %td= sar.instrument
     %tr
       %td.title Ionization:
-      %td= sar.ionization      
+      %td= sar.ionization
     %tr
       %td.title Analyzer:
       %td= sar.analyzer
     -sar.spectrum_identifications.each do |si|
       %tr
         %td{:colspan => 3}
-          %table.my_table
+          //Spectrum Identification Protocol -----------------------------------//
+          %table.my_table.inner
             %tr
               %td.title{:rowspan => 8} Spectrum Identification Protocol
             %tr
@@ -47,29 +48,63 @@
             %tr
               %td Fragment Tolerance (lower value)
               %td= si.spectrum_identification_protocol.fragment_tol_minus_value
-            -if si.spectrum_identification_protocol.sip_psi_ms_cv_terms
-              %table.my_table
+          //SEARCH DATABASE -------------------------------------------------------//
+          %table.my_table.inner
+            %tr
+              %td.title{:rowspan => si.search_databases.count * 3 + 1}Search Database(s)
+              - si.search_databases.each do |sdb|
                 %tr
-                  %td.title{:rowspan => si.spectrum_identification_protocol.sip_psi_ms_cv_terms.count * 2 + 1}PSI-MS CV terms            
-                - si.spectrum_identification_protocol.sip_psi_ms_cv_terms.each do |psiterm|
-                  %tr 
-                    %td PSI-MS cv Accession
-                    %td= psiterm.psi_ms_cv_term_accession
-                  %tr 
-                    %td Name
-                    %td= PsiMsCvTerm.where(:accession => psiterm.psi_ms_cv_term_accession)[0].name
-            -if si.spectrum_identification_protocol.searched_modifications
-              %table.my_table
-                %tr             
-                  %td.title{:rowspan => si.spectrum_identification_protocol.searched_modifications.count + 2}Searched Modifications            
+                  %td  Search Database
+                  %td= sdb.name
                 %tr
-                  %td UNIMOD Accession
-                  %td Residue
-                  %td Fixed / Variable    
-                  %td Mass Delta 
-                - si.spectrum_identification_protocol.searched_modifications.each do |mod|
-                  %tr 
-                    %td= mod.unimod_accession
-                    %td= mod.residue
-                    %td= mod.is_fixed
-                    %td= mod.mass_delta
+                  %td Number Sequences
+                  %td= sdb.db_sequences.count
+                %tr 
+                  %td Release Date
+                  %td= sdb.release_date
+          //PSI-MS CV TERMS -------------------------------------------------------//
+          -if si.spectrum_identification_protocol.sip_psi_ms_cv_terms
+            %table.my_table.inner
+              %tr
+                %td.title{:rowspan => si.spectrum_identification_protocol.sip_psi_ms_cv_terms.count * 2 + 1}PSI-MS CV terms
+              - si.spectrum_identification_protocol.sip_psi_ms_cv_terms.each do |psiterm|
+                %tr
+                  %td PSI-MS cv Accession
+                  %td= psiterm.psi_ms_cv_term_accession
+                %tr
+                  %td Name
+                  %td= PsiMsCvTerm.where(:accession => psiterm.psi_ms_cv_term_accession)[0].name
+          //SEARCHED MODIFICATIONS ----------------------------------------------//
+          -if si.spectrum_identification_protocol.searched_modifications
+            %table.my_table.inner
+              %tr
+                %td.title{:rowspan => si.spectrum_identification_protocol.searched_modifications.count + 2}Searched Modifications
+              %tr
+                %td UNIMOD Accession
+                %td Name
+                %td Residue
+                %td Fixed / Variable
+                %td Mass Delta
+              - si.spectrum_identification_protocol.searched_modifications.each do |mod|
+                %tr
+                  %td= mod.unimod_accession
+                  %td= UnimodCvTerm.where(:accession => mod.unimod_accession)[0].name
+                  %td= mod.residue
+                  %td= mod.is_fixed
+                  %td= mod.mass_delta                  
+          //SPECTRA ---------------------------------------------------------------//
+          %table.my_table.inner
+            %tr
+              %td.title{:rowspan => si.search_databases.count * 3 + 2}Spectrum Identification List
+            %tr
+              %td  Specrum Identification List Name
+              %td= si.spectrum_identification_list.sil_id
+            %tr
+              %td Number Sequences Searched
+              %td= si.spectrum_identification_list.num_seq_searched
+            %tr 
+              %td Spectrum Identification Results
+              %td= si.spectrum_identification_list.spectrum_identification_results.count
+            %tr
+              %td{:colspan => 2, :style=> "text-align:center"}= button_to 'Spectra', experiment_protocol_spectra_path(@mzid_file_id, si.id), method: :get
+                    

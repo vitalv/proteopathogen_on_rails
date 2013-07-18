@@ -1,0 +1,2 @@
+class SpectrumIdentificationResultsController < ApplicationController
+end
