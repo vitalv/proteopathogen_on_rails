@@ -7,29 +7,7 @@ before_filter :require_login
 
 def index
 
-  #do a method and put it in model!!!
-  @mzidf_input_spectra_files = {} #HASH: {4=>["AtiO2.mzML", "Elu1A.mzML", "Elu2A.mzML"], 5=>["MYOGLOBIN_ECD.mgf"]}
- 
-  #get this from existing mzidfile.spectra_acquisition_runs
-  spect_acq_runs, @stored_spectra_files = [], []
-  
-  MzidFile.all.each do |mzidf|
-    #get this from the mzid file
-    input_spect_files = []  
-    if File.exists? mzidf.location
-      spect_acq_runs = MzidFile.find(mzidf).spectra_acquisition_runs
-      unless spect_acq_runs.blank?
-         spect_acq_runs.each do |sar|
-          @stored_spectra_files << sar.spectra_file
-        end
-      end
-      spectra_data = Nokogiri::XML(File.open(mzidf.location)).xpath("//xmlns:SpectraData")
-      spectra_data.each do |s| #<SpectraData> minOccurs = 1
-        input_spect_files << s.attr("location").split("/")[-1] #attr location required
-      end
-      @mzidf_input_spectra_files[mzidf.id] = input_spect_files
-    end    
-  end
+  @mzidf_input_spectra_files = MzidFile.spectra_files
 
 end
 
@@ -52,11 +30,49 @@ end
 
 
 def create
-  #params = (sar_params)
-  #spectra_data_hash = params[:spectra_acquisition_run]
-  #spectra_data_hash[:spectra_file] = params[:spectra_acquisition_run][:spectra_file]
-  #spectra_data_hash[:mzid_file_id] = params[:spectra_acquisition_run][:mzid_file_id]
-  #@spectra_acquisition_run = SpectraAcquisitionRun.create(spectra_data_hash)
+
+ 
+  #~ Nokogiri::XML(File.open(mzidf.location)).xpath("//xmlns:SpectrumIdentification")
+
+    #~ si_arr = []
+    #~ @doc.xpath("//xmlns:SpectrumIdentification").each do |si|
+      #~ si_id = si.attr("id")
+      #~ sip_ref = si.attr("spectrumIdentificationProtocol_ref")
+      #~ sil_ref = si.attr("spectrumIdentificationList_ref")
+      #~ si_name ||= si.attr("name")
+      #~ activity_date ||= si.attr("activityDate")
+      #~ input_spectra_files_arr, search_db_arr = [] , [] #input_spectra_ref_arr es un arr de input_spectra hashes  #input_spectra = {} #[ {"SID_AtiO2" => "AtiO2.mzML"}, {"SID_Elu1A" => "Elu1A.mzML"}, {"SID_Elu2A" => "Elu2A.mzML"} ]
+      #~ si.xpath(".//xmlns:InputSpectra").each do |i_s|
+        #~ sd_id = i_s.attr("spectraData_ref")
+        #~ spectra_data = @doc.xpath("//xmlns:SpectraData[@id='#{sd_id}']") #input_spectra[sd_id] = spectra_data.attr("location").to_s.split("/")[-1]
+        #~ input_spectra_files_arr << spectra_data.attr("location").to_s.split("/")[-1]
+      #~ end      
+      #~ si.xpath(".//xmlns:SearchDatabaseRef").each do |sdb|
+        #~ sdb_id = sdb.attr("searchDatabase_ref")
+        #~ search_database = @doc.xpath("//xmlns:SearchDatabase[@id='#{sdb_id}']")[0]
+        #~ name = get_cvParam_and_or_userParam(search_database.xpath(".//xmlns:DatabaseName"))
+        #~ location, version = search_database.attr("location"), search_database.attr("version")
+        #~ releaseDate, num_seq = search_database.attr("releaseDate"),  search_database.attr("numDatabaseSequences")
+        #~ sdb = SearchDB.new(name, sdb_id, location, version, releaseDate, num_seq)
+        #~ search_db_arr << sdb if search_db_arr.empty?
+        #~ search_db_arr << sdb unless search_db_arr.include? sdb
+      #~ end      
+      #~ si_arr << Si.new(si_id, sip_ref, sil_ref, si_name, activity_date, input_spectra_files_arr, search_db_arr)
+    #~ end
+
+
+
+  #OPCION A:
+  #Guardar aqui el SpectraAcquisitionRun, SIN su spectrum_identification_id y luego hacer un update
+  
+  #OPCION B:
+  #Guardar antes el SpectrumIdentification para poder guardar el SpectraAcquistionRun con su sii_id
+  #Por ahora me inclino más por esto:
+  #Hacer admin/spectra_acquistion_runs nested así: admin/mzid_file/1/spectra_acquisiton_runs
+  #Crear un nuevo controller spectrum_identifications también así: admin/mzid_file/1/spectrum_identifications
+
+
+
   @spectra_acquisition_run = SpectraAcquisitionRun.create(sar_params)
   
   if @spectra_acquisition_run.invalid?
@@ -75,3 +91,15 @@ private
 
 
 end
+
+
+
+
+
+
+
+
+
+
+
+
