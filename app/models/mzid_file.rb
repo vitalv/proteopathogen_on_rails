@@ -5,7 +5,7 @@ class MzidFile < ActiveRecord::Base
   validates :name, :presence => true
   validates :experiment_id, :presence => true
   belongs_to :experiment
-  has_many :spectra_acquisition_runs, :dependent => :destroy
+  has_many :spectrum_identifications, :dependent => :destroy
   validates_associated :spectra_acquisition_runs
    
   
