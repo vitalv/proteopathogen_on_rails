@@ -11,10 +11,10 @@
       Sha-1: #{mzidf.sha1}
       %br
       Submission date: #{mzidf.submission_date}
-      %br
-      -unless mzidf.spectra_acquisition_runs.blank?
+      %p
+      -if mzidf.spectrum_identifications.blank?
         =button_to 'Load 2 DB', action: :load, :id => mzidf.id
 
-
+%br
 %p= link_to "New mzid file", :controller => 'admin/mzid_files', :action => :new
 
