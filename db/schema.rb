@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130725130205) do
+ActiveRecord::Schema.define(version: 20130726084545) do
 
   create_table "db_sequences", force: true do |t|
     t.string  "accession"
@@ -221,7 +221,6 @@ ActiveRecord::Schema.define(version: 20130725130205) do
     t.string  "ionization"
     t.string  "analyzer"
     t.string  "spectra_file"
-    t.integer "mzid_file_id"
     t.integer "spectrum_identification_id"
   end
 
