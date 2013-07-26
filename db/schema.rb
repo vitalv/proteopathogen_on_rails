@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130718151044) do
+ActiveRecord::Schema.define(version: 20130725130205) do
 
   create_table "db_sequences", force: true do |t|
     t.string  "accession"
@@ -262,9 +262,10 @@ ActiveRecord::Schema.define(version: 20130718151044) do
   end
 
   create_table "spectrum_identifications", force: true do |t|
-    t.string "si_id",         null: false
-    t.string "name"
-    t.string "activity_date"
+    t.string  "si_id",         null: false
+    t.string  "name"
+    t.string  "activity_date"
+    t.integer "mzid_file_id"
   end
 
   create_table "unimod_cv_terms", force: true do |t|
