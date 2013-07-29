@@ -18,7 +18,8 @@ ProteopathogenOnRails::Application.routes.draw do
   namespace :admin do 
     resources :users, :experiments, :mzid_files, :spectra_acquisition_runs
     resources :mzid_files do
-      get 'load', on: :member
+      post 'load2db', on: :member
+      #get 'load', on: :member
     end    
   end
  

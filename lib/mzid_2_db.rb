@@ -133,40 +133,11 @@ class Mzid2db
 
   def saveSpectrumIdentification(mzid_si)
     mzid_si_id = mzid_si.si_id
-    #WATCH OUT! #DON'T SAVE the same si multiple times!! How could that ever happen? Only in dev mode when I'm resubmitting the same mzid file continuously...
-    #production should look like: (always create)
-    #my_si = SpectrumIdentification.create(:si_id => mzid_si_id, :name => si.si_name, :activity_date => si.activity_date)
-    #dev mode :  #Check if current mzid_file_id  has an already stored si with same si_id (through sar)
-    this_mzid_stored_si_ids = []
-    MzidFile.find(@mzid_file_id).spectra_acquisition_runs.each do |stored_sar|
-      stored_sar.spectrum_identifications.each do |stored_si|
-        this_mzid_stored_si_ids << stored_si.si_id
-      end
-    end
-    my_si = nil
-    if this_mzid_stored_si_ids.include? mzid_si_id
-      my_si = SpectrumIdentification.find_by_si_id(mzid_si_id)
-	else
-      my_si = SpectrumIdentification.create(
-      :si_id => mzid_si_id,
-      :name => mzid_si.si_name,
-      :activity_date => mzid_si.activity_date)
-	end
+    my_si = SpectrumIdentification.find_or_create_by(si_id: mzid_si_id, mzid_file_id: @mzid_file_id) do |si|
+      si.name = mzid_si.si_name
+      si.activity_date =  mzid_si.activity_date      
+    end    
     return my_si
-  end
-
-
-  def saveSarSiJoinTable(mzid_si, my_si)
-    mzid_si.input_spectra_files_arr.each do |s_f|
-      if SpectraAcquisitionRun.exists? SpectraAcquisitionRun.find_by_spectra_file(s_f) and SpectrumIdentification.exists? my_si.id
-        if SpectrumIdentification.find(my_si.id).spectra_acquisition_run_ids.empty?
-          my_si.spectra_acquisition_runs << SpectraAcquisitionRun.find_by_spectra_file(s_f)
-        else
-          new_sars = SpectraAcquisitionRun.find(:all, :conditions => ['mzid_file_id = ? AND id NOT IN (?)', @mzid_file_id, SpectrumIdentification.find(my_si.id).spectra_acquisition_run_ids])
-          my_si.spectra_acquisition_runs << new_sars
-        end
-      end
-    end
   end
 
 
@@ -178,16 +149,15 @@ class Mzid2db
     parent_tol_plus_value, parent_tol_minus_value = mzid_sip.parent_tolerance[0][:value], mzid_sip.parent_tolerance[1][:value]
     fragment_tol_plus_value, fragment_tol_minus_value = mzid_sip.fragment_tolerance[0][:value], mzid_sip.fragment_tolerance[1][:value]
     #Check Sip model : (validates_uniqueness)
-    my_sip = SpectrumIdentificationProtocol.find_or_create_by_spectrum_identification_id(
-    :spectrum_identification_id => my_si.id,
-    :sip_id => sip_id,
-    :analysis_software => analysis_software,
-    :search_type => search_type,
-    :threshold => threshold,
-    :parent_tol_plus_value => parent_tol_plus_value,
-    :parent_tol_minus_value => parent_tol_minus_value,
-    :fragment_tol_plus_value => fragment_tol_plus_value,
-    :fragment_tol_minus_value => fragment_tol_minus_value)
+    my_sip = SpectrumIdentificationProtocol.find_or_create_by(spectrum_identification_id: my_si.id, sip_id: sip_id) do |sip|
+      sip.analysis_software = analysis_software
+      sip.search_type = search_type
+      sip.threshold = threshold
+      sip.parent_tol_plus_value = parent_tol_plus_value
+      sip.parent_tol_minus_value = parent_tol_minus_value
+      sip.fragment_tol_plus_value = fragment_tol_plus_value
+      sip.fragment_tol_minus_value = fragment_tol_minus_value
+    end
     return my_sip
   end
 
@@ -325,11 +295,10 @@ class Mzid2db
     si_id = SpectrumIdentificationList.find(sil_id).spectrum_identification_id
     search_db_id = SpectrumIdentification.find(si_id).search_databases.map { |sdb| sdb.id if sdb.sdb_id == search_db_ref }[0]
     #watch out searching by accession, it may change in different mzid files
-    my_DbSequence = DbSequence.find_or_create_by_accession_and_search_database_id(
-    :accession => db_seq_accession,
-    :sequence => db_seq_sequence,
-    :description => db_seq_description,
-    :search_database_id => search_db_id)
+    my_DbSequence = DbSequence.find_or_create_by(accession: db_seq_accession, search_database_id: search_db_id) do |dbseq|
+      dbseq.sequence = db_seq_sequence
+      dbseq.description = db_seq_description
+    end
     return my_DbSequence
   end
 
@@ -546,32 +515,35 @@ end
 #  end
 
 
-  def rollback(mzid_file_id)
-    if MzidFile.exists? mzid_file_id
-      #puts "\n-Error saving data 2 tables. Rolling back -- \n\n"
-      MzidFile.find(mzid_file_id).spectra_acquisition_runs.each do |sar|
-        sar.spectrum_identifications.each do |si|
-          sil_id = si.spectrum_identification_list.id if si.spectrum_identification_list
-          sip_id = si.spectrum_identification_protocol.id if si.spectrum_identification_protocol
-          SpectrumIdentificationProtocol.destroy(sip_id) if sip_id #SipPsiMsCvTerms and SipUserParams are :dependent => :destroy on sip.destroy
-          pd_id ||= SpectrumIdentificationList.find(sil_id).protein_detection_id if sil_id
-          si.spectrum_identification_results.each do |sir|
-            sir.spectrum_identification_items.each do |sii|
-              sii.fragments{ |fragment|Fragment.destroy(fragment.id) }
-              SpectrumIdentificationItem.destroy(sii.id)
-            end
-            SpectrumIdentificationResult.destroy(sir.id)
-          end
-          ProteinDetection.destroy(pd_id) if pd_id
-          SpectrumIdentificationList.destroy(SpectrumIdentificationList.find_by_spectrum_identification_id(si).id)
-          SpectrumIdentification.destroy(si.id) if SpectrumIdentification.exists? (si.id)
-        end
-        #SpectraAcquisitionRun.destroy(sar.id)
-      end
-      #MzidFile.destroy(mzid_file_id)
-#~ 
+def rollback(mzid_file_id)
+  if MzidFile.exists? mzid_file_id
+    puts "\n-Error saving data 2 tables. Rolling back -- \n\n"
+    pd_ids = []
+    MzidFile.find(mzid_file_id).spectrum_identifications.each do |si|
+      sip = si.spectrum_identification_protocol
+      sil = si.spectrum_identification_list
+      SpectrumIdentificationProtocol.destroy(sip.id) #sip_searched_mod_join_table, SipPsiMsCvTerms and SipUserParams are dependently destroyed 
+      pd_ids << SpectrumIdentificationList.find(sil.id).protein_detection_id
+      this_si_sir_ids = si.spectrum_identification_results.map { |sir| sir.id }
+      SpectrumIdentificationResult.destroy(this_si_sir_ids)
+      #Destroying sir, dependently destroys: 
+        #Sii (which in turn dependently destroys siiPsiTerm, SiiUserP and Fragments)
+        #SirPsiMsTerms and SirUserP
+        #PeptideSpectrumAssignment (which in turn dependently destroys associated PeptideHypothesis)
+        #Note that PeptideEvidence is not destroyed here
+      SpectrumIdentification.destroy(si)  
+      #Destroys SI, Sip, SipPsiTerms, SipUserP
     end
-
+    ProteinDetection.destroy(pd_ids.uniq!) unless pd_ids.blank?
+      #Before Destroying PD dependencies load:
+        #PDL loads, dependently destroys PAG, but before destroying, PAG loads PDH
+        #PDH destroys its PeptideHypothesis and its PdhPsiTerms and PdhUserParams
+        #all PDH  are destroyed and then PAG can be destroyed (and in fact is)
+        #PDL can then be destroyed
+        #PDP and its PdpPsiTerms and PdpUserParams are destroyed
+        #PD is destroyed     
   end
+end
+
 
 

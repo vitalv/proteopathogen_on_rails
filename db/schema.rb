@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(version: 20130726084545) do
 
   create_table "db_sequences", force: true do |t|
     t.string  "accession"
-    t.string  "description"
+    t.text    "description"
     t.text    "sequence"
     t.integer "search_database_id"
   end
@@ -119,8 +119,8 @@ ActiveRecord::Schema.define(version: 20130726084545) do
 
   create_table "protein_detection_hypothesis_user_params", force: true do |t|
     t.integer "protein_detection_hypothesis_id"
-    t.string  "name"
-    t.string  "value"
+    t.text    "name"
+    t.text    "value"
   end
 
   create_table "protein_detection_lists", force: true do |t|

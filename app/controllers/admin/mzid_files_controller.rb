@@ -33,11 +33,11 @@ class Admin::MzidFilesController < ApplicationController
 
   end
 
-  def load
+  def load2db
     
     load 'mzid_parser.rb' #this goes here so I can make changes to this file and see results after require this file just once
     load 'mzid_2_db.rb'
-    mzid_file_id = params[:mzid_file_id]
+    mzid_file_id = params[:id]
     mzid_file = MzidFile.find(mzid_file_id)
     mzid = Mzid.new(mzid_file.location)
     #mzid = Mzid.new("/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/public/uploaded_mzid_files/SILAC_phos_OrbitrapVelos_1_interact-ipro-filtered.mzid")
