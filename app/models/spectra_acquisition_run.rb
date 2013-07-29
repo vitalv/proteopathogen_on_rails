@@ -1,5 +1,4 @@
 class SpectraAcquisitionRun < ActiveRecord::Base
-  # attr_accessible :title, :body
   belongs_to :spectrum_identification
   validates :spectrum_identification_id, :presence => true
   #before_destroy { |sar| sar.spectrum_identifications.clear }
