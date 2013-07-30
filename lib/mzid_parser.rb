@@ -349,6 +349,7 @@ end #class Mzid
     parent_node.xpath("./xmlns:cvParam").each do |cvP| #("./xmlns: searches in current node ; (".//xmlns: searches in all children !!
       cv_hash = {:name => cvP.attr("name"), :accession => cvP.attr("accession"), :value => cvP.attr("value"), :cvRef => cvP.attr("cvRef"),
       :unitAccession => cvP.attr("unitAccession"), :unitCvRef => cvP.attr("unitCvRef"), :unitName => cvP.attr("unitName")}
+      cv_hash.map { |k,v| cv_hash[k] = nil if v == "" }
       cvParams << cv_hash
     end
     return cvParams

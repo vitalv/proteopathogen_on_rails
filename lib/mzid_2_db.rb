@@ -26,7 +26,7 @@ class Mzid2db
   #Fragment for instance. These are always new stuff. Use .create methods.
 
   def save2tables
-  
+
     savePsiMsCvTerms(@psi_ms_cv_terms)
     saveUnimodCvTerms(@unimod_cv_terms)
 
@@ -77,8 +77,8 @@ class Mzid2db
           mzid_item.pepEv_ref_arr.each do |pep_ev_ref|
             pep_seq = savePeptideSequence(pep_ev_ref)
             dbseq = saveDbSequence(pep_ev_ref, sil_id)
-            my_PeptideEvidence = savePeptideEvidence(pep_ev_ref, pep_seq.id, dbseq.id) 
-            savePeptideModifications(pep_ev_ref, my_PeptideEvidence.id, pep_seq.id) 
+            my_PeptideEvidence = savePeptideEvidence(pep_ev_ref, pep_seq.id, dbseq.id)
+            savePeptideModifications(pep_ev_ref, my_PeptideEvidence.id, pep_seq.id)
             savePeptideSpectrumAssignments(my_item.id, my_PeptideEvidence.id)
           end
         end
@@ -115,14 +115,18 @@ class Mzid2db
 
   def savePsiMsCvTerms(psi_ms_cv_terms)
     psi_ms_cv_terms.each do |acc, name|
-      PsiMsCvTerm.find_or_create_by_accession(:accession => acc, :name => name)
+      PsiMsCvTerm.find_or_create_by(accession: acc) do |psi_ms_t|
+        psi_ms_t.name = name
+      end
     end
   end
 
 
   def saveUnimodCvTerms(unimod_cv_terms)
     unimod_cv_terms.each do |acc, name|
-      UnimodCvTerm.find_or_create_by_accession(:accession => acc, :name => name)
+      UnimodCvTerm.find_or_create_by(accession: acc) do |userP|
+        userP.name = name
+      end
     end
   end
 
@@ -135,24 +139,21 @@ class Mzid2db
     mzid_si_id = mzid_si.si_id
     my_si = SpectrumIdentification.find_or_create_by(si_id: mzid_si_id, mzid_file_id: @mzid_file_id) do |si|
       si.name = mzid_si.si_name
-      si.activity_date =  mzid_si.activity_date      
-    end    
+      si.activity_date =  mzid_si.activity_date
+    end
     return my_si
   end
 
 
   def saveSip(mzid_sip, my_si)
     sip_id = mzid_sip.sip_id
-    analysis_software = mzid_sip.analysis_software
-    search_type = mzid_sip.search_type
-    threshold = mzid_sip.threshold
     parent_tol_plus_value, parent_tol_minus_value = mzid_sip.parent_tolerance[0][:value], mzid_sip.parent_tolerance[1][:value]
     fragment_tol_plus_value, fragment_tol_minus_value = mzid_sip.fragment_tolerance[0][:value], mzid_sip.fragment_tolerance[1][:value]
     #Check Sip model : (validates_uniqueness)
     my_sip = SpectrumIdentificationProtocol.find_or_create_by(spectrum_identification_id: my_si.id, sip_id: sip_id) do |sip|
-      sip.analysis_software = analysis_software
-      sip.search_type = search_type
-      sip.threshold = threshold
+      sip.analysis_software = mzid_sip.analysis_software
+      sip.search_type = mzid_sip.search_type
+      sip.threshold = mzid_sip.threshold
       sip.parent_tol_plus_value = parent_tol_plus_value
       sip.parent_tol_minus_value = parent_tol_minus_value
       sip.fragment_tol_plus_value = fragment_tol_plus_value
@@ -176,7 +177,7 @@ class Mzid2db
 
   def saveSipUserParams(mzid_sip, my_sip)
     mzid_userP = mzid_sip.user_params
-    unless user_params.empty?
+    unless mzid_userP.empty?
       mzid_userP.each do |mzid_userP|
         SipUserParam.find_or_create_by(spectrum_identification_protocol_id: my_sip.id, name: mzid_userP[:name]) do |my_sip_userP|
           my_sip_userP.value = mzid_userP[:value]
@@ -204,7 +205,13 @@ class Mzid2db
 
   def saveSearchDatabases(mzid_si, my_si)
     mzid_si.search_db_arr.each do |sdb|
-      my_sdb = SearchDatabase.find_or_create_by_name_and_sdb_id_and_version_and_release_date_and_number_of_sequences_and_location(:name => sdb.name, :sdb_id => sdb.sdb_id, :version => sdb.version, :release_date => sdb.releaseDate, :number_of_sequences => sdb.num_seq, :location => sdb.location)
+      my_sdb = SearchDatabase.find_or_create_by(
+      name: sdb.name,
+      sdb_id: sdb.sdb_id,
+      version: sdb.version,
+      release_date: sdb.releaseDate,
+      number_of_sequences: sdb.num_seq,
+      location: sdb.location)
       my_si.search_databases << my_sdb unless my_si.search_databases.include? my_sdb
     end
   end
@@ -216,11 +223,11 @@ class Mzid2db
     pd_id = my_Protein_detection.id if my_Protein_detection
     sil_id = mzid_sil.sil_id
     num_seq_searched = mzid_sil.num_seq_searched
-    my_sil = SpectrumIdentificationList.find_or_create_by_spectrum_identification_id(
-    :sil_id => sil_id,
-    :protein_detection_id => pd_id, #puede ser null
-    :spectrum_identification_id => si_id,
-    :num_seq_searched => num_seq_searched)
+    my_sil = SpectrumIdentificationList.find_or_create_by(spectrum_identification_id: si_id) do |sil|
+      sil.sil_id = sil_id
+      sil.protein_detection_id = pd_id #puede ser null
+      sil.num_seq_searched = num_seq_searched
+    end
     return my_sil.id
   end
 
@@ -229,32 +236,30 @@ class Mzid2db
     sir_id = mzid_sir.sir_id
     spectrum_id = mzid_sir.spectrum_id
     spectrum_name = mzid_sir.spectrum_name
-    my_sir = SpectrumIdentificationResult.find_or_create_by_spectrum_identification_list_id_and_sir_id(
-    :sir_id => sir_id,
-    :spectrum_identification_list_id => sil_id,
-    :spectrum_id => spectrum_id,
-    :spectrum_name => spectrum_name)
+    my_sir = SpectrumIdentificationResult.find_or_create_by(spectrum_identification_list_id: sil_id, sir_id: sir_id) do |sir|
+      sir.spectrum_id = spectrum_id
+      sir.spectrum_name = spectrum_name
+    end
     return my_sir
   end
 
 
   def saveSirPsiMsCvTerms(mzid_sir, my_sir)
     sir_psi_ms_cv_terms = mzid_sir.sir_psi_ms_cv_terms
-    sir_psi_ms_cv_terms.each do |psi_ms_t|
-      SirPsiMsCvTerm.find_or_create_by_spectrum_identification_result_id_and_psi_ms_cv_term(
-      :spectrum_identification_result_id => my_sir.id,
-      :psi_ms_cv_term => psi_ms_t[:accession], :value => psi_ms_t[:value])
+    sir_psi_ms_cv_terms.each do |mzid_psi_ms_t|
+      SirPsiMsCvTerm.find_or_create_by(spectrum_identification_result_id: my_sir.id, psi_ms_cv_term: mzid_psi_ms_t[:accession]) do |my_psi_ms_t|
+        psi_ms_t.value = psi_ms_t[:value]
+      end
     end
   end
 
 
   def saveSirUserParams(mzid_sir, my_sir)
     sir_user_params = mzid_sir.sir_user_params
-    sir_user_params.each do |userP|
-      SirUserParam.find_or_create_by_spectrum_identification_result_id_and_name(
-      :spectrum_identification_result_id => my_sir.id,
-      :name => userP[:name],
-      :value => userP[:value])
+    sir_user_params.each do |mzid_userP|
+      SirUserParam.find_or_create_by(spectrum_identification_result_id: my_sir.id, name: mzid_userP[:name]) do |my_userP|
+        my_userP.value = mzid_userP[:value]
+      end
     end
   end
 
@@ -265,14 +270,15 @@ class Mzid2db
     calc_m2z, exp_m2z = mzid_item.calc_m2z, mzid_item.exp_m2z
     rank, charge_state  = mzid_item.rank, mzid_item.charge_state
     pass_threshold = mzid_item.pass_threshold
-    my_item = SpectrumIdentificationItem.find_or_create_by_sii_id_and_spectrum_identification_result_id(
-    :sii_id => sii_id + "_Mzid_#{@mzid_file_id}", #Add mzid file id so when savePeptideHypothesis I can search unambiguously the spectrum_identification_id to get the peptide_spectrum_assignment_id
-    :spectrum_identification_result_id => spectrum_identification_result_id,
-    :calc_m2z => calc_m2z,
-    :exp_m2z => exp_m2z,
-    :rank => rank,
-    :charge_state => charge_state,
-    :pass_threshold => pass_threshold )
+    my_item = SpectrumIdentificationItem.find_or_create_by(
+    sii_id: sii_id + "_Mzid_#{@mzid_file_id}", #Add mzid file id so when savePeptideHypothesis I can search unambiguously the spectrum_identification_id to get the peptide_spectrum_assignment_id
+    spectrum_identification_result_id: spectrum_identification_result_id) do |sii|
+      sii.calc_m2z = calc_m2z
+      sii.exp_m2z = exp_m2z
+      sii.rank = rank
+      sii.charge_state = charge_state
+      sii.pass_threshold = pass_threshold
+    end
     return my_item
   end
 
@@ -282,7 +288,7 @@ class Mzid2db
     mzid_pep_ref = mzid_pep_ev.pep_ref
     mzid_pep = @mzid_obj.pep(mzid_pep_ref)
     pep_seq = mzid_pep.sequence
-    my_peptide_sequence = PeptideSequence.find_or_create_by_sequence(:sequence => pep_seq)
+    my_peptide_sequence = PeptideSequence.find_or_create_by(sequence: pep_seq)
     return my_peptide_sequence
   end
 
@@ -307,15 +313,16 @@ class Mzid2db
 
   def savePeptideEvidence(pep_ev_ref, pep_seq_id, dbseq_id)
     pep_ev = @mzid_obj.pep_evidence(pep_ev_ref)
-    my_PeptideEvidence = PeptideEvidence.find_or_create_by_pepev_id_and_peptide_sequence_id_and_db_sequence_id_and_start_and_end(    
-    :peptide_sequence_id => pep_seq_id,
-    :db_sequence_id => dbseq_id,
-    :start => pep_ev.start,
-    :end => pep_ev.end,
-    :is_decoy => pep_ev.is_decoy,
-    :pre => pep_ev.pre,
-    :post => pep_ev.post,
-    :pepev_id => pep_ev_ref + "_Mzid_#{@mzid_file_id}") #Likewise sii, add mzid file id so when i savePeptideHypothesis I can search unambiguously the peptide_evidence_id to get the peptide_spectrum_assignment_id
+    my_PeptideEvidence = PeptideEvidence.find_or_create_by(
+    pepev_id: pep_ev_ref + "_Mzid_#{@mzid_file_id}", #Likewise sii, add mzid file id so when i savePeptideHypothesis I can search unambiguously the peptide_evidence_id to get the peptide_spectrum_assignment_id
+    peptide_sequence_id: pep_seq_id,
+    db_sequence_id: dbseq_id,
+    start: pep_ev.start,
+    end: pep_ev.end) do |my_pep_ev|
+      my_pep_ev.is_decoy = pep_ev.is_decoy
+      my_pep_ev.pre = pep_ev.pre
+      my_pep_ev.post = pep_ev.post
+    end
     return my_PeptideEvidence
   end
 
@@ -329,37 +336,40 @@ class Mzid2db
     mzid_modif_arr.each do |m|
       unless m.cv_params.empty?
         unimod_acc = m.cv_params.map { |cvP| cvP[:accession] if cvP[:cvRef] == "UNIMOD" }[0] unless m.cv_params.empty?
-        my_modifications << Modification.find_or_create_by_peptide_evidence_id_and_peptide_sequence_id_and_unimod_accession_and_location(
-        :residue => m.residue,
-        :avg_mass_delta => m.avg_mass_delta,
-        :location => m.location,
-        :unimod_accession => unimod_acc,
-        :peptide_evidence_id => pep_ev_id,
-        :peptide_sequence_id => pep_seq_id)
+        my_mod = Modification.find_or_create_by(
+        peptide_evidence_id: pep_ev_id,
+        peptide_sequence_id: pep_seq_id,
+        unimod_accession: unimod_acc,
+        location: m.location) do |my_m|
+          my_m.residue = m.residue
+          my_m.avg_mass_delta = m.avg_mass_delta
+        end
+        my_modifications << my_mod
       end
     end
   end
 
 
   def savePeptideSpectrumAssignments(my_item_id, my_PeptideEvidence_id)
-    PeptideSpectrumAssignment.find_or_create_by_spectrum_identification_item_id_and_peptide_evidence_id(
-    :spectrum_identification_item_id => my_item_id,
-    :peptide_evidence_id => my_PeptideEvidence_id)
+    PeptideSpectrumAssignment.find_or_create_by(
+    spectrum_identification_item_id: my_item_id,
+    peptide_evidence_id: my_PeptideEvidence_id)
   end
 
 
   def saveFragments(mzid_item, my_item_id)
     unless mzid_item.fragments_arr.empty?
-      mzid_item.fragments_arr.each do |f|
-        Fragment.find_or_create_by_spectrum_identification_item_id_and_fragment_type_and_index_and_charge(
-        :spectrum_identification_item_id => my_item_id,
-        :charge => f.charge,
-        :index => f.ion_index,
-        :m_mz => f.mz_value,
-        :m_intensity => f.m_intensity,
-        :m_error => f.m_err,
-        :fragment_type => f.fragment_name,
-        :psi_ms_cv_fragment_type_accession => f.fragment_psi_ms_cv_acc)
+      mzid_item.fragments_arr.each do |mzid_f|
+        Fragment.find_or_create_by(
+        spectrum_identification_item_id: my_item_id,
+        fragment_type: mzid_f.fragment_name,
+        index: mzid_f.ion_index,
+        charge: mzid_f.charge) do |my_f|
+          my_f.m_mz = mzid_f.mz_value
+          my_f.m_intensity = mzid_f.m_intensity
+          my_f.m_error = mzid_f.m_err
+          my_f.psi_ms_cv_fragment_type_accession = mzid_f.fragment_psi_ms_cv_acc
+        end
       end
     end
   end
@@ -369,11 +379,12 @@ class Mzid2db
     #Does "DRY"  mean anything to you¿?
     sii_psi_ms_cv_terms = mzid_item.sii_psi_ms_cv_terms
     unless sii_psi_ms_cv_terms.empty?
-      sii_psi_ms_cv_terms.each do |psi_ms_t|
-        SiiPsiMsCvTerm.find_or_create_by_spectrum_identification_item_id_and_psi_ms_cv_term_accession(
-        :spectrum_identification_item_id => my_item_id,
-        :psi_ms_cv_term_accession => psi_ms_t[:accession],
-        :value => psi_ms_t[:value])
+      sii_psi_ms_cv_terms.each do |mzid_psi_ms_t|
+        SiiPsiMsCvTerm.find_or_create_by(
+        spectrum_identification_item_id: my_item_id, 
+        psi_ms_cv_term_accession: mzid_psi_ms_t[:accession]) do |my_psi_ms_t|
+          my_psi_ms_t.value = mzid_psi_ms_t[:value]
+        end
       end
     end
   end
@@ -382,18 +393,19 @@ class Mzid2db
   def saveSiiUserParams(mzid_item, my_item_id)
     sii_user_params = mzid_item.sii_user_params
     unless sii_user_params.empty?
-      sii_user_params.each do |userP|
-        SiiUserParam.find_or_create_by_spectrum_identification_item_id_and_name(
-        :spectrum_identification_item_id => my_item_id,
-        :name => userP[:name],
-        :value => userP[:value])
+      sii_user_params.each do |mzid_userP|
+        SiiUserParam.find_or_create_by(
+        spectrum_identification_item_id: my_item_id, 
+        name: mzid_userP[:name]) do |my_userP|
+          my_userP.value = mzid_userP[:value]
+        end
       end
     end
   end
 
 
   def saveProteinAmbiguityGroup(pag_id, pdl_id)
-    my_Pag = ProteinAmbiguityGroup.find_or_create_by_protein_ambiguity_group_id_and_protein_detection_list_id(:protein_ambiguity_group_id => pag_id, :protein_detection_list_id => pdl_id)
+    my_Pag = ProteinAmbiguityGroup.find_or_create_by(protein_ambiguity_group_id: pag_id, protein_detection_list_id: pdl_id)
     return my_Pag.id
   end
 
@@ -402,11 +414,12 @@ class Mzid2db
     mzid_prot_hyp_id = mzid_prot_hyp.prot_hyp_id
     pass_threshold = mzid_prot_hyp.pass_thr
     name ||= mzid_prot_hyp.name
-    my_Protein_hypothesis = ProteinDetectionHypothesis.find_or_create_by_protein_detection_hypothesis_id_and_protein_ambiguity_group_id(
-    :protein_ambiguity_group_id => my_pag_id,
-    :protein_detection_hypothesis_id => mzid_prot_hyp_id,
-    :pass_threshold => pass_threshold,
-    :name => name)
+    my_Protein_hypothesis = ProteinDetectionHypothesis.find_or_create_by(
+    protein_detection_hypothesis_id: mzid_prot_hyp_id,
+    protein_ambiguity_group_id: my_pag_id) do |my_ph|
+      my_ph.pass_threshold = pass_threshold
+      my_ph.name = name
+    end
     return my_Protein_hypothesis.id
   end
 
@@ -414,11 +427,12 @@ class Mzid2db
   def saveProtHypPsiMsTerms(mzid_prot_hyp, my_prot_hyp_id)
     prot_hyp_psi_ms_cv_terms = mzid_prot_hyp.prot_hyp_psi_ms_cv_terms
     unless prot_hyp_psi_ms_cv_terms.empty?
-      prot_hyp_psi_ms_cv_terms.each do |psi_ms_t|
-        ProteinDetectionHypothesisPsiMsCvTerm.find_or_create_by_protein_detection_hypothesis_id_and_psi_ms_cv_term_accession(
-        :protein_detection_hypothesis_id => my_prot_hyp_id,
-        :psi_ms_cv_term_accession => psi_ms_t[:accession],
-        :value => psi_ms_t[:value])
+      prot_hyp_psi_ms_cv_terms.each do |mzid_psi_ms_t|
+        ProteinDetectionHypothesisPsiMsCvTerm.find_or_create_by(
+        protein_detection_hypothesis_id: my_prot_hyp_id, 
+        psi_ms_cv_term_accession: mzid_psi_ms_t[:accession]) do |my_psi_ms_t|
+          my_psi_ms_t.value = mzid_psi_ms_t[:value]
+        end
       end
     end
   end
@@ -427,11 +441,12 @@ class Mzid2db
   def saveProtHypUserParams(mzid_prot_hyp, my_prot_hyp_id)
     prot_hyp_user_params = mzid_prot_hyp.prot_hyp_user_params
     unless prot_hyp_user_params.empty?
-      prot_hyp_user_params.each do |userP|
-        ProteinDetectionHypothesisUserParam.create(
-        :protein_detection_hypothesis_id => my_prot_hyp_id,
-        :name => userP[:name],
-        :value => userP[:value])
+      prot_hyp_user_params.each do |mzid_userP|
+        ProteinDetectionHypothesisUserParam.find_or_create_by(
+        protein_detection_hypothesis_id: my_prot_hyp_id, 
+        name: mzid_userP[:name]) do |my_userP|
+          my_userP.value = mzid_userP[:value]
+        end
       end
     end
   end
@@ -442,27 +457,30 @@ class Mzid2db
     #my trick to "uniquify" the pep_Ev_refs and sii_refs by adding the mzid_file_id to the string
     my_pep_ev_ref = mzid_pep_ev_ref + "_Mzid_#{@mzid_file_id}"
     my_sii_ref = mzid_sii_ref + "_Mzid_#{@mzid_file_id}"
-    pepEv_id = PeptideEvidence.find_by_pepev_id(my_pep_ev_ref).id
-    sii_id = SpectrumIdentificationItem.find_by_sii_id(my_sii_ref).id
-    psa_id = PeptideSpectrumAssignment.where(:spectrum_identification_item_id => sii_id, :peptide_evidence_id => pepEv_id)[0].id
-    PeptideHypothesis.find_or_create_by_protein_detection_hypothesis_id_and_peptide_spectrum_assignment_id(:protein_detection_hypothesis_id => my_Protein_hypothesis_id, :peptide_spectrum_assignment_id => psa_id)
+    pepEv_id = PeptideEvidence.find_by(pepev_id: my_pep_ev_ref).id
+    sii_id = SpectrumIdentificationItem.find_by(sii_id: my_sii_ref).id
+    psa_id = PeptideSpectrumAssignment.find_by(spectrum_identification_item_id: sii_id, peptide_evidence_id:  pepEv_id).id
+    PeptideHypothesis.find_or_create_by(protein_detection_hypothesis_id: my_Protein_hypothesis_id, peptide_spectrum_assignment_id: psa_id)
   end
 
 
   def saveProteinDetection(mzid_pd)
     pd_id = mzid_pd.pd_id + "_Mzid_#{@mzid_file_id}"
     pd_name = mzid_pd.pd_name
-    #watch out protein_detection_id can be "PD_1" in different mzids. Yeah, but that is why I add mzid_file_id to the pd_id    
-    my_Pd = ProteinDetection.find_or_create_by_protein_detection_id(:protein_detection_id => pd_id, :name => pd_name)
+    #watch out protein_detection_id can be "PD_1" in different mzids. Yeah, but that is why I add mzid_file_id to the pd_id
+    my_Pd = ProteinDetection.find_or_create_by(protein_detection_id: pd_id) do |my_pd|
+      my_pd.name = pd_name
+    end
     return my_Pd
   end
 
 
   def saveProteinDetectionProtocol(mzid_pdp, my_pd_id)
     pdp_id = mzid_pdp.pdp_id
-    pdp_name = mzid_pdp.pdp_name
-    analysis_software = mzid_pdp.analysis_software
-    my_Pdp = ProteinDetectionProtocol.find_or_create_by_pdp_id_and_protein_detection_id(:protein_detection_id => my_pd_id, :pdp_id => pdp_id, :name => pdp_name, :analysis_software => analysis_software)
+    my_Pdp = ProteinDetectionProtocol.find_or_create_by(protein_detection_id: my_pd_id, pdp_id: pdp_id) do |pdp|
+      pdp.name = mzid_pdp.pdp_name
+      pdp.analysis_software = mzid_pdp.analysis_software
+    end
     return my_Pdp.id
   end
 
@@ -470,11 +488,12 @@ class Mzid2db
   def savePdpPsiMsTerms(mzid_pdp, my_pdp_id)
     mzid_psi_ms_terms = mzid_pdp.psi_ms_terms
     unless mzid_psi_ms_terms.empty?
-      mzid_psi_ms_terms.each do |psi_ms_term|
-        my_psi_term = PdpPsiMsCvTerm.find_or_create_by_protein_detection_protocol_id_and_psi_ms_cv_term_accession(
-        :protein_detection_protocol_id => my_pdp_id,
-        :psi_ms_cv_term_accession => psi_ms_term[:accession],
-        :value => psi_ms_term[:value])
+      mzid_psi_ms_terms.each do |mzid_psi_ms_t|
+        my_psi_term = PdpPsiMsCvTerm.find_or_create_by(
+        protein_detection_protocol_id: my_pdp_id, 
+        psi_ms_cv_term_accession: mzid_psi_ms_t[:accession]) do |my_psi_ms_t|
+          my_psi_ms_t.value = mzid_psi_ms_t[:value]
+        end
       end
     end
   end
@@ -483,11 +502,12 @@ class Mzid2db
   def savePdpUserParams(mzid_pdp, my_pdp_id)
     user_params = mzid_pdp.user_params
     unless user_params.empty?
-      user_params.each do |userP|
-        my_userP = PdpUserParam.find_or_create_by_protein_detection_protocol_id_and_name(
-        :protein_detection_protocol_id => my_pdp_id,
-        :name => userP[:name],
-        :value => userP[:value])
+      user_params.each do |mzid_userP|
+        my_userP = PdpUserParam.find_or_create_by(
+        protein_detection_protocol_id: my_pdp_id, 
+        name: mzid_userP[:name]) do |my_userP|
+          my_userP.value = mzid_userP[:value]
+        end
       end
     end
   end
@@ -495,7 +515,7 @@ class Mzid2db
 
   def saveProteinDetectionList(pdl_ref, my_pd_id)
     pdl_id = pdl_ref
-    pdl = ProteinDetectionList.find_or_create_by_protein_detection_id_and_pdl_id(:protein_detection_id => my_pd_id, :pdl_id => pdl_id)
+    pdl = ProteinDetectionList.find_or_create_by(protein_detection_id: my_pd_id, pdl_id: pdl_id)
     return pdl
   end
 
@@ -523,17 +543,17 @@ def rollback(mzid_file_id)
     pd_ids = []
     MzidFile.find(mzid_file_id).spectrum_identifications.each do |si|
       sip = si.spectrum_identification_protocol
-      sil = si.spectrum_identification_list
-      SpectrumIdentificationProtocol.destroy(sip.id) #sip_searched_mod_join_table, SipPsiMsCvTerms and SipUserParams are dependently destroyed 
-      pd_ids << SpectrumIdentificationList.find(sil.id).protein_detection_id
+      sil_id = si.spectrum_identification_list
+      SpectrumIdentificationProtocol.destroy(sip.id) #sip_searched_mod_join_table, SipPsiMsCvTerms and SipUserParams are dependently destroyed
+      pd_ids << SpectrumIdentificationList.find(sil_id).protein_detection_id
       this_si_sir_ids = si.spectrum_identification_results.map { |sir| sir.id }
       SpectrumIdentificationResult.destroy(this_si_sir_ids)
-      #Destroying sir, dependently destroys: 
+      #Destroying sir, dependently destroys:
         #Sii (which in turn dependently destroys siiPsiTerm, SiiUserP and Fragments)
         #SirPsiMsTerms and SirUserP
         #PeptideSpectrumAssignment (which in turn dependently destroys associated PeptideHypothesis)
         #Note that PeptideEvidence is not destroyed here
-      SpectrumIdentification.destroy(si)  
+      SpectrumIdentification.destroy(si)
       #Destroys SI, Sip, SipPsiTerms, SipUserP
     end
     ProteinDetection.destroy(pd_ids.uniq!) unless pd_ids.blank?
@@ -543,7 +563,7 @@ def rollback(mzid_file_id)
         #all PDH  are destroyed and then PAG can be destroyed (and in fact is)
         #PDL can then be destroyed
         #PDP and its PdpPsiTerms and PdpUserParams are destroyed
-        #PD is destroyed     
+        #PD is destroyed
   end
 end
 

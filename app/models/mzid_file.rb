@@ -1,9 +1,9 @@
 class MzidFile < ActiveRecord::Base
   # attr_accessible :title, :body
-  validates :location, :presence => true
-  validates :sha1, :uniqueness => true
-  validates :name, :presence => true
-  validates :experiment_id, :presence => true
+  validates :location, presence: true
+  validates :sha1, uniqueness: true
+  validates :name, presence: true
+  validates :experiment_id, presence: true
   belongs_to :experiment
   has_many :spectrum_identifications, :dependent => :destroy
   validates_associated :spectrum_identifications

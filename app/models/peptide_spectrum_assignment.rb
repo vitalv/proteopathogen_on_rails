@@ -5,5 +5,5 @@ class PeptideSpectrumAssignment < ActiveRecord::Base
   belongs_to :peptide_evidence
   validates :peptide_evidence_id, uniqueness: {scope: :spectrum_identification_item_id}, presence: true  
   has_many :peptide_hypotheses, dependent: :destroy
-  has_many :protein_detection_hypotheses, :through => :peptide_hypotheses  
+  has_many :protein_detection_hypotheses, through: :peptide_hypotheses  
 end
