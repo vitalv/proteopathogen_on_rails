@@ -1,5 +1,4 @@
 class SpectrumIdentification < ActiveRecord::Base
-  # attr_accessible :title, :body
 
   validates :si_id, uniqueness: {scope: :mzid_file_id}, presence: true
   
