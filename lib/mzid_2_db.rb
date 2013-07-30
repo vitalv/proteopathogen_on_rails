@@ -165,24 +165,22 @@ class Mzid2db
   def saveSipPsiMsTerms(mzid_sip, my_sip)
     mzid_psi_ms_terms = mzid_sip.psi_ms_terms
     unless mzid_psi_ms_terms.empty?
-      mzid_psi_ms_terms.each do |psi_ms_term|
-        my_psi_term = SipPsiMsCvTerm.find_or_create_by_spectrum_identification_protocol_id_and_psi_ms_cv_term_accession(
-        :spectrum_identification_protocol_id => my_sip.id,
-        :psi_ms_cv_term_accession => psi_ms_term[:accession],
-        :value => psi_ms_term[:value])
+      mzid_psi_ms_terms.each do |mzid_psi_t|
+        SipPsiMsCvTerm.find_or_create_by(spectrum_identification_protocol_id:  my_sip.id, psi_ms_cv_term_accession: mzid_psi_t[:accession]) do |my_sip_psi_t|
+          my_sip_psi_t.value = mzid_psi_t[:value]
+        end
       end
     end
   end
 
 
   def saveSipUserParams(mzid_sip, my_sip)
-    user_params = mzid_sip.user_params
+    mzid_userP = mzid_sip.user_params
     unless user_params.empty?
-      user_params.each do |userP|
-        my_userP = SipUserParam.find_or_create_by_spectrum_identification_protocol_id_and_name(
-        :spectrum_identification_protocol_id => my_sip.id,
-        :name => userP[:name],
-        :value => userP[:value])
+      mzid_userP.each do |mzid_userP|
+        SipUserParam.find_or_create_by(spectrum_identification_protocol_id: my_sip.id, name: mzid_userP[:name]) do |my_sip_userP|
+          my_sip_userP.value = mzid_userP[:value]
+        end
       end
     end
   end
