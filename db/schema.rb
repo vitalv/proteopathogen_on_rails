@@ -166,7 +166,7 @@ ActiveRecord::Schema.define(version: 20130726084545) do
   end
 
   create_table "searched_modifications", force: true do |t|
-    t.decimal "mass_delta",       precision: 4, scale: 0
+    t.string  "mass_delta"
     t.boolean "is_fixed"
     t.string  "residue"
     t.string  "unimod_accession"

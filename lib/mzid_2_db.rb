@@ -191,7 +191,11 @@ class Mzid2db
     unless searched_mod_arr.nil?
       searched_mod_arr.each do |mod|
         fixed = '1' if mod.fixedMod == 'true'; fixed = '0' if mod.fixedMod == 'false'
-        my_mod = SearchedModification.find_or_create_by_unimod_accession_and_mass_delta_and_residue_and_is_fixed(:unimod_accession => mod.unimod_accession, :mass_delta => mod.mass_delta, :residue => mod.residue, :is_fixed => fixed)
+        my_mod = SearchedModification.find_or_create_by(
+        unimod_accession: mod.unimod_accession,
+        mass_delta: mod.mass_delta,
+        residue: mod.residue,
+        is_fixed: fixed)
         my_sip.searched_modifications << my_mod unless my_sip.searched_modifications.include? my_mod
       end
     end
