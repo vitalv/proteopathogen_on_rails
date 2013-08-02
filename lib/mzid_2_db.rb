@@ -98,10 +98,15 @@ class Mzid2db
           saveProtHypPsiMsTerms(mzid_prot_hyp, my_Protein_hypothesis_id)
           saveProtHypUserParams(mzid_prot_hyp, my_Protein_hypothesis_id)
           mzid_prot_hyp.pep_hyp_arr.each do |mzid_pep_hyp|
-            mzid_pep_ev_ref = mzid_pep_hyp.pep_ev_ref
+            mzid_pep_ev_ref = mzid_pep_hyp.pep_ev_ref            
+            #REMEMBER:
+            #<SpectrumIdentificationItemRef>s under <PeptideHypothesis> "indicate which spectra were actually accepted as evidence for this peptide identification in the given protein."
+            #So, it may be the case that not all Spectra corresponding to a PeptideEvidence are used to infer the pdh => check examplefile.mzid
+            #It is better to associate the pdh with its peptides through the psa, i.e., at the spectrum level
             mzid_pep_hyp.sii_arr.each do |mzid_sii_ref|
               savePeptideHypothesis(my_Protein_hypothesis_id, mzid_pep_ev_ref, mzid_sii_ref)
             end
+            
           end
         end
       end
@@ -109,7 +114,6 @@ class Mzid2db
 
 
   end
-
 #-----------------------------------------------------------------------------------------------
 
 
@@ -147,8 +151,10 @@ class Mzid2db
 
   def saveSip(mzid_sip, my_si)
     sip_id = mzid_sip.sip_id
-    parent_tol_plus_value, parent_tol_minus_value = mzid_sip.parent_tolerance[0][:value], mzid_sip.parent_tolerance[1][:value]
-    fragment_tol_plus_value, fragment_tol_minus_value = mzid_sip.fragment_tolerance[0][:value], mzid_sip.fragment_tolerance[1][:value]
+    parent_tol_plus_value = mzid_sip.parent_tolerance[0][:value] + mzid_sip.parent_tolerance[0][:unitName ]
+    parent_tol_minus_value = mzid_sip.parent_tolerance[1][:value] + mzid_sip.parent_tolerance[0][:unitName ]
+    fragment_tol_plus_value = mzid_sip.fragment_tolerance[0][:value] + mzid_sip.fragment_tolerance[0][:unitName ]
+    fragment_tol_minus_value = mzid_sip.fragment_tolerance[1][:value] + mzid_sip.fragment_tolerance[0][:unitName ]
     #Check Sip model : (validates_uniqueness)
     my_sip = SpectrumIdentificationProtocol.find_or_create_by(spectrum_identification_id: my_si.id, sip_id: sip_id) do |sip|
       sip.analysis_software = mzid_sip.analysis_software
@@ -248,7 +254,7 @@ class Mzid2db
     sir_psi_ms_cv_terms = mzid_sir.sir_psi_ms_cv_terms
     sir_psi_ms_cv_terms.each do |mzid_psi_ms_t|
       SirPsiMsCvTerm.find_or_create_by(spectrum_identification_result_id: my_sir.id, psi_ms_cv_term: mzid_psi_ms_t[:accession]) do |my_psi_ms_t|
-        psi_ms_t.value = psi_ms_t[:value]
+        my_psi_ms_t.value = mzid_psi_ms_t[:value]
       end
     end
   end
@@ -428,7 +434,7 @@ class Mzid2db
     prot_hyp_psi_ms_cv_terms = mzid_prot_hyp.prot_hyp_psi_ms_cv_terms
     unless prot_hyp_psi_ms_cv_terms.empty?
       prot_hyp_psi_ms_cv_terms.each do |mzid_psi_ms_t|
-        ProteinDetectionHypothesisPsiMsCvTerm.find_or_create_by(
+        PdhPsiMsCvTerm.find_or_create_by(
         protein_detection_hypothesis_id: my_prot_hyp_id, 
         psi_ms_cv_term_accession: mzid_psi_ms_t[:accession]) do |my_psi_ms_t|
           my_psi_ms_t.value = mzid_psi_ms_t[:value]
@@ -442,7 +448,7 @@ class Mzid2db
     prot_hyp_user_params = mzid_prot_hyp.prot_hyp_user_params
     unless prot_hyp_user_params.empty?
       prot_hyp_user_params.each do |mzid_userP|
-        ProteinDetectionHypothesisUserParam.find_or_create_by(
+        PdhUserParam.find_or_create_by(
         protein_detection_hypothesis_id: my_prot_hyp_id, 
         name: mzid_userP[:name]) do |my_userP|
           my_userP.value = mzid_userP[:value]
@@ -460,7 +466,9 @@ class Mzid2db
     pepEv_id = PeptideEvidence.find_by(pepev_id: my_pep_ev_ref).id
     sii_id = SpectrumIdentificationItem.find_by(sii_id: my_sii_ref).id
     psa_id = PeptideSpectrumAssignment.find_by(spectrum_identification_item_id: sii_id, peptide_evidence_id:  pepEv_id).id
-    PeptideHypothesis.find_or_create_by(protein_detection_hypothesis_id: my_Protein_hypothesis_id, peptide_spectrum_assignment_id: psa_id)
+    PeptideHypothesis.find_or_create_by(
+    protein_detection_hypothesis_id: my_Protein_hypothesis_id, 
+    peptide_spectrum_assignment_id: psa_id)
   end
 
 
@@ -556,7 +564,8 @@ def rollback(mzid_file_id)
       SpectrumIdentification.destroy(si)
       #Destroys SI, Sip, SipPsiTerms, SipUserP
     end
-    ProteinDetection.destroy(pd_ids.uniq!) unless pd_ids.blank?
+    unless pd_ids.blank?
+      ProteinDetection.destroy(pd_ids.uniq)
       #Before Destroying PD dependencies load:
         #PDL loads, dependently destroys PAG, but before destroying, PAG loads PDH
         #PDH destroys its PeptideHypothesis and its PdhPsiTerms and PdhUserParams
@@ -564,6 +573,8 @@ def rollback(mzid_file_id)
         #PDL can then be destroyed
         #PDP and its PdpPsiTerms and PdpUserParams are destroyed
         #PD is destroyed
+    end
+      
   end
 end
 

@@ -11,14 +11,14 @@ class Mzid
   def initialize(mzid_file)
 
     @doc = Nokogiri::XML(File.open(mzid_file))
-    @mzid_file_id ||= MzidFile.find_by_location(mzid_file).id  
+    @mzid_file_id ||= MzidFile.find_by_location(mzid_file).id
     @psi_ms_cv_terms = psi_ms_cv_terms
     @unimod_cv_terms = unimod_cv_terms
-    
+
   end
-  
-  
-  
+
+
+
   def psi_ms_cv_terms
     psi_t = {}
     accessions = []
@@ -53,7 +53,7 @@ class Mzid
     pep = @doc.xpath("//xmlns:Peptide[@id='#{pep_ref}']")[0]
     sequence = pep.xpath("./xmlns:PeptideSequence").text
     pep_id = pep.attr("id")
-    modif_arr = [] #Array de Structs PeptideMod (que a su vez es un attr del objeto de la clase 
+    modif_arr = [] #Array de Structs PeptideMod (que a su vez es un attr del objeto de la clase
     pep.xpath(".//xmlns:Modification").each do |mod| #:unimod_acc
       residue = mod.attr("residues")
       avg_mass_delta = mod.attr("avgMassDelta")
@@ -63,9 +63,9 @@ class Mzid
     end
     Pep.new(sequence, modif_arr)
   end
-  
-  
-  def pep_evidence(pepEv_ref) 
+
+
+  def pep_evidence(pepEv_ref)
     pepEv = @doc.xpath("//xmlns:PeptideEvidence[@id='#{pepEv_ref}']")[0] #There is only ONE peptideEvidence per id, so it's ok I get [0]
     pepEv_id = pepEv.attr("id")
     name = pepEv.attr("name")
@@ -75,10 +75,10 @@ class Mzid
     db_seq_ref, pep_ref = pepEv.attr("dBSequence_ref"), pepEv.attr("peptide_ref")
     pep_ev = PepEv.new(pepEv_id, start_pos, end_pos, pre, post, is_decoy, db_seq_ref, name, pep_ref)#PepEv = Struct.new(:pepEv_id, :start, :end, :pre, :post, :is_decoy, :db_seq_ref, :name, :pep_ref)
     return pep_ev
-  end  
-  
-  
-  def db_seq(dbseq_ref)    
+  end
+
+
+  def db_seq(dbseq_ref)
     dBSeq = @doc.xpath("//xmlns:DBSequence[@id='#{dbseq_ref}']")[0]
     db_seq_id = dBSeq.attr("id")
     search_db_ref = dBSeq.attr("searchDatabase_ref")
@@ -89,9 +89,9 @@ class Mzid
     db_seq = DBSeq.new(db_seq_id, search_db_ref, accession, sequence, description) #DBSeq = Struct.new(:id, :search_db_ref, :accession, :sequence, :description)
     return db_seq
   end
-  
 
-#<AnalysisCollection> ------------------------------------------------------------------  
+
+#<AnalysisCollection> ------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------
 
   def spectrum_identifications
@@ -107,7 +107,7 @@ class Mzid
         sd_id = i_s.attr("spectraData_ref")
         spectra_data = @doc.xpath("//xmlns:SpectraData[@id='#{sd_id}']") #input_spectra[sd_id] = spectra_data.attr("location").to_s.split("/")[-1]
         input_spectra_files_arr << spectra_data.attr("location").to_s.split("/")[-1]
-      end      
+      end
       si.xpath(".//xmlns:SearchDatabaseRef").each do |sdb|
         sdb_id = sdb.attr("searchDatabase_ref")
         search_database = @doc.xpath("//xmlns:SearchDatabase[@id='#{sdb_id}']")[0]
@@ -117,12 +117,12 @@ class Mzid
         sdb = SearchDB.new(name, sdb_id, location, version, releaseDate, num_seq)
         search_db_arr << sdb if search_db_arr.empty?
         search_db_arr << sdb unless search_db_arr.include? sdb
-      end      
+      end
       si_arr << Si.new(si_id, sip_ref, sil_ref, si_name, activity_date, input_spectra_files_arr, search_db_arr)
     end
     return si_arr
   end
-  
+
 
   def protein_detection #max_occurs = 1
     if pd = @doc.xpath("//xmlns:ProteinDetection")[0]
@@ -134,13 +134,13 @@ class Mzid
       pd.xpath(".//xmlns:InputSpectrumIdentifications").each do |sil_ref|
         sil_ref_arr << sil_ref.attr("spectrumIdentificationList_ref")
       end
-      return ProtDetection.new(pd_id, pd_name, pdp_ref, pdl_ref, sil_ref_arr) 
+      return ProtDetection.new(pd_id, pd_name, pdp_ref, pdl_ref, sil_ref_arr)
     end
   end
 
 
 
-#<AnalysisProtocolCollection> ------------------------------------------------------------------  
+#<AnalysisProtocolCollection> ------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------
 
   def sip(sip_ref) #<SpectrumIdentificationProtcol> minOccurs:1; maxOccurs: unbounded
@@ -193,7 +193,7 @@ class Mzid
     nodes_w_uP.each do |n|
       user_params << getuserParams(n)
     end
-    user_params.flatten!    
+    user_params.flatten!
     sip_args_arr = [sip_id, search_type, threshold, analysis_software, searched_modification_arr, parent_tolerance, fragment_tolerance, psi_ms_terms, user_params]
     sip = Sip.new(sip_args_arr)
     return sip
@@ -215,7 +215,7 @@ class Mzid
   end
 
 
-#<DataCollection><AnalysisData> ------------------------------------------------------------------  
+#<DataCollection><AnalysisData> ------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------
 
   def sil(sil_ref)
@@ -225,8 +225,8 @@ class Mzid
     sil = Sil.new(sil_id, num_seq_searched)
     return sil
   end
-  
-  
+
+
   def spectrum_identification_results(sil_ref)
     results = []
     sil = @doc.xpath("//xmlns:SpectrumIdentificationList[@id='#{sil_ref}']")[0]
@@ -235,7 +235,7 @@ class Mzid
       spectrum_name = sir.attr("name")
       spectrum_id = sir.attr("spectrumID")
       sir_psi_ms_cv_terms = getcvParams(sir)
-      sir_user_params = getuserParams(sir)      
+      sir_user_params = getuserParams(sir)
       items_arr = []
       sir.xpath(".//xmlns:SpectrumIdentificationItem").each do |sii|
         sii_id = sii.attr("id")
@@ -248,7 +248,7 @@ class Mzid
         sii.xpath("./xmlns:PeptideEvidenceRef").each do |pepEvRef|
           pepEv_ref_arr << pepEvRef.attr("peptideEvidence_ref")
         end
-        fragments_arr = [] #Array de Fragments        
+        fragments_arr = [] #Array de Fragments
         if fragmentation = sii.xpath("./xmlns:Fragmentation")[0] #maxOccurs = 1
           fragmentation.xpath("./xmlns:IonType").each do |ion|
             mz_values_arr, m_intensity_arr, m_err_arr = [], [], []
@@ -267,7 +267,7 @@ class Mzid
               mz_value = mz_values_arr[i] unless mz_values_arr.empty?
               m_intensity = m_intensity_arr[i] unless m_intensity_arr.empty?
               m_err = m_err_arr[i] unless m_err_arr.empty?
-              fragments_arr << FragmentIon.new(ion_index, fragment_name, fragment_psi_ms_cv_acc, charge, mz_value, m_intensity, m_err ) 
+              fragments_arr << FragmentIon.new(ion_index, fragment_name, fragment_psi_ms_cv_acc, charge, mz_value, m_intensity, m_err )
             end
           end
         end
@@ -276,8 +276,8 @@ class Mzid
         items_arr << Sii.new(sii_id, calc_m2z, exp_m2z, rank, charge_state, pass_threshold, pepEv_ref_arr, sii_psi_ms_cv_terms, sii_user_params, fragments_arr)
       end
       results << Sir.new(sir_id, spectrum_name, spectrum_id, sir_psi_ms_cv_terms, sir_user_params, items_arr)
-    end    
-    return results #Array of Result objects (that will be related to one sil)  
+    end
+    return results #Array of Result objects (that will be related to one sil)
   end
 
 
@@ -302,15 +302,15 @@ class Mzid
          pepEv_ref_sii_arr = []
          pep_hyp.xpath(".//xmlns:SpectrumIdentificationItemRef").each do |sii_ref|
            pepEv_ref_sii_arr << sii_ref.attr("spectrumIdentificationItem_ref")
-         end         
+         end
          pep_hyp_arr << PepHyp.new(pepEv_ref, pepEv_ref_sii_arr)
        end
        prot_hyp_psi_ms_cv_terms = getcvParams(prot_hyp)
        prot_hyp_user_params = getuserParams(prot_hyp)
        protein_hypothesis_arr << ProtHyp.new(pass_thr, name, prot_hyp_id, pep_hyp_arr, prot_hyp_psi_ms_cv_terms, prot_hyp_user_params )
      end
-     pag_arr << Pag.new(pag_id, protein_hypothesis_arr)  
-   end 
+     pag_arr << Pag.new(pag_id, protein_hypothesis_arr)
+   end
    return pag_arr
  end
 
@@ -337,7 +337,7 @@ end #class Mzid
       name = getuserParams(node)[0][:name] if name == ""
     else
       #break
-      puts node.class 
+      puts node.class
       puts node.inspect
       #puts "there must be at least cvParam and/or userParam under #{node.node_name}"
     end
@@ -371,12 +371,12 @@ PepEv = Struct.new(:pepEv_id, :start, :end, :pre, :post, :is_decoy, :db_seq_ref,
 PeptideMod = Struct.new(:residue, :avg_mass_delta, :location, :cv_params)
 
 
-class Pep 
-  attr_reader :sequence, :modif_arr #, :pep_id  
+class Pep
+  attr_reader :sequence, :modif_arr #, :pep_id
   def initialize(sequence, modif_arr)
     @sequence = sequence
     @modif_arr = modif_arr
-  end  
+  end
 end
 
 
@@ -399,8 +399,8 @@ SearchedMod = Struct.new(:mass_delta, :fixedMod, :residue, :unimod_accession)
 SearchDB = Struct.new(:name, :sdb_id, :location, :version, :releaseDate, :num_seq)
 
 
-class Sip 
-  attr_reader :sip_id, :search_type, :threshold, :analysis_software, :searched_modification_arr, :parent_tolerance, :fragment_tolerance, :psi_ms_terms, :user_params  
+class Sip
+  attr_reader :sip_id, :search_type, :threshold, :analysis_software, :searched_modification_arr, :parent_tolerance, :fragment_tolerance, :psi_ms_terms, :user_params
   def initialize(args_arr)
      @sip_id = args_arr[0]
      @search_type = args_arr[1]
@@ -416,19 +416,19 @@ end
 
 
 class Sir
-  attr_reader :sir_id, :spectrum_name, :spectrum_id, :sir_psi_ms_cv_terms, :sir_user_params, :items_arr  
+  attr_reader :sir_id, :spectrum_name, :spectrum_id, :sir_psi_ms_cv_terms, :sir_user_params, :items_arr
   def initialize(sir_id, spectrum_name, spectrum_id, sir_psi_ms_cv_terms, sir_user_params, items_arr)
     @sir_id = sir_id
     @spectrum_id = spectrum_id
     @spectrum_name = spectrum_name
     @sir_psi_ms_cv_terms = sir_psi_ms_cv_terms
     @sir_user_params = sir_user_params
-    @items_arr = items_arr  
+    @items_arr = items_arr
   end
 end
 
 
-FragmentIon = Struct.new(:ion_index, :fragment_name, :fragment_psi_ms_cv_acc, :charge, :mz_value, :m_intensity, :m_err ) 
+FragmentIon = Struct.new(:ion_index, :fragment_name, :fragment_psi_ms_cv_acc, :charge, :mz_value, :m_intensity, :m_err )
 
 class Sii
   attr_reader :sii_id, :calc_m2z, :exp_m2z, :rank, :charge_state, :pass_threshold, :pepEv_ref_arr, :sii_psi_ms_cv_terms, :sii_user_params, :fragments_arr
@@ -438,7 +438,7 @@ class Sii
     @exp_m2z = exp_m2z
     @rank = rank
     @charge_state = charge_state
-    @pass_threshold = pass_threshold 
+    @pass_threshold = pass_threshold
     @pepEv_ref_arr = pepEv_ref_arr
     @sii_psi_ms_cv_terms = sii_psi_ms_cv_terms
     @sii_user_params = sii_user_params
@@ -447,7 +447,7 @@ class Sii
 end
 
 
-class Pag 
+class Pag
   attr_reader :pag_id, :prot_hyp_arr
   def initialize(pag_id, prot_hyp_arr)
     @pag_id = pag_id
@@ -456,7 +456,7 @@ class Pag
 end
 
 
-class ProtHyp 
+class ProtHyp
   attr_reader :pass_thr, :name, :prot_hyp_id, :pep_hyp_arr, :prot_hyp_psi_ms_cv_terms, :prot_hyp_user_params
   def initialize(pass_thr, name, prot_hyp_id, pep_hyp_arr, prot_hyp_psi_ms_cv_terms, prot_hyp_user_params)
     @pass_thr = pass_thr
@@ -465,12 +465,12 @@ class ProtHyp
     @pep_hyp_arr = pep_hyp_arr
     @prot_hyp_psi_ms_cv_terms = prot_hyp_psi_ms_cv_terms
     @prot_hyp_user_params = prot_hyp_user_params
-  end  
+  end
 end
 
 
 class PepHyp
-  attr_reader :pep_ev_ref, :sii_arr  
+  attr_reader :pep_ev_ref, :sii_arr
   def initialize(pepEv_ref, pepEv_ref_sii_arr)
      @pep_ev_ref = pepEv_ref
      @sii_arr = pepEv_ref_sii_arr
@@ -478,8 +478,8 @@ class PepHyp
 end
 
 
-class ProtDetection  
-  attr_reader :pd_id, :pd_name, :pdp_ref, :pdl_ref, :sil_ref_arr  
+class ProtDetection
+  attr_reader :pd_id, :pd_name, :pdp_ref, :pdl_ref, :sil_ref_arr
   def initialize(pd_id, pd_name, pdp_ref, pdl_ref, sil_ref_arr)
     @pd_id = pd_id
     @pd_name = pd_name
