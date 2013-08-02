@@ -51,7 +51,9 @@ class Admin::MzidFilesController < ApplicationController
       rollback(mzid_file_id) if MzidFile.exists? mzid_file_id #sometimes I might refresh the view with the "load .mzid file" button when the mzid_file_id was already destroyed in rollback
       render :rescue
   
-    
+    #redirect_to :action =>  :index
+
+  
   end
 
   
