@@ -4,8 +4,16 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
+#one: {}
 # column: value
 #
-two: {}
+#two: {}
 #  column: value
+
+
+my_sii:
+  sii_id: "SII_id"
+  exp_m2z: 1734.1734
+  rank: 1
+  charge_state: 2
+  pass_threshold: true

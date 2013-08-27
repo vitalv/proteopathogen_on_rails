@@ -4,8 +4,16 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
+#one: {}
 # column: value
 #
-two: {}
+#two: {}
 #  column: value
+
+
+<% 10.times do |n| %>
+sip_<%= n %>:
+  sip_id: <%= "SIP_#{n}" %>
+  spectrum_identification_id: <%= "SI_#{n}" %>
+  threshold: "threshold(s) applied to determine that a result is significant"
+<% end %>

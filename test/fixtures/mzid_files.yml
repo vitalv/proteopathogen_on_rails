@@ -9,3 +9,9 @@ one: {}
 #
 two: {}
 #  column: value
+#
+
+#  validates :location, presence: true
+#  validates :sha1, uniqueness: true
+#  validates :name, presence: true
+#  validates :experiment_id, presence: true
