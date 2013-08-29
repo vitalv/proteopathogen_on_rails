@@ -6,7 +6,7 @@ class MzidFile < ActiveRecord::Base
   validates :experiment_id, presence: true
   belongs_to :experiment
   has_many :spectrum_identifications, :dependent => :destroy
-  validates_associated :spectrum_identifications
+  #validates_associated :spectrum_identifications  #This is in the other part of the association
    
   
   def self.spectra_files  
