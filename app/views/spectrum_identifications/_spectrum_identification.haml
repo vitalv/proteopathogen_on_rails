@@ -1,0 +1,20 @@
+%table.my_table
+  %tr
+    %td.title Spectrum Identification ID
+    %td= spectrum_identification.si_id
+  - if spectrum_identification.name
+    %tr
+      %td.title Spectrum Identification Name
+      %td= spectrum_identification.name
+  - if spectrum_identification.activity_date
+    %tr
+      %td.title Spectrum Identification Activity Date
+      %td= spectrum_identification.activity_date
+  
+  %tr
+    %td{:colspan => 2}
+      = render partial: "input_spectra", locals: {sars: spectrum_identification.spectra_acquisition_runs}
+     
+  %tr
+    %td{:colspan => 2}
+      = render partial: "spectrum_identification_protocol", locals: {sip: spectrum_identification.spectrum_identification_protocol}

@@ -1,0 +1,18 @@
+%h4 Spectra Acquisition Run
+//%h4= "#{link_to_function "[-]", "workforchange('go_table','go_changer','[+]','[-]')", :id => "go_changer"} Gene Ontology annotations"
+  - sars.each do |sar|
+    %tr
+      %td.title Fraction
+      %td= sar.fraction
+    %tr
+      %td.title Instrument
+      %td= sar.instrument
+    %tr
+      %td.title Ionization
+      %td= sar.ionization
+    %tr
+      %td.title Analyzer
+      %td= sar.analyzer
+    %tr
+      %td.title Spectra File
+      %td= sar.spectra_file

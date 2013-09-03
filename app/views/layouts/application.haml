@@ -7,16 +7,15 @@
 
     %link{:rel => "icon", :href => "/images/g3360.png"}
     %title Proteopathogen
-
-
-  =stylesheet_link_tag 'style'
-  /=javascript_include_tag :defaults
+    = stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true
+    = javascript_include_tag "application", "data-turbolinks-track" => true
+    = csrf_meta_tags
 
   %body
     %div.wrapper
     
       %header
-        =image_tag 'proteopathogen_logo.png'
+        =image_tag("proteopathogen_logo.png")
 
         %nav_links
           %ul
@@ -47,7 +46,7 @@
       %div.push
       
     %div.footer
-      =image_tag "proteopathogen_logo.png" 
+      =image_tag("proteopathogen_logo.png")
       
 
     

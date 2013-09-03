@@ -24,4 +24,7 @@ class SpectrumIdentification < ActiveRecord::Base
   #~ has_many :spectrum_identification_results, through: :spectrum_identification_list #, :dependent => :destroy
   #~ 
   
+  has_many :spectra_acquisition_runs
+  
+  
 end
