@@ -1,101 +1,79 @@
-$proteopath_light_green: #DEEAEA;
-$blue_font_color: #0A2747;
-$gray: #B6B5B0;
-
-
 /*----- sticky footer thing ------*/
-* { 
-  margin: 0; 
-  }
-html, body { 
- height: 100%;
+* {
+  margin: 0; }
 
- }
+html, body {
+  height: 100%; }
+
 .wrapper {
-  min-height:100%;
+  min-height: 100%;
   height: auto !important;
   height: 100%;
   margin: 0 auto -5.5em;
-  background-color: white; 
+  background-color: white; }
 
-}
 .footer, .push {
-  height: 5.5em;
+  height: 5.5em; }
 
-}
 /*----- sticky footer thing ------*/
-
-
 body {
   /*background-color: #FAFAFA; #poner una imagen de fondo?*/
   padding: 0% 16% 0% 16%;
   font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
   font-size: 9pt;
-  color: $blue_font_color;
-}
+  color: #0a2747; }
 
-  
-p {padding: 8px 0;} /* this is bc of the sticky footer thing */ 
+p {
+  padding: 8px 0; }
 
+/* this is bc of the sticky footer thing */
 nav_links {
   padding: 5px;
-  float: right;
-  ul { list-style-type: none; }
-  li {
+  float: right; }
+  nav_links ul {
+    list-style-type: none; }
+  nav_links li {
     float: left;
-    padding: 25px 0px 0px 40px;
-    a {
-	  font-size: 11pt;
-	  text-decoration: none;
-	  font-weight: bold;
-	  color: #924C4C;
-	  &:hover{ color: #ACABAC; }
-    }
-  }
-}
-
-
+    padding: 25px 0px 0px 40px; }
+    nav_links li a {
+      font-size: 11pt;
+      text-decoration: none;
+      font-weight: bold;
+      color: #924C4C; }
+      nav_links li a:hover {
+        color: #ACABAC; }
 
 content {
-  display:block;
+  display: block;
   clear: both;
   border-top: solid #924C4C 2px;
   padding: 20px;
-  /*overflow: scroll;*/
-}
-
+  /*overflow: scroll;*/ }
 
 .my_table {
   margin: 2% auto;
   table-layout: fixed;
   width: 100%;
-  border:solid 1px #E1E1E1;
-  tr:nth-of-type(odd){
-    background-color:#F1F1F1;
-  }
-  tr:nth-of-type(even){
-    background-color:#F8F8F8;
-  } 
-  td {
-    padding: 3px 6px;
-  }
-  td.title {
+  border: solid 1px #E1E1E1; }
+  .my_table tr:nth-of-type(odd) {
+    background-color: #F1F1F1; }
+  .my_table tr:nth-of-type(even) {
+    background-color: #F8F8F8; }
+  .my_table td {
+    padding: 3px 6px; }
+  .my_table td.title {
     width: 150px;
     font-weight: bold;
-  }
-}
-
+    text-transform: uppercase; }
 
 .my_table .inner {
   border-collapse: collapse;
   margin: 1% auto;
-  width: 100%;
-  tr td {
-    border: solid 2px white;
-   
-  }
-}
-
+  width: 100%; }
+  .my_table .inner tr td {
+    border: solid 2px white; }
+  .my_table .inner td.title {
+    text-transform: lowercase; }
 
 /* Interesting for spectrum_identification_results:  wrap the <table> in a non-statically positioned <div> which has an overflow:auto CSS property. Then position the elements in the <thead> absolutely.
 
@@ -124,9 +102,3 @@ content {
   border:1px solid red;
 }
 */
-
-
-
-
-
-
