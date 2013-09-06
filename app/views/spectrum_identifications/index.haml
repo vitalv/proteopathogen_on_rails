@@ -1,10 +1,8 @@
+
 %h3= @exp_protocol
 
-//= render partial: "spectrum_identification", collection: @spectrum_identifications
-
-
-%a{:href => "#", :onclick => "my_alert"}My alert
-
-
+-# render partial: "spectrum_identification", collection: @spectrum_identifications
 = render @spectrum_identifications
+
+
 

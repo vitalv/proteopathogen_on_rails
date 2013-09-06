@@ -1,6 +1,7 @@
-%h4 #{link_to_function "[-]", "workforchange('sar','sar_changer','[+]','[-]')", :id => "sar_changer"} Spectrum Acquisition Run
-%table.my_table.inner#sar
-  - sars.each do |sar|
+
+- sars.each do |sar|
+  %a{:href => "#", :data => {'sar-id' => "#{sar.id}"} } > Spectra Acquisition Run Data #{sar.id}
+  %table#sar.my_table.inner{:data => {'sar-id' => "#{sar.id}"}}
     %tr
       %td.title Fraction
       %td= sar.fraction
@@ -17,4 +18,4 @@
       %td.title Spectra File
       %td= sar.spectra_file
 
-  -#%h4  #{link_to_function "fold", "workforchange('sar','sar_changer','unfold','fold')", :id => "sar_changer"} Spectrum Acquisition Run
+
