@@ -2,43 +2,40 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-#this is vanilla javascript:
-#function showhide(targetID) {
-#		//change target element mode
-#		var elementmode = document.getElementById(targetID).style;
-#		elementmode.display = (!elementmode.display) ? 'none' : '';
-#	}
-
-#function changetext(changee,oldText,newText) {
-#	//changes text in source element
-#	var elementToChange = document.getElementById(changee);
-#	elementToChange.innerHTML = (elementToChange.innerHTML == oldText) ? newText : oldText;
-#}
-
-#function workforchange(targetID,sourceID,oldContent,newContent) {
-#	showhide(targetID);
-#	changetext(sourceID,oldContent,newContent);
-#}
-
-
-#and this is coffeescript
-
-#showhide = (targetID) -> 
-#  elementmode = document.getElementById(targetID).style
-#  elementmode.display = (!elementmode.display) ? 'none' : ''
-
-
-#changetext = (changee,oldText,newText) ->
-#  elementToChange = document.getElementById(changee)
-#  elementToChange.innerHTML = (elementToChange.innerHTML == oldText) ? newText : oldText
-
-#workforchange = (targetID,sourceID,oldContent,newContent) ->
-#  showhide(targetID)
-#  changetext(sourceID,oldContent,newContent)
-
-
 @paintIt = (element, backgroundColor, textColor) ->
   element.style.backgroundColor = backgroundColor
   if textColor?
     element.style.color = textColor
 
+#The main jQuery function is the $() function (the jQuery function). If you pass DOM objects to this function, it returns jQuery objects, with jQuery functionality added to them
+$ ->
+  $("a[data-background-color]").click -> 
+    backgroundColor = $(this).data("background-color")
+    textColor = $(this).data("text-color")
+    paintIt(this, backgroundColor, textColor)
+
+
+$ ->
+  $("a[data-sar-id]").click ->
+    data_sar_id = $(this).data("sar-id")
+    $("table").find("table[data-sar-id='" + data_sar_id + "']").toggle "fast" 
+    return false
+    
+    
+$ ->
+  $("a[data-sip-id]").click ->
+    data_sip_id = $(this).data("sip-id")
+    $("table").find("table[data-sip-id='" + data_sip_id + "']").toggle "fast" 
+    return false    
+
+$ ->
+  $("a[data-sip-cvp-id]").click ->
+    data_sip_cvp_id = $(this).data("sip-cvp-id")
+    $("table").find("table[data-sip-cvp-id='" + data_sip_cvp_id + "']").toggle "fast" 
+    return false    
+    
+$ ->
+  $("a[data-sip-up-id]").click ->
+    data_sip_up_id = $(this).data("sip-up-id")
+    $("table").find("table[data-sip-up-id='" + data_sip_up_id + "']").toggle "fast" 
+    return false    

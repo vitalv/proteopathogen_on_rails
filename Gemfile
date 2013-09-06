@@ -14,6 +14,9 @@ gem 'nokogiri'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
 
+#Compass with support for rails 4
+gem 'compass-rails', github: 'milgner/compass-rails', branch: 'rails4'
+
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 
