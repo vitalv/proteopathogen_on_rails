@@ -9,7 +9,24 @@ gem 'sqlite3'
 gem 'mysql2'#, '0.3.12b4'
 gem 'haml'#, '3.1.7'
 
-gem 'nokogiri'
+gem 'nokogiri' #xml parser/reader I use for .mzIdentML files
+
+
+#For behavior driven development we add rspec-rails and factory_girl_rails
+group :development, :test do
+  gem 'rspec-rails', '~> 2.0'
+  gem 'factory_girl_rails', '~> 4.0'
+end
+
+#For integration testing capybara together with guard
+group :test do
+  gem 'capybara', '~>2.0.2'
+  gem 'guard'
+  gem 'guard-rspec'
+  gem 'growl'
+end
+#guard and guard-rspec for automatic testing, watches changes to files and performs tests
+
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
