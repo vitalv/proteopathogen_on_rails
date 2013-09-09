@@ -32,6 +32,19 @@ module ProteopathogenOnRails
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
     
+    #configure my test framework
+    config.generators do |g|
+      g.test_framework :rspec, 
+        fixtures: true, 
+        view_specs: false, 
+        helper_specs: false,
+        routing_specs: false, 
+        controller_specs: true, 
+        request_specs: false
+      g.fixtures_replacement :factory_girl, dir: "spec/factories"
+    end
+    #set factory_girl as fixtures replacement
+    #set request_specs false, bc I want to do integration test with capybara
     
   end
 end
