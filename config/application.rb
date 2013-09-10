@@ -44,7 +44,7 @@ module ProteopathogenOnRails
       g.fixtures_replacement :factory_girl, dir: "spec/factories"
     end
     #set factory_girl as fixtures replacement
-    #set request_specs false, bc I want to do integration test with capybara
+    #set request_specs false, bc I want to do integration test with capybara features
     
   end
 end
