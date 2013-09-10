@@ -17,4 +17,6 @@
         %td.title Submission date:
         %td= mzidf.submission_date
       %tr
-        %td{:colspan => 2, :style=> "text-align:center"}= button_to 'Spectrum Identification', experiment_spectrum_identifications_path(mzidf.id), method: :get
+        %td{:colspan => 2, :style=> "text-align:center"}= link_to '> Spectrum Identification', experiment_spectrum_identifications_path(mzidf.id)
+      %tr
+        %td{:colspan => 2, :style=> "text-align:center"}= link_to '> Spectrum Identification Results', "#"
