@@ -19,7 +19,9 @@ group :development, :test do
 end
 
 #For integration testing capybara together with guard
-group :test do
+group :test do #these are grouped under test bc are only used when actually running specs
+  gem 'faker' #generates random data in combination with factory_girl
+  gem 'shoulda-matchers' #allows to test associations like this: " it { should belong_to(:experiment) }
   gem 'capybara', '~>2.0.2'
   gem 'guard'
   gem 'guard-rspec'
