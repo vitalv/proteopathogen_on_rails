@@ -1,6 +1,7 @@
 class SpectrumIdentificationProtocol < ActiveRecord::Base
 
   validates :sip_id, presence: true
+  validates :search_type, presence: true
  
   has_and_belongs_to_many :searched_modifications, join_table: 'sip_searched_mod_join_table'
   before_destroy { |sip| sip.searched_modifications.clear } #avoids orphans in join table
