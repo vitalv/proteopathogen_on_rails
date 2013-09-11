@@ -1,6 +1,8 @@
+require 'faker'
+
 FactoryGirl.define do
-  factory :user do
-    email "vvialasf@farm.ucm.es"
-    password "proteo.que"
+  factory :user do |f|
+    f.email { Faker::Internet.email } 
+    f.password { Faker::Lorem.words[0] }
   end
 end

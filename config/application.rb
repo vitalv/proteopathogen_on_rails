@@ -35,16 +35,14 @@ module ProteopathogenOnRails
     #configure my test framework
     config.generators do |g|
       g.test_framework :rspec, 
-        fixtures: true, 
-        view_specs: false, 
-        helper_specs: false,
-        routing_specs: false, 
+        fixtures: true, #specifies to generate a fixture for each model (using a Factory Girl factory, instead of an actual fixture) 
+        view_specs: false, #don't want view specs, instead use request specs to test interface elements
+        helper_specs: false, #false por ahora
+        routing_specs: false, #omits a spec file for config/routes.rb
         controller_specs: true, 
-        request_specs: false
-      g.fixtures_replacement :factory_girl, dir: "spec/factories"
+        request_specs: false #set request_specs false, bc I want to do integration test with capybara features
+      g.fixtures_replacement :factory_girl, dir: "spec/factories" #tells rails to generate factories instead of fixtures and save in spec/factories
     end
-    #set factory_girl as fixtures replacement
-    #set request_specs false, bc I want to do integration test with capybara features
-    
+        
   end
 end

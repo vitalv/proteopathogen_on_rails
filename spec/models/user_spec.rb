@@ -7,6 +7,10 @@ describe "An instance of", User do  #"feature" is alias for "describe ..., :type
     @user = FactoryGirl.build(:user) ## Returns a User instance that's not saved
   end
 
+  it "should be valid when created" do
+    FactoryGirl.create(:user).should be_valid
+  end
+
   it "should be properly initialized" do  
     expect(@user).to be_a(User)  
   end
