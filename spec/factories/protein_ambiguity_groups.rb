@@ -1,7 +1,7 @@
 require 'faker'
 
 FactoryGirl.define do
-  #~ factory : do |f|
+  factory : do |f|
     #~ f. { Faker:: } 
     #~ f. { Faker::}
   #~ end
