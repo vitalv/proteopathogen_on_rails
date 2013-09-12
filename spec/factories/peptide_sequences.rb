@@ -1,8 +1,9 @@
-require 'faker'
 
 FactoryGirl.define do
-  #~ factory : do |f|
-    #~ f. { Faker:: } 
-    #~ f. { Faker::}
-  #~ end
+  factory :peptide_sequence do |f|
+    sequence(:sequence) { "#{(0...rand(50)+10).map{ ('A'..'Z').to_a[rand(26)] }.join}" } 
+        
+  end
+  
 end
+

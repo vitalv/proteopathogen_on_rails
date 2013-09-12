@@ -3,11 +3,11 @@ require 'spec_helper'
 describe "An instance of", SpectrumIdentificationList do
 
   before "built with factory girl" do 
-    @sil = FactoryGirl.build(:spectrum_identification_list)
+    @sil = build(:spectrum_identification_list)
   end
 
   it "has a valid factory" do
-    FactoryGirl.create(:spectrum_identification_list).should be_valid
+    create(:spectrum_identification_list).should be_valid
   end
 
   it "should be properly initialized" do  
@@ -25,19 +25,15 @@ describe "An instance of", SpectrumIdentificationList do
   end
 
   it "should not be valid if there is already a sil with same sil_id for the si it belongs to" do
-    pending
-    #~ @sip.search_type = nil
-    #~ @sip.should_not be_valid
-    #~ @sip.should have(1).errors_on(:search_type)
-    #~ #expect(@si).to have(1).errors_on(:mzid_file_id)
+    si = create(:spectrum_identification)
+    create(:spectrum_identification_list, spectrum_identification: si, sil_id: "SIL_1")
+    dup_sil = build(:spectrum_identification_list, spectrum_identification: si, sil_id: "SIL_1")
+    dup_sil.should_not be_valid
   end
 
-  #~ it "should belong to SpectrumIdentification" do 
-    #~ @sip.should belong_to(:spectrum_identification)
-  #~ end
-
-
-#  validates :spectrum_identification_id, uniqueness: {scope: :sip_id}, presence: true
+  it "should belong to SpectrumIdentification" do 
+    @sil.should belong_to(:spectrum_identification)
+  end
 
     
 end

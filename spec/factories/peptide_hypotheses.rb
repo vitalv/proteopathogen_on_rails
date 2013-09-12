@@ -1,8 +1,6 @@
-require 'faker'
-
 FactoryGirl.define do
-  #~ factory : do |f|
-    #~ f. { Faker:: } 
-    #~ f. { Faker::}
-  #~ end
+  factory :peptide_hypothesis do |f|
+    association :protein_detection_hypothesis
+    association :peptide_spectrum_assignment
+  end
 end
