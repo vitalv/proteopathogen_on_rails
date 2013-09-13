@@ -5,5 +5,5 @@ class SpectrumIdentificationList < ActiveRecord::Base
   has_many :spectrum_identification_results, dependent: :destroy
   validates_associated :spectrum_identification_results
   belongs_to :protein_detection
-  #protein_detection_id can be null
+  #protein_detection_id can be null !!!
 end

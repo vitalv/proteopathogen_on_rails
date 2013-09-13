@@ -35,6 +35,9 @@ describe "An instance of", SpectrumIdentificationList do
     @sil.should belong_to(:spectrum_identification)
   end
 
+  it "should belong to ProteinDetection" do 
+    @sil.should belong_to(:protein_detection)
+  end
     
 end
 
