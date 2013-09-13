@@ -2,8 +2,11 @@ class ProteinDetectionHypothesis < ActiveRecord::Base
   # attr_accessible :title, :body
   validates :protein_detection_hypothesis_id, presence: true
   validates :pass_threshold, presence: true
+  validates :protein_ambiguity_group_id, presence: true
   
   belongs_to :protein_ambiguity_group
+  
+  
   has_many :pdh_psi_ms_cv_terms, dependent: :destroy
   has_many :pdh_user_params, dependent: :destroy
   

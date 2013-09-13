@@ -1,8 +1,6 @@
-require 'faker'
-
 FactoryGirl.define do
-  #~ factory : do |f|
-    #~ f. { Faker:: } 
-    #~ f. { Faker::}
-  #~ end
+  factory :protein_detection_list do |f|
+    sequence(:pdl_id) { |i| "PDL_#{i}" }
+    association :protein_detection
+  end
 end

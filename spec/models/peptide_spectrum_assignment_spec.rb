@@ -1,4 +1,3 @@
-
 require 'spec_helper'
 
 describe "An instance of", PeptideSpectrumAssignment do
@@ -44,6 +43,14 @@ describe "An instance of", PeptideSpectrumAssignment do
   it "should belong to spectrum identification item" do
      @psa.should belong_to(:spectrum_identification_item)
   end  
+
+  it "should have many peptide hypotheses" do
+    @psa.should have_many(:peptide_hypotheses)
+  end
+  
+   it "should have many protein detection hypotheses through peptide hypotheses" do
+    @psa.should have_many(:protein_detection_hypotheses).through(:peptide_hypotheses)
+  end
 
 
 end
