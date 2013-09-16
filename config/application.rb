@@ -43,6 +43,9 @@ module ProteopathogenOnRails
         request_specs: false #set request_specs false, bc I want to do integration test with capybara features
       g.fixtures_replacement :factory_girl, dir: "spec/factories" #tells rails to generate factories instead of fixtures and save in spec/factories
     end
+    
+    #added this to get rid of "DEPRECATION WARNING: You didn't set config.secret_key_base" when running guard/rspec 
+    config.secret_key_base = 'blipblapblup'
         
   end
 end
