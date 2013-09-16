@@ -3,10 +3,10 @@
   %p No stored .mzid files
 -else
   -@all_mzid_files.each do |mzidf|
-    %table.my_table
+    %table{:id => "exp_table_#{mzidf.id}", :class =>"my_table" }
       %tr
         %td.title Experiment:
-        %td= Experiment.find(mzidf.experiment_id).protocol
+        %td= mzidf.experiment.protocol#Experiment.find(mzidf.experiment_id).protocol
       %tr
         %td.title Mzid file:
         %td= mzidf.name
@@ -17,6 +17,6 @@
         %td.title Submission date:
         %td= mzidf.submission_date
       %tr
-        %td{:colspan => 2, :style=> "text-align:center"}= link_to '> Spectrum Identification', experiment_spectrum_identifications_path(mzidf.id)
+        %td{:colspan => 2, :style=> "text-align:center"}= link_to '> Spectrum Identification', experiment_spectrum_identifications_path(mzidf.id), :id => "si_#{mzidf.id}"
       %tr
         %td{:colspan => 2, :style=> "text-align:center"}= link_to '> Spectrum Identification Results', "#"

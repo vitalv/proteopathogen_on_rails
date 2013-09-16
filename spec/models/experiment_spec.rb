@@ -30,6 +30,5 @@ describe "An instance of", Experiment do  #"feature" is alias for "describe ...,
     expect(@experiment).to have(1).errors_on(:protocol)
   end
   
-  
 end
 

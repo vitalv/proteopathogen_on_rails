@@ -11,6 +11,7 @@ describe MzidFilesController do
       mzidf = FactoryGirl.create(:mzid_file)
       get :index
       assigns(:all_mzid_files).should eq([mzidf]) #@all_mzid_files
+      
     end
     
     it "displays the :index view" do
