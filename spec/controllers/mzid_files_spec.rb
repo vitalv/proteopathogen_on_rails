@@ -6,12 +6,19 @@ require 'spec_helper'
 describe MzidFilesController do
  
   describe "GET #index " do
+  
     it "generates list of mzid files" do
       mzidf = FactoryGirl.create(:mzid_file)
       get :index
       assigns(:all_mzid_files).should eq([mzidf]) #@all_mzid_files
     end
-    it "displays the :index view" 
+    
+    it "displays the :index view" do
+      get :index
+      response.should render_template :index  
+    end
+    
   end
+  
 
 end
