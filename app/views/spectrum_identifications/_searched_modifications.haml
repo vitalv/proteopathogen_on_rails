@@ -1,0 +1,17 @@
+%tr
+  %td{:colspan => 2}
+    %a{:href => "#", :data => {'sip-mods-id' => "#{sip.id}"} } > Searched Modifications
+    %table#sip_mods.my_table.inner{:data => {'sip-mods-id' => "#{sip.id}"}}
+      %tr
+        %td= "mass delta"
+        %td= "fixed"
+        %td= "residue"
+        %td= "unimod accession"
+        %td= "type of modification"
+      - sip.searched_modifications.each do |mod|
+        %tr
+          %td= mod.mass_delta
+          %td= mod.is_fixed
+          %td= mod.residue
+          %td= mod.unimod_accession
+          %td= UnimodCvTerm.where(accession: mod.unimod_accession)[0].name       

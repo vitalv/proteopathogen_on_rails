@@ -1,0 +1,17 @@
+-mzid_files.each do |mzidf|
+  %table{:id => "mzidf_table_#{mzidf.id}", :class =>"my_table inner" }
+    %tr
+      %td.title Mzid file:
+      %td= mzidf.name
+    %tr
+      %td.title Sha-1:
+      %td= mzidf.sha1
+    %tr
+      %td.title File original location:
+      %td= mzidf.location
+    %tr
+      %td.title Submission date:
+      %td= mzidf.submission_date
+    %tr
+      %td{:colspan => 2, :style=> "text-align:center"}
+        = link_to '> Spectrum Identification', mzid_file_spectrum_identifications_path(mzidf.id), :id => "mzidf_#{mzidf.id}_si"      

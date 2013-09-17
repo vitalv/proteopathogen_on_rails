@@ -39,3 +39,9 @@ $ ->
     data_sip_up_id = $(this).data("sip-up-id")
     $("table").find("table[data-sip-up-id='" + data_sip_up_id + "']").toggle "fast" 
     return false    
+
+$ ->
+  $("a[data-sip-mods-id]").click ->
+    data_sip_mods_id = $(this).data("sip-mods-id")
+    $("table").find("table[data-sip-mods-id='" + data_sip_mods_id + "']").toggle "fast" 
+    return false    
