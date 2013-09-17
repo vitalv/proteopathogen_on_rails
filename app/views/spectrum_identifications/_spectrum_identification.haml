@@ -1,4 +1,4 @@
-%table.my_table
+%table{:id => "si_table_#{spectrum_identification.id}", :class =>"my_table" }
   %tr
     %td.title Spectrum Identification ID
     %td= spectrum_identification.si_id
@@ -14,9 +14,13 @@
     %tr
       %td{:colspan => 2}
         = render partial: "input_spectra", locals: {sars: spectrum_identification.spectra_acquisition_runs}
+        
   -unless spectrum_identification.spectrum_identification_protocol.blank?
     %tr
       %td{:colspan => 2}
         = render partial: "spectrum_identification_protocol", locals: {sip: spectrum_identification.spectrum_identification_protocol}
 
-
+  -unless spectrum_identification.spectrum_identification_list.blank? #can this be blank?
+    %tr
+      %td{:colspan => 2, :style=> "text-align:center"}
+        =  link_to '> Spectrum Identification Results', spectrum_identification_results_path(spectrum_identification.id), :id => "si_#{spectrum_identification.id}_results"
