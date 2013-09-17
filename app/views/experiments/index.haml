@@ -1,0 +1,22 @@
+%h2 Experiments
+-if @experiments.blank?
+  %p No stored Experiments 
+-else
+  -@experiments.each do |exp|
+    %table{:id => "exp_table_#{exp.id}", :class =>"my_table" }
+      %tr
+        %td.title protocol:
+        %td= exp.protocol
+      %tr
+        %td.title organism:
+        %td= exp.organism
+      %tr
+        %td.title contact:
+        %td= exp.researcher
+      %tr
+        %td.title date:
+        %td= exp.date
+      %tr
+        %td{:colspan => 2}
+          = render partial: "mzid_files", locals: {mzid_files: exp.mzid_files}
+  

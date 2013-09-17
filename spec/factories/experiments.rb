@@ -6,6 +6,7 @@ FactoryGirl.define do
     f.protocol { Faker::Lorem.paragraph }
     sequence(:date) { |i| i.days.ago }
     f.researcher { Faker::Name.name }
+    #association :mzid_file
   end
 end
 

@@ -30,5 +30,15 @@ describe "An instance of", Experiment do  #"feature" is alias for "describe ...,
     expect(@experiment).to have(1).errors_on(:protocol)
   end
   
+  it "should have many mzid_files" do 
+    @experiment.should have_many(:mzid_files)
+  end
+  
+  it "should have a list of associated mzid_files.ids" do
+    e = FactoryGirl.create(:experiment)
+    e.mzid_files = [FactoryGirl.create(:mzid_file)]
+    e.mzid_files.should_not be_empty
+  end
+
 end
 
