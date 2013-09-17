@@ -42,6 +42,9 @@ ProteopathogenOnRails::Application.routes.draw do
     resources :spectrum_identifications
   end 
  
+  resources :spectrum_identifications do
+    resources :spectrum_identification_results, path: 'results', as: 'results'
+  end
 
   
   #resources :mzid_files, path: 'experiments', as: 'experiments' do
