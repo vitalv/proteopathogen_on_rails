@@ -21,8 +21,7 @@ class SpectrumIdentification < ActiveRecord::Base
   #Note: SpectrumIdentificationProtocol and SpectrumIdentificationList are both required attributes in element <SpectrumIdentification> which MUST be (and always is) present in the mzid file
   #so I am not validating them here. 
    
-  has_many :spectrum_identification_results, through: :spectrum_identification_list #, :dependent => :destroy
-  #~ 
+  #has_many :spectrum_identification_results, through: :spectrum_identification_list #, :dependent => :destroy
   
   has_many :spectra_acquisition_runs
   
