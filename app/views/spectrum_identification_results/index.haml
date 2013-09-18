@@ -1,1 +1,11 @@
+%h3= @protocol
+%h4= "Spectrum Identification: #{@si.si_id} - Spectrum Identification List:  #{@sil.sil_id}"
 
+%div{:id => 'table-wrapper' }
+  %div{:id => 'table-scroll' }
+    %table{:id => "si_#{@si.id}_sir_table", :class =>"spectrum_results_table" }
+      %tr
+        %th Spectrum Result ID
+        %th Spectrum Name
+        %th Spectrum ID
+      = render @spectrum_identification_results

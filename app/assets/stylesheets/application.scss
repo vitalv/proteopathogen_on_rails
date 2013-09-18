@@ -74,6 +74,42 @@ content {
 
 
 
+.my_table {
+  margin: 2% auto;
+  table-layout: fixed;
+  width: 100%;
+  border:solid 1px #E1E1E1;
+  tr:nth-of-type(odd){
+    background-color:#F1F1F1;
+  }
+  tr:nth-of-type(even){
+    background-color:#F8F8F8;
+  } 
+  td {
+    padding: 3px 6px;
+  }
+  td.title {
+    width: 200px;
+    font-weight: bold;
+    text-transform:uppercase;
+  }
+  td h4 {
+    padding-top: 10px;
+  }
+}
+
+
+.my_table .inner {
+  border-collapse: collapse;
+  margin: 1% auto;
+  width: 100%;
+  tr td {
+    border: solid 2px white;
+  }
+  td.title { text-transform: lowercase; } 
+}
+
+
 /* Interesting for spectrum_identification_results:  wrap the <table> in a non-statically positioned <div> which has an overflow:auto CSS property. Then position the elements in the <thead> absolutely.
 
 #table-wrapper {
@@ -101,7 +137,6 @@ content {
   border:1px solid red;
 }
 */
-
 
 
 

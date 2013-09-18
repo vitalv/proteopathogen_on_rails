@@ -1,3 +1,103 @@
 // Place all the styles related to the SpectrumIdentificationResults controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+/*
+.spectrum_results_table {
+  margin: 0% auto;
+  table-layout: fixed;
+  width: 100%;
+  border:solid 1px #E1E1E1;
+  tr:nth-of-type(odd){
+    background-color:#F1F1F1;
+  }
+  tr:nth-of-type(even){
+    background-color:#F8F8F8;
+  } 
+  td {
+    padding: 3px 6px;
+  }
+  td.title {
+    width: 200px;
+    font-weight: bold;
+    text-transform:uppercase;
+  }
+  td h4 {
+    padding-top: 10px;
+  }
+}
+
+
+.my_table .inner {
+  border-collapse: collapse;
+  margin: 1% auto;
+  width: 100%;
+  tr td {
+    border: solid 2px white;
+  }
+  td.title { text-transform: lowercase; } 
+}
+
+*/
+/*Interesting for spectrum_identification_results:  wrap the <table> in a non-statically positioned <div> which has an overflow:auto CSS property. Then position the elements in the <thead> absolutely.*/
+
+#table-wrapper {
+  position:relative;
+}
+#table-scroll {
+  height:150px;
+  overflow:auto;  
+  margin-top:20px;
+}
+#table-wrapper table {
+  width:100%;    
+}
+
+
+
+#table-wrapper table.spectrum_results_table {
+  margin: 0% auto;
+  table-layout: fixed;
+  width: 100%;
+  border:solid 2px #E1E1E1;
+  tr:nth-of-type(odd){
+    background-color:#F1F1F1;
+  }
+  tr:nth-of-type(even){
+    background-color:#F8F8F8;
+  } 
+  tr.hover {
+   cursor: pointer;
+   /* whatever other hover styles you want */
+  }
+  
+  td {
+    padding: 3px 6px;
+  }
+  td.title {
+    width: 200px;
+    font-weight: bold;
+    text-transform:uppercase;
+  }
+  td h4 {
+    padding-top: 10px;
+  }
+}
+
+
+
+/*
+#table-wrapper table thead th .text {
+  position:absolute;   
+  top:-20px;
+  z-index:2;
+  height:20px;
+  width:35%;
+  border:1px solid red;
+}
+*/
+
+
+
+
