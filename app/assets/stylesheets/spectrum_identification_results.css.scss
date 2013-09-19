@@ -56,33 +56,8 @@
 
 
 
-#table-wrapper table.spectrum_results_table {
+#table-wrapper table.my_table {
   margin: 0% auto;
-  table-layout: fixed;
-  width: 100%;
-  border:solid 2px #E1E1E1;
-  tr:nth-of-type(odd){
-    background-color:#F1F1F1;
-  }
-  tr:nth-of-type(even){
-    background-color:#F8F8F8;
-  } 
-  tr.hover {
-   cursor: pointer;
-   /* whatever other hover styles you want */
-  }
-  
-  td {
-    padding: 3px 6px;
-  }
-  td.title {
-    width: 200px;
-    font-weight: bold;
-    text-transform:uppercase;
-  }
-  td h4 {
-    padding-top: 10px;
-  }
 }
 
 

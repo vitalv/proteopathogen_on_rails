@@ -1,0 +1,9 @@
+%tr
+  %td{:colspan => 2}
+    -#%a{:href => "#", :data => {'sip-cvp-id' => "#{sip.id}"} } > PSI-MS CV Params
+    = link_to "> PSI-MS CV Params", '#', :data => {'sip-cvp-id' => "#{sip.id}"}, remote: true
+    %table#sip_cvp.my_table.inner{:data => {'sip-cvp-id' => "#{sip.id}"}}
+      - sip.sip_psi_ms_cv_terms.each do |cvp|
+        %tr
+          %td.title= cvp.psi_ms_cv_term_accession
+          %td= PsiMsCvTerm.where(accession: cvp.psi_ms_cv_term_accession)[0].name

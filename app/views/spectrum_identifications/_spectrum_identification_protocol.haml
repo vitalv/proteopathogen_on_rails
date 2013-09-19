@@ -1,4 +1,5 @@
-%a{:href => "#", :data => {'sip-id' => "#{sip.id}"} } > Spectrum Identification Protocol
+-#%a{:href => "#", :data => {'sip-id' => "#{sip.id}"} } > Spectrum Identification Protocol
+= link_to "> Spectrum Identification Protocol", '#',  :data => {'sip-id' => "#{sip.id}" }, remote: true
 %table#sip.my_table.inner{:data => {'sip-id' => "#{sip.id}"}}
   %tr
     %td.title Analysis Software
@@ -24,25 +25,11 @@
 
   -# maybe put psi cv terms and user params in sendos partials?
 
-  -unless sip.sip_psi_ms_cv_terms.blank?  
-    %tr
-      %td{:colspan => 2}
-        %a{:href => "#", :data => {'sip-cvp-id' => "#{sip.id}"} } > PSI-MS CV Params
-        %table#sip_cvp.my_table.inner{:data => {'sip-cvp-id' => "#{sip.id}"}}
-          - sip.sip_psi_ms_cv_terms.each do |cvp|
-            %tr
-              %td.title= cvp.psi_ms_cv_term_accession
-              %td= PsiMsCvTerm.where(accession: cvp.psi_ms_cv_term_accession)[0].name
+  -unless sip.sip_psi_ms_cv_terms.blank?
+    = render partial: "sip_psi_ms_cv_terms", locals: {sip: sip}
 
-  -unless sip.sip_user_params.blank?    
-    %tr
-      %td{:colspan => 2}
-        %a{:href => "#", :data => {'sip-up-id' => "#{sip.id}"} } > User Params
-        %table#sip_up.my_table.inner{:data => {'sip-up-id' => "#{sip.id}"}}
-          - sip.sip_user_params.each do |up|
-            %tr
-              %td.title= up.name
-              %td= up.value
+  -unless sip.sip_user_params.blank?
+    = render partial: "sip_user_params", locals: {sip: sip}
               
   -unless sip.searched_modifications.blank?    
     = render partial: "searched_modifications", locals: {sip: sip} 
