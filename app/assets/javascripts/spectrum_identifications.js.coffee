@@ -2,19 +2,6 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-@paintIt = (element, backgroundColor, textColor) ->
-  element.style.backgroundColor = backgroundColor
-  if textColor?
-    element.style.color = textColor
-
-#The main jQuery function is the $() function (the jQuery function). If you pass DOM objects to this function, it returns jQuery objects, with jQuery functionality added to them
-$ ->
-  $("a[data-background-color]").click -> 
-    backgroundColor = $(this).data("background-color")
-    textColor = $(this).data("text-color")
-    paintIt(this, backgroundColor, textColor)
-
-
 $ ->
   $("a[data-sar-id]").click ->
     data_sar_id = $(this).data("sar-id")

@@ -7,6 +7,13 @@ class SpectrumIdentificationResultsController < ApplicationController
     #@protocol = Experiment.find(experiment_id).protocol
     #@spectra_acquisition_runs = SpectraAcquisitionRun.where(:mzid_file_id => params[:experiment_id])
     @spectrum_identification_results = @si.spectrum_identification_list.spectrum_identification_results
+    
+    respond_to do |format|
+      format.html #“if the client wants HTML in response to this action, just respond as we would have before
+      #format.js
+    end
+    
+    
   end
 
 end
