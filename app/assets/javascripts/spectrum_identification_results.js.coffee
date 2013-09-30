@@ -4,3 +4,7 @@
 
 jQuery ->
   $('#sii_table').dataTable()
+
+
+$ ->
+  $('.my_table').dataTable()
