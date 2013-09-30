@@ -4,11 +4,13 @@
 %div{:id => 'table-wrapper' }
   %div{:id => 'table-scroll' }
     %table{:id => "si_#{@si.id}_sir_table", :class =>"my_table" }
-      %tr
-        %th Spectrum Result ID
-        %th Spectrum Name
-        %th Spectrum ID
-      = render @spectrum_identification_results
+      %thead
+        %tr
+          %th Spectrum Result ID
+          %th Spectrum Name
+          %th Spectrum ID
+      %tbody
+        = render @spectrum_identification_results
 
 -#%div{:id => 'sii-wrapper'}
 %div{:id => 'table-wrapper' , :class => 'sii'}
@@ -22,3 +24,22 @@
         %th Charge
         %th Pass threshold 
       = render partial: "spectrum_identification_item"
+
+
+%div{:id => 'datatable_div'}
+  %table{:id => "sii_table"}
+    %thead
+      %tr
+        %th Spectrum Result ID
+        %th Spectrum Name
+        %th Spectrum ID
+    %tbody
+      %tr
+        %td Spectrum Result ID
+        %td Spectrum Name
+        %td Spectrum ID
+      %tr
+        %td Spectrum Result ID
+        %td Spectrum Name
+        %td Spectrum ID
+                    

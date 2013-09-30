@@ -6,6 +6,13 @@ GIT
     compass-rails (1.0.3)
       compass (>= 0.12.2, < 0.14)
 
+GIT
+  remote: git://github.com/rweng/jquery-datatables-rails.git
+  revision: 494f752b8eb8350f33841c822a67d014c869219f
+  specs:
+    jquery-datatables-rails (1.11.2)
+      jquery-rails
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -218,6 +225,7 @@ DEPENDENCIES
   guard-rspec
   haml
   jbuilder (~> 1.2)
+  jquery-datatables-rails!
   jquery-rails
   mysql2
   nokogiri
