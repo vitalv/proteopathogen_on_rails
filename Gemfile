@@ -12,6 +12,14 @@ gem 'haml'#, '3.1.7'
 gem 'nokogiri' #xml parser/reader I use for .mzIdentML files
 
 
+
+
+#tablas bonitas
+gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
+
+
+
+
 #For behavior driven development we add rspec-rails and factory_girl_rails
 group :development, :test do
   gem 'rspec-rails', '~> 2.0'
