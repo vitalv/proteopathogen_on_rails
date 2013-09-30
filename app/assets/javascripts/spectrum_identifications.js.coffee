@@ -35,5 +35,10 @@ $ ->
 
 
 $ ->
-  $("#sip_mods").dataTable()
+  $("#sip_mods.dataTable").dataTable(
+	  "bLengthChange": false,
+	  "bFilter": false,
+	  "bInfo": false,
+	  "bPaginate": false
+  )
   

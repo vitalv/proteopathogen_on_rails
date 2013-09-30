@@ -1,44 +1,30 @@
 %h3= @protocol
 %h4= "Spectrum Identification: #{@si.si_id} - Spectrum Identification List:  #{@sil.sil_id}"
-
-%div{:id => 'table-wrapper' }
-  %div{:id => 'table-scroll' }
-    %table{:id => "si_#{@si.id}_sir_table", :class =>"my_table" }
-      %thead
-        %tr
-          %th Spectrum Result ID
-          %th Spectrum Name
-          %th Spectrum ID
-      %tbody
-        = render @spectrum_identification_results
-
--#%div{:id => 'sii-wrapper'}
-%div{:id => 'table-wrapper' , :class => 'sii'}
-  %div{:id => 'table-scroll' }
-    %table{:id => "sii_table", :class =>"my_table" }
-      %tr
-        %th Spectrum Identification Item
-        %th Calculated m/z
-        %th Expected m/z
-        %th Rank
-        %th Charge
-        %th Pass threshold 
-      = render partial: "spectrum_identification_item"
-
-
-%table{:id => "sii_table"}
+%br
+%table#sir_table.my_table{:data => {'si-id' => "#{@si.id}"}}
   %thead
     %tr
       %th Spectrum Result ID
       %th Spectrum Name
       %th Spectrum ID
   %tbody
-    %tr
-      %td Spectrum Result ID
-      %td Spectrum Name
-      %td Spectrum ID
-    %tr
-      %td Spectrum Result ID
-      %td Spectrum Name
-      %td Spectrum ID
-                    
+    = render @spectrum_identification_results
+
+
+
+
+
+-#%div{:id => 'sii-wrapper'}
+-#%div{:id => 'table-wrapper' , :class => 'sii'}
+-#  %div{:id => 'table-scroll' }
+-#    %table{:id => "sii_table", :class =>"my_table" }
+-#      %tr
+-#        %th Spectrum Identification Item
+-#        %th Calculated m/z
+-#        %th Expected m/z
+-#        %th Rank
+-#        %th Charge
+-#        %th Pass threshold 
+-#      = render partial: "spectrum_identification_item"
+
+
