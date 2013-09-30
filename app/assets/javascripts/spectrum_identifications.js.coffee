@@ -32,3 +32,8 @@ $ ->
     data_sip_mods_id = $(this).data("sip-mods-id")
     $("table").find("table[data-sip-mods-id='" + data_sip_mods_id + "']").toggle "fast" 
     return false    
+
+
+$ ->
+  $("#sip_mods").dataTable()
+  
