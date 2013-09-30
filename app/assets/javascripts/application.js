@@ -14,5 +14,7 @@
 //= require jquery_ujs
 //= require dataTables/jquery.dataTables
 //= require spectrum_identifications
+//= require spectrum_identification_results
 //= require_tree .
+
 
