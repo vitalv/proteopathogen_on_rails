@@ -2,14 +2,14 @@
 %h4= "Spectrum Identification: #{@si.si_id} - Spectrum Identification List:  #{@sil.sil_id}"
 %p
   %h4= "Spectrum Identification Results"
-%table#sir_table.my_table{:data => {'si-id' => "#{@si.id}"}}
+%table#sir_table.my_table{:data => {'si-id' => "#{@si.id}", 'source' => spectrum_identification_results_url(format: "json")}}
   %thead
     %tr
       %th Spectrum Result ID
       %th Spectrum Name
       %th Spectrum ID
   %tbody
-    = render @spectrum_identification_results
+    -#= render @spectrum_identification_results
 
 %br
 %p

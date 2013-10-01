@@ -19,6 +19,9 @@ gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-ra
 
 
 
+#server side datatables processing
+gem 'will_paginate'
+
 
 #For behavior driven development we add rspec-rails and factory_girl_rails
 group :development, :test do
