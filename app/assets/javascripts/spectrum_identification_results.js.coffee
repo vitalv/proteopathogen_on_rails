@@ -3,5 +3,9 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $ ->
-  $("#sir_table").dataTable()
-  $("#sir_table tbody").delegate("tr", "click", rowClick)
+  $("#sir_table").dataTable
+    sPaginationType: "full_numbers"
+    bJQueryUI: true
+    bProcessing: true
+    bServerSide: true
+    sAjaxSource: $('#sir_table').data('source')
