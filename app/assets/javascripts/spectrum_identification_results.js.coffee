@@ -4,3 +4,4 @@
 
 $ ->
   $("#sir_table").dataTable()
+  $("#sir_table tbody").delegate("tr", "click", rowClick)
