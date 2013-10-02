@@ -1,7 +1,7 @@
 class SpectrumIdentificationResultsDatatable
   #this is called from respond_to format.json render json in the spectrum_identification_results controller to generate the json
 
-  delegate :params,  to: :@view
+  delegate :params, :link_to, to: :@view
 
   def initialize(view, spectrum_identification_results)
     @view = view
@@ -20,11 +20,14 @@ class SpectrumIdentificationResultsDatatable
   end
 
 private
+#    %a{:href => "#", :data => {'sip-mods-id' => "#{sip.id}"} } > Searched Modifications
+#    = link_to "> User Params", '#', :data => {'sip-up-id' => "#{sip.id}"}, remote: true
+
 
   def data
     sirs.map do |sir|
       [
-        sir.sir_id,
+        link_to("#{sir.sir_id}" , '#', :data => {'sir-id' => sir.id}, remote: true),
         sir.spectrum_name,
         sir.spectrum_id
       ]
@@ -39,7 +42,7 @@ private
     sirs = @spectrum_identification_results.order("#{sort_column} #{sort_direction}")
     sirs = sirs.page(page).per_page(per_page)
     if params[:sSearch].present?
-      sirs = sirs.where("spectrum_name like :search or sir_id like :search", search: "%#{params[:sSearch]}%")
+      sirs = sirs.where("spectrum_name like :search or sir_id or spectrum_id like :search", search: "%#{params[:sSearch]}%")
     end
     sirs
   end
