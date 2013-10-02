@@ -14,20 +14,15 @@
 %br
 %p
   %h4= "Spectrum Identification Items"
-
-
-
--#%div{:id => 'sii-wrapper'}
--#%div{:id => 'table-wrapper' , :class => 'sii'}
--#  %div{:id => 'table-scroll' }
--#    %table{:id => "sii_table", :class =>"my_table" }
--#      %tr
--#        %th Spectrum Identification Item
--#        %th Calculated m/z
--#        %th Expected m/z
--#        %th Rank
--#        %th Charge
--#        %th Pass threshold 
--#      = render partial: "spectrum_identification_item"
+  %table#sii_table.my_table
+    %thead
+      %tr
+        %th SII ID
+        %th calc m/z
+        %th exp m/z
+        %th rank
+        %th charge
+        %th pass thrshld
+    %tbody
 
 

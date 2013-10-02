@@ -35,3 +35,24 @@ div.dataTables_paginate span.paginate_button:hover {
 div.dataTables_paginate span.paginate_active {
     background-color: #99B3FF;
 }
+
+
+
+div.dataTables_paginate a {
+  margin: 0 5px;
+  cursor: pointer;
+  *cursor: hand;
+}
+
+
+div.dataTables_paginate a.ui-state-disabled {
+    color: gray;
+  }
+
+
+
+
+table#sii_table {display:none;}
+
+
+
