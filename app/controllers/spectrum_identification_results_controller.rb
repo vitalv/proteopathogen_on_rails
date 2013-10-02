@@ -10,7 +10,10 @@ class SpectrumIdentificationResultsController < ApplicationController
     
     respond_to do |format|
       format.html #“if the client wants HTML in response to this action, just respond as we would have before
-      format.json { render json: SpectrumIdentificationResultsDatatable.new(view_context, @spectrum_identification_results) }
+      format.json { 
+        render json: SpectrumIdentificationResultsDatatable.new(view_context, @spectrum_identification_results) 
+        #render json: SpectrumIdentificationItemsDatatable.new(view_context, @spectrum_identification_results) 
+        }
       #format.json { render json: @si}
     end
     
