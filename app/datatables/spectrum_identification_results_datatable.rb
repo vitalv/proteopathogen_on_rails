@@ -9,7 +9,7 @@ class SpectrumIdentificationResultsDatatable
   end
 
   def as_json(options = {}) 
-  #as_jason is triggered (behind the scenes) by the render json: call in the controller
+  #as_jason is triggered (and over-ridden here) (behind the scenes) by the render json: call in the controller
   #This will return all the data that DataTables expects including all the relevant rows from the database
     {
       sEcho: params[:sEcho].to_i,
@@ -19,15 +19,13 @@ class SpectrumIdentificationResultsDatatable
     }
   end
 
-private
-#    %a{:href => "#", :data => {'sip-mods-id' => "#{sip.id}"} } > Searched Modifications
-#    = link_to "> User Params", '#', :data => {'sip-up-id' => "#{sip.id}"}, remote: true
+  private
 
-
+  #link_to( "#{sir.sir_id}" , '#', :data => {'sir-id' => sir.id, 'source' => spectrum_identification_results_url(format: "json")}, remote: true )
   def data
     sirs.map do |sir|
       [
-        link_to("#{sir.sir_id}" , '#', :data => {'sir-id' => sir.id}, remote: true),
+        link_to( "#{sir.sir_id}" , '#', :data => {'sir-id' => sir.id}, remote: true ),
         sir.spectrum_name,
         sir.spectrum_id
       ]
