@@ -12,16 +12,16 @@ $ ->
 
 
 $ ->
-  $("a[data-sir-id]").click ->
-    data_sir_id = $(this).data("sir-id")
-    $("#sii_table").toggle "fast" 
-    return false    
-
-
-$ ->
   $("#sii_table").dataTable
     "bLengthChange": false,
     "bFilter": false,
     "bInfo": false,
     "bPaginate": false
+
+
+$ ->
+  $("a[data-sir-id]").click ->
+    data_sir_id = $(this).data("sir-id")
+    $("sii_table").toggle "fast" 
+    return false    
 
