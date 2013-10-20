@@ -10,7 +10,13 @@ class SpectrumIdentificationResultsController < ApplicationController
     
     respond_to do |format|
       format.html #“if the client wants HTML in response to this action, just respond as we would have before
+      
+      
+      #@sir_datatable =  SpectrumIdentificationResultsDatatable.new(view_context, @spectrum_identification_results) 
+      #sii_datatlable = 
+      #json_response =  { :sir_datatable => @sir_datatable }
       format.json { 
+        #render json: json_response
         render json: SpectrumIdentificationResultsDatatable.new(view_context, @spectrum_identification_results) 
         #render json: SpectrumIdentificationItemsDatatable.new(view_context, @spectrum_identification_results) 
         }
