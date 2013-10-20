@@ -11,12 +11,13 @@ class SpectrumIdentificationResultsDatatable
   def as_json(options = {}) 
   #as_jason is triggered (behind the scenes) by the render json: call in the controller
   #This will return all the data that DataTables expects including all the relevant rows from the database
-    {
+   {
       sEcho: params[:sEcho].to_i,
       iTotalRecords: @spectrum_identification_results.count,
       iTotalDisplayRecords: sirs.total_entries,
       aaData: data
     }
+  
   end
 
 private

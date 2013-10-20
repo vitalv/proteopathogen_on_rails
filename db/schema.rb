@@ -15,7 +15,7 @@ ActiveRecord::Schema.define(version: 20130731083715) do
 
   create_table "db_sequences", force: true do |t|
     t.string  "accession"
-    t.text    "description"
+    t.string  "description"
     t.text    "sequence"
     t.integer "search_database_id"
   end
@@ -64,8 +64,8 @@ ActiveRecord::Schema.define(version: 20130731083715) do
 
   create_table "pdh_user_params", force: true do |t|
     t.integer "protein_detection_hypothesis_id"
-    t.text    "name"
-    t.text    "value"
+    t.string  "name"
+    t.string  "value"
   end
 
   create_table "pdp_psi_ms_cv_terms", force: true do |t|
@@ -166,11 +166,18 @@ ActiveRecord::Schema.define(version: 20130731083715) do
   end
 
   create_table "searched_modifications", force: true do |t|
-    t.string  "mass_delta"
+    t.decimal "mass_delta",       precision: 4, scale: 0
     t.boolean "is_fixed"
     t.string  "residue"
     t.string  "unimod_accession"
   end
+
+  create_table "sii_pepevidence_join_table", id: false, force: true do |t|
+    t.integer "spectrum_identification_item_id"
+    t.integer "peptide_evidence_id"
+  end
+
+  add_index "sii_pepevidence_join_table", ["spectrum_identification_item_id", "peptide_evidence_id"], name: "index_sii_pepevidence", using: :btree
 
   create_table "sii_psi_ms_cv_terms", force: true do |t|
     t.integer "spectrum_identification_item_id"

@@ -15,6 +15,7 @@ $ ->
   $("a[data-sir-id]").click ->
     data_sir_id = $(this).data("sir-id")
     $("#sii_table").toggle "fast" 
+    $("table").find("table#sii_table").toggle "fast" 
     return false    
 
 
