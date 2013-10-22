@@ -2,6 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
+
 $ ->
   $("#sir_table").dataTable
     sPaginationType: "full_numbers"
@@ -28,9 +29,5 @@ $ ->
     bProcessing: true
     #bServerSide: true
     #sAjaxSource: $('#sii_table').data('source')
-
-
-
-
 
 

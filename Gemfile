@@ -12,11 +12,11 @@ gem 'haml'#, '3.1.7'
 gem 'nokogiri' #xml parser/reader I use for .mzIdentML files
 
 
-
-
 #tablas bonitas
 gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
 
+#D3.js is a JavaScript library for manipulating documents based on data. Interactive graphics and stuff
+gem 'd3js-rails'
 
 
 #server side datatables processing
@@ -45,7 +45,7 @@ end
 gem 'sass-rails', '~> 4.0.0'
 
 #Compass with support for rails 4
-gem 'compass-rails', github: 'milgner/compass-rails', branch: 'rails4'
+#gem 'compass-rails', github: 'milgner/compass-rails', branch: 'rails4'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
