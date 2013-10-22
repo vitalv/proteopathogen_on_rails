@@ -42,3 +42,32 @@ $ ->
 	  "bPaginate": false
   )
   
+  #dataset = [5, 10, 15, 20, 25]
+  ##dataset = $("spectrum_identification").data
+  #d3.select("content").selectAll("p")
+    #.data(dataset)
+    #.enter()  
+    #.append("p")
+    #.text( (d) ->  return d ) #javascript: .text(function(d) { return d; });
+  
+
+
+  jsonCircles = [
+    { "x_axis": 30, "y_axis": 30, "radius": 20, "color" : "green" },
+    { "x_axis": 110, "y_axis": 110, "radius": 20, "color" : "red"}]
+    { "x_axis": 70, "y_axis": 70, "radius": 20, "color" : "purple"},
+
+  svgContainer = d3.select("body").append("svg")
+                                  .attr("width", 200)
+                                  .attr("height", 200);
+
+  circles = svgContainer.selectAll("circle")
+                        .data(jsonCircles)
+                        .enter()
+                        .append("circle");
+
+  circleAttributes = circles
+                     .attr("cx", (d) -> return d.x_axis)
+                     .attr("cy", (d) -> return d.y_axis)
+                     .attr("r",  (d) -> return d.radius)
+                     .style("fill", (d) -> return d.color)
