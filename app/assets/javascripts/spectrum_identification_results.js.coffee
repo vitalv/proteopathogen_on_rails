@@ -2,6 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
+
 $ ->
   $("#sir_table").dataTable
     sPaginationType: "full_numbers"
@@ -13,16 +14,25 @@ $ ->
 
 $ ->
   $("a[data-sir-id]").click ->
+
     data_sir_id = $(this).data("sir-id")
     $("#sii_table").toggle "fast" 
     $("table").find("table#sii_table").toggle "fast" 
     return false    
 
+    #@clicked_sir_id = $(this).data("sir-id")
+    #$("sii_table").toggle "fast" #No quiero que aparezca y desaparezca, solo rellenarla con los siis corespondientes al sir
+
+
 
 $ ->
   $("#sii_table").dataTable
-    "bLengthChange": false,
-    "bFilter": false,
-    "bInfo": false,
-    "bPaginate": false
+    bLengthChange: false
+    bFilter: false
+    bInfo: false
+    bPaginate: false
+    bProcessing: true
+    #bServerSide: true
+    #sAjaxSource: $('#sii_table').data('source')
+
 
