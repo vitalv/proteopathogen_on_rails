@@ -1,53 +1,48 @@
-class SpectrumIdentificationResultsDatatable
+class SpectrumIdentificationItemsDatatable
   #this is called from respond_to format.json render json in the spectrum_identification_results controller to generate the json
 
   delegate :params, :link_to, to: :@view
 
-  def initialize(view, spectrum_identification_results)
+  def initialize(view, spectrum_identification_items)
     @view = view
-    @spectrum_identification_results = spectrum_identification_results
+    @spectrum_identification_items = spectrum_identification_items
   end
 
   def as_json(options = {}) 
   #as_jason is triggered (and over-ridden here) (behind the scenes) by the render json: call in the controller
   #This will return all the data that DataTables expects including all the relevant rows from the database
-
-   {
+  {"sii_table":{
       sEcho: params[:sEcho].to_i,
-      iTotalRecords: @spectrum_identification_results.count,
-      iTotalDisplayRecords: sirs.total_entries,
+      iTotalRecords: @spectrum_identification_items.count,
+      iTotalDisplayRecords: siis.total_entries,
       aaData: data
     }
-  
-
+  }
   end
 
   private
 
   def data
-    sirs.map do |sir|
+    siis.map do |sii|
       [
         link_to( "#{sir.sir_id}" , '#', :data => {'sir-id' => sir.id}, remote: true ),
-        #quiza si pudiera poner link_to a una accion show de @sir, en esa accion del contrl podría definir
-        #link_to( "#{sir.sir_id}" , '#', :data => {'sir-id' => sir.id, 'source' => spectrum_identification_results_url(format: "json")}, remote: true )
-        #link_to( "#{sir.sir_id}" , '#', :data => {'sir-id' => sir.id, 'source' => spectrum_identification_result_url(format:"json") } ),
         sir.spectrum_name,
         sir.spectrum_id
       ]
     end
   end
 
-  def sirs
-    @sirs ||= fetch_sirs
+  def siis
+    @siis ||= fetch_siis
   end
 
-  def fetch_sirs
-    sirs = @spectrum_identification_results.order("#{sort_column} #{sort_direction}")
-    sirs = sirs.page(page).per_page(per_page)
+  def fetch_siis
+    siis = @spectrum_identification_items.order("#{sort_column} #{sort_direction}")
+    siis = siis.page(page).per_page(per_page)
     if params[:sSearch].present?
-      sirs = sirs.where("spectrum_name like :search or sir_id or spectrum_id like :search", search: "%#{params[:sSearch]}%")
+      siis = siis.where("spectrum_name like :search or sir_id or spectrum_id like :search", search: "%#{params[:sSearch]}%")
     end
-    sirs
+    siis
   end
 
   def page
@@ -68,3 +63,4 @@ class SpectrumIdentificationResultsDatatable
   end
   
 end
+
