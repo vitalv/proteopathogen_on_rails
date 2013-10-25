@@ -27,10 +27,10 @@ ProteopathogenOnRails::Application.configure do
   # number of complex assets.
   # 
   # 
-  #config.assets.debug = false
+  config.assets.debug = false
   
   
   #default in an out of the box rails4 app is:
-  config.assets.debug = true
+  #config.assets.debug = true
   
 end
