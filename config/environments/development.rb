@@ -25,5 +25,12 @@ ProteopathogenOnRails::Application.configure do
   # Debug mode disables concatenation and preprocessing of assets.
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
-  config.assets.debug = false
+  # 
+  # 
+  #config.assets.debug = false
+  
+  
+  #default in an out of the box rails4 app is:
+  config.assets.debug = true
+  
 end

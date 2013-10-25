@@ -10,12 +10,15 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require d3
+// Instead of including all js and js.coffee files I require only those I use
+//
 //= require jquery
 //= require jquery_ujs
 //= require dataTables/jquery.dataTables
+//= require d3
+//= require experiments
 //= require spectrum_identifications
 //= require spectrum_identification_results
-//= require_tree .
+
 
 
