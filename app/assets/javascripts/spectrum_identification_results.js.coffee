@@ -16,12 +16,9 @@ $ ->
   $("a[data-sir-id]").click ->
 
     data_sir_id = $(this).data("sir-id")
-    $("#sii_table").toggle "fast" 
-    $("table").find("table#sii_table").toggle "fast" 
-    return false    
-
-    #@clicked_sir_id = $(this).data("sir-id")
-    #$("sii_table").toggle "fast" #No quiero que aparezca y desaparezca, solo rellenarla con los siis corespondientes al sir
+    #$("#sii_table").toggle "fast" #NO quiero que aparezca sii_table, solo su contenido
+    
+  
 
 
 
@@ -36,3 +33,5 @@ $ ->
     #sAjaxSource: $('#sii_table').data('source')
 
 
+    
+    
