@@ -14,6 +14,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery.tipsy
 //= require dataTables/jquery.dataTables
 //= require d3
 //= require experiments
