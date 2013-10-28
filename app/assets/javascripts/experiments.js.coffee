@@ -122,10 +122,10 @@ $ ->
                .attr("font-size", "12px")
     
   #ADD MS BARS (RECT OR LINE ???) --------------------------------
-  msBars = svgContainer.selectAll("line")
+  msBars = svgContainer.selectAll('line')#("rect")
                            .data(jsonFragmentIons)
                            .enter()
-                           .append("line")
+                           .append("line")#("rect")
                            
   msBarText = svgContainer.selectAll("text")
                           .data(jsonFragmentIons)
@@ -133,12 +133,16 @@ $ ->
                           .append("text")
 
   msBarAttributes = msBars
+                     #.attr("y", (d) -> return h - yScale(d.m_intensity) )
+                     #.attr("x", (d) -> return xScale(d.m_mz))
                      .attr("x1", (d) -> return xScale(d.m_mz) )
                      .attr("y1", h - padding)
                      .attr("x2", (d) -> return xScale(d.m_mz) )
                      .attr("y2", (d) -> return h - yScale(d.m_intensity) )
                      .attr("stroke-width", 2)
                      .attr("stroke", (d) -> return d.color)
+                     #.attr("width", 2)
+                     #.attr("fill")
                      
 
   msBarTextLabels = msBarText
@@ -148,23 +152,51 @@ $ ->
                      .text((d) -> return d.m_mz)
                      .attr("font-family", "sans-serif")
                      .attr("font-size", "9px")
+                     .attr("cursor", "pointer")
                      .attr("fill", "gray")
 
 
-  $("svg line").tipsy
-    gravity: "n"
-    offset: 1
-    html: true
-    title: ->
-      d = @__data__
-      #c = colors(d.i)
-      d.fragment_type + "<br/>m/z: " + d.m_mz + "<br/z: " + d.charge + "<br/>intensity: " + d.m_intensity 
+#TOOLTIPS. 2 OPTIONS:
+
+#1 HTML div tooltips--------------
+  msBarTextLabels.on("mouseover", (d) ->  
+    #Get this bar's x/y values, then augment for the tooltip
+    xPosition = parseFloat(d3.select(this).attr("x")) + 300 #OJO No puedo usar rangeBand porque esa es una propiedad de las escalas ordinales !!+ xScale.rangeBand() / 2
+    #xPosition = svgContainer
+    yPosition = parseFloat(d3.select(this).attr("y")) 
+    #yPosition = svgContainer.offsetBottom
+    #Update the tooltip position and value
+    d3.select("#tooltip")
+      .style("left", xPosition + "px")
+      .style("top", yPosition + "px")
+      .select("#value")
+      .html(d.fragment_type + '<br/>m/z: ' + d.m_mz + '<br/>z: ' + d.charge + '<br/>intensity: ' + d.m_intensity )
+    #Show the tooltip
+    d3.select("#tooltip").classed("hidden", false)
+  
+  ).on("mouseout", d3.select("#tooltip").classed("hidden",true) )
+
+
+#2 jquery plugin tipsy--------------
+#  $("svg line").tipsy
+#    gravity: "n"
+#    offset: 1
+#    html: true
+#    title: ->
+#      d = @__data__
+#      #c = colors(d.i)
+#      d.fragment_type + "<br/>m/z: " + d.m_mz + "<br/z: " + d.charge + "<br/>intensity: " + d.m_intensity 
       
       
       #"id":189,"spectrum_identification_item_id":24337,"charge":1,"index":22,"m_mz":2413.21,"m_intensity":8991000,"m_error":-0.0067,"fragment_type":"frag: c ion","psi_ms_cv_fragment_type_accession":"MS:1001231
       
       
+  
+  
+  
+#  svgContainer.call(d3.behavior.zoom().x(xScale).scaleExtent([1, 10000]).on("zoom", zoom))
       
-      
-      
-                     
+#  zoom -> 
+#    svgContainer.select(".axis").call(xAxis)
+#    #svgContainer.select(".yAxis").call(yAxis)
+#    svgContainer.selectAll("line").attr("transform", "translate(" + d3.event.translate[0] + ",0)scale(" + d3.event.scale + ", 1)");
