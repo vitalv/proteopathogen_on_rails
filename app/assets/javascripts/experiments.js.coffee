@@ -2,7 +2,9 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-#Note: I am placing this d3 thing here bc, since I am appending svg to content, I will see the results on all pages, and this (experiments.js) was empty of js.coffee
+#Note: I am placing this d3 thing here , 
+#I am appending svg to #spectrum, I will see the results on / (home), where div spectrum is
+#However, this should prollly be in spectrum_identification_results.js.coffee or spectrum_identification_items.js.coffee or something
 
 $ ->
 
@@ -63,18 +65,19 @@ $ ->
 
 
   #SET UP svgContainer--------------------------------------------
+  #---------------------------------------------------------------
   w = 650
   h = 350
   padding = 40
-  svgContainer = d3.select("content").append("svg")
+  svgContainer = d3.select("#spectrum").append("svg")
                                      .attr("width", w)
                                      .attr("height", h)
                                      .style("border", "1px solid black")
-                                     .style("margin", "1% 5%");
+                                     .style("margin", "1% 5%")
+                                     #.call(zoom)
 
-
-
-  #SCALING thing----------------------------------------------------
+  #SCALING thing--------------------------------------------------
+  #---------------------------------------------------------------
   maxInitialMz = d3.max(jsonFragmentIons, (d) -> return d.m_mz)
   minInitialMz = d3.min(jsonFragmentIons, (d) -> return d.m_mz)  
   maxInitialIntensity = d3.max(jsonFragmentIons, (d) -> return d.m_intensity)
@@ -89,26 +92,31 @@ $ ->
                    .range([padding, h - padding])  #Now that we’re using scales, it’s super easy to reverse that, so greater values are higher up, as you would expect (alignedleft/scales)
                    #.range([h - padding, padding])
 
-
-
   #SET UP Axis----------------------------------------------------
-  
+  #---------------------------------------------------------------
   xAxis = d3.svg.axis()
                  .scale(xScale)
                  .orient("bottom")
                  .ticks(5)
-  svgContainer.append("g")
-                .attr("class", "axis")
-                .attr("transform", "translate(0," + (h - padding) + ")")
-                .call(xAxis)
-                
+
   yAxis = d3.svg.axis()
                  .scale(yScale)
                  .orient("left")
                  .ticks(5)
                  .tickFormat((d) -> '')
+                 
+                 
+  
+  #APEND, Axis, MS BARS , etc To svgContainer --------------------
+  #---------------------------------------------------------------
+
   svgContainer.append("g")
-               .attr("class", "axis")
+               .attr("class", "x axis")
+               .attr("transform", "translate(0," + (h - padding) + ")")
+               .call(xAxis)
+
+  svgContainer.append("g")
+               .attr("class", "y axis")
                .attr("transform", "translate(" + padding  + ",0)")
                .call(yAxis)
               
@@ -120,17 +128,16 @@ $ ->
                .text("m / z")
                .attr("font-family", "sans-serif")
                .attr("font-size", "12px")
-    
-  #ADD MS BARS (RECT OR LINE ???) --------------------------------
-  msBars = svgContainer.selectAll('line')#("rect")
-                           .data(jsonFragmentIons)
-                           .enter()
-                           .append("line")#("rect")
+  
+  msBars = svgContainer.selectAll('line')
+                        .data(jsonFragmentIons)
+                        .enter()
+                        .append("line")
                            
   msBarText = svgContainer.selectAll("text")
-                          .data(jsonFragmentIons)
-                          .enter()
-                          .append("text")
+                           .data(jsonFragmentIons)
+                           .enter()
+                           .append("text")
 
   msBarAttributes = msBars
                      #.attr("y", (d) -> return h - yScale(d.m_intensity) )
@@ -144,7 +151,6 @@ $ ->
                      #.attr("width", 2)
                      #.attr("fill")
                      
-
   msBarTextLabels = msBarText
                      .attr("x", (d) -> return xScale(d.m_mz) )
                      .attr("y", (d) -> return h - yScale(d.m_intensity) )
@@ -156,25 +162,23 @@ $ ->
                      .attr("fill", "gray")
 
 
-#TOOLTIPS. 2 OPTIONS:
-
-#1 HTML div tooltips--------------
+  #TOOLTIPS. 2 OPTIONS:
+  #---------------------------------------------------------------
+  #1 HTML div tooltips--------------
   msBarTextLabels.on("mouseover", (d) ->  
     #Get this bar's x/y values, then augment for the tooltip
     xPosition = parseFloat(d3.select(this).attr("x")) + 300 #OJO No puedo usar rangeBand porque esa es una propiedad de las escalas ordinales !!+ xScale.rangeBand() / 2
-    #xPosition = svgContainer
     yPosition = parseFloat(d3.select(this).attr("y")) 
-    #yPosition = svgContainer.offsetBottom
     #Update the tooltip position and value
     d3.select("#tooltip")
       .style("left", xPosition + "px")
       .style("top", yPosition + "px")
       .select("#value")
-      .html(d.fragment_type + '<br/>m/z: ' + d.m_mz + '<br/>z: ' + d.charge + '<br/>intensity: ' + d.m_intensity )
+      .html(d.fragment_type + '<br/>z: ' + d.charge + '<br/>m/z: ' + d.m_mz + '<br/>intensity: ' + d.m_intensity + '<br/>error: ' + d.m_error)
     #Show the tooltip
     d3.select("#tooltip").classed("hidden", false)
   
-  ).on("mouseout", d3.select("#tooltip").classed("hidden",true) )
+  ).on("mouseout",  (d) -> d3.select("#tooltip").classed("hidden",true) )
 
 
 #2 jquery plugin tipsy--------------
@@ -188,15 +192,16 @@ $ ->
 #      d.fragment_type + "<br/>m/z: " + d.m_mz + "<br/z: " + d.charge + "<br/>intensity: " + d.m_intensity 
       
       
-      #"id":189,"spectrum_identification_item_id":24337,"charge":1,"index":22,"m_mz":2413.21,"m_intensity":8991000,"m_error":-0.0067,"fragment_type":"frag: c ion","psi_ms_cv_fragment_type_accession":"MS:1001231
-      
-      
   
+#  zoom = d3.behavior.zoom()
+#   .x(xScale)
+#   .y(yScale)
+#   .scaleExtent([1,10])
+#   .on("zoom", zoomed)
   
+#  svgContainer.call(zoom)
   
-#  svgContainer.call(d3.behavior.zoom().x(xScale).scaleExtent([1, 10000]).on("zoom", zoom))
-      
-#  zoom -> 
-#    svgContainer.select(".axis").call(xAxis)
-#    #svgContainer.select(".yAxis").call(yAxis)
-#    svgContainer.selectAll("line").attr("transform", "translate(" + d3.event.translate[0] + ",0)scale(" + d3.event.scale + ", 1)");
+#  zoomed ->
+#    svgContainer.select(".x.axis").call(xAxis)
+#    svgContainer.select(".y.axis").call(yAxis)
+  

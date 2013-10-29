@@ -9,11 +9,11 @@
       %th Spectrum Name
       %th Spectrum ID
   %tbody
-    -#= render @spectrum_identification_results
+
 %br
+
 %p
-  %h4= "Spectrum Identification Items " 
--#%table#sii_table.my_table{:data => {'source' => spectrum_identification_results_url(format: "json") } }
+  %h4.sir= "Spectrum Identification Items" 
 %table#sii_table.my_table
   %thead
     %tr

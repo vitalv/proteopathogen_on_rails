@@ -27,13 +27,11 @@ class SpectrumIdentificationResultsDatatable
   def data
     sirs.map do |sir|
       [
-        link_to( "#{sir.sir_id}" , '#', :data => {'sir-id' => sir.id}, remote: true ),
+        #link_to( "#{sir.sir_id}" , '#', :data => {'sir-id' => sir.id}, remote: true ),
         #quiza si pudiera poner link_to a una accion show de @sir, en esa accion del contrl podría definir
         #quiza no tengo que coger sir_id en el coffeescript si no en el controlador primero:
-        #link_to("#{sir.sir_id}", path_to_the_controller_action(sir_id: => sir.id), :data => {'sir-id' => sir.id}, remote: true)
-        link_to("#{sir.sir_id}", spectrum_identification_results(sir_id: => sir.id, action: 'get_siis'), :data => {'sir-id' => sir.id}, remote: true)
-        #link_to( "#{sir.sir_id}" , '#', :data => {'sir-id' => sir.id, 'source' => spectrum_identification_results_url(format: "json")}, remote: true )
-        #link_to( "#{sir.sir_id}" , '#', :data => {'sir-id' => sir.id, 'source' => spectrum_identification_result_url(format:"json") } ),
+        link_to( "#{sir.sir_id}", "results/#{sir.id}"), #, remote: true ),
+
         sir.spectrum_name,
         sir.spectrum_id
       ]

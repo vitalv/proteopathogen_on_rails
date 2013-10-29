@@ -22,9 +22,16 @@ class SpectrumIdentificationResultsController < ApplicationController
     
   end
   
-  def get_siis
-    @
+  def show
+    @sir_id = params[:id]
+    @spectrum_identification_items = SpectrumIdentificationResult.find(@sir_id).spectrum_identification_items
+    respond_to do |format|
+      format.js 
+    end
+    #render partial
+    
   end
+  
   
 
 end
