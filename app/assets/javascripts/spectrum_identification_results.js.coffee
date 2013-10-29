@@ -33,5 +33,7 @@ $ ->
     #sAjaxSource: $('#sii_table').data('source')
 
 
-    
-    
+  sir_id = "#{@sir_id}"
+  $(socument).ready ->
+    sir_id = sir_id
+    alert sir_id
