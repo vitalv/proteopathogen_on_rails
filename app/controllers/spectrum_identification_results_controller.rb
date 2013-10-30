@@ -25,11 +25,9 @@ class SpectrumIdentificationResultsController < ApplicationController
   def show
     @sir_id = params[:id]
     @spectrum_identification_items = SpectrumIdentificationResult.find(@sir_id).spectrum_identification_items
-    respond_to do |format|
-      format.js 
-    end
-    #render partial
-    
+
+    #render partial: "spectrum_identification_items", locals: {siis: @spectrum_identification_items}
+
   end
   
   

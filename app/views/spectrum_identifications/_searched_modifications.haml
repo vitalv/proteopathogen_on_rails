@@ -1,5 +1,6 @@
 %tr
   %td{:colspan => 2}
+    -# sip_mods should only be datatable when there are more than, say 5 modifications
     %a{:href => "#", :data => {'sip-mods-id' => "#{sip.id}"} } > Searched Modifications
     %table#sip_mods.my_table.inner.dataTable{:data => {'sip-mods-id' => "#{sip.id}"}}
       %thead

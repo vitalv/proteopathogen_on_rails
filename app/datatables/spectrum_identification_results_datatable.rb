@@ -30,8 +30,7 @@ class SpectrumIdentificationResultsDatatable
         #link_to( "#{sir.sir_id}" , '#', :data => {'sir-id' => sir.id}, remote: true ),
         #quiza si pudiera poner link_to a una accion show de @sir, en esa accion del contrl podría definir
         #quiza no tengo que coger sir_id en el coffeescript si no en el controlador primero:
-        link_to( "#{sir.sir_id}", "results/#{sir.id}"), #, remote: true ),
-
+        link_to( "#{sir.sir_id}", "results/#{sir.id}", remote: true ), #esto va a show con params[:sir_id]
         sir.spectrum_name,
         sir.spectrum_id
       ]
