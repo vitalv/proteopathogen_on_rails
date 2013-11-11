@@ -146,7 +146,7 @@ $ ->
                      .attr("y1", h - padding)
                      .attr("x2", (d) -> return xScale(d.m_mz) )
                      .attr("y2", (d) -> return h - yScale(d.m_intensity) )
-                     .attr("stroke-width", 2)
+                     .attr("stroke-width", 1)
                      .attr("stroke", (d) -> return d.color)
                      #.attr("width", 2)
                      #.attr("fill")
