@@ -12,28 +12,34 @@ $ ->
     sAjaxSource: $('#sir_table').data('source')
 
 
-$ ->
-  $("a[data-sir-id]").click ->
-
-    data_sir_id = $(this).data("sir-id")
-    #$("#sii_table").toggle "fast" #NO quiero que aparezca sii_table, solo su contenido
-    
-  
-
-
 
 $ ->
-  $("#sii_table").dataTable
+  my_sii_datatable = $("#sii_table").dataTable
     bLengthChange: false
     bFilter: false
     bInfo: false
     bPaginate: false
     bProcessing: true
-    #bServerSide: true
+    #sAjaxSource: $('#sir_id_' + @sir_id)
+    @sir_id = 19186
+    #sAjaxSource: ('results/' + @sir_id )
+    #sAjaxSource:$("a[sir_id]").data('source')
     #sAjaxSource: $('#sii_table').data('source')
+    #bServerSide: true
+    
+    
+$ ->
+  $("a[sir_id]").click ->
+    my_sii_datatable
+      #sAjaxSource: ('results/' + @sir_id )
+    #$("#sii_table").dataTable
+      sAjaxSource: $('#sii_table').data('results/' + @sir_id )
+      fnDraw()
 
+#  sir_id = "#{@sir_id}"
+#  $(socument).ready ->
+#    sir_id = sir_id
+#    alert sir_id
 
-  sir_id = "#{@sir_id}"
-  $(socument).ready ->
-    sir_id = sir_id
-    alert sir_id
+#$ -> 
+#  $("#sii_table").html("hola que ase")

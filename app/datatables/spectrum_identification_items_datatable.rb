@@ -11,13 +11,12 @@ class SpectrumIdentificationItemsDatatable
   def as_json(options = {}) 
   #as_jason is triggered (and over-ridden here) (behind the scenes) by the render json: call in the controller
   #This will return all the data that DataTables expects including all the relevant rows from the database
-  {"sii_table":{
+   {
       sEcho: params[:sEcho].to_i,
       iTotalRecords: @spectrum_identification_items.count,
       iTotalDisplayRecords: siis.total_entries,
       aaData: data
     }
-  }
   end
 
   private
@@ -25,9 +24,12 @@ class SpectrumIdentificationItemsDatatable
   def data
     siis.map do |sii|
       [
-        link_to( "#{sir.sir_id}" , '#', :data => {'sir-id' => sir.id}, remote: true ),
-        sir.spectrum_name,
-        sir.spectrum_id
+        sii.sii_id,
+        sii.calc_m2z,
+        sii.exp_m2z,
+        sii.rank,
+        sii.charge_state,
+        sii.pass_threshold
       ]
     end
   end
@@ -39,9 +41,9 @@ class SpectrumIdentificationItemsDatatable
   def fetch_siis
     siis = @spectrum_identification_items.order("#{sort_column} #{sort_direction}")
     siis = siis.page(page).per_page(per_page)
-    if params[:sSearch].present?
-      siis = siis.where("spectrum_name like :search or sir_id or spectrum_id like :search", search: "%#{params[:sSearch]}%")
-    end
+    #if params[:sSearch].present?
+    #  siis = siis.where("sii_id like :search", search: "%#{params[:sSearch]}%")
+    #end
     siis
   end
 
@@ -54,7 +56,7 @@ class SpectrumIdentificationItemsDatatable
   end
 
   def sort_column
-    columns = %w[sir_id spectrum_name spectrum_id]
+    columns = %w[sii_id calc_m2z exp_m2z rank charge_state pass_threshold]
     columns[params[:iSortCol_0].to_i]
   end
 
