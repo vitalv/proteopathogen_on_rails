@@ -20,8 +20,9 @@ $ ->
     bInfo: false
     bPaginate: false
     bProcessing: true
+    
     #sAjaxSource: $('#sir_id_' + @sir_id)
-    @sir_id = 19186
+    #@sir_id = 19186
     #sAjaxSource: ('results/' + @sir_id )
     #sAjaxSource:$("a[sir_id]").data('source')
     #sAjaxSource: $('#sii_table').data('source')
@@ -30,11 +31,11 @@ $ ->
     
 $ ->
   $("a[sir_id]").click ->
-    my_sii_datatable
+    #my_sii_datatable
       #sAjaxSource: ('results/' + @sir_id )
     #$("#sii_table").dataTable
-      sAjaxSource: $('#sii_table').data('results/' + @sir_id )
-      fnDraw()
+      #sAjaxSource: $('#sii_table').data('source' )
+     # fnDraw()
 
 #  sir_id = "#{@sir_id}"
 #  $(socument).ready ->
