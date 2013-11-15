@@ -14,6 +14,7 @@
 
 %p
   %h4.sir= "Spectrum Identification Items" 
+-#-%table#sii_table.my_table{:data => {'source' => spectrum_identification_result_path(spectrum_identification_id: #{@si_id}, id: #{@sir_id}, format: "json") }}
 %table#sii_table.my_table
   %thead
     %tr
