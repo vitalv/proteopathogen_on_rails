@@ -21,21 +21,17 @@ $ ->
     bPaginate: false
     bProcessing: true
     
-    #sAjaxSource: $('#sir_id_' + @sir_id)
-    #@sir_id = 19186
-    #sAjaxSource: ('results/' + @sir_id )
-    #sAjaxSource:$("a[sir_id]").data('source')
-    #sAjaxSource: $('#sii_table').data('source')
-    #bServerSide: true
     
     
 $ ->
-  $("a[sir_id]").click ->
-    #my_sii_datatable
+  $("a[data-sir-id]").click ->
+    data_sir_id = $(this).data("sir-id")
+    my_sii_datatable
       #sAjaxSource: ('results/' + @sir_id )
+      sAjaxSource: ('results/' + data_sir_id )
     #$("#sii_table").dataTable
       #sAjaxSource: $('#sii_table').data('source' )
-     # fnDraw()
+      fnDraw()
 
 #  sir_id = "#{@sir_id}"
 #  $(socument).ready ->
