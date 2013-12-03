@@ -12,31 +12,18 @@ $ ->
     sAjaxSource: $('#sir_table').data('source')
 
 
+#$ ->
+#  my_sii_datatable = $("#sii_table").dataTable
+#    bLengthChange: false
+#    bFilter: false
+#    bInfo: false
+#    bPaginate: false
+#    bProcessing: true
+#   # sAjaxSource:  ('results/' + data_sir_id )
+    
 
-$ ->
-  my_sii_datatable = $("#sii_table").dataTable
-    bLengthChange: false
-    bFilter: false
-    bInfo: false
-    bPaginate: false
-    bProcessing: true
-    
-    
-    
 $ ->
   $("a[data-sir-id]").click ->
-    data_sir_id = $(this).data("sir-id")
-    my_sii_datatable
-      #sAjaxSource: ('results/' + @sir_id )
-      sAjaxSource: ('results/' + data_sir_id )
-    #$("#sii_table").dataTable
-      #sAjaxSource: $('#sii_table').data('source' )
-      fnDraw()
-
-#  sir_id = "#{@sir_id}"
-#  $(socument).ready ->
-#    sir_id = sir_id
-#    alert sir_id
-
-#$ -> 
-#  $("#sii_table").html("hola que ase")
+#    #alert("whaa?!")
+    @sir = $(this).data("sir-id")
+    #fnDraw()
