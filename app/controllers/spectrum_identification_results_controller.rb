@@ -21,14 +21,15 @@ class SpectrumIdentificationResultsController < ApplicationController
     @sir_id = params[:id]
     @spectrum_identification_items = SpectrumIdentificationResult.find(@sir_id).spectrum_identification_items
 
-    #respond_to do |format|
-    #  format.html
+    respond_to do |format|
+      #format.html
+      format.js
       #format.json {
         #render json: SpectrumIdentificationItemsDatatable.new(view_context, @spectrum_identification_items) 
       #  render json: SpectrumIdentificationItemsDatatable.new(view_context, @sir_id) 
         #render partial: "show"
       #}
-    #end
+    end
     
     #render partial: "show"
     
