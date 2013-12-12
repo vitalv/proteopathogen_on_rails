@@ -11,19 +11,14 @@ $ ->
     bServerSide: true
     sAjaxSource: $('#sir_table').data('source')
 
-
-#$ ->
-#  my_sii_datatable = $("#sii_table").dataTable
-#    bLengthChange: false
-#    bFilter: false
-#    bInfo: false
-#    bPaginate: false
-#    bProcessing: true
-#   # sAjaxSource:  ('results/' + data_sir_id )
-    
+$.ajax(url: "/results").done (html) ->
+  $("#sii_table").append html "whaaa"
 
 $ ->
   $("a[data-sir-id]").click ->
-#    #alert("whaa?!")
-    @sir = $(this).data("sir-id")
-    #fnDraw()
+    alert "whaaa"
+    $("sii_table").tbody.html("asf")
+    $("sii_table").tbody.toggle "fast" 
+#    return false  
+ 
+ 
