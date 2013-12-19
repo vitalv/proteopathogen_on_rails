@@ -146,7 +146,7 @@ $ ->
                      .attr("y1", h - padding)
                      .attr("x2", (d) -> return xScale(d.m_mz) )
                      .attr("y2", (d) -> return h - yScale(d.m_intensity) )
-                     .attr("stroke-width", 1)
+                     .attr("stroke-width", 1.5)
                      .attr("stroke", (d) -> return d.color)
                      #.attr("width", 2)
                      #.attr("fill")
@@ -182,7 +182,8 @@ $ ->
   ).on("mouseout",  (d) -> d3.select("#tooltip").classed("hidden",true) )
 
 
-#2 jquery plugin tipsy--------------
+#2 jquery plugin tipsy-------------- Include //= require jquery.tipsy in application.js
+
 #  $("svg line").tipsy
 #    gravity: "n"
 #    offset: 1
@@ -192,6 +193,17 @@ $ ->
 #      #c = colors(d.i)
 #      d.fragment_type + "<br/>m/z: " + d.m_mz + "<br/z: " + d.charge + "<br/>intensity: " + d.m_intensity 
       
+      
+  #CHECKBOX Thing to filter (show only) checked ion types
+  d3.selectAll(".input class id").on "change", ->
+    selected = this.name
+    display = (if @checked then "inline" else "none")
+    
+    svgContainer.selectAll("line")
+                                  .filter( (d) -> d.fragment_type == selected )
+                                  .attr("display", display)
+  
+  
       
   
 #  zoom = d3.behavior.zoom()

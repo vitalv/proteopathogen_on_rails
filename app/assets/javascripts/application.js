@@ -21,5 +21,5 @@
 //= require spectrum_identifications
 //= require spectrum_identification_results
 
-
+//= require turbolinks
 
