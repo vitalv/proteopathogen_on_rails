@@ -1,3 +1,5 @@
+$('#selected_sir').empty();
+$('#selected_sir').append("<%= @sir_id_name %>");
 $('table#sii_table').find('tbody').empty();
 $('table#sii_table').find('tbody').append("<%= escape_javascript(render partial: 'show') %>");
 

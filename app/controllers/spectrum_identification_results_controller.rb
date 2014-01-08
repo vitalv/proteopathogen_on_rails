@@ -18,6 +18,7 @@ class SpectrumIdentificationResultsController < ApplicationController
   
   def show
     @sir_id = params[:id]
+    @sir_id_name = SpectrumIdentificationResult.find(@sir_id).sir_id
     @spectrum_identification_items = SpectrumIdentificationResult.find(@sir_id).spectrum_identification_items
     respond_to do |format|
       format.html 
