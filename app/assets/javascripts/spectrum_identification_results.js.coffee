@@ -2,9 +2,9 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
  
-ready = -> 
+#ready = -> 
 
-#$ -> 
+$ -> 
 
   $("#sir_table").dataTable
     sPaginationType: "full_numbers"
@@ -36,6 +36,6 @@ ready = ->
 #    $("sii_table").tbody.html("asf")
 #    $("sii_table").tbody.toggle "fast" 
     
-$(document).ready ready
-$(document).on "page:change", ready 
+#$(document).ready ready
+#$(document).on "page:change", ready 
  
