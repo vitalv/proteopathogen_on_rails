@@ -1,6 +1,6 @@
 = @spectrum_identification_items.each do |sii|
   %tr
-    %td= sii.sii_id
+    %td= link_to "#{sii.sii_id}", "#", remote: true #, format: json, generar el json con los fragmentos
     %td= sii.calc_m2z
     %td= sii.exp_m2z
     %td= sii.rank
