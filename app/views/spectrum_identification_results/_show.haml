@@ -1,6 +1,8 @@
 = @spectrum_identification_items.each do |sii|
   %tr
-    %td= link_to "#{sii.sii_id}", 'fragments', locals: {sii: sii.id}, remote: true, "data-type" =>  "json" #, format: json, generar el json con los fragmentos
+    -#%td= link_to "#{sii.sii_id}", "/spectrum_identification_items/#{sii.id}", remote: true, "data-type" =>  "json" #, format: json, generar el json con los fragmentos
+    %td= link_to "#{sii.sii_id}", "results/#{@sir_id}/identification_item", remote: true, "data-type" =>  "json" #, format: json, generar el json con los fragmentos
+    -#link_to( "#{sir.sir_id}", "results/#{sir.id}", remote: true, format: :js, id: "sir_link" ),
     %td= sii.calc_m2z
     %td= sii.exp_m2z
     %td= sii.rank

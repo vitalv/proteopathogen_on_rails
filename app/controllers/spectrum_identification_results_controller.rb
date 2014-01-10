@@ -27,5 +27,13 @@ class SpectrumIdentificationResultsController < ApplicationController
   end
   
   
+  def identification_item
+    @sii = params[:sii_id]
+    
+    respond_to do |format|
+      format.json {}
+      format.html {render partial: 'spectrum'}
+    end
+  end
 
 end
