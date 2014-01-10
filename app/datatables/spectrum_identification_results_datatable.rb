@@ -9,7 +9,7 @@ class SpectrumIdentificationResultsDatatable
   end
 
   def as_json(options = {}) 
-  #as_jason is triggered (and over-ridden here) (behind the scenes) by the render json: call in the controller
+  #as_json is triggered (and over-ridden here) (behind the scenes) by the render json: call in the controller
   #This will return all the data that DataTables expects including all the relevant rows from the database
 
    {
