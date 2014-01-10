@@ -1,14 +1,9 @@
-
-
 $(function() {  
   $("a[data-sir-id]").click(function() {
     $(".underline").removeClass("underline");  //remove the class from any element that has it
     $(this).addClass("underline");  //add a class to the currently clicked link
   });
 });
-
-$('#selected_sir').empty();
-$('#selected_sir').append("<%= @sir_id_name %>");
 $('table#sii_table').find('tbody').empty();
 $('table#sii_table').find('tbody').append("<%= escape_javascript(render partial: 'show') %>");
 
