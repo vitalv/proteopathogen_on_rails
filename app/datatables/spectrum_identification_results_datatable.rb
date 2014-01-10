@@ -27,10 +27,8 @@ class SpectrumIdentificationResultsDatatable
   def data
     sirs.map do |sir|
       [
-        link_to( "#{sir.sir_id}", "results/#{sir.id}", remote: true, format: :js, id: "sir_link" ),
-        #link_to( "#{sir.sir_id}", "results/#{sir.id}", remote: true, id: "sir_link" , :data => {'update-target' => "sii_table"} ),
-        #link_to( "#{sir.sir_id}", "results/#{sir.id}", :data => {'sir-id' => "#{sir.id}"}, remote: true, format: :js ),
-        #link_to( "#{sir.sir_id}", spectrum_identification_result_url(:spectrum_identification_id => sir.id, format: :js), remote: true, id: 'sir_link' ),
+        link_to( "#{sir.sir_id}", "results/#{sir.id}", remote: true, format: :js, :data => {'sir-id' => "#{sir.id}"} ),
+        #link_to( "#{sir.sir_id}", action: :show, sir_id: sir.id, remote: true, format: :js, id: "sir_link" ),
         sir.spectrum_name,
         sir.spectrum_id
       ]
