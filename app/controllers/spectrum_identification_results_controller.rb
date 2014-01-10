@@ -29,11 +29,13 @@ class SpectrumIdentificationResultsController < ApplicationController
   
   def identification_item
     @sii = params[:sii_id]
-    @jsonFragmentIons = SpectrumIdentificationItem.find(@sii).fragments.as_json
+    @fragments = SpectrumIdentificationItem.find(@sii).fragments
     respond_to do |format|
       format.html 
-      format.json { }
-      format.js { render  :layout => false } 
+      #format.json { render :json => @FragmentIons.to_json  }
+      #format.js { render :layout => false } 
+      format.json {   }
+      format.js { render :json => @fragments.to_json, :layout => false } 
     end
   end
 
