@@ -86,6 +86,16 @@ table#sii_table {
 }
 
 
+#spectrum { 
+  width: 100%;
+    svg {
+      border: 1px solid gray;
+      border-radius: 6px;
+      display: block;
+      margin: 1% auto;
+    }
+  }
+
 
 #tooltip {
         position: absolute;
