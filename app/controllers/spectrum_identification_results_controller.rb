@@ -10,7 +10,7 @@ class SpectrumIdentificationResultsController < ApplicationController
       format.html #“if the client wants HTML in response to this action, just respond as we would have before
       format.json { 
         render json: SpectrumIdentificationResultsDatatable.new(view_context, @spectrum_identification_results) 
-        }
+      }
     end
      
   end
@@ -31,11 +31,8 @@ class SpectrumIdentificationResultsController < ApplicationController
     @sii = params[:sii_id]
     @fragments = SpectrumIdentificationItem.find(@sii).fragments
     respond_to do |format|
-      format.html 
-      #format.json { render :json => @FragmentIons.to_json  }
-      #format.js { render :layout => false } 
-      format.json {   }
-      format.js { render :json => @fragments.to_json, :layout => false } 
+      #format.json { render json: @fragments }
+      format.js { render json: @fragments }
     end
   end
 
