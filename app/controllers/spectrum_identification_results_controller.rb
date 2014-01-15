@@ -32,7 +32,9 @@ class SpectrumIdentificationResultsController < ApplicationController
     @fragments = SpectrumIdentificationItem.find(@sii).fragments
     respond_to do |format|
       #format.json { render json: @fragments }
-      format.js { render json: @fragments }
+      #format.js { }#render json: @fragments }
+      format.any { render json: @fragments }
+      #Esto en la consola funciona: d3.json("results/24334/identification_item?sii_id=24337", function(error,json) { data = json; } );
     end
   end
 
