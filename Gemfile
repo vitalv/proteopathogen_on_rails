@@ -60,6 +60,13 @@ gem 'therubyracer', platforms: :ruby
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
+
+
+# Gon Nos permite establecer variables en nuestros controladores para luego acceder a ellos desde JavaScript
+gem 'gon'
+
+
+
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 

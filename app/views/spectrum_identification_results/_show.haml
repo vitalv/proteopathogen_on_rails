@@ -1,7 +1,11 @@
 = @spectrum_identification_items.each do |sii|
   %tr
-    %td= link_to "#{sii.sii_id}", controller: "spectrum_identification_results", action: "identification_item", remote: true, sii_id: sii.id
-    -#%td= link_to "#{sii.sii_id}", controller: "spectrum_identification_results", action: "identification_item", :data => {'sii-id' =>  "#{sii.id}"}, format: "json"
+    -#link_to( "#{sir.sir_id}", "results/#{sir.id}", remote: true, format: :js, :data => {'sir-id' => "#{sir.id}"} ),
+    -#%td= link_to "#{sii.sii_id}", controller: "spectrum_identification_results", action: "identification_item", data: {remote: true, sii: sii.id}, sii_id: sii.id
+    %td= link_to name="#{sii.sii_id}", 
+    url={controller: "spectrum_identification_results", action: "identification_item", sii_id: sii.id},
+    options={remote: true, format: :js, data: {sii_id: sii.id}, class: "sii_link"}
+    -#%td= link_to "#{sii.sii_id}", controller: "specrum_identification_results", action: "identification_item", :data => {'sii-id' =>  "#{sii.id}"}, format: "json"
     %td= sii.calc_m2z
     %td= sii.exp_m2z
     %td= sii.rank
