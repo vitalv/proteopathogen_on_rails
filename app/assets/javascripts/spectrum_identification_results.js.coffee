@@ -34,17 +34,17 @@ $ ->
 
 $ ->  
   $('#sii_table').on "click", ".sii_link", (e) ->
-    #e.preventDefault()
+    e.preventDefault()
     sii_id = $(this).data("sii-id")
     $(".underline").removeClass("underline")
     $(this).addClass("underline")
     $("#spectrum").empty()
-    #return false
     d3.json "results/sir_id/identification_item?sii_id=" + sii_id + "", (error, json) ->
       return console.warn(error) if error
       visualizeD3spectrum json
-      return false
-    return false
+    e.preventDefault()
+
+
 
 
 
