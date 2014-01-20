@@ -30,14 +30,11 @@ class SpectrumIdentificationResultsController < ApplicationController
   def identification_item
     @sii = params[:sii_id]
     @fragments = SpectrumIdentificationItem.find(@sii).fragments
-    #gon.sii_url = "results/#{params[:id]}/identification_item?sii_id=#{@sii}"
-    #gon.watch
+    #render json: @fragments
     respond_to do |format|
-      #format.html 
-      #format.json { render json: @fragments }
-      #format.js { render json: @fragments }
-      format.any { render json: @fragments }
-      #Esto en la consola funciona: d3.json("results/24334/identification_item?sii_id=24337", function(error,json) { data = json; } );
+      format.html { render json: @fragments}
+      #format.any { render json: @fragments }
+      format.js { render json: @fragments }
     end
   end
 

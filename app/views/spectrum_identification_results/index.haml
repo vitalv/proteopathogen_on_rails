@@ -16,6 +16,16 @@
 
 %br
 
+%div#spectrum
+  %p
+    -#%div#tooltip.hidden
+      -#%span#value= ""
+  -#%div#checkboxthing
+    -#= check_box_tag 'y_ions', 'yes', true
+    -#Show y ions
+
+
+
 %p
   %h4.sir= "Spectrum Identification Items" 
 %table#sii_table.my_table
@@ -33,10 +43,4 @@
     
 
 
-%div#spectrum
-  %p
-    -#%div#tooltip.hidden
-      -#%span#value= ""
-  -#%div#checkboxthing
-    -#= check_box_tag 'y_ions', 'yes', true
-    -#Show y ions
+

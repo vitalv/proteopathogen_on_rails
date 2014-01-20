@@ -13,20 +13,41 @@ $ ->
     sAjaxSource: $('#sir_table').data('source')
 
 
-#  $("a[data-sar-id]").click ->
-#    data_sar_id = $(this).data("sar-id")
 
-#console.log gon.sii_url if gon
-#Esto funciona:
-#d3.json("results/24334/identification_item?sii_id=24337", function(error,json) { data = json; } );
+# Note that if I use the "click"" function on ".sii_link" like so:
+#$ ->
+#  $('a[data-sii-id]').click ->
+# it does not trigger the js, since sii_link is not yet in the DOM, it is created ajaxy
+#Remember that $ -> makes JQuery run the function on DOMContentLoaded
+#And if I, instead, use:
+#$ ->
+#  $('#sii_table').on "click", ".sii_link", (e) ->
+#the "on" function triggers an html response:
+#In the network tab in chrome console, I see every time a click a sii_link two responses are triggered:
+#one html and one (JS)
+#I think it may need to trigger this additional html so the "on" funciton can parse the new ajax-created sii_link DOM node
 
-$ ->
-  $('a[data-sii-id]').click ->
-    #d3.json gon.sii_url, (error, json) ->
+#See delegated events : http://api.jquery.com/on/
+#Delegated events have the advantage that they can process events from descendant elements that are added to the document at a later time
+
+
+
+$ ->  
+  $('#sii_table').on "click", ".sii_link", (e) ->
+    #e.preventDefault()
     sii_id = $(this).data("sii-id")
+    $(".underline").removeClass("underline")
+    $(this).addClass("underline")
+    $("#spectrum").empty()
+    #return false
     d3.json "results/sir_id/identification_item?sii_id=" + sii_id + "", (error, json) ->
       return console.warn(error) if error
       visualizeD3spectrum json
+      return false
+    return false
+
+
+
 
 
 visualizeD3spectrum = (json) ->
@@ -39,6 +60,8 @@ visualizeD3spectrum = (json) ->
       jsonFragmentIons[i].color = "steelblue"
     else if jsonFragmentIons[i].fragment_type == "frag: z+1 ion"
      jsonFragmentIons[i].color = "red" 
+    else if jsonFragmentIons[i].fragment_type == "frag: z+2 ion"
+     jsonFragmentIons[i].color = "red"      
     else if jsonFragmentIons[i].fragment_type == "frag: y ion"
       jsonFragmentIons[i].color = "orange"
     i++
