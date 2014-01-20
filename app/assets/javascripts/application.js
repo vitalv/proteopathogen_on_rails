@@ -13,6 +13,7 @@
 // Instead of including all js and js.coffee files I require only those I use
 //
 //= require jquery
+//= require jquery.turbolinks
 //= require jquery_ujs
 //= require jquery.tipsy
 //= require dataTables/jquery.dataTables
