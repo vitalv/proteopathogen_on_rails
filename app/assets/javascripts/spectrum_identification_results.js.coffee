@@ -43,12 +43,6 @@ $ ->
       return console.warn(error) if error
       visualizeD3spectrum json
     e.preventDefault()
-    #return false
-
-
-
-
-
 
 
 
@@ -163,40 +157,40 @@ visualizeD3spectrum = (json) ->
                      .text((d) -> return d.fragment_type.substr(5))
                      .attr("font-family", "sans-serif")
                      .attr("font-size", "9px")
-                     .attr("cursor", "pointer")
+                     #.attr("cursor", "pointer")
                      .attr("fill", "gray")
 
 
   #TOOLTIPS. 2 OPTIONS:
   #---------------------------------------------------------------
   #1 HTML div tooltips--------------
-  msBarTextLabels.on("mouseover", (d) ->  
-    #Get this bar's x/y values, then augment for the tooltip
-    xPosition = parseFloat(d3.select(this).attr("x")) + 300 #OJO No puedo usar rangeBand porque esa es una propiedad de las escalas ordinales !!+ xScale.rangeBand() / 2
-    yPosition = parseFloat(d3.select(this).attr("y")) 
-    #Update the tooltip position and value
-    d3.select("#tooltip")
-      .style("left", xPosition + "px")
-      .style("top", yPosition + "px")
-      .select("#value")
-      .html(d.fragment_type + '<br/>z: ' + d.charge + '<br/>m/z: ' + d.m_mz + '<br/>intensity: ' + d.m_intensity + '<br/>error: ' + d.m_error)
-    #Show the tooltip
-    d3.select("#tooltip").classed("hidden", false)
-  
-  ).on("mouseout",  (d) -> d3.select("#tooltip").classed("hidden",true) )
+  #msBarTextLabels.on("mouseover", (d) ->  
+  #  #Get this bar's x/y values, then augment for the tooltip
+  #  xPosition = parseFloat(d3.select(this).attr("x")) #+ 300 #OJO No puedo usar rangeBand porque esa es una propiedad de las escalas ordinales !!+ xScale.rangeBand() / 2
+  #  yPosition = parseFloat(d3.select(this).attr("y")) 
+  #  #Update the tooltip position and value
+  #  d3.select("#tooltip")
+  #    .style("left", xPosition + "px")
+  #    .style("top", yPosition + "px")
+  #    .select("#value")
+  #    .html(d.fragment_type + '<br/>z: ' + d.charge + '<br/>m/z: ' + d.m_mz + '<br/>intensity: ' + d.m_intensity + '<br/>error: ' + d.m_error)
+  #  #Show the tooltip
+  #  d3.select("#tooltip").classed("hidden", false)
+  #
+  #).on("mouseout",  (d) -> d3.select("#tooltip").classed("hidden",true) )
 
 
 #2 jquery plugin tipsy-------------- Include //= require jquery.tipsy in application.js
 
-#  $("svg line").tipsy
-#    gravity: "n"
-#    offset: 1
-#    html: true
-#    title: ->
-#      d = @__data__
-#      #c = colors(d.i)
-#      d.fragment_type + "<br/>m/z: " + d.m_mz + "<br/z: " + d.charge + "<br/>intensity: " + d.m_intensity 
-      
+  $("svg line").tipsy
+    gravity: "n"
+    offset: 1
+    html: true
+    title: ->
+      d = @__data__
+      #c = colors(d.i)
+      #d.fragment_type + "<br/>m/z: " + d.m_mz + "<br/z: " + d.charge + "<br/>intensity: " + d.m_intensity 
+      d.fragment_type + '<br/>z: ' + d.charge + '<br/>m/z: ' + d.m_mz + '<br/>intensity: ' + d.m_intensity + '<br/>error: ' + d.m_error
       
   #CHECKBOX Thing to filter (show only) checked ion types
   d3.selectAll(".input class id").on "change", ->

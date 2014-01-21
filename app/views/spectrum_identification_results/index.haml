@@ -17,9 +17,12 @@
 %br
 
 %div#spectrum
-  %p
-    -#%div#tooltip.hidden
-      -#%span#value= ""
+  %div#pre_spectrum_display_msg
+    %p
+      SPECTRUM IDENTIFICATION ITEM
+  %div#tooltip.hidden
+    %p
+      %span#value= ""
   -#%div#checkboxthing
     -#= check_box_tag 'y_ions', 'yes', true
     -#Show y ions
