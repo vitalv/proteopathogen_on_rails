@@ -41,14 +41,21 @@ $ ->
     $("#spectrum").empty() 
     d3.json "results/sir_id/identification_item?sii_id=" + sii_id + "", (error, json) ->
       return console.warn(error) if error
-      visualizeD3spectrum json
-    e.preventDefault()
+      if $.isEmptyObject json
+        $("#spectrum").append("<div class=spectrum_display_msg><p>NO FRAGMENTATION AVAILABLE FOR SELECTED SPECTRUM IDENTIFICATION ITEM</p></div>")
+      else
+        visualizeD3spectrum json
+    #e.preventDefault()
 
 
 
 visualizeD3spectrum = (json) ->
 
   jsonFragmentIons = json
+  
+  #jsonFragmentIons = json["fragments"]
+  
+  #jsonSiiParams = json["psi_ms_cv_terms"]
 
   i = 0
   while i < jsonFragmentIons.length
@@ -57,7 +64,7 @@ visualizeD3spectrum = (json) ->
     else if jsonFragmentIons[i].fragment_type == "frag: z+1 ion"
      jsonFragmentIons[i].color = "red" 
     else if jsonFragmentIons[i].fragment_type == "frag: z+2 ion"
-     jsonFragmentIons[i].color = "red"      
+     jsonFragmentIons[i].color = "red"
     else if jsonFragmentIons[i].fragment_type == "frag: y ion"
       jsonFragmentIons[i].color = "orange"
     i++
@@ -107,6 +114,23 @@ visualizeD3spectrum = (json) ->
   
   #APEND, Axis, MS BARS , etc To svgContainer --------------------
   #---------------------------------------------------------------
+  
+  
+  
+  #sii_params_text = svgContainer.selectAll("text")
+  #                               .remove()
+  #                               .data(jsonSiiParams)
+  #                               .enter()
+  #                               .append("text")
+
+  #sii_params_text
+  #               .attr("x", w/2 )
+  #               .attr("y", h )
+  #               .text((d) -> return d.psi_ms_cv_term_accession)
+                 
+  
+  #siiTable = tabulate(data, ["date", "close"])
+  
 
   svgContainer.append("g")
                .attr("class", "x axis")
@@ -126,12 +150,14 @@ visualizeD3spectrum = (json) ->
                .text("m / z")
                .attr("font-family", "sans-serif")
                .attr("font-size", "12px")
+               
+
   
   msBars = svgContainer.selectAll('line')
                         .data(jsonFragmentIons)
                         .enter()
                         .append("line")
-                           
+
   msBarText = svgContainer.selectAll("text")
                            .data(jsonFragmentIons)
                            .enter()
@@ -144,7 +170,7 @@ visualizeD3spectrum = (json) ->
                      .attr("y1", h - padding)
                      .attr("x2", (d) -> return xScale(d.m_mz) )
                      .attr("y2", (d) -> return h - yScale(d.m_intensity) )
-                     .attr("stroke-width", 1.2)
+                     .attr("stroke-width", 1.5)
                      .attr("stroke", (d) -> return d.color)
                      #.attr("width", 2)
                      #.attr("fill")
@@ -152,13 +178,15 @@ visualizeD3spectrum = (json) ->
   msBarTextLabels = msBarText
                      .attr("x", (d) -> return xScale(d.m_mz) )
                      .attr("y", (d) -> return h - yScale(d.m_intensity) )
-                     #.attr("transform", "rotate(90)")
+                     #.attr("transform", "rotate(-90)")
                      #.text((d) -> return d.fragment_type.replace("frag:",'')
                      .text((d) -> return d.fragment_type.substr(5))
                      .attr("font-family", "sans-serif")
                      .attr("font-size", "9px")
                      #.attr("cursor", "pointer")
                      .attr("fill", "gray")
+
+
 
 
   #TOOLTIPS. 2 OPTIONS:
@@ -189,7 +217,6 @@ visualizeD3spectrum = (json) ->
     title: ->
       d = @__data__
       #c = colors(d.i)
-      #d.fragment_type + "<br/>m/z: " + d.m_mz + "<br/z: " + d.charge + "<br/>intensity: " + d.m_intensity 
       d.fragment_type + '<br/>z: ' + d.charge + '<br/>m/z: ' + d.m_mz + '<br/>intensity: ' + d.m_intensity + '<br/>error: ' + d.m_error
       
   #CHECKBOX Thing to filter (show only) checked ion types
@@ -206,3 +233,44 @@ visualizeD3spectrum = (json) ->
   
 #$(document).ready ready
 #$(document).on "page:load", ready 
+
+
+
+
+
+
+
+
+
+
+
+
+
+#tabulate = (data, columns) ->
+#  table = d3.select("body").append("table").attr("style", "margin-left: 250px")
+#  thead = table.append("thead")
+#  tbody = table.append("tbody")
+  
+#  # append the header row
+#  thead.append("tr").selectAll("th").data(columns).enter().append("th").text (column) ->
+#    column
+
+  
+#  # create a row for each object in the data
+#  rows = tbody.selectAll("tr").data(data).enter().append("tr")
+  
+#  # create a cell in each row for each column
+#  cells = rows.selectAll("td").data((row) ->
+#    columns.map (column) ->
+#      column: column
+#      value: row[column]
+
+#  ).enter().append("td").attr("style", "font-family: Courier").html((d) ->
+#    d.value
+#  )
+#  table
+
+
+
+
+
