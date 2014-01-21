@@ -64,15 +64,6 @@ table#sii_table {
 
 
 
-
-
-
-
-
-
-
-
-
 .axis path,
 .axis line {
     fill: none;
@@ -87,10 +78,13 @@ table#sii_table {
 
 
 #spectrum { 
-  width: 100%;
+  width: 80%;
+  height: 350px;
+  margin: 10px auto;
+  display: block;
+  border: 1px dashed #B6B5B0;
+  border-radius: 6px;
     svg {
-      border: 1px solid gray;
-      border-radius: 6px;
       display: block;
       margin: 1% auto;
     }
