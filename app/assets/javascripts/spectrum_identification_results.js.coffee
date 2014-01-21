@@ -14,7 +14,7 @@ $ ->
 
 
 
-# Note that if I use the "click"" function on ".sii_link" like so:
+# Note that if I use the "click" function on ".sii_link" like so:
 #$ ->
 #  $('a[data-sii-id]').click ->
 # it does not trigger the js, since sii_link is not yet in the DOM, it is created ajaxy
@@ -33,16 +33,18 @@ $ ->
 
 
 $ ->  
-  $('#sii_table').on "click", ".sii_link", (e) ->
-    e.preventDefault()
+  $('#sii_table').on "click", ".sii_link", (e) -> 
+  #this function is bound to all ".sii_link" click events, even if they are added to the DOM via ajax later
     sii_id = $(this).data("sii-id")
     $(".underline").removeClass("underline")
     $(this).addClass("underline")
-    $("#spectrum").empty()
+    $("#spectrum").empty() 
     d3.json "results/sir_id/identification_item?sii_id=" + sii_id + "", (error, json) ->
       return console.warn(error) if error
       visualizeD3spectrum json
     e.preventDefault()
+    #return false
+
 
 
 
@@ -70,8 +72,8 @@ visualizeD3spectrum = (json) ->
 
   #SET UP svgContainer--------------------------------------------
   #---------------------------------------------------------------
-  w = 650
-  h = 350
+  w = 600
+  h = 300
   padding = 40
   svgContainer = d3.select("#spectrum").append("svg")
                                      .attr("width", w)
