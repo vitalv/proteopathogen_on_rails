@@ -89,6 +89,17 @@ table#sii_table {
       margin: 1% auto;
     }
   }
+  
+#pre_spectrum_display_msg  {
+  display: block;
+    p {
+      text-align: center;
+      line-height: 350px;
+      font-family: sans-serif;
+      font-size: 11px;
+      color: #B6B5B0;
+    }
+}
 
 
 #tooltip {
