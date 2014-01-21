@@ -30,11 +30,14 @@ class SpectrumIdentificationResultsController < ApplicationController
   def identification_item
     @sii = params[:sii_id]
     @fragments = SpectrumIdentificationItem.find(@sii).fragments
-    #render json: @fragments
+    @psi_ms_cv_terms = SpectrumIdentificationItem.find(@sii).sii_psi_ms_cv_terms
+    #sii_things = {fragments: @fragments, psi_ms_cv_terms: @psi_ms_cv_terms }
     respond_to do |format|
-      format.html { render json: @fragments}
+      format.html { render json: @fragments  }
+      #format.html { render json: sii_things }
       #format.any { render json: @fragments }
       format.js { render json: @fragments }
+      #format.js { render json: sii_things }
     end
   end
 
