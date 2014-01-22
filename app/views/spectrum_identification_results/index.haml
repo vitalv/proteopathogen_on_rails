@@ -17,15 +17,36 @@
 %br
 
 %div#spectrum
+
   %div.spectrum_display_msg
     %p
       SPECTRUM IDENTIFICATION ITEM
-  %div#tooltip.hidden
-    %p
-      %span#value= ""
+
+  -#%div#peptide_sequence
+  
+  -#%div#tooltip.hidden
+  -#  %p
+  -#    %span#value= ""
+  
   -#%div#checkboxthing
     -#= check_box_tag 'y_ions', 'yes', true
     -#Show y ions
+
+
+%h4 Peptide Evidence(s)
+%table#pep_ev_table.my_table
+  %thead
+    %tr
+      %th start
+      %th end
+      %th pre
+      %th post
+      %th is_decoy
+      %th DB sequence
+      %th Peptide Sequence
+  %tbody
+    %tr
+      %td{:colspan => 7, :style=> "text-align:center"}Peptide Spectrum Matches
 
 
 

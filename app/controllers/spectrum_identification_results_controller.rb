@@ -28,15 +28,20 @@ class SpectrumIdentificationResultsController < ApplicationController
   
   
   def identification_item
-    @sii = params[:sii_id]
-    @fragments = SpectrumIdentificationItem.find(@sii).fragments
-    @psi_ms_cv_terms = SpectrumIdentificationItem.find(@sii).sii_psi_ms_cv_terms
+    sii = SpectrumIdentificationItem.find(params[:sii_id])
+    @fragments = sii.fragments    
+    @psi_ms_cv_terms = sii.sii_psi_ms_cv_terms
+    @psms = sii.peptide_spectrum_assignments
+    @peptide_evidences = sii.peptide_evidences    
+    @peptide_sequence = PeptideSequence.find(sii.peptide_evidences[0].peptide_sequence_id).sequence
+    
     #sii_things = {fragments: @fragments, psi_ms_cv_terms: @psi_ms_cv_terms }
     respond_to do |format|
       format.html { render json: @fragments  }
       #format.html { render json: sii_things }
       #format.any { render json: @fragments }
-      format.js { render json: @fragments }
+      format.json { render json: @fragments }
+      format.js { render :layout => false }
       #format.js { render json: sii_things }
     end
   end

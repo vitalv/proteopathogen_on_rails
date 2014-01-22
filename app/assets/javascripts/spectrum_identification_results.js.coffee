@@ -38,11 +38,14 @@ $ ->
     sii_id = $(this).data("sii-id")
     $(".underline").removeClass("underline")
     $(this).addClass("underline")
-    $("#spectrum").empty() 
+    $("#spectrum").empty()
+    $("#spectrum").append("<div id=peptide_sequence>")
+    $('#spectrum').append("<div id=sii_params>")
     d3.json "results/sir_id/identification_item?sii_id=" + sii_id + "", (error, json) ->
       return console.warn(error) if error
       if $.isEmptyObject json
-        $("#spectrum").append("<div class=spectrum_display_msg><p>NO FRAGMENTATION AVAILABLE FOR SELECTED SPECTRUM IDENTIFICATION ITEM</p></div>")
+        missing_spec_msg = "<div class=spectrum_display_msg><p>NO FRAGMENTATION AVAILABLE FOR SELECTED SPECTRUM IDENTIFICATION ITEM</p></div>"
+        $("#spectrum").append(missing_spec_msg)
       else
         visualizeD3spectrum json
     #e.preventDefault()
@@ -73,8 +76,8 @@ visualizeD3spectrum = (json) ->
 
   #SET UP svgContainer--------------------------------------------
   #---------------------------------------------------------------
-  w = 600
-  h = 300
+  w = 580
+  h = 280
   padding = 40
   svgContainer = d3.select("#spectrum").append("svg")
                                      .attr("width", w)
@@ -115,23 +118,6 @@ visualizeD3spectrum = (json) ->
   #APEND, Axis, MS BARS , etc To svgContainer --------------------
   #---------------------------------------------------------------
   
-  
-  
-  #sii_params_text = svgContainer.selectAll("text")
-  #                               .remove()
-  #                               .data(jsonSiiParams)
-  #                               .enter()
-  #                               .append("text")
-
-  #sii_params_text
-  #               .attr("x", w/2 )
-  #               .attr("y", h )
-  #               .text((d) -> return d.psi_ms_cv_term_accession)
-                 
-  
-  #siiTable = tabulate(data, ["date", "close"])
-  
-
   svgContainer.append("g")
                .attr("class", "x axis")
                .attr("transform", "translate(0," + (h - padding) + ")")
@@ -233,44 +219,4 @@ visualizeD3spectrum = (json) ->
   
 #$(document).ready ready
 #$(document).on "page:load", ready 
-
-
-
-
-
-
-
-
-
-
-
-
-
-#tabulate = (data, columns) ->
-#  table = d3.select("body").append("table").attr("style", "margin-left: 250px")
-#  thead = table.append("thead")
-#  tbody = table.append("tbody")
-  
-#  # append the header row
-#  thead.append("tr").selectAll("th").data(columns).enter().append("th").text (column) ->
-#    column
-
-  
-#  # create a row for each object in the data
-#  rows = tbody.selectAll("tr").data(data).enter().append("tr")
-  
-#  # create a cell in each row for each column
-#  cells = rows.selectAll("td").data((row) ->
-#    columns.map (column) ->
-#      column: column
-#      value: row[column]
-
-#  ).enter().append("td").attr("style", "font-family: Courier").html((d) ->
-#    d.value
-#  )
-#  table
-
-
-
-
 

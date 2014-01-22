@@ -78,27 +78,51 @@ table#sii_table {
 
 
 #spectrum { 
+  position: relative;
   width: 80%;
-  height: 350px;
+  height: 350px; //,if I don't specify this div height, the javascript when clicking on sii makes page jump to top//
+  overflow: hidden;
   margin: 10px auto;
   display: block;
   border: 1px dashed #B6B5B0;
   border-radius: 6px;
     svg {
       display: block;
+      //height: 100%;
       margin: 1% auto;
     }
   }
+
+
+$blue_font_color: #0A2747;
+
+#peptide_sequence {
+  display: block;
+  
+  p {
+  width: 90%;
+  text-align: center;
+  margin: 1% auto;
+  color: $blue_font_color;
+  font-size: 1.1em;
+  white-space: pre-wrap;      /* CSS3 */   
+  white-space: -moz-pre-wrap; /* Firefox */    
+  white-space: -pre-wrap;     /* Opera <7 */   
+  white-space: -o-pre-wrap;   /* Opera 7 */    
+  word-wrap: break-word;      /* IE */
+  }
+}
+
   
 .spectrum_display_msg  {
   display: block;
-    p {
-      text-align: center;
-      line-height: 350px;
-      font-family: sans-serif;
-      font-size: 11px;
-      color: #B6B5B0;
-    }
+  p {
+    text-align: center;
+    line-height: 300px;
+    font-family: sans-serif;
+    font-size: 1.1em;
+    color: #B6B5B0;
+  }
 }
 
 
