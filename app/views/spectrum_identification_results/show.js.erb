@@ -1,5 +1,6 @@
 $(function() {  
-  $("a[data-sir-id]").click(function() {
+  //$("a[data-sir-id]").click(function() {
+  $("#sir_table").on("click", ".sir_link", function() {
     //$("#spectrum").empty()
     $(".underline").removeClass("underline");  //remove the class from any element that has it
     $(this).addClass("underline");  //add a class to the currently clicked link
