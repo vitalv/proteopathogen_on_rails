@@ -39,8 +39,11 @@ $ ->
     $(".underline").removeClass("underline")
     $(this).addClass("underline")
     $("#spectrum").empty()
-    $("#spectrum").append("<div id=peptide_sequence>")
-    $('#spectrum').append("<div id=sii_params>")
+    $("#peptide_sequence").remove()
+    $("#spectrum").before("<div id=peptide_sequence class=spectrum_annotation>")
+    $("#db_seq").remove()
+    $("#spectrum").before("<div id=db_seq class=spectrum_annotation>")
+    #$('#spectrum').append
     d3.json "results/sir_id/identification_item?sii_id=" + sii_id + "", (error, json) ->
       return console.warn(error) if error
       if $.isEmptyObject json

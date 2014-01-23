@@ -3,6 +3,12 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 
+
+#sir_table_wrapper { margin:  1em auto; }
+
+
+
+
 div.dataTables_info {
     width: 40%;
 }
@@ -36,24 +42,23 @@ div.dataTables_paginate span.paginate_active {
     background-color: #99B3FF;
 }
 
-
-
 div.dataTables_paginate a {
   margin: 0 5px;
   cursor: pointer;
   *cursor: hand;
 }
 
-
 div.dataTables_paginate a.ui-state-disabled {
     color: gray;
   }
+
+
 
 table#sii_table {
   //border: solid 1px gray;
   //border-radius: 4px;
   width: 100%;
-  margin: 0;
+  margin: 1em auto;
     th { text-align: center; }
     .sii_id {width: 30%} 
   }
@@ -62,6 +67,63 @@ table#sii_table {
 
 .underline {text-decoration: underline;}
 
+
+
+
+
+$blue_font_color: #0A2747;
+
+.spectrum_annotation{
+  height: 50px;
+  position: relative;
+  display: block;
+  margin: 5px auto;
+  width: 80%;
+  border: 1px dashed #B6B5B0;
+  border-radius: 6px;
+  p {
+  width: 90%;
+  text-align: center;
+  margin: 1% auto;
+  color: $blue_font_color;
+  //font-size: 1.1em;
+  white-space: pre-wrap;      /* CSS3 */   
+  white-space: -moz-pre-wrap; /* Firefox */    
+  white-space: -pre-wrap;     /* Opera <7 */   
+  white-space: -o-pre-wrap;   /* Opera 7 */    
+  word-wrap: break-word;      /* IE */
+  }
+}
+
+
+
+#spectrum { 
+  position: relative;
+  width: 80%;
+  height: 300px; //,if I don't specify this div height, the javascript when clicking on sii makes page jump to top//
+  overflow: hidden;
+  margin: 5px auto;
+  display: block;
+  border: 1px dashed #B6B5B0;
+  border-radius: 6px;
+    svg {
+      display: block;
+      //height: 100%;
+      margin: 1% auto;
+    }
+  }
+
+ 
+.spectrum_display_msg  {
+  display: block;
+  p {
+    text-align: center;
+    line-height: 300px;
+    font-family: sans-serif;
+    font-size: 1.1em;
+    color: #B6B5B0;
+  }
+}
 
 
 .axis path,
@@ -76,54 +138,6 @@ table#sii_table {
     font-size: 11px;
 }
 
-
-#spectrum { 
-  position: relative;
-  width: 80%;
-  height: 350px; //,if I don't specify this div height, the javascript when clicking on sii makes page jump to top//
-  overflow: hidden;
-  margin: 10px auto;
-  display: block;
-  border: 1px dashed #B6B5B0;
-  border-radius: 6px;
-    svg {
-      display: block;
-      //height: 100%;
-      margin: 1% auto;
-    }
-  }
-
-
-$blue_font_color: #0A2747;
-
-#peptide_sequence {
-  display: block;
-  
-  p {
-  width: 90%;
-  text-align: center;
-  margin: 1% auto;
-  color: $blue_font_color;
-  font-size: 1.1em;
-  white-space: pre-wrap;      /* CSS3 */   
-  white-space: -moz-pre-wrap; /* Firefox */    
-  white-space: -pre-wrap;     /* Opera <7 */   
-  white-space: -o-pre-wrap;   /* Opera 7 */    
-  word-wrap: break-word;      /* IE */
-  }
-}
-
-  
-.spectrum_display_msg  {
-  display: block;
-  p {
-    text-align: center;
-    line-height: 300px;
-    font-family: sans-serif;
-    font-size: 1.1em;
-    color: #B6B5B0;
-  }
-}
 
 
 #tooltip {

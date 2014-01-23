@@ -1,11 +1,10 @@
-%h3= "EXPERIMENT / MZID FILE:"
+%h2= "EXPERIMENT / MZID FILE:"
 %h3= @protocol
-%p
-  %h4= "SPECTRUM IDENTIFICATION:"
-  %h4= "Spectrum Identification: #{@si.si_id} - Spectrum Identification List:  #{@sil.sil_id}"
-
-%p
-  %h4= "Spectrum Identification Results"
+%br
+%h3= "SPECTRUM IDENTIFICATION:"
+%h4= "Spectrum Identification: #{@si.si_id} - Spectrum Identification List:  #{@sil.sil_id}"
+%br
+%h3= "Spectrum Identification Results"
 %table#sir_table.my_table{:data => {'si-id' => "#{@si.id}", 'source' => spectrum_identification_results_url(format: "json") } }
   %thead
     %tr
@@ -15,6 +14,36 @@
   %tbody
 
 %br
+%br
+%h3.table_header= "Spectrum Identification Items" 
+%table#sii_table.my_table
+  %thead
+    %tr
+      %th.sii_id SII ID
+      %th calc m/z
+      %th exp m/z
+      %th.r rank
+      %th.z charge
+      %th pass thrshld
+  %tbody
+    %tr
+      %td{:colspan => 6, :style=> "text-align:center"}Spectrum Identification Items
+    
+-#%h4 Peptide Evidence(s)
+-#%table#pep_ev_table.my_table
+-#  %thead
+-#    %tr
+-#      %th start
+-#      %th end
+-#      %th pre
+-#      %th post
+-#      %th is_decoy
+-#      %th DB sequence
+-#      %th Peptide Sequence
+-#  %tbody
+-#    %tr
+-#      %td{:colspan => 7, :style=> "text-align:center"}Peptide Evidences
+
 
 %div#spectrum
 
@@ -31,40 +60,6 @@
   -#%div#checkboxthing
     -#= check_box_tag 'y_ions', 'yes', true
     -#Show y ions
-
-
-%h4 Peptide Evidence(s)
-%table#pep_ev_table.my_table
-  %thead
-    %tr
-      %th start
-      %th end
-      %th pre
-      %th post
-      %th is_decoy
-      %th DB sequence
-      %th Peptide Sequence
-  %tbody
-    %tr
-      %td{:colspan => 7, :style=> "text-align:center"}Peptide Spectrum Matches
-
-
-
-%p
-  %h4.sir= "Spectrum Identification Items" 
-%table#sii_table.my_table
-  %thead
-    %tr
-      %th.sii_id SII ID
-      %th calc m/z
-      %th exp m/z
-      %th.r rank
-      %th.z charge
-      %th pass thrshld
-  %tbody
-    %tr
-      %td{:colspan => 6, :style=> "text-align:center"}Spectrum Identification Items
-    
 
 
 

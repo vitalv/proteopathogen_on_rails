@@ -1,8 +1,11 @@
 $('#peptide_sequence').empty();
 $('#peptide_sequence').append("<p><%= @peptide_sequence %></p>")
 
-$('table#pep_ev_table').find('tbody').empty();
-$('table#pep_ev_table').find('tbody').append("<%= escape_javascript(render partial: 'identification_item') %>");
+$('#db_seq').empty();
+$('#db_seq').append("<p><%= @protein.accession %></p>")
+
+//$('table#pep_ev_table').find('tbody').empty();
+//$('table#pep_ev_table').find('tbody').append("<%= escape_javascript(render partial: 'identification_item') %>");
 
 
 

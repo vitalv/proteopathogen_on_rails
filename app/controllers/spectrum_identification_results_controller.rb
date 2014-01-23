@@ -33,7 +33,9 @@ class SpectrumIdentificationResultsController < ApplicationController
     @psi_ms_cv_terms = sii.sii_psi_ms_cv_terms
     @psms = sii.peptide_spectrum_assignments
     @peptide_evidences = sii.peptide_evidences    
+
     @peptide_sequence = PeptideSequence.find(sii.peptide_evidences[0].peptide_sequence_id).sequence
+    @protein = DbSequence.find(sii.peptide_evidences[0].db_sequence_id)
     
     #sii_things = {fragments: @fragments, psi_ms_cv_terms: @psi_ms_cv_terms }
     respond_to do |format|
