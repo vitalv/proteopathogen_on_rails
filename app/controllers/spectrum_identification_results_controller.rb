@@ -30,7 +30,7 @@ class SpectrumIdentificationResultsController < ApplicationController
   def identification_item
     sii = SpectrumIdentificationItem.find(params[:sii_id])
     @fragments = sii.fragments    
-    @psi_ms_cv_terms = sii.sii_psi_ms_cv_terms
+    @sii_psi_ms_cv_terms = sii.sii_psi_ms_cv_terms
     @psms = sii.peptide_spectrum_assignments
     @peptide_evidences = sii.peptide_evidences    
 
@@ -47,5 +47,7 @@ class SpectrumIdentificationResultsController < ApplicationController
       #format.js { render json: sii_things }
     end
   end
+  
+  
 
 end
