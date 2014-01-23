@@ -30,20 +30,37 @@ $ ->
 #See delegated events : http://api.jquery.com/on/
 #Delegated events have the advantage that they can process events from descendant elements that are added to the document at a later time
 
+#this function, in show.js.erb works bad. Only for 2nd click and subsequents. Por que? No se sabe
+$ ->
+  $("#sir_table").on "click", ".sir_link", ()  ->
+    $("#sir_table .underline").removeClass("underline")
+    $(this).addClass("underline")
+    $("#spectrum").empty()
+    $("#peptide_sequence").remove()
 
-
+      
 $ ->  
   $('#sii_table').on "click", ".sii_link", (e) -> 
   #this function is bound to all ".sii_link" click events, even if they are added to the DOM via ajax later
     sii_id = $(this).data("sii-id")
-    $(".underline").removeClass("underline")
+
+    $("#sii_table .underline").removeClass("underline")
     $(this).addClass("underline")
+
     $("#spectrum").empty()
+    
     $("#peptide_sequence").remove()
     $("#spectrum").before("<div id=peptide_sequence class=spectrum_annotation>")
-    $("#db_seq").remove()
-    $("#spectrum").before("<div id=db_seq class=spectrum_annotation>")
-    #$('#spectrum').append
+    
+    #$(this).parent().parent().after("<tr><td><table id=sii_psi_ms_cv_terms data-sii-id=" + sii_id + ">")
+    #"table[data-sip-cvp-id='" + data_sip_cvp_id + "']"
+
+    #$("#db_seq").remove()
+    #$("#spectrum").before("<div id=db_seq class=spectrum_annotation>")
+
+    #$("#sii_psi_ms_cv_terms").remove()
+    #$("#spectrum").before("<div id=sii_psi_ms_cv_terms class=spectrum_annotation>")
+
     d3.json "results/sir_id/identification_item?sii_id=" + sii_id + "", (error, json) ->
       return console.warn(error) if error
       if $.isEmptyObject json

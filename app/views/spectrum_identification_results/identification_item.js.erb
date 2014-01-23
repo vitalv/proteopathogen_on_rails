@@ -1,8 +1,31 @@
-$('#peptide_sequence').empty();
+//$('#peptide_sequence').empty();
+//$(function() {  
+  //$("#sii_table").on("click", ".sii_link", function() {
+  //$(document).on("click", "#sii_table a.sii_link", function() {
+    //$(this).html("grijander");
+    //data_sii_id = $(this).data("sii-id")
+    //$("table").find("table[data-sii-id='" + data_sii_id + "']").html("estoy aqui");
+  //$("a.sii_link").click(function() {
+  //$(this).closest("tr").after("<tr><td><table id=sii_psi_ms_cv_term>estoy aqui");
+  //});
+//});
+
+//$('#sii_psi_" +<%= @sii_id %> + "_ms_cv_term').html("estoy aqui")
+
+//"table[data-sip-cvp-id='" + data_sip_cvp_id + "']"
+
+
+
 $('#peptide_sequence').append("<p><%= @peptide_sequence %></p>")
 
-$('#db_seq').empty();
-$('#db_seq').append("<p><%= @protein.accession %></p>")
+
+
+
+
+//$('#db_seq').empty();
+//$('#db_seq').append("<p><%= @protein.accession %></p>")
+
+//$('#sii_psi_ms_cv_terms').append("<%= escape_javascript(render partial: 'sii_psi_ms_cv_terms') %>");
 
 //$('table#pep_ev_table').find('tbody').empty();
 //$('table#pep_ev_table').find('tbody').append("<%= escape_javascript(render partial: 'identification_item') %>");
