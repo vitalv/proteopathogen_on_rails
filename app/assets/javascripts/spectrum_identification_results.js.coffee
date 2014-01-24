@@ -82,21 +82,27 @@ visualizeD3spectrum = (json) ->
 
   i = 0
   while i < jsonFragmentIons.length
-    if jsonFragmentIons[i].fragment_type == "frag: c ion"
-      jsonFragmentIons[i].color = "steelblue"
-    else if jsonFragmentIons[i].fragment_type == "frag: z+1 ion"
-     jsonFragmentIons[i].color = "red" 
-    else if jsonFragmentIons[i].fragment_type == "frag: z+2 ion"
-     jsonFragmentIons[i].color = "red"
-    else if jsonFragmentIons[i].fragment_type == "frag: y ion"
-      jsonFragmentIons[i].color = "orange"
+    if jsonFragmentIons[i].fragment_type.match(/precursor/)
+      jsonFragmentIons[i].color = "darkgray"
+    else if jsonFragmentIons[i].fragment_type.match(/frag: a/)
+      jsonFragmentIons[i].color = "crimson"
+    else if jsonFragmentIons[i].fragment_type.match(/frag: b/)
+      jsonFragmentIons[i].color = "orangered"  
+    else if jsonFragmentIons[i].fragment_type.match(/frag: c/)
+      jsonFragmentIons[i].color = "darkorange"
+    else if jsonFragmentIons[i].fragment_type.match(/frag: x/) 
+     jsonFragmentIons[i].color = "teal" 
+    else if jsonFragmentIons[i].fragment_type.match(/frag: y/)
+     jsonFragmentIons[i].color = "royalblue"
+    else if jsonFragmentIons[i].fragment_type.match(/frag: z/)
+      jsonFragmentIons[i].color = "navy"
     i++
 
 
 
   #SET UP svgContainer--------------------------------------------
   #---------------------------------------------------------------
-  w = 580
+  w = 600
   h = 280
   padding = 40
   svgContainer = d3.select("#spectrum").append("svg")
@@ -176,7 +182,7 @@ visualizeD3spectrum = (json) ->
                      .attr("y1", h - padding)
                      .attr("x2", (d) -> return xScale(d.m_mz) )
                      .attr("y2", (d) -> return h - yScale(d.m_intensity) )
-                     .attr("stroke-width", 1.5)
+                     .attr("stroke-width", 1)
                      .attr("stroke", (d) -> return d.color)
                      #.attr("width", 2)
                      #.attr("fill")
@@ -186,7 +192,7 @@ visualizeD3spectrum = (json) ->
                      .attr("y", (d) -> return h - yScale(d.m_intensity) )
                      #.attr("transform", "rotate(-90)")
                      #.text((d) -> return d.fragment_type.replace("frag:",'')
-                     .text((d) -> return d.fragment_type.substr(5))
+                     .text((d) -> return d.fragment_type.substr(5)) #substr removes the "frag: " part
                      .attr("font-family", "sans-serif")
                      .attr("font-size", "9px")
                      #.attr("cursor", "pointer")

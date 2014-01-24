@@ -554,7 +554,8 @@ def rollback(mzid_file_id)
       sil_id = si.spectrum_identification_list
       SpectrumIdentificationProtocol.destroy(sip.id) #sip_searched_mod_join_table, SipPsiMsCvTerms and SipUserParams are dependently destroyed
       pd_ids << SpectrumIdentificationList.find(sil_id).protein_detection_id
-      this_si_sir_ids = si.spectrum_identification_results.map { |sir| sir.id }
+      #this_si_sir_ids = si.spectrum_identification_results.map { |sir| sir.id }
+      this_si_sir_ids = si.spectrum_identification_list.spectrum_identification_result_ids
       SpectrumIdentificationResult.destroy(this_si_sir_ids)
       #Destroying sir, dependently destroys:
         #Sii (which in turn dependently destroys siiPsiTerm, SiiUserP and Fragments)
