@@ -253,10 +253,12 @@ class Mzid
           fragmentation.xpath("./xmlns:IonType").each do |ion|
             mz_values_arr, m_intensity_arr, m_err_arr = [], [], []
             if !ion.xpath("./xmlns:FragmentArray").empty? #minOccurs = 0
-              ion.xpath("./xmlns:FragmentArray").each do |frg_arr|
-                mz_values_arr = frg_arr.attr("values").split("\s") if frg_arr.attr("measure_ref") == "m_mz"
-                m_intensity_arr = frg_arr.attr("values").split("\s") if frg_arr.attr("measure_ref") == "m_intensity"
-                m_err_arr = frg_arr.attr("values").split("\s") if frg_arr.attr("measure_ref") == "m_error"
+              ion.xpath("./xmlns:FragmentArray").each do |frg_arr|              
+                measure_ref = frg_arr.attr("measure_ref")
+                measure_name = sil.xpath(".//xmlns:Measure[@id='#{measure_ref}']").xpath("./xmlns:cvParam").attr("name").value                
+                mz_values_arr = frg_arr.attr("values").split("\s") if measure_name == "product ion m/z"
+                m_intensity_arr = frg_arr.attr("values").split("\s") if measure_name == "product ion intensity"
+                m_err_arr = frg_arr.attr("values").split("\s") if measure_name == "product ion m/z error"
               end
             end
             fragment_name = getcvParams(ion)[0][:name]
