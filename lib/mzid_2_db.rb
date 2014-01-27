@@ -272,7 +272,9 @@ class Mzid2db
 
   def saveSpectrumIdentificationItem(mzid_item, my_sir)
     sii_id = mzid_item.sii_id
-    spectrum_identification_result_id = SpectrumIdentificationResult.find_by_sir_id(my_sir.sir_id).id
+    #spectrum_identification_result_id = SpectrumIdentificationResult.find_by_sir_id(my_sir.sir_id).id
+    #OJO! No puedo buscar el sir por sir_id! Por que puede haber muchos "SIR_1" por ejemplo
+    spectrum_identification_result_id = my_sir.id
     calc_m2z, exp_m2z = mzid_item.calc_m2z, mzid_item.exp_m2z
     rank, charge_state  = mzid_item.rank, mzid_item.charge_state
     pass_threshold = mzid_item.pass_threshold
