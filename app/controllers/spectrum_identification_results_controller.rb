@@ -16,10 +16,12 @@ class SpectrumIdentificationResultsController < ApplicationController
   end
   
   
-  def show
-    @sir_id = params[:id]
-    @sir_id_name = SpectrumIdentificationResult.find(@sir_id).sir_id
-    @spectrum_identification_items = SpectrumIdentificationResult.find(@sir_id).spectrum_identification_items
+  def show    
+    sir = SpectrumIdentificationResult.find(params[:id])
+    @sir_user_params = sir.sir_user_params
+    @sir_psi_ms_cv_terms = sir.sir_psi_ms_cv_terms
+    @sir_id_name = sir.sir_id
+    @spectrum_identification_items = sir.spectrum_identification_items    
     respond_to do |format|
       format.html 
       format.js { render  :layout => false } 
