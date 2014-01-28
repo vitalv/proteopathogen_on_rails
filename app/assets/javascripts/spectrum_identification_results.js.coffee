@@ -75,6 +75,8 @@ $ ->
 visualizeD3spectrum = (json) ->
 
   jsonFragmentIons = json
+  #jsonFragmentIons = [{"id":12769,"spectrum_identification_item_id":28223,"charge":1,"index":0,"m_mz":946.492,"m_intensity":46,"m_error":0.00656,"fragment_type":"frag: precursor ion - H2O","psi_ms_cv_fragment_type_accession":"MS:1001521"},{"id":12770,"spectrum_identification_item_id":28223,"charge":1,"index":9,"m_mz":918.52,"m_intensity":2,"m_error":0.029029,"fragment_type":"frag: a ion","psi_ms_cv_fragment_type_accession":"MS:1001229"},{"id":12771,"spectrum_identification_item_id":28223,"charge":1,"index":9,"m_mz":946.492,"m_intensity":46,"m_error":0.006119,"fragment_type":"frag: b ion","psi_ms_cv_fragment_type_accession":"MS:1001224"},{"id":12772,"spectrum_identification_item_id":28223,"charge":1,"index":9,"m_mz":929.542,"m_intensity":15,"m_error":0.082664,"fragment_type":"frag: b ion - NH3","psi_ms_cv_fragment_type_accession":"MS:1001232"},{"id":12773,"spectrum_identification_item_id":28223,"charge":1,"index":6,"m_mz":683.442,"m_intensity":6,"m_error":0.119497,"fragment_type":"frag: y ion","psi_ms_cv_fragment_type_accession":"MS:1001220"},{"id":12774,"spectrum_identification_item_id":28223,"charge":1,"index":5,"m_mz":550.421,"m_intensity":1,"m_error":0.136,"fragment_type":"frag: y ion - NH3","psi_ms_cv_fragment_type_accession":"MS:1001233"},{"id":12775,"spectrum_identification_item_id":28223,"charge":1,"index":6,"m_mz":665.338,"m_intensity":2,"m_error":0.026057,"fragment_type":"frag: y ion - NH3","psi_ms_cv_fragment_type_accession":"MS:1001233"},{"id":12776,"spectrum_identification_item_id":28223,"charge":1,"index":9,"m_mz":946.492,"m_intensity":46,"m_error":0.006119,"fragment_type":"frag: y ion - NH3","psi_ms_cv_fragment_type_accession":"MS:1001233"},{"id":12777,"spectrum_identification_item_id":28223,"charge":1,"index":5,"m_mz":552.401,"m_intensity":5,"m_error":0.12416,"fragment_type":"frag: z ion","psi_ms_cv_fragment_type_accession":"MS:1001230"},{"id":12778,"spectrum_identification_item_id":28223,"charge":1,"index":7,"m_mz":764.39,"m_intensity":51,"m_error":0.033453,"fragment_type":"frag: z ion","psi_ms_cv_fragment_type_accession":"MS:1001230"}]
+  #jsonFragmentIons = [{"id":13350,"spectrum_identification_item_id":28254,"charge":1,"index":5,"m_mz":447.217,"m_intensity":4380000,"m_error":-0.0031,"fragment_type":"frag: c ion","psi_ms_cv_fragment_type_accession":"MS:1001231"},{"id":13351,"spectrum_identification_item_id":28254,"charge":1,"index":6,"m_mz":576.262,"m_intensity":854900,"m_error":-0.0008,"fragment_type":"frag: c ion","psi_ms_cv_fragment_type_accession":"MS:1001231"},{"id":13352,"spectrum_identification_item_id":28254,"charge":1,"index":7,"m_mz":762.389,"m_intensity":7506000,"m_error":0.0478,"fragment_type":"frag: c ion","psi_ms_cv_fragment_type_accession":"MS:1001231"},{"id":13353,"spectrum_identification_item_id":28254,"charge":1,"index":105,"m_mz":11752.3,"m_intensity":4613000,"m_error":-0.0014,"fragment_type":"frag: c ion","psi_ms_cv_fragment_type_accession":"MS:1001231"},{"id":13354,"spectrum_identification_item_id":28254,"charge":1,"index":21,"m_mz":2411.3,"m_intensity":24380000,"m_error":-0.0042,"fragment_type":"frag: y ion","psi_ms_cv_fragment_type_accession":"MS:1001220"},{"id":13355,"spectrum_identification_item_id":28254,"charge":1,"index":5,"m_mz":521.271,"m_intensity":649000,"m_error":-0.0008,"fragment_type":"frag: y ion","psi_ms_cv_fragment_type_accession":"MS:1001220"},{"id":13356,"spectrum_identification_item_id":28254,"charge":1,"index":37,"m_mz":3965.97,"m_intensity":23390000,"m_error":-0.007,"fragment_type":"frag: z+1 ion","psi_ms_cv_fragment_type_accession":"MS:1001367"},{"id":13357,"spectrum_identification_item_id":28254,"charge":1,"index":36,"m_mz":3878.93,"m_intensity":4996000,"m_error":-0.006,"fragment_type":"frag: z+1 ion","psi_ms_cv_fragment_type_accession":"MS:1001367"},{"id":13358,"spectrum_identification_item_id":28254,"charge":1,"index":32,"m_mz":3459.71,"m_intensity":21840000,"m_error":-0.0048,"fragment_type":"frag: z+1 ion","psi_ms_cv_fragment_type_accession":"MS:1001367"},{"id":13359,"spectrum_identification_item_id":28254,"charge":1,"index":28,"m_mz":3069.55,"m_intensity":8877000,"m_error":-0.0072,"fragment_type":"frag: z+1 ion","psi_ms_cv_fragment_type_accession":"MS:1001367"},{"id":13360,"spectrum_identification_item_id":28254,"charge":1,"index":27,"m_mz":2954.53,"m_intensity":21940000,"m_error":-0.006,"fragment_type":"frag: z+1 ion","psi_ms_cv_fragment_type_accession":"MS:1001367"},{"id":13361,"spectrum_identification_item_id":28254,"charge":1,"index":25,"m_mz":2755.43,"m_intensity":17380000,"m_error":-0.006,"fragment_type":"frag: z+1 ion","psi_ms_cv_fragment_type_accession":"MS:1001367"},{"id":13362,"spectrum_identification_item_id":28254,"charge":1,"index":18,"m_mz":2083.07,"m_intensity":29990000,"m_error":-0.0043,"fragment_type":"frag: z+1 ion","psi_ms_cv_fragment_type_accession":"MS:1001367"},{"id":13363,"spectrum_identification_item_id":28254,"charge":1,"index":17,"m_mz":1954.03,"m_intensity":11550000,"m_error":-0.0037,"fragment_type":"frag: z+1 ion","psi_ms_cv_fragment_type_accession":"MS:1001367"},{"id":13364,"spectrum_identification_item_id":28254,"charge":1,"index":14,"m_mz":1537.77,"m_intensity":6256000,"m_error":-0.0023,"fragment_type":"frag: z+1 ion","psi_ms_cv_fragment_type_accession":"MS:1001367"},{"id":13365,"spectrum_identification_item_id":28254,"charge":1,"index":13,"m_mz":1423.73,"m_intensity":7062000,"m_error":-0.0017,"fragment_type":"frag: z+1 ion","psi_ms_cv_fragment_type_accession":"MS:1001367"},{"id":13366,"spectrum_identification_item_id":28254,"charge":1,"index":12,"m_mz":1308.71,"m_intensity":6381000,"m_error":-0.0017,"fragment_type":"frag: z+1 ion","psi_ms_cv_fragment_type_accession":"MS:1001367"},{"id":13367,"spectrum_identification_item_id":28254,"charge":1,"index":11,"m_mz":1195.62,"m_intensity":972500,"m_error":-0.0017,"fragment_type":"frag: z+1 ion","psi_ms_cv_fragment_type_accession":"MS:1001367"},{"id":13368,"spectrum_identification_item_id":28254,"charge":1,"index":10,"m_mz":1124.58,"m_intensity":1199000,"m_error":-0.0015,"fragment_type":"frag: z+1 ion","psi_ms_cv_fragment_type_accession":"MS:1001367"},{"id":13369,"spectrum_identification_item_id":28254,"charge":1,"index":9,"m_mz":1053.55,"m_intensity":2309000,"m_error":0.003,"fragment_type":"frag: z+1 ion","psi_ms_cv_fragment_type_accession":"MS:1001367"},{"id":13370,"spectrum_identification_item_id":28254,"charge":1,"index":7,"m_mz":762.389,"m_intensity":7506000,"m_error":-0.0012,"fragment_type":"frag: z+1 ion","psi_ms_cv_fragment_type_accession":"MS:1001367"},{"id":13371,"spectrum_identification_item_id":28254,"charge":1,"index":5,"m_mz":505.253,"m_intensity":810600,"m_error":-0.0005,"fragment_type":"frag: z+1 ion","psi_ms_cv_fragment_type_accession":"MS:1001367"}]
   
   #jsonFragmentIons = json["fragments"]
   
@@ -96,6 +98,8 @@ visualizeD3spectrum = (json) ->
      jsonFragmentIons[i].color = "royalblue"
     else if jsonFragmentIons[i].fragment_type.match(/frag: z/)
       jsonFragmentIons[i].color = "navy"
+    else 
+      jsonFragmentIons[i].color = "black"
     i++
 
 
@@ -185,7 +189,7 @@ visualizeD3spectrum = (json) ->
                      .attr("stroke-width", 1)
                      .attr("stroke", (d) -> return d.color)
                      #.attr("width", 2)
-                     #.attr("fill")
+                     .attr("fill")
                      
   msBarTextLabels = msBarText
                      .attr("x", (d) -> return xScale(d.m_mz) )
@@ -232,13 +236,13 @@ visualizeD3spectrum = (json) ->
       d.fragment_type + '<br/>z: ' + d.charge + '<br/>m/z: ' + d.m_mz + '<br/>intensity: ' + d.m_intensity + '<br/>error: ' + d.m_error
       
   #CHECKBOX Thing to filter (show only) checked ion types
-  d3.selectAll(".input class id").on "change", ->
-    selected = this.name
-    display = (if @checked then "inline" else "none")
+  #d3.selectAll(".input class id").on "change", ->
+  #  selected = this.name
+  #  display = (if @checked then "inline" else "none")
     
-    svgContainer.selectAll("line")
-                                  .filter( (d) -> d.fragment_type == selected )
-                                  .attr("display", display)
+  #  svgContainer.selectAll("line")
+  #                                .filter( (d) -> d.fragment_type == selected )
+  #                                .attr("display", display)
   
 
   
