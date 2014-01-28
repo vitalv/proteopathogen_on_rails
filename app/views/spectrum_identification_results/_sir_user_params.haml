@@ -1,0 +1,8 @@
+- if  @sir_user_params.blank?
+  %tr
+    %td.empty= "No user-defined parameters"
+- else
+  - @sir_user_params.each do |uP|
+    %tr
+      %td.title= uP.name
+      %td= uP.value

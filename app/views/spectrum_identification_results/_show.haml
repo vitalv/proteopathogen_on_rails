@@ -4,7 +4,7 @@
 - else
   = @spectrum_identification_items.each do |sii|
     %tr
-      %td= link_to name="#{sii.sii_id}", 
+      %td= link_to name="#{sii.sii_id.gsub(/_Mzid_\d+/, "")}", 
       url={controller: "spectrum_identification_results", action: "identification_item", sii_id: sii.id},
       options={remote: true, format: :js, data: {sii_id: sii.id}, class: "sii_link"}
       %td= sii.calc_m2z

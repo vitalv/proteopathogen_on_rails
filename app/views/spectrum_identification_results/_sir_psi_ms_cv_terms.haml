@@ -1,0 +1,9 @@
+- if  @sir_psi_ms_cv_terms.blank?
+  %tr
+    %td.empty= "No PSI-MS CV terms"
+- else
+  - @sir_psi_ms_cv_terms.each do |cvP|
+    %tr
+      %td.title= cvP.psi_ms_cv_term
+      %td= cvP.ms_term_name
+      %td= cvP.value
