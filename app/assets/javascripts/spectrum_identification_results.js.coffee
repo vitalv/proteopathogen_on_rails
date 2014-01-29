@@ -37,6 +37,7 @@ $ ->
     $(this).addClass("underline")
     $("#spectrum").empty()
     $("#peptide_sequence").remove()
+    $("#sii_cvp td.empty").empty()
 
       
 $ ->  
@@ -52,13 +53,10 @@ $ ->
     $("#peptide_sequence").remove()
     $("#spectrum").before("<div id=peptide_sequence class=spectrum_annotation>")
     
-    #$(this).parent().parent().after("<tr><td><table id=sii_psi_ms_cv_terms data-sii-id=" + sii_id + ">")
-    #"table[data-sip-cvp-id='" + data_sip_cvp_id + "']"
 
     #$("#db_seq").remove()
     #$("#spectrum").before("<div id=db_seq class=spectrum_annotation>")
 
-    #$("#sii_psi_ms_cv_terms").remove()
     #$("#spectrum").before("<div id=sii_psi_ms_cv_terms class=spectrum_annotation>")
 
     d3.json "results/sir_id/identification_item?sii_id=" + sii_id + "", (error, json) ->
@@ -169,34 +167,34 @@ visualizeD3spectrum = (json) ->
                
 
   
-  msBars = svgContainer.selectAll('line')
+  msBars = svgContainer.selectAll('line.matched_peak')   
                         .data(jsonFragmentIons)
                         .enter()
                         .append("line")
+                        
 
-  msBarText = svgContainer.selectAll("text")
+  msBarText = svgContainer.selectAll("text.matched_peak_label") #note I have to add class name, w/o it I would select DOM elements that the axis component added  From SO: "The problem is that you're drawing the axes before adding the lines and labels. By doing .selectAll("line") and .selectAll("text"), you're selecting the existing DOM elements that the axis component added. Then you're matching data to it and therefore your .enter() selection doesn't contain what you suppose."
                            .data(jsonFragmentIons)
                            .enter()
                            .append("text")
+                           
 
   msBarAttributes = msBars
-                     #.attr("y", (d) -> return h - yScale(d.m_intensity) )
-                     #.attr("x", (d) -> return xScale(d.m_mz))
+                     .attr("class", "matched_peak")
                      .attr("x1", (d) -> return xScale(d.m_mz) )
                      .attr("y1", h - padding)
                      .attr("x2", (d) -> return xScale(d.m_mz) )
                      .attr("y2", (d) -> return h - yScale(d.m_intensity) )
                      .attr("stroke-width", 1)
                      .attr("stroke", (d) -> return d.color)
-                     #.attr("width", 2)
                      .attr("fill")
                      
   msBarTextLabels = msBarText
+                     .attr("class", "matched_peak_label")
                      .attr("x", (d) -> return xScale(d.m_mz) )
-                     .attr("y", (d) -> return h - yScale(d.m_intensity) )
-                     #.attr("transform", "rotate(-90)")
-                     #.text((d) -> return d.fragment_type.replace("frag:",'')
+                     .attr("y", (d) -> return h - yScale(d.m_intensity) )                     
                      .text((d) -> return d.fragment_type.substr(5)) #substr removes the "frag: " part
+                     #.attr("transform", (d) -> return "rotate(90)" )
                      .attr("font-family", "sans-serif")
                      .attr("font-size", "9px")
                      #.attr("cursor", "pointer")

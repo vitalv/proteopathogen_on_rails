@@ -15,10 +15,13 @@
 //"table[data-sip-cvp-id='" + data_sip_cvp_id + "']"
 
 
+$('table#sii_cvp').find('tbody').empty()
+$('table#sii_cvp').find('tbody').append("<%= escape_javascript(render partial: 'sii_psi_ms_cv_terms') %>");
+
+$('table#sii_up').find('tbody').empty()
+$('table#sii_up').find('tbody').append("<%= escape_javascript(render partial: 'sii_user_params') %>");
 
 $('#peptide_sequence').append("<p><%= @peptide_sequence %></p>")
-
-
 
 
 

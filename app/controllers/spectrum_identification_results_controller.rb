@@ -33,6 +33,7 @@ class SpectrumIdentificationResultsController < ApplicationController
     sii = SpectrumIdentificationItem.find(params[:sii_id])
     @fragments = sii.fragments    
     @sii_psi_ms_cv_terms = sii.sii_psi_ms_cv_terms
+    @sii_user_params = sii.sii_user_params
     @psms = sii.peptide_spectrum_assignments
     @peptide_evidences = sii.peptide_evidences    
 
