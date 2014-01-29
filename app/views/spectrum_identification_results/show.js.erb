@@ -17,4 +17,10 @@ $('table#sir_up').find('tbody').append("<%= escape_javascript(render partial: 's
 $('table#sii_table').find('tbody').empty();
 $('table#sii_table').find('tbody').append("<%= escape_javascript(render partial: 'show') %>");
 
+$('table#sii_cvp').find('tbody').empty()
+$('table#sii_cvp').find('tbody').append("<tr><td class=empty>PSI-MS CV terms, names and value</td></tr>");
+
+$('table#sii_up').find('tbody').empty()
+$('table#sii_up').find('tbody').append("<tr><td class=empty>User-defined Parameters</td></tr>");
+
 
