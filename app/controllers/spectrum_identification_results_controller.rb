@@ -30,25 +30,29 @@ class SpectrumIdentificationResultsController < ApplicationController
   
   
   def identification_item
+  
     sii = SpectrumIdentificationItem.find(params[:sii_id])
     @fragments = sii.fragments    
     @sii_psi_ms_cv_terms = sii.sii_psi_ms_cv_terms
     @sii_user_params = sii.sii_user_params
+
     @psms = sii.peptide_spectrum_assignments
     @peptide_evidences = sii.peptide_evidences    
 
-    @peptide_sequence = PeptideSequence.find(sii.peptide_evidences[0].peptide_sequence_id).sequence
-    @protein = DbSequence.find(sii.peptide_evidences[0].db_sequence_id)
+    #note: I can safely fetch psa[0] There might be more than one peptide_evidence per sii in the case "a specific sequence can be assigned to multiple proteins and or positions in a protein", but the peptide sequence is the same
+    @peptide_sequence = sii.peptide_spectrum_assignments[0].peptide_evidence.peptide_sequence.sequence
+    #for that reason, the referred protein might be different
+    @db_seq = []
+    @peptide_evidences.each do |pep_ev|
+      @db_seq << pep_ev.db_sequence
+    end
     
-    #sii_things = {fragments: @fragments, psi_ms_cv_terms: @psi_ms_cv_terms }
     respond_to do |format|
       format.html { render json: @fragments  }
-      #format.html { render json: sii_things }
-      #format.any { render json: @fragments }
       format.json { render json: @fragments }
       format.js { render :layout => false }
-      #format.js { render json: sii_things }
     end
+    
   end
   
   

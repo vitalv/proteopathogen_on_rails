@@ -242,6 +242,15 @@ visualizeD3spectrum = (json) ->
   #                                .filter( (d) -> d.fragment_type == selected )
   #                                .attr("display", display)
   
+  
+  
+  
+  
+  #zoom = d3.behavior.zoom().x(xScale).y(yScale).scaleExtent([1,100]).on("zoom", zoomed)
+  
+  #zoomed = ->
+  #  svgContainer.select(".x.axis").call xAxis
+  #  svgContainer.select(".y.axis").call yAxis
 
   
   
