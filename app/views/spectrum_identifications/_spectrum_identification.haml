@@ -23,4 +23,4 @@
   -unless spectrum_identification.spectrum_identification_list.blank? #can this be blank?
     %tr
       %td{:colspan => 2, :style=> "text-align:center"}
-        =  link_to '> Spectrum Identification Results', spectrum_identification_results_path(spectrum_identification.id), :id => "si_#{spectrum_identification.id}_results"
+        =  link_to 'Spectrum Identification Results', spectrum_identification_results_path(spectrum_identification.id), id: "si_#{spectrum_identification.id}_results", class: "flat_link"

@@ -33,8 +33,8 @@ $ ->
 #this function, in show.js.erb works bad. Only for 2nd click and subsequents. Por que? No se sabe
 $ ->
   $("#sir_table").on "click", ".sir_link", ()  ->
-    $("#sir_table .underline").removeClass("underline")
-    $(this).addClass("underline")
+    $("#sir_table .flat_link").removeClass("flat_link")
+    $(this).addClass("flat_link")
     $("#spectrum").empty()
     $("#peptide_sequence").remove()
     $("#sii_cvp td.empty").empty()
@@ -45,8 +45,8 @@ $ ->
   #this function is bound to all ".sii_link" click events, even if they are added to the DOM via ajax later
     sii_id = $(this).data("sii-id")
 
-    $("#sii_table .underline").removeClass("underline")
-    $(this).addClass("underline")
+    $("#sii_table .flat_link").removeClass("flat_link")
+    $(this).addClass("flat_link")
 
     $("#spectrum").empty()
     

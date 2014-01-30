@@ -30,7 +30,7 @@ html, body {
 body {
   /*background-color: #FAFAFA; #poner una imagen de fondo?*/
   padding: 0% 16% 0% 16%;
-  font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+  font-family: helvetica, 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
   font-size: 8pt;
   color: $blue_font_color;
 }
@@ -49,7 +49,7 @@ nav_links {
 	  font-size: 11pt;
 	  text-decoration: none;
 	  font-weight: bold;
-	  color: #924C4C;
+	  color: $blue_font_color;
 	  &:hover{ color: #ACABAC; }
     }
   }
@@ -79,6 +79,14 @@ content {
   letter-spacing: 1px;
   padding: 1px;
   border-radius: 2px;
+}
+
+.flat_link {
+  background-color: #55A5D8;
+  padding: 1px 4px;
+  border-radius: 2px;
+  color: whitesmoke;
+  &:hover{ color: white; }
 }
 
 
