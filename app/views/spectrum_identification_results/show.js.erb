@@ -17,6 +17,9 @@ $('table#sir_up').find('tbody').append("<%= escape_javascript(render partial: 's
 $('table#sii_table').find('tbody').empty();
 $('table#sii_table').find('tbody').append("<%= escape_javascript(render partial: 'show') %>");
 
+$('table#pep_ev_table').find('tbody').empty();
+$('table#pep_ev_table').find('tbody').append("<tr><td colspan=6 class=empty>Peptide Evidences</td></tr>");
+
 $('table#sii_cvp').find('tbody').empty()
 $('table#sii_cvp').find('tbody').append("<tr><td class=empty>PSI-MS CV terms, names and value</td></tr>");
 

@@ -47,36 +47,21 @@
 
 %br
 
-%h3.table_header= "Spectrum Identification Item PSI-MS CV Parameters "
-%table#sii_cvp.my_table
+%h3.table_header= "Peptide Evidence(s)"
+%table#pep_ev_table.my_table
+  %thead
+    %tr
+      %th start
+      %th end
+      %th pre
+      %th post
+      %th is_decoy
+      %th DB sequence
   %tbody
     %tr
-      %td.empty= "PSI-MS CV terms, names and value"
+      %td{colspan: 6, style: "text-align:center"}Peptide Evidences
 
 %br
-
-%h3.table_header= "Spectrum Identification Item User Parameters "
-%table#sii_up.my_table
-  %tbody
-    %tr
-      %td.empty= "User-defined Parameters"
-
-
--#%h4 Peptide Evidence(s)
--#%table#pep_ev_table.my_table
--#  %thead
--#    %tr
--#      %th start
--#      %th end
--#      %th pre
--#      %th post
--#      %th is_decoy
--#      %th DB sequence
--#      %th Peptide Sequence
--#  %tbody
--#    %tr
--#      %td{:colspan => 7, :style=> "text-align:center"}Peptide Evidences
-
 
 %div#spectrum
 
@@ -93,6 +78,20 @@
   -#%div#checkboxthing
     -#= check_box_tag 'y_ions', 'yes', true
     -#Show y ions
+    
+%br
 
+%h3.table_header= "Spectrum Identification Item PSI-MS CV Parameters "
+%table#sii_cvp.my_table
+  %tbody
+    %tr
+      %td.empty= "PSI-MS CV terms, names and value"
 
+%br
+
+%h3.table_header= "Spectrum Identification Item User Parameters "
+%table#sii_up.my_table
+  %tbody
+    %tr
+      %td.empty= "User-defined Parameters"
 
