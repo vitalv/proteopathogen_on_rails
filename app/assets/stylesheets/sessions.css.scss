@@ -1,0 +1,21 @@
+/*
+  Place all the styles related to the matching controller here.
+  They will automatically be included in application.css.
+*/
+
+#log_in {
+  width: 30%;
+  margin: 10% auto;
+  form {
+  
+    display: table;
+    border: 1px dashed #B6B5B0;
+    border-radius: 6px;  
+   /*position: relative;*/
+    padding: 2em;
+    margin: 0 ;
+    boder: dashed gray 1px;
+    border-radius: 5px;
+  }
+  
+}
