@@ -72,6 +72,14 @@ content {
   }
 }
 
+.flat {
+  display: table;
+  background-color: #924C4C;  
+  color: WhiteSmoke;
+  letter-spacing: 1px;
+  padding: 1px;
+  border-radius: 2px;
+}
 
 
 .my_table {
@@ -98,9 +106,17 @@ content {
   }
 }
 
+.shadow {
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+}
 
 .my_table .inner {
   border-collapse: collapse;
+  border-color: white;
   margin: 1% auto;
   width: 100%;
   tr td {

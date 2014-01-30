@@ -3,7 +3,7 @@
   %p No stored Experiments 
 -else
   -@experiments.each do |exp|
-    %table{:id => "exp_table_#{exp.id}", :class =>"my_table" }
+    %table{:id => "exp_table_#{exp.id}", :class =>"my_table shadow" }
       %tr
         %td.title protocol:
         %td= exp.protocol
