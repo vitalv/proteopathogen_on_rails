@@ -22,7 +22,11 @@ html, body {
 }
 .footer, .push {
   height: 5.5em;
-
+  img { 
+   /*border-top: solid 1px #924C4C;*/ 
+   display: block;
+   margin: 0 auto;
+   }
 }
 /*----- sticky footer thing ------*/
 
@@ -38,6 +42,7 @@ body {
   
 p {padding: 8px 0;} /* this is bc of the sticky footer thing */ 
 
+
 nav_links {
   padding: 5px;
   float: right;
@@ -49,8 +54,8 @@ nav_links {
 	  font-size: 11pt;
 	  text-decoration: none;
 	  font-weight: bold;
-	  color: $blue_font_color;
-	  &:hover{ color: #ACABAC; }
+	  color: #d45500;
+	  &:hover{ color: #ff8b3e; }
     }
   }
 }
@@ -71,6 +76,8 @@ content {
 	&:hover{ color: #ACABAC; }  
   }
 }
+
+/*h2, h3 { letter-spacing: 1px}*/
 
 .flat {
   display: table;

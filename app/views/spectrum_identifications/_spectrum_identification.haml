@@ -24,3 +24,7 @@
     %tr
       %td{:colspan => 2, :style=> "text-align:center"}
         =  link_to 'Spectrum Identification Results', spectrum_identification_results_path(spectrum_identification.id), id: "si_#{spectrum_identification.id}_results", class: "flat_link"
+
+    %tr
+      %td{:colspan => 2, :style=> "text-align:center"}
+        =  link_to 'Protein Detection', '#', class: "flat_link"

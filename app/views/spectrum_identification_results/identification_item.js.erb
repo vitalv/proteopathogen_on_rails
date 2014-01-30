@@ -2,6 +2,8 @@ $('table#sii_cvp').find('tbody').empty()
 $('table#sii_cvp').find('tbody').append("<%= escape_javascript(render partial: 'sii_psi_ms_cv_terms') %>");
 $('table#sii_up').find('tbody').empty()
 $('table#sii_up').find('tbody').append("<%= escape_javascript(render partial: 'sii_user_params') %>");
+$('table#pep_ev_table').find('tbody').empty()
+$('table#pep_ev_table').find('tbody').append("<%= escape_javascript(render partial: 'sii_peptide_evidences') %>");
 $('#peptide_sequence').append("<p><%= @peptide_sequence %></p>")
 
 
