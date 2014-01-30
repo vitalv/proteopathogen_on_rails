@@ -14,4 +14,4 @@
       %td= mzidf.submission_date
     %tr
       %td{:colspan => 2, :style=> "text-align:center"}
-        = link_to '> Spectrum Identification', mzid_file_spectrum_identifications_path(mzidf.id), :id => "mzidf_#{mzidf.id}_si"      
+        = link_to 'Spectrum Identification', mzid_file_spectrum_identifications_path(mzidf.id), id:"mzidf_#{mzidf.id}_si", class: "flat_link"
