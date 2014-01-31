@@ -8,50 +8,6 @@
 
 
 
-
-div.dataTables_info {
-    width: 40%;
-}
- 
-.dataTables_paginate {
-    width: 400px;
-    height: 22px;
-    line-height: 22px;
-}
- 
-div.dataTables_paginate span.paginate_button,
-    div.dataTables_paginate span.paginate_active {
-    border: 1px solid #aaa;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    padding: 2px 5px;
-    margin: 0 3px;
-    cursor: pointer;
-    *cursor: hand;
-}
- 
-div.dataTables_paginate span.paginate_button {
-    background-color: #ddd;
-}
- 
-div.dataTables_paginate span.paginate_button:hover {
-    background-color: #ccc;
-}
- 
-div.dataTables_paginate span.paginate_active {
-    background-color: #99B3FF;
-}
-
-div.dataTables_paginate a {
-  margin: 0 5px;
-  cursor: pointer;
-  *cursor: hand;
-}
-
-div.dataTables_paginate a.ui-state-disabled {
-    color: gray;
-  }
-
 .my_table { border-radius: 5px; }
 
 table#sii_table {
@@ -67,15 +23,27 @@ td.empty { text-align: center;}
 
 
 
-//#sii_psi_ms_cv_terms_table {
- // display: none;
-//}
-
-
 .underline {text-decoration: underline;}
 
 
+//Datatables tweaks 
 
+table.dataTable thead th {
+  border: none;
+}
+.paging_full_numbers a.paginate_button, paging_full_numbers a.paginate_active {
+  color: #55A5D8!important;
+}
+#sir_table_paginate {  
+  a { 
+    background-color:white;
+    border: none;
+  }
+  .paginate_active {
+    text-decoration: underline;
+    color: gray!important;
+  }
+}
 
 
 $blue_font_color: #0A2747;
@@ -89,16 +57,16 @@ $blue_font_color: #0A2747;
   border: 1px dashed #B6B5B0;
   border-radius: 6px;
   p {
-  width: 90%;
-  text-align: center;
-  margin: 1% auto;
-  color: $blue_font_color;
-  //font-size: 1.1em;
-  white-space: pre-wrap;      /* CSS3 */   
-  white-space: -moz-pre-wrap; /* Firefox */    
-  white-space: -pre-wrap;     /* Opera <7 */   
-  white-space: -o-pre-wrap;   /* Opera 7 */    
-  word-wrap: break-word;      /* IE */
+    width: 90%;
+    text-align: center;
+    margin: 1% auto;
+    color: $blue_font_color;
+    //font-size: 1.1em;
+    white-space: pre-wrap;      /* CSS3 */   
+    white-space: -moz-pre-wrap; /* Firefox */    
+    white-space: -pre-wrap;     /* Opera <7 */   
+    white-space: -o-pre-wrap;   /* Opera 7 */    
+    word-wrap: break-word;      /* IE */
   }
 }
 

@@ -7,7 +7,6 @@
 $ -> 
   $("#sir_table").dataTable
     sPaginationType: "full_numbers"
-    bJQueryUI: true
     bProcessing: true
     bServerSide: true
     sAjaxSource: $('#sir_table').data('source')
@@ -55,13 +54,14 @@ $ ->
     
 
     d3.json "results/sir_id/identification_item?sii_id=" + sii_id + "", (error, json) ->
+      $("#spectrum").css("visibility", "visible") 
       return console.warn(error) if error
       if $.isEmptyObject json
         missing_spec_msg = "<div class=spectrum_display_msg><p>NO FRAGMENTATION AVAILABLE FOR SELECTED SPECTRUM IDENTIFICATION ITEM</p></div>"
         $("#spectrum").append(missing_spec_msg)
       else
         visualizeD3spectrum json
-    e.preventDefault()
+    #e.preventDefault()
 
 
 

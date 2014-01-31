@@ -138,7 +138,6 @@ class Mzid2db
 
 
 
-
   def saveSpectrumIdentification(mzid_si)
     mzid_si_id = mzid_si.si_id
     my_si = SpectrumIdentification.find_or_create_by(si_id: mzid_si_id, mzid_file_id: @mzid_file_id) do |si|
@@ -151,10 +150,10 @@ class Mzid2db
 
   def saveSip(mzid_sip, my_si)
     sip_id = mzid_sip.sip_id
-    parent_tol_plus_value = mzid_sip.parent_tolerance[0][:value] + mzid_sip.parent_tolerance[0][:unitName ]
-    parent_tol_minus_value = mzid_sip.parent_tolerance[1][:value] + mzid_sip.parent_tolerance[0][:unitName ]
-    fragment_tol_plus_value = mzid_sip.fragment_tolerance[0][:value] + mzid_sip.fragment_tolerance[0][:unitName ]
-    fragment_tol_minus_value = mzid_sip.fragment_tolerance[1][:value] + mzid_sip.fragment_tolerance[0][:unitName ]
+    parent_tol_plus_value = mzid_sip.parent_tolerance[0][:value] + " #{mzid_sip.parent_tolerance[0][:unitName]}"
+    parent_tol_minus_value = mzid_sip.parent_tolerance[1][:value] + " #{mzid_sip.parent_tolerance[0][:unitName ]}"
+    fragment_tol_plus_value = mzid_sip.fragment_tolerance[0][:value] + " #{mzid_sip.fragment_tolerance[0][:unitName]}"
+    fragment_tol_minus_value = mzid_sip.fragment_tolerance[1][:value] + " #{mzid_sip.fragment_tolerance[0][:unitName]}"
     #Check Sip model : (validates_uniqueness)
     my_sip = SpectrumIdentificationProtocol.find_or_create_by(spectrum_identification_id: my_si.id, sip_id: sip_id) do |sip|
       sip.analysis_software = mzid_sip.analysis_software
