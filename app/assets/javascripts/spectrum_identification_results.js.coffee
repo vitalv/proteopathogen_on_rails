@@ -222,18 +222,22 @@ $ ->
   zoomed = ->
     svgContainer.select(".x.axis").call xAxis
     svgContainer.select(".y.axis").call yAxis
-    #svgContainer.select(".line.matched_peak").attr("d", msBars);
-    svgContainer.selectAll(".line.matched_peak").attr("transform", "translate(" +
-                  d3.event.translate[0] + ",0)scale(" + d3.event.scale + ", 1)");
+    svgContainer.selectAll("line.matched_peak")
+                        .attr("x1", (d) -> return xScale(d.m_mz) )
+                        .attr("y1", h - padding)
+                        .attr("x2", (d) -> return xScale(d.m_mz) )
+                        .attr("y2", (d) -> return yScale(d.m_intensity) )
+    svgContainer.selectAll("text.matched_peak_label")
+        .attr("x", (d) -> return xScale(d.m_mz) )
+                           .attr("y", (d) -> return  yScale(d.m_intensity) )
     
   zoom = d3.behavior.zoom()
                      .x(xScale)
                      .y(yScale)
-                     .scaleExtent([1, 10])
+                     #.scaleExtent([1, 10])
                      .on("zoom", zoomed)
   
   svgContainer.call zoom
-  
   
   
 #$(document).ready ready
