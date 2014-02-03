@@ -7,11 +7,11 @@
       %td= link_to name="#{sii.sii_id.gsub(/_Mzid_\d+/, "")}", 
       url={controller: "spectrum_identification_results", action: "identification_item", sii_id: sii.id},
       options={remote: true, format: :js, data: {sii_id: sii.id}, class: "sii_link"}
-      %td= sii.calc_m2z
-      %td= sii.exp_m2z
-      %td= sii.rank
-      %td= sii.charge_state
-      %td= sii.pass_threshold
+      %td.center= sii.calc_m2z
+      %td.center= sii.exp_m2z
+      %td.center= sii.rank
+      %td.center= sii.charge_state
+      %td.center= sii.pass_threshold
   
 -#    -unless sii.sii_psi_ms_cv_terms.blank?
 -#      %tr

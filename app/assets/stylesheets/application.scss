@@ -99,7 +99,7 @@ content {
 
 .my_table {
   margin: 1em auto;
-  table-layout: fixed;
+  //table-layout: fixed;
   width: 100%;
   border:solid 1px #E1E1E1;
   tr:nth-of-type(odd){
@@ -111,6 +111,7 @@ content {
   td {
     padding: 3px 6px;
   }
+  td.center { text-align: center; }
   td.title {
     width: 200px;
     font-weight: bold;
