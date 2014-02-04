@@ -111,7 +111,6 @@ visualizeD3spectrum = (json) ->
             .attr("height", h - 2 * padding)
 
 
-
   #SCALING thing--------------------------------------------------
   #---------------------------------------------------------------
   maxInitialMz = d3.max(jsonFragmentIons, (d) -> return d.m_mz)
@@ -120,14 +119,11 @@ visualizeD3spectrum = (json) ->
   minInitialIntensity = d3.min(jsonFragmentIons, (d) -> return d.m_intensity)
   
   xScale = d3.scale.linear() #Remember: When I say “input,” you say “domain.” Then I say “output,” and you say “range.” Ready?
-                   .domain([minInitialMz, maxInitialMz]).nice()
+                   .domain([minInitialMz, maxInitialMz]).nice() #.nice() tells the scale to take whatever input domain that you gave to range() and expand both ends to the nearest round value
                    .range([padding, w - padding])
-                   #.range([padding, w]) 
-                   #.nice() # This tells the scale to take whatever input domain that you gave to range() and expand both ends to the nearest round value
 
   yScale = d3.scale.linear()
                    .domain([minInitialIntensity, maxInitialIntensity]).nice()
-                   #.range([padding, h - padding])  #Now that we’re using scales, it’s super easy to reverse that, so greater values are higher up, as you would expect (alignedleft/scales)
                    .range([h - padding, padding])
                    
 
@@ -136,13 +132,16 @@ visualizeD3spectrum = (json) ->
                  .scale(xScale)
                  .orient("bottom")
                  .ticks(5)
-
+  
+  if minInitialIntensity > 1000
+    my_format = d3.format("e")
+  else 
+    my_format = d3.format(", 0f")
   yAxis = d3.svg.axis()
                  .scale(yScale)
                  .orient("left")
                  .ticks(5)
-                 #.tickFormat("")
-                 
+                 .tickFormat((d) -> return my_format(d) )
   
   #APEND, Axis, MS BARS , etc To svgContainer --------------------  
   svgContainer.append("g")
@@ -191,7 +190,6 @@ visualizeD3spectrum = (json) ->
                            #.attr("transform", (d) -> return "rotate(90)" )
                            .attr("font-family", "sans-serif")
                            .attr("font-size", "9px")
-                           #.attr("cursor", "pointer")
                            .attr("fill", "gray")
                            .attr("clip-path", "url(#cp)")
 
