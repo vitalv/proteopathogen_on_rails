@@ -106,9 +106,9 @@ visualizeD3spectrum = (json) ->
   cp = svgContainer.append("defs").append("clipPath").attr("id", "cp")
             .append("rect")
             .attr("x", padding)
-            .attr("y", padding)
+            .attr("y", padding - 20)
             .attr("width", w - 2 * padding) 
-            .attr("height", h - 2 * padding)
+            .attr("height", h - (2 * padding) + 20) #con este 20 hago que si un pico llega hasta arriba en la grafica quede un poco mas de margen para escribir su label
 
 
   #SCALING thing--------------------------------------------------
@@ -181,17 +181,20 @@ visualizeD3spectrum = (json) ->
 
   msBarText = svgContainer.selectAll("text.matched_peak_label") #note I have to add class name, w/o it I would select DOM elements that the axis component added  From SO: "The problem is that you're drawing the axes before adding the lines and labels. By doing .selectAll("line") and .selectAll("text"), you're selecting the existing DOM elements that the axis component added. Then you're matching data to it and therefore your .enter() selection doesn't contain what you suppose."
                            .data(jsonFragmentIons)
-                           .enter()
+                           .enter()                           
+                           .append("g").attr("clip-path", "url(#cp)")
                            .append("text")
                            .attr("class", "matched_peak_label")
                            .attr("x", (d) -> return xScale(d.m_mz) )
-                           .attr("y", (d) -> return yScale(d.m_intensity) )                     
+                           .attr("y", (d) -> return yScale(d.m_intensity) )
+                           #.attr("transform", (d) -> return "translate(" + xScale(d.m_mz) + "," + yScale(d.m_intensity) + ")rotate(-90)" )
+                           .attr("transform", (d) -> return "rotate(-90 " + xScale(d.m_mz) + "," + yScale(d.m_intensity) + ")" )
+                           
                            .text((d) -> return d.fragment_type.substr(5)) #substr removes the "frag: " part
-                           #.attr("transform", (d) -> return "rotate(90)" )
                            .attr("font-family", "sans-serif")
                            .attr("font-size", "9px")
                            .attr("fill", "gray")
-                           .attr("clip-path", "url(#cp)")
+                           
 
 
   #TOOLTIPS. 2 OPTIONS:
@@ -261,6 +264,8 @@ visualizeD3spectrum = (json) ->
     svgContainer.selectAll("text.matched_peak_label")
                             .attr("x", (d) -> return xScale(d.m_mz) )
                             .attr("y", (d) -> return yScale(d.m_intensity) )
+                            #.attr("transform", (d) -> return "translate(" + xScale(d.m_mz) + "," + yScale(d.m_intensity) + ")rotate(-90)" )
+                            .attr("transform", (d) -> return "rotate(-90 " + xScale(d.m_mz) + "," + yScale(d.m_intensity) + ")" )
 
   
   zoom = d3.behavior.zoom()
