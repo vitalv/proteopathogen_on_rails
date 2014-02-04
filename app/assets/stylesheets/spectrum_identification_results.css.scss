@@ -99,13 +99,14 @@ $blue_font_color: #0A2747;
 .axis path,
 .axis line {
     fill: none;
-    stroke: black;
+    stroke: gray;
     shape-rendering: crispEdges;
 }
 
 .axis text {
     font-family: sans-serif;
-    font-size: 11px;
+    font-size: 9px;
+    color: $blue_font_color;
 }
 
 
