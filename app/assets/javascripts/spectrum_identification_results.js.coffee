@@ -64,11 +64,11 @@ $ ->
     #e.preventDefault()
 
 
-#visualizeD3spectrum = (json) ->
-$ -> 
+visualizeD3spectrum = (json) ->
+#$ -> 
 
-  #jsonFragmentIons = json
-  jsonFragmentIons = [{"id":12769,"spectrum_identification_item_id":28223,"charge":1,"index":0,"m_mz":946.492,"m_intensity":46,"m_error":0.00656,"fragment_type":"frag: precursor ion - H2O","psi_ms_cv_fragment_type_accession":"MS:1001521"},{"id":12770,"spectrum_identification_item_id":28223,"charge":1,"index":9,"m_mz":918.52,"m_intensity":2,"m_error":0.029029,"fragment_type":"frag: a ion","psi_ms_cv_fragment_type_accession":"MS:1001229"},{"id":12771,"spectrum_identification_item_id":28223,"charge":1,"index":9,"m_mz":946.492,"m_intensity":46,"m_error":0.006119,"fragment_type":"frag: b ion","psi_ms_cv_fragment_type_accession":"MS:1001224"},{"id":12772,"spectrum_identification_item_id":28223,"charge":1,"index":9,"m_mz":929.542,"m_intensity":15,"m_error":0.082664,"fragment_type":"frag: b ion - NH3","psi_ms_cv_fragment_type_accession":"MS:1001232"},{"id":12773,"spectrum_identification_item_id":28223,"charge":1,"index":6,"m_mz":683.442,"m_intensity":6,"m_error":0.119497,"fragment_type":"frag: y ion","psi_ms_cv_fragment_type_accession":"MS:1001220"},{"id":12774,"spectrum_identification_item_id":28223,"charge":1,"index":5,"m_mz":550.421,"m_intensity":1,"m_error":0.136,"fragment_type":"frag: y ion - NH3","psi_ms_cv_fragment_type_accession":"MS:1001233"},{"id":12775,"spectrum_identification_item_id":28223,"charge":1,"index":6,"m_mz":665.338,"m_intensity":2,"m_error":0.026057,"fragment_type":"frag: y ion - NH3","psi_ms_cv_fragment_type_accession":"MS:1001233"},{"id":12776,"spectrum_identification_item_id":28223,"charge":1,"index":9,"m_mz":946.492,"m_intensity":46,"m_error":0.006119,"fragment_type":"frag: y ion - NH3","psi_ms_cv_fragment_type_accession":"MS:1001233"},{"id":12777,"spectrum_identification_item_id":28223,"charge":1,"index":5,"m_mz":552.401,"m_intensity":5,"m_error":0.12416,"fragment_type":"frag: z ion","psi_ms_cv_fragment_type_accession":"MS:1001230"},{"id":12778,"spectrum_identification_item_id":28223,"charge":1,"index":7,"m_mz":764.39,"m_intensity":51,"m_error":0.033453,"fragment_type":"frag: z ion","psi_ms_cv_fragment_type_accession":"MS:1001230"}]
+  jsonFragmentIons = json
+  #jsonFragmentIons = [{"id":12769,"spectrum_identification_item_id":28223,"charge":1,"index":0,"m_mz":946.492,"m_intensity":46,"m_error":0.00656,"fragment_type":"frag: precursor ion - H2O","psi_ms_cv_fragment_type_accession":"MS:1001521"},{"id":12770,"spectrum_identification_item_id":28223,"charge":1,"index":9,"m_mz":918.52,"m_intensity":2,"m_error":0.029029,"fragment_type":"frag: a ion","psi_ms_cv_fragment_type_accession":"MS:1001229"},{"id":12771,"spectrum_identification_item_id":28223,"charge":1,"index":9,"m_mz":946.492,"m_intensity":46,"m_error":0.006119,"fragment_type":"frag: b ion","psi_ms_cv_fragment_type_accession":"MS:1001224"},{"id":12772,"spectrum_identification_item_id":28223,"charge":1,"index":9,"m_mz":929.542,"m_intensity":15,"m_error":0.082664,"fragment_type":"frag: b ion - NH3","psi_ms_cv_fragment_type_accession":"MS:1001232"},{"id":12773,"spectrum_identification_item_id":28223,"charge":1,"index":6,"m_mz":683.442,"m_intensity":6,"m_error":0.119497,"fragment_type":"frag: y ion","psi_ms_cv_fragment_type_accession":"MS:1001220"},{"id":12774,"spectrum_identification_item_id":28223,"charge":1,"index":5,"m_mz":550.421,"m_intensity":1,"m_error":0.136,"fragment_type":"frag: y ion - NH3","psi_ms_cv_fragment_type_accession":"MS:1001233"},{"id":12775,"spectrum_identification_item_id":28223,"charge":1,"index":6,"m_mz":665.338,"m_intensity":2,"m_error":0.026057,"fragment_type":"frag: y ion - NH3","psi_ms_cv_fragment_type_accession":"MS:1001233"},{"id":12776,"spectrum_identification_item_id":28223,"charge":1,"index":9,"m_mz":946.492,"m_intensity":46,"m_error":0.006119,"fragment_type":"frag: y ion - NH3","psi_ms_cv_fragment_type_accession":"MS:1001233"},{"id":12777,"spectrum_identification_item_id":28223,"charge":1,"index":5,"m_mz":552.401,"m_intensity":5,"m_error":0.12416,"fragment_type":"frag: z ion","psi_ms_cv_fragment_type_accession":"MS:1001230"},{"id":12778,"spectrum_identification_item_id":28223,"charge":1,"index":7,"m_mz":764.39,"m_intensity":51,"m_error":0.033453,"fragment_type":"frag: z ion","psi_ms_cv_fragment_type_accession":"MS:1001230"}]
 
   i = 0
   while i < jsonFragmentIons.length
@@ -96,11 +96,21 @@ $ ->
   w = 600
   h = 280
   padding = 40
-  #svgContainer = d3.select("#spectrum").append("svg")
-  svgContainer = d3.select("#spectrum_test").append("svg")
+  svgContainer = d3.select("#spectrum").append("svg")
+  #svgContainer = d3.select("#spectrum_test").append("svg")
                                      .attr("width", w)
                                      .attr("height", h)
                                      
+
+  #clipPath element: https://developer.mozilla.org/en-US/docs/Web/SVG/Element/clipPath
+  cp = svgContainer.append("defs").append("clipPath").attr("id", "cp")
+            .append("rect")
+            .attr("x", padding)
+            .attr("y", padding)
+            .attr("width", w - 2 * padding) 
+            .attr("height", h - 2 * padding)
+
+
 
   #SCALING thing--------------------------------------------------
   #---------------------------------------------------------------
@@ -110,16 +120,16 @@ $ ->
   minInitialIntensity = d3.min(jsonFragmentIons, (d) -> return d.m_intensity)
   
   xScale = d3.scale.linear() #Remember: When I say “input,” you say “domain.” Then I say “output,” and you say “range.” Ready?
-                   .domain([minInitialMz, maxInitialMz])
+                   .domain([minInitialMz, maxInitialMz]).nice()
                    .range([padding, w - padding])
                    #.range([padding, w]) 
-                   .nice() # This tells the scale to take whatever input domain that you gave to range() and expand both ends to the nearest round value
+                   #.nice() # This tells the scale to take whatever input domain that you gave to range() and expand both ends to the nearest round value
 
   yScale = d3.scale.linear()
-                   .domain([minInitialIntensity, maxInitialIntensity])
+                   .domain([minInitialIntensity, maxInitialIntensity]).nice()
                    #.range([padding, h - padding])  #Now that we’re using scales, it’s super easy to reverse that, so greater values are higher up, as you would expect (alignedleft/scales)
                    .range([h - padding, padding])
-                   .nice()
+                   
 
   #SET UP Axis----------------------------------------------------
   xAxis = d3.svg.axis()
@@ -166,7 +176,8 @@ $ ->
                         .attr("y2", (d) -> return  yScale(d.m_intensity) )
                         .attr("stroke-width", 1)
                         .attr("stroke", (d) -> return d.color)
-                        .attr("fill")
+                        .attr("clip-path", "url(#cp)")
+                        #.attr("fill")
                         
 
   msBarText = svgContainer.selectAll("text.matched_peak_label") #note I have to add class name, w/o it I would select DOM elements that the axis component added  From SO: "The problem is that you're drawing the axes before adding the lines and labels. By doing .selectAll("line") and .selectAll("text"), you're selecting the existing DOM elements that the axis component added. Then you're matching data to it and therefore your .enter() selection doesn't contain what you suppose."
@@ -182,6 +193,7 @@ $ ->
                            .attr("font-size", "9px")
                            #.attr("cursor", "pointer")
                            .attr("fill", "gray")
+                           .attr("clip-path", "url(#cp)")
 
 
   #TOOLTIPS. 2 OPTIONS:
@@ -229,26 +241,19 @@ $ ->
   #THE ZOOM THING ----------------------------------------------------------------
   zoomed = ->
   
-    #translate = zoom.translate()
-    #scale = zoom.scale()
-    #tx = Math.min(0, Math.max(w * (1 - scale), translate[0]))
-    #ty = Math.min(0, Math.max(h * (1 - scale), translate[1]))
-    #zoom.translate([tx,ty])
+    t = zoom.translate()
+    s = zoom.scale()
     
-    #t = d3.event.translate
-    #s = d3.event.scale
-    #t[0] = Math.min(w / 2 * (s - 1), Math.max(w / 2 * (1 - s), t[0]))
-    #t[1] = Math.min(h / 2 * (s - 1) + 230 * s, Math.max(h / 2 * (1 - s) - 230 * s, t[1]))
-
+    tx = t[0]
+    ty = t[1]
     
-    #zoom.translate t
-
+    tx = Math.min(0, Math.max(w * (1-s), t[0]))
+    ty = Math.min(0, Math.max((h-padding) * (1-s), t[1]))
     
-  
+    zoom.translate([tx, ty])
+    
     svgContainer.select("g.x.axis").call xAxis
     svgContainer.select("g.y.axis").call yAxis
-    
-    
     
     svgContainer.selectAll("line.matched_peak")
                             .attr("x1", (d) -> return xScale(d.m_mz) )
@@ -259,35 +264,11 @@ $ ->
                             .attr("x", (d) -> return xScale(d.m_mz) )
                             .attr("y", (d) -> return yScale(d.m_intensity) )
 
-
-#The zoom behaviour listens to mouse events and modifies the range of the associated scales
-#The scales are used by the axes which draw them as lines with ticks, 
-#and the scales are also used by the data associated with my lines(peaks)
-#So when the zoom changes, it fires a callback with the method defined in zoomed
-#Buuut I don't want the default zoom behavior on the y scale.
-#I want to modify the y scales domain myself whenever we get a zoom or pan
-
-#    filtered_data =  
-#      jsonFragmentIons.filter (d) ->
-#        zoomed_mz = xScale(d.m_mz)
-#        zoomed_mz > 0 and zoomed_mz < w
-
-#    yExtent = -> d3.extent(filtered_data, (d) -> d.value)
-    
-    
-
-#    zoom.y.domain(yExtent).nice()
-
- 
-
-  
   
   zoom = d3.behavior.zoom()
                      .x(xScale)
-                     #.xExtent[0] = 0
                      .y(yScale)
-                     #.scaleExtent([0, 10000])
-                     #.yExtent[0] = 0
+                     .scaleExtent([1, 10])
                      .on("zoom", zoomed)
 
   
