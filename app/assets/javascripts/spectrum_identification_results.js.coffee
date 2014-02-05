@@ -112,14 +112,13 @@ visualizeD3spectrum = (json) ->
 
 
   #SCALING thing--------------------------------------------------
-  #---------------------------------------------------------------
   maxInitialMz = d3.max(jsonFragmentIons, (d) -> return d.m_mz)
   minInitialMz = d3.min(jsonFragmentIons, (d) -> return d.m_mz)  
   maxInitialIntensity = d3.max(jsonFragmentIons, (d) -> return d.m_intensity)
   minInitialIntensity = d3.min(jsonFragmentIons, (d) -> return d.m_intensity)
   
-  xScale = d3.scale.linear() #Remember: When I say “input,” you say “domain.” Then I say “output,” and you say “range.” Ready?
-                   .domain([minInitialMz, maxInitialMz]).nice() #.nice() tells the scale to take whatever input domain that you gave to range() and expand both ends to the nearest round value
+  xScale = d3.scale.linear() 
+                   .domain([minInitialMz, maxInitialMz]).nice()
                    .range([padding, w - padding])
 
   yScale = d3.scale.linear()
@@ -176,8 +175,7 @@ visualizeD3spectrum = (json) ->
                         .attr("stroke-width", 1)
                         .attr("stroke", (d) -> return d.color)
                         .attr("clip-path", "url(#cp)")
-                        #.attr("fill")
-                        
+
 
   msBarText = svgContainer.selectAll("text.matched_peak_label") #note I have to add class name, w/o it I would select DOM elements that the axis component added  From SO: "The problem is that you're drawing the axes before adding the lines and labels. By doing .selectAll("line") and .selectAll("text"), you're selecting the existing DOM elements that the axis component added. Then you're matching data to it and therefore your .enter() selection doesn't contain what you suppose."
                            .data(jsonFragmentIons)
@@ -189,7 +187,6 @@ visualizeD3spectrum = (json) ->
                            .attr("y", (d) -> return yScale(d.m_intensity) )
                            #.attr("transform", (d) -> return "translate(" + xScale(d.m_mz) + "," + yScale(d.m_intensity) + ")rotate(-90)" )
                            .attr("transform", (d) -> return "rotate(-90 " + xScale(d.m_mz) + "," + yScale(d.m_intensity) + ")" )
-                           
                            .text((d) -> return d.fragment_type.substr(5)) #substr removes the "frag: " part
                            .attr("font-family", "sans-serif")
                            .attr("font-size", "9px")
@@ -218,7 +215,7 @@ visualizeD3spectrum = (json) ->
   #2 jquery plugin tipsy-------------- Include //= require jquery.tipsy in application.js
   $("svg line").tipsy
     gravity: "n"
-    offset: 1
+    offset: 0
     html: true
     title: ->
       d = @__data__

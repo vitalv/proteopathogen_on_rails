@@ -15,6 +15,9 @@
     %tr
       %td{:colspan => 2, :style=> "text-align:center"}
         = link_to 'Spectrum Identification', mzid_file_spectrum_identifications_path(mzidf.id), id:"mzidf_#{mzidf.id}_si", class: "flat_link"
-    %tr
-      %td{:colspan => 2, :style=> "text-align:center"}
-        =  link_to 'Protein Detection', mzid_file_protein_detection_path(mzidf.id), class: "flat_link"
+    -#Ojo con este -if , puede que la sil del s_i[0] no se haya utilizado para protein_detection
+    -#ver <ProteinDetection> element -> subelement InputSpectrumIdentifications: "are the lists of spectrum identifications that are input to the protein detection process"
+    - if mzidf.includes_protein_detection
+      %tr
+        %td{:colspan => 2, :style=> "text-align:center"}
+          =  link_to 'Protein Detection', mzid_file_protein_detection_path(mzidf.id), class: "flat_link"

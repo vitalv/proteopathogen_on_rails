@@ -34,4 +34,22 @@ class MzidFile < ActiveRecord::Base
   end
   
   
+  
+  def includes_protein_detection 
+    pd = false
+    self.spectrum_identifications.each do |si|
+      pd = true if si.spectrum_identification_list.protein_detection
+    end
+    return pd
+  end
+  
+  def protein_detection
+    if self.includes_protein_detection
+      pds = MzidFile.find(1).spectrum_identifications.collect { |si| si.spectrum_identification_list.protein_detection}
+      return pds.compact.uniq[0] if pds.compact.uniq.length == 1 
+    end  
+  end
+  
+  
+  
 end
