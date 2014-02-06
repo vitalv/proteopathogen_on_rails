@@ -16,7 +16,7 @@ class SpectrumIdentificationResultsController < ApplicationController
   end
   
   
-  def show    
+  def show
     sir = SpectrumIdentificationResult.find(params[:id])
     @sir_user_params = sir.sir_user_params
     @sir_psi_ms_cv_terms = sir.sir_psi_ms_cv_terms

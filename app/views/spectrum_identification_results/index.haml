@@ -1,11 +1,11 @@
 %h2= "EXPERIMENT"
 %h3= @protocol
-%br
-%h3= "SPECTRUM IDENTIFICATION"
+
+%h3.table_header= "SPECTRUM IDENTIFICATION"
 %h4= "Spectrum Identification: #{@si.si_id} - Spectrum Identification List:  #{@sil.sil_id}"
-%br
-%h3= "Spectrum Identification Results"
-%table#sir_table.my_table{:data => {'si-id' => "#{@si.id}", 'source' => spectrum_identification_results_url(format: "json") } }
+
+%h3.table_header= "Spectrum Identification Results"
+%table#sir_table.my_table{:data => {'si-id' => "#{@si.id}", 'source' =>  spectrum_identification_results_url(format: "json") } }
   %thead
     %tr
       %th Spectrum Result ID
@@ -13,15 +13,13 @@
       %th Spectrum ID
   %tbody
   
-%br
 
-%h3= "Spectrum Identification Result PSI-MS CV Parameters "
+%h3.table_header= "Spectrum Identification Result PSI-MS CV Parameters "
 %table#sir_cvp.my_table
   %tbody
     %tr
       %td.empty= "PSI-MS CV terms, names and value"
 
-%br
 
 %h3.table_header= "Spectrum Identification Result User Parameters "
 %table#sir_up.my_table
@@ -29,7 +27,6 @@
     %tr
       %td.empty= "User-defined Parameters"
 
-%br
 
 %h3.table_header= "Spectrum Identification Items" 
 %table#sii_table.my_table
@@ -45,7 +42,6 @@
     %tr
       %td{:colspan => 6, :style=> "text-align:center"}Spectrum Identification Items
 
-%br
 
 %h3.table_header= "Peptide Evidence(s)"
 %table#pep_ev_table.my_table
@@ -61,7 +57,6 @@
     %tr
       %td{colspan: 6, style: "text-align:center"}Peptide Evidence(s)
 
-%br
 
 %div#spectrum
 
@@ -79,7 +74,6 @@
     -#= check_box_tag 'y_ions', 'yes', true
     -#Show y ions
     
-%br
 
 %h3.table_header= "Spectrum Identification Item PSI-MS CV Parameters "
 %table#sii_cvp.my_table
@@ -87,7 +81,6 @@
     %tr
       %td.empty= "PSI-MS CV terms, names and value"
 
-%br
 
 %h3.table_header= "Spectrum Identification Item User Parameters "
 %table#sii_up.my_table

@@ -1,1 +1,16 @@
+%h2= "EXPERIMENT"
+%h3= @protocol
+
+%h3.table_header= "PROTEIN DETECTION"
+%h4="Protein Detection: #{@pd.protein_detection_id} - Protein Detection List: #{@pdl.pdl_id}"
+
+%h3.table_header= "Protein Ambiguity Groups"
+%table#pag_table.my_table{:data => {'pdl-id' => "#{@pdl.id}", 'source' => mzid_file_protein_detections_url, format: :json } }
+  %thead
+    %tr
+      %th Protein Group ID
+      -#%th Protein Group Name
+      -#%th Protein Accessions
+  %tbody
+  
 
