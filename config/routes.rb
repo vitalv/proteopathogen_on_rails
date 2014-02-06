@@ -40,7 +40,7 @@ ProteopathogenOnRails::Application.routes.draw do
   
   resources :mzid_files do
     resources :spectrum_identifications
-    resource :protein_detection #remember element ProteinDetection maxOccurs: 1
+    resources :protein_detections #remember element ProteinDetection maxOccurs: 1
   end 
  
   resources :spectrum_identifications do
