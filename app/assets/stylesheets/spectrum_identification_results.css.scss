@@ -4,12 +4,6 @@
 
 
 
-#sir_table_wrapper { margin:  1em auto; }
-
-
-
-.my_table { border-radius: 5px; }
-
 table#sii_table {
     th { text-align: center; }
   }
@@ -21,24 +15,7 @@ td.empty { text-align: center;}
 .underline {text-decoration: underline;}
 
 
-//Datatables tweaks 
 
-table.dataTable thead th {
-  border: none;
-}
-.paging_full_numbers a.paginate_button, paging_full_numbers a.paginate_active {
-  color: #55A5D8!important;
-}
-#sir_table_paginate {  
-  a { 
-    background-color:white;
-    border: none;
-  }
-  .paginate_active {
-    text-decoration: underline;
-    color: gray!important;
-  }
-}
 
 
 $blue_font_color: #0A2747;

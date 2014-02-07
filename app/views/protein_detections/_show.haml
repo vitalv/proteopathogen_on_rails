@@ -1,0 +1,13 @@
+- if  @pdhs.blank?
+  %tr
+    %td{:colspan => 6, :style=> "text-align:center"}No Protein Detection Hypotheses? WTF, this is not possible, I can write whatever here, this is not going to ever happen or be displayed, is it?
+- else
+  = @pdhs.each do |pdh|
+    %tr
+      -#%td= link_to name="#{pdh.protein_detection_hypothesis_id}", 
+      -#url={controller: "protein_detections", action: "peptide_hypothesis", pdh_id: pdh.id},
+      -#options={remote: true, format: :js, data: {pdh_id: pdh.id}, class: "pdh_link"}
+      %td= pdh.protein_detection_hypothesis_id
+      %td.center= pdh.pass_threshold
+      %td.center= pdh.name
+

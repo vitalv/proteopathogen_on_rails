@@ -2,15 +2,102 @@
 %h3= @protocol
 
 %h3.table_header= "PROTEIN DETECTION"
-%h4="Protein Detection: #{@pd.protein_detection_id} - Protein Detection List: #{@pdl.pdl_id}"
+
+
+-#%h4="Protein Detection: #{@pd.protein_detection_id} - Protein Detection List: #{@pdl.pdl_id}"
+
+
+
+
+%table{:id => "pd_table_#{@pd.id}", :class =>"my_table shadow" }
+  %tr
+    %td.title Protein Detection ID
+    %td= @pd.protein_detection_id 
+  - if @pd.name
+    %tr
+      %td.title Protein Detection Name
+      %td= @pd.name
+  - if !@pd.protein_detection_list.blank?
+    %tr
+      %td.title Protein Detection List
+      %td= @pd.protein_detection_list.pdl_id
+  - if @pdp
+    %tr
+      %td.title Protein Detection Protocol ID
+      %td= "#{@pdp.pdp_id} "+ " #{@pdp.name}"
+    %tr
+      %td.title Analysis Software
+      %td= @pdp.analysis_software
+  -unless @pdp.pdp_psi_ms_cv_terms.blank?
+    = render partial: "pdp_psi_ms_cv_terms", locals: {pdp: @pdp}
+  -unless @pdp.pdp_user_params.blank?
+    = render partial: "pdp_user_params", locals: {pdp: @pdp}  
+
+-#  -unless spectrum_identification.spectrum_identification_protocol.blank?
+-#    %tr
+-#      %td{:colspan => 2}
+-#        = render partial: "spectrum_identification_protocol", locals: {sip: spectrum_identification.spectrum_identification_protocol}
+
+
+
+
+
+
+-#%table#pdp_table.my_table
+-#  %thead
+-#    %tr
+-#      %th Protein Detection Protocol ID
+-#      %th Analysis Software
+-#      -#%th Protein Accessions
+-#  %tbody
+-#    %tr
+-#      %td= "#{@pdp.pdp_id} "+ " #{@pdp.name}"
+-#      %td= @pdp.analysis_software
+-#  -unless @pdp.pdp_psi_ms_cv_terms.blank?
+-#    = render partial: "pdp_psi_ms_cv_terms", locals: {pdp: @pdp}
+-#  -unless @pdp.pdp_user_params.blank?
+-#    = render partial: "pdp_user_params", locals: {pdp: @pdp}  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 %h3.table_header= "Protein Ambiguity Groups"
-%table#pag_table.my_table{:data => {'pdl-id' => "#{@pdl.id}", 'source' => mzid_file_protein_detections_url, format: :json } }
+%table#pag_table.my_table{:data => {'pdl-id' => "#{@pdl.id}", 'source' => mzid_file_protein_detections_url(format: "json") } }
   %thead
     %tr
       %th Protein Group ID
-      -#%th Protein Group Name
+      %th Protein Accession(s) in group
       -#%th Protein Accessions
   %tbody
   
+  
 
+%h3.table_header= "Protein Detection Hypothesis/Hypotheses" 
+%table#pdh_table.my_table
+  %thead
+    %tr
+      %th PDH ID
+      %th pass thrshld
+      %th name
+  %tbody
+    %tr
+      %td{:colspan => 3, :style=> "text-align:center"}Protein detection hypothesis. Single result of the Protein Detection analysis

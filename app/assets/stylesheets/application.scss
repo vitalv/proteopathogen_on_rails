@@ -103,6 +103,7 @@ content {
   //table-layout: fixed;
   width: 100%;
   border:solid 1px #E1E1E1;
+  border-radius: 5px;
   tr:nth-of-type(odd){
     background-color:#F1F1F1;
   }
@@ -131,6 +132,7 @@ content {
   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
 }
 
+
 .my_table .inner {
   border-collapse: collapse;
   border-color: white;
@@ -143,35 +145,24 @@ content {
 }
 
 
-/* Interesting for spectrum_identification_results:  wrap the <table> in a non-statically positioned <div> which has an overflow:auto CSS property. Then position the elements in the <thead> absolutely.
+//Datatables tweaks 
 
-#table-wrapper {
-  position:relative;
-}
-#table-scroll {
-  height:150px;
-  overflow:auto;  
-  margin-top:20px;
-}
-#table-wrapper table {
-  width:100%;
-    
-}
-#table-wrapper table * {
-  background:yellow;
-  color:black;
-}
-#table-wrapper table thead th .text {
-  position:absolute;   
-  top:-20px;
-  z-index:2;
-  height:20px;
-  width:35%;
-  border:1px solid red;
-}
-*/
+.dataTables_wrapper { margin:  1em auto; }
 
-
-
-
+table.dataTable thead th {
+  border: none;
+}
+.paging_full_numbers a.paginate_button, paging_full_numbers a.paginate_active {
+  color: #55A5D8!important;
+}
+#sir_table_paginate, #pag_table_paginate{  
+  a { 
+    background-color:white;
+    border: none;
+  }
+  .paginate_active {
+    text-decoration: underline;
+    color: gray!important;
+  }
+}
 

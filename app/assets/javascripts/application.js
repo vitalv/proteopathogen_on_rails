@@ -21,6 +21,6 @@
 //= require experiments
 //= require spectrum_identifications
 //= require spectrum_identification_results
-
+//= require protein_detections
 //= require turbolinks
 
