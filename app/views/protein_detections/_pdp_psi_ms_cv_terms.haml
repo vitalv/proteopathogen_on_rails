@@ -1,0 +1,9 @@
+%tr
+  %td{:colspan => 2}
+    = link_to "> PSI-MS CV Params", '#', :data => {'pdp-cvp-id' => "#{pdp.id}"}, remote: true
+    %table#pdp_cvp.my_table.inner{:data => {'pdp-cvp-id' => "#{pdp.id}"}}
+      - pdp.pdp_psi_ms_cv_terms.each do |cvp|
+        %tr
+          %td.title= cvp.psi_ms_cv_term_accession
+          
+          -#%td= PsiMsCvTerm.where(accession: cvp.psi_ms_cv_term_accession)[0].name

@@ -8,6 +8,7 @@ class ProteinDetectionsController < ApplicationController
     #@pd_id = params[:id]
     
     @pd = mzid_file.protein_detection
+    @pdp = @pd.protein_detection_protocol
     @pdl = @pd.protein_detection_list
     @pag_count = @pdl.protein_ambiguity_groups.count
     @pags = @pdl.protein_ambiguity_groups
@@ -24,8 +25,23 @@ class ProteinDetectionsController < ApplicationController
 
   end
   
-  #def show
-
-  #end
+  def show
+    pag = ProteinAmbiguityGroup.find(params[:id])
+    @pdhs = pag.protein_detection_hypotheses
+    #@sir_psi_ms_cv_terms = sir.sir_psi_ms_cv_terms
+    #@sir_id_name = sir.sir_id
+    #@spectrum_identification_items = sir.spectrum_identification_items    
+    respond_to do |format|
+      format.html 
+      format.js { render  :layout => false } 
+    end
+  end
+  
+  
+  def peptide_hypothesis
+  
+  end
+  
+  
 
 end
