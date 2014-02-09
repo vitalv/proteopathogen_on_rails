@@ -16,6 +16,7 @@
 //= require jquery.turbolinks
 //= require jquery_ujs
 //= require jquery.tipsy
+//= require naturalSort
 //= require dataTables/jquery.dataTables
 //= require d3
 //= require experiments

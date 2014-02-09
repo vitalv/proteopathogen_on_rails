@@ -4,11 +4,21 @@
  
 #ready = -> 
 
+jQuery.extend jQuery.fn.dataTableExt.oSort,
+  "natural-asc": (a, b) ->
+    naturalSort a, b
+
+  "natural-desc": (a, b) ->
+    naturalSort(a, b) * -1
+
+
 $ -> 
   $("#sir_table").dataTable
     sPaginationType: "full_numbers"
     bProcessing: true
     bServerSide: true
+    aoColumns: [{sType: "natural"}, {sType: "natural"} , {sType: "natural"} ]
+    aaSorting: [[ 0, "asc" ]]
     sAjaxSource: $('#sir_table').data('source')
 
 
