@@ -3,7 +3,7 @@
 
 %h3.table_header= "PROTEIN DETECTION"
 
-%table{:id => "pd_table_#{@pd.id}", :class =>"my_table shadow" }
+%table{:id => "pd_table_#{@pd.id}", :class =>"my_table" }
   %tr
     %td.title Protein Detection ID
     %td= @pd.protein_detection_id 
@@ -76,14 +76,19 @@
 
 
 %h3.table_header= "Peptide Spectrum Matches"
-%table#pep_hyp_table.my_table
+%table#psms_table.my_table
   %thead
     %tr
-      %th spectrum identification item
-      %th peptide sequence
+      %th Spectrum Identification Item
+      /%th calc m/z
+      /%th exp m/z
+      /%th rank
+      /%th charge
+      /%th pass thrshld
+      %th Peptide Sequence
+      
   %tbody
-    %tr
-      %td{colspan: 6, style: "text-align:center"}Peptide Evidence(s)
+
 
 
 

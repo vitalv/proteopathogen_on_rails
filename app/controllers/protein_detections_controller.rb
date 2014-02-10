@@ -45,12 +45,9 @@ class ProteinDetectionsController < ApplicationController
     
     @pdh_psi_ms_cv_terms = pdh.pdh_psi_ms_cv_terms
     @pdh_user_params = pdh.pdh_user_params
-        
-    #@sii_psi_ms_cv_terms = sii.sii_psi_ms_cv_terms
-    #@sii_user_params = sii.sii_user_params
+    
+    @psms = pdh.peptide_spectrum_assignments
 
-    #@psms = sii.peptide_spectrum_assignments
-    #@peptide_evidences = sii.peptide_evidences    
 
     ##note: I can safely fetch psa[0] There might be more than one peptide_evidence per sii in the case "a specific sequence can be assigned to multiple proteins and or positions in a protein", but the peptide sequence is the same
     #@peptide_sequence = sii.peptide_spectrum_assignments[0].peptide_evidence.peptide_sequence.sequence
