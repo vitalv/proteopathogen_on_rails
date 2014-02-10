@@ -39,7 +39,9 @@ body {
   color: $blue_font_color;
 }
 
-  
+
+.hidden { display: none; }
+
 p {padding: 8px 0;} /* this is bc of the sticky footer thing */ 
 
 

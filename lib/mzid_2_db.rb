@@ -463,7 +463,6 @@ class Mzid2db
   def savePeptideHypothesis(my_Protein_hypothesis_id, mzid_pep_ev_ref, mzid_sii_ref)
     #OJO!! Puede haber mas de un peptide evidence que se se hayan llamado con el mismo pep_ev_id (pep_ev_ref):
     #my trick to "uniquify" the pep_Ev_refs and sii_refs by adding the mzid_file_id to the string
-    @mzid_file_id = 9
     my_pep_ev_ref = mzid_pep_ev_ref + "_Mzid_#{@mzid_file_id}"
     my_sii_ref = mzid_sii_ref + "_Mzid_#{@mzid_file_id}"
     pepEv_id = PeptideEvidence.find_by(pepev_id: my_pep_ev_ref).id

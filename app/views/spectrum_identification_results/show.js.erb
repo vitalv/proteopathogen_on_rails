@@ -7,9 +7,10 @@
 //    $(this).addClass("underline");  //add a class to the currently clicked link
 //  });
 //});
-
+//$('#sir_cvp').removeClass("hidden")
 $('table#sir_cvp').find('tbody').empty()
 $('table#sir_cvp').find('tbody').append("<%= escape_javascript(render partial: 'sir_psi_ms_cv_terms') %>");
+
 
 $('table#sir_up').find('tbody').empty()
 $('table#sir_up').find('tbody').append("<%= escape_javascript(render partial: 'sir_user_params') %>");

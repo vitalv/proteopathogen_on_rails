@@ -10,5 +10,8 @@
       %td= "#{pdh.db_seq_description}" 
       %td.center= pdh.pass_threshold
       %td.center= pdh.protein_detection_hypothesis_id
-      %td= link_to image_tag("../assets/cgd_small_logo.png"),  "http://www.candidagenome.org/cgi-bin/locus.pl?dbid=#{pdh.cgdid}", target: '_blank'
+      - if pdh.cgdid
+        %td= link_to image_tag("../assets/cgd_small_logo.png"),  "http://www.candidagenome.org/cgi-bin/locus.pl?dbid=#{pdh.cgdid}", target: '_blank'
+      - else
+        %td= "NA"
 
