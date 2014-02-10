@@ -4,6 +4,7 @@ class Mzid2db
 #mzid = Mzid.new("/home/vital/proteopathogen_on_rails/public/uploaded_mzid_files/examplefile.mzid"); nil;
 #mzid = Mzid.new("/home/vital/SeattleThings/PeptideAtlasExperiments_mzIdentML/CandidaRotofor-1.pep.mzid")
 #mzid = Mzid.new("/home/vital/proteopathogen_on_rails/public/uploaded_mzid_files/CandidaRotofor-1.pep.mzid")
+#mzid = Mzid.new("/home/vital/proteopathogen_on_rails/public/uploaded_mzid_files/Orbitrap_XL_CID_SILAC_IMAC_Replicate_1B.mzid")
 
   def initialize(mzid_object)
     @mzid_obj = mzid_object

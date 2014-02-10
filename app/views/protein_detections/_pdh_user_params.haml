@@ -1,8 +1,9 @@
-- if  @sii_user_params.blank?
+- if  @pdh_user_params.blank?
   %tr
     %td.empty= "No user-defined parameters"
 - else
-  - @sii_user_params.each do |uP|
+  - @pdh_user_params.each do |uP|
     %tr
       %td.title= uP.name
       %td= uP.value
+

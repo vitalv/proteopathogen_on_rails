@@ -5,3 +5,12 @@
 
 table#pdp_cvp {display: none;}
 table#pdp_up {display: none;}
+
+
+table#pdh_up.my_table {
+  table-layout: fixed;
+  width: 100%;
+  td {
+    word-wrap:break-word;
+   }
+}

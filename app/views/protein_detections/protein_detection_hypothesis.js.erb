@@ -1,0 +1,4 @@
+$('table#pdh_cvp').find('tbody').empty()
+$('table#pdh_cvp').find('tbody').append("<%= escape_javascript(render partial: 'pdh_psi_ms_cv_terms') %>");
+$('table#pdh_up').find('tbody').empty()
+$('table#pdh_up').find('tbody').append("<%= escape_javascript(render partial: 'pdh_user_params') %>");
