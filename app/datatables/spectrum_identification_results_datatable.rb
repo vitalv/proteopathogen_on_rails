@@ -65,4 +65,15 @@ class SpectrumIdentificationResultsDatatable
     params[:sSortDir_0] == "desc" ? "desc" : "asc"
   end
   
+  
+  #def sort_type
+  # params[:aoColumns] == [{sType: "natural"}, {sType: "natural"} , {sType: "natural"} ]
+  #end
+  
+  #aoColumns: [{sType: "html", "natural"}, {sType: "natural"} , {sType: "natural"} ]
+  #aaSorting: [[ 1, "asc" ]]
+  
 end
+
+
+

@@ -3,6 +3,7 @@ require 'nokogiri'
 #mzid = Mzid.new("/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/public/uploaded_mzid_files/SILAC_phos_OrbitrapVelos_1_interact-ipro-filtered.mzid")
 #mzid = Mzid.new("/home/vital/proteopathogen_on_rails_3/proteopathogen_on_rails/public/uploaded_mzid_files/CandidaRotofor-1.pep.mzid")
 #@doc = Nokogiri::XML(File.open("/home/vital/pepXML_protXML_2_mzid_V/examplefile.mzid"))
+#@pdl = Nokogiri::XML(File.open("/home/vital/proteopathogen_on_rails/public/uploaded_mzid_files/Orbitrap_XL_CID_SILAC_IMAC_Replicate_1B.mzid")).xpath("//xmlns:ProteinDetectionList[@id='PDL_1']")[0]
 
 class Mzid
 
