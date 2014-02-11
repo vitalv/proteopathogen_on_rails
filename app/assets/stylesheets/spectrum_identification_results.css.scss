@@ -21,24 +21,32 @@ td.empty { text-align: center;}
 $blue_font_color: #0A2747;
 
 .spectrum_annotation{
-  height: 50px;
+  //height: 50px;
   position: relative;
-  display: block;
+  display: table;
+  table-layout: fixed;
   margin: 5px auto;
+  padding: 4px 0;
   width: 80%;
   border: 1px dashed #B6B5B0;
   border-radius: 6px;
   p {
     width: 90%;
     text-align: center;
-    margin: 1% auto;
+    margin: 0 auto;
+    padding: 2px;
     color: $blue_font_color;
-    //font-size: 1.1em;
+    font-size: 1.1em;
     white-space: pre-wrap;      /* CSS3 */   
     white-space: -moz-pre-wrap; /* Firefox */    
     white-space: -pre-wrap;     /* Opera <7 */   
     white-space: -o-pre-wrap;   /* Opera 7 */    
     word-wrap: break-word;      /* IE */
+  }
+  span.modification { 
+   display: table;
+   position: relative; 
+   margin: 0 auto; 
   }
 }
 
@@ -49,7 +57,7 @@ $blue_font_color: #0A2747;
   width: 80%;
   height: 300px; //,if I don't specify this div height, the javascript when clicking on sii makes page jump to top//
   overflow: hidden;
-  margin: 2em auto;
+  margin: 1em auto;
   display: block;
   border: 1px dashed #B6B5B0;
   border-radius: 6px;

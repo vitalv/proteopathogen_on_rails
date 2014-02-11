@@ -1,0 +1,14 @@
+-#%p=@mod_pep_seq.html_safe
+%p=@peptide_sequence.sequence
+- unless @pep_mods.blank?
+  - @pep_mods.each do |m|
+    - @mod_string = ""
+    - @mod_string += " #{m.unimod_accession}" if m.unimod_accession
+    - @mod_string += " : #{m.unimod_name}" if m.unimod_name
+    - @mod_string += " -@: #{m.residue}" if m.residue
+    - @mod_string += " - pos: #{m.location}" if m.location
+    - @mod_string += " - avg mass delta: #{m.avg_mass_delta}" if m.avg_mass_delta
+    %span.modification= @mod_string
+    -#= "#{m.unimod_accession}: #{m.unimod_name} -@: #{m.residue} -pos: #{m.location} -avg mass delta: #{m.avg_mass_delta}"
+    -#= @peptide_sequence.sequence.gsub(@peptide_sequence[m.location-1], "<span class="mod">#{@peptide_sequence[m.location-1]}</span>" )
+

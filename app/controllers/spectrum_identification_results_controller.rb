@@ -37,11 +37,17 @@ class SpectrumIdentificationResultsController < ApplicationController
     @sii_user_params = sii.sii_user_params
 
     @psms = sii.peptide_spectrum_assignments
-    @peptide_evidences = sii.peptide_evidences    
-
+    @peptide_evidences = sii.peptide_evidences
+    
     #note: I can safely fetch psa[0] There might be more than one peptide_evidence per sii in the case "a specific sequence can be assigned to multiple proteins and or positions in a protein", but the peptide sequence is the same
-    @peptide_sequence = sii.peptide_spectrum_assignments[0].peptide_evidence.peptide_sequence.sequence
+    @peptide_sequence = @psms[0].peptide_evidence.peptide_sequence
     #for that reason, the referred protein might be different
+    
+    @pep_mods = []
+    if @peptide_evidences.count == 1
+      @pep_mods = @peptide_evidences[0].modifications
+    end
+
     @db_seq = []
     @peptide_evidences.each do |pep_ev|
       @db_seq << pep_ev.db_sequence
