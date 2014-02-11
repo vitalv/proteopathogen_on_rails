@@ -4,7 +4,8 @@ $('table#sii_up').find('tbody').empty()
 $('table#sii_up').find('tbody').append("<%= escape_javascript(render partial: 'sii_user_params') %>");
 $('table#pep_ev_table').find('tbody').empty()
 $('table#pep_ev_table').find('tbody').append("<%= escape_javascript(render partial: 'sii_peptide_evidences') %>");
-$('#peptide_sequence').append("<p><%= @peptide_sequence %></p>")
+$('#peptide_sequence').append("<%= escape_javascript(render partial: 'peptide_sequence') %>");
+//$('#peptide_sequence').append("<p><%= @peptide_sequence %></p><")
 
 
 //$('#db_seq').empty();

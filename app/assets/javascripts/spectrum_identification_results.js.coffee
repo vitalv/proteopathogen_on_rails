@@ -54,18 +54,14 @@ $ ->
   $('#sii_table').on "click", ".sii_link", (e) -> 
   #this function is bound to all ".sii_link" click events, even if they are added to the DOM via ajax later
     sii_id = $(this).data("sii-id")
-
     $("#sii_table .flat_link").removeClass("flat_link")
     $(this).addClass("flat_link")
-
-    $("#spectrum").empty()
-    
+    $("#spectrum").empty()    
     $("#peptide_sequence").remove()
-    $("#spectrum").before("<div id=peptide_sequence class=spectrum_annotation>")
-    
+    $("#spectrum").before("<div id=peptide_sequence class=spectrum_annotation>")   
 
     d3.json "results/sir_id/identification_item?sii_id=" + sii_id + "", (error, json) ->
-      $("#spectrum").css("visibility", "visible") 
+      #$("#spectrum").css("visibility", "visible") 
       return console.warn(error) if error
       if $.isEmptyObject json
         missing_spec_msg = "<div class=spectrum_display_msg><p>NO FRAGMENTATION AVAILABLE FOR SELECTED SPECTRUM IDENTIFICATION ITEM</p></div>"
