@@ -14,4 +14,19 @@ class PeptideEvidence < ActiveRecord::Base
   has_many :peptide_spectrum_assignments, dependent: :destroy
   has_many :spectrum_identification_items, through: :peptide_spectrum_assignments
   has_many :modifications
+  
+  
+  def modified_seq_html_string
+    unless self.modifications.blank?
+      pep_seq_arr = self.peptide_sequence.sequence.split("")      
+      pep_seq_arr.each_with_index do |aa, i|
+        self.modifications.each do |m|
+          pep_seq_arr[i] = "<span class='mod'>#{aa}</span>" if i == m.location.to_i-1
+        end
+      end
+      return pep_seq_arr.join
+    end    
+  end
+  
+  
 end

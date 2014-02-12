@@ -1,6 +1,9 @@
 -#%p=@mod_pep_seq.html_safe
-%p=@peptide_sequence.sequence
-- unless @pep_mods.blank?
+
+- if @pep_mods.blank?
+  %p=@peptide_sequence.sequence
+- else 
+  %p=@modified_pep_seq.html_safe
   - @pep_mods.each do |m|
     - @mod_string = ""
     - @mod_string += " #{m.unimod_accession}" if m.unimod_accession

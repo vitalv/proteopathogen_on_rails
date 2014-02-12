@@ -35,24 +35,17 @@ class SpectrumIdentificationResultsController < ApplicationController
     @fragments = sii.fragments    
     @sii_psi_ms_cv_terms = sii.sii_psi_ms_cv_terms
     @sii_user_params = sii.sii_user_params
-
     @psms = sii.peptide_spectrum_assignments
     @peptide_evidences = sii.peptide_evidences
-    
-    #note: I can safely fetch psa[0] There might be more than one peptide_evidence per sii in the case "a specific sequence can be assigned to multiple proteins and or positions in a protein", but the peptide sequence is the same
-    @peptide_sequence = @psms[0].peptide_evidence.peptide_sequence
-    #for that reason, the referred protein might be different
-    
-    @pep_mods = []
-    if @peptide_evidences.count == 1
-      @pep_mods = @peptide_evidences[0].modifications
-    end
-
+    #note: I can safely fetch @peptide_evidences[0] There might be more than one peptide_evidence per sii in the case "a specific sequence can be assigned to multiple proteins and or positions in a protein", but the peptide sequence is the same
+    @peptide_sequence = @peptide_evidences[0].peptide_sequence
+    #for that reason, the referred protein might be different, but REMEMBER: the referred peptided (PeptideSequence in my DB), is the same, and that includes its modifications:
+    @pep_mods = @peptide_evidences[0].modifications
+    @modified_pep_seq = @peptide_evidences[0].modified_seq_html_string unless @pep_mods.blank?
     @db_seq = []
     @peptide_evidences.each do |pep_ev|
       @db_seq << pep_ev.db_sequence
     end
-    
     respond_to do |format|
       format.html { render json: @fragments  }
       format.json { render json: @fragments }
