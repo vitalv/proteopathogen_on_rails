@@ -44,7 +44,7 @@ ProteopathogenOnRails::Application.routes.draw do
   root :to => "home#index"
   
   
-  match "*path" => 'errors#routing'
+  get "*path" => 'errors#routing'
 
   # See how all your routes lay out with "rake routes"
 
