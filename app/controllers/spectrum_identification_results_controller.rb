@@ -53,7 +53,6 @@ class SpectrumIdentificationResultsController < ApplicationController
     end
     
   end
-  
-  
+
 
 end
