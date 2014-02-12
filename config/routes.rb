@@ -1,20 +1,5 @@
 ProteopathogenOnRails::Application.routes.draw do
 
-  # The priority is based upon order of creation:
-  # first created -> highest priority.
-
-  # Sample of regular route:
-  #   match 'products/:id' => 'catalog#view'
-  # Keep in mind you can assign values other than :controller and :action
-
-  # Sample of named route:
-  #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
-  # This route can be invoked with purchase_url(:id => product.id)
-
-  # Sample resource route (maps HTTP verbs to controller actions automatically):
-  #   resources :products
- 
- 
   namespace :admin do 
     resources :users, :experiments, :mzid_files, :spectra_acquisition_runs
     resources :mzid_files do
@@ -55,53 +40,11 @@ ProteopathogenOnRails::Application.routes.draw do
     end
   end
 
-  #resources :mzid_files, path: 'experiments', as: 'experiments' do
-  #  resources :spectrum_identifications # do
-      #resources :spectrum_identification_results, path: 'spectra', as: 'spectra'
-    #end
-  #  resources :spectrum_identification_results, path: 'spectra', as: 'spectra'
-    #resources :peptide_spectrum_assignments
-    #resources :peptide_evidences
-    #resources :protein_detection_hypothesis
-  #end
-  
-  
-  # Sample resource route with options:
-  #   resources :products do
-  #     member do
-  #       get 'short'
-  #       post 'toggle'
-  #     end
-  #
-  #     collection do
-  #       get 'sold'
-  #     end
-  #   end
 
-  # Sample resource route with sub-resources:
-  #   resources :products do
-  #     resources :comments, :sales
-  #     resource :seller
-  #   end
-
-  # Sample resource route with more complex sub-resources
-  #   resources :products do
-  #     resources :comments
-  #     resources :sales do
-  #       get 'recent', :on => :collection
-  #     end
-  #   end
-
-  # Sample resource route within a namespace:
-  #   namespace :admin do
-  #     # Directs /admin/products/* to Admin::ProductsController
-  #     # (app/controllers/admin/products_controller.rb)
-  #     resources :products
-  #   end
-
-  # You can have the root of your site routed with "root"
-  # just remember to delete public/index.html.
   root :to => "home#index"
+  
+  
+  match "*path" => 'errors#routing'
 
   # See how all your routes lay out with "rake routes"
 
