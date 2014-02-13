@@ -2,6 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+$blue_font_color: #0A2747;
 
 table#pdp_cvp {display: none;}
 table#pdp_up {display: none;}
@@ -13,4 +14,37 @@ table#pdh_up, #psms_table {
   td {
     word-wrap:break-word;
    }
+}
+
+
+.peptide_protein_map{
+  //height: 50px;
+  position: relative;
+  display: table;
+  table-layout: fixed;
+  margin: 5px auto;
+  padding: 4px 0;
+  width: 90%;
+  border: 1px dashed #B6B5B0;
+  border-radius: 6px;
+  p {
+    width: 90%;
+    text-align: center;
+    margin: 0 auto;
+    padding: 2px;
+    color: $blue_font_color;
+    font-size: 1.1em;
+    white-space: pre-wrap;      /* CSS3 */   
+    white-space: -moz-pre-wrap; /* Firefox */    
+    white-space: -pre-wrap;     /* Opera <7 */   
+    white-space: -o-pre-wrap;   /* Opera 7 */    
+    word-wrap: break-word;      /* IE */
+    span.cov { 
+      font-size: 110%;
+      font-weight: bold;
+      color: #d45500;
+    }
+  }
+  p.no_prot_seq { color: gray; }
+  
 }

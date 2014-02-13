@@ -36,10 +36,10 @@ $ ->
     $("#pag_table .flat_link").removeClass("flat_link")
     $(this).addClass("flat_link")
     $("#pdh_cvp td.empty").empty()
-    
-    #$("#spectrum").empty()
-    #$("#peptide_sequence").remove()
-    #$("#sii_cvp td.empty").empty()
+    #$("#protein_sequence").empty()
+    $('#protein_sequence').empty();
+    $("#protein_sequence").append("<p>PROTEIN SEQUENCE</p>")
+
     
 
 $ ->  
@@ -49,3 +49,8 @@ $ ->
 
     $("#pdh_table .flat_link").removeClass("flat_link")
     $(this).addClass("flat_link")
+    
+    $("#protein_sequence").empty()
+
+    
+    

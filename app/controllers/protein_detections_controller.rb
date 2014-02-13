@@ -48,16 +48,31 @@ class ProteinDetectionsController < ApplicationController
     
     @psms = pdh.peptide_spectrum_assignments
 
-
-    ##note: I can safely fetch psa[0] There might be more than one peptide_evidence per sii in the case "a specific sequence can be assigned to multiple proteins and or positions in a protein", but the peptide sequence is the same
-    #@peptide_sequence = sii.peptide_spectrum_assignments[0].peptide_evidence.peptide_sequence.sequence
-    ##for that reason, the referred protein might be different
-    #@db_seq = []
-    #@peptide_evidences.each do |pep_ev|
-    #  @db_seq << pep_ev.db_sequence
-    #end
+    #pdh_h es ProteinDetectionHypothesis.find(2310) (HORSE MYG)
+    #pdh_h.peptide_hypotheses[0].peptide_spectrum_assignment.peptide_evidence.db_sequence
+    #en este caso solo hay un peptide_hypothesis que solo tiene un peptide_evidence y por tanto solo corresponde a una proteina
+    #p.ej. pdh_cox2 = ProteinDetectionHypothesis.find(935)
+    #tiene 3 peptide_hypotheses entonces tengo que: 
+    #COMPROBAR que todos los pep_hypothesIs.peptide_spectrum_assignment.peptide_evidence se refieren a la misma proteina
     
-    respond_to do |format|
+    @protein_sequence = pdh.db_seq_mapping.sequence
+    
+    @db_seq_accession = pdh.db_seq_mapping.accession
+    
+    @peptide_sequences = @psms.map { |psm| psm.peptide_evidence.peptide_sequence.sequence }
+    
+    if @protein_sequence and !@protein_sequence.blank?
+      offsets = []
+      @peptide_sequences.each {|pepseq| @protein_sequence.scan(pepseq){offsets << $~.offset(0)} }
+      ranges = offsets.map { |o| o[0]..o[1] }
+      #convierto mis offsets arrays a ranges para poder usar la funcion merge_ranges
+      coverage_ranges = merge_ranges(ranges) #[5..17, 34..63]
+      coverage_offsets = coverage_ranges.map {|r| [r.first, r.last] } #[[5, 17], [34, 63]]
+      #pero claro, luego tengo que voler a convertir los ranges a offsets (arrays)
+      @prot_seq_w_cov_tags = pdh.prot_seq_highlighted_coverage(coverage_offsets)
+    end
+    
+   respond_to do |format|
     #  format.html { render json: @fragments  }
     #  format.json { render json: @fragments }
       format.js { render :layout => false }
@@ -65,6 +80,25 @@ class ProteinDetectionsController < ApplicationController
 
 
   end
+  
+  
+  
+  
+  private
+  
+  def merge_ranges(ranges) #main:Object
+    ranges = ranges.sort_by {|r| r.first }
+    *outages = ranges.shift
+    ranges.each do |r|
+      lastr = outages[-1]
+      if lastr.last >= r.first - 1
+        outages[-1] = lastr.first..[r.last, lastr.last].max
+      else
+        outages.push(r)
+      end
+    end
+    outages
+  end  
   
   
 
