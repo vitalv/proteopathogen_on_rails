@@ -1,0 +1,10 @@
+%p=@db_seq_accession
+- if @protein_sequence and !@protein_sequence.blank?
+
+  - if  @prot_seq_w_cov_tags and ! @prot_seq_w_cov_tags.blank?
+    %p= @prot_seq_w_cov_tags.html_safe
+  -else
+    %p=@protein_sequence
+  
+- else 
+  %p.no_prot_seq PROTEIN SEQUENCE NOT FOUND

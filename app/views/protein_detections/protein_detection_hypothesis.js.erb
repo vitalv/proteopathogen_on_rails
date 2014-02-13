@@ -4,3 +4,4 @@ $('table#pdh_up').find('tbody').empty()
 $('table#pdh_up').find('tbody').append("<%= escape_javascript(render partial: 'pdh_user_params') %>");
 $('table#psms_table').find('tbody').empty()
 $('table#psms_table').find('tbody').append("<%= escape_javascript(render partial: 'peptide_spectrum_matches') %>");
+$('#protein_sequence').append("<%= escape_javascript(render partial: 'peptide_protein_mapping') %>")

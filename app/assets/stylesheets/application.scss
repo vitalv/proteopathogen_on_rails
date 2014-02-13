@@ -1,5 +1,6 @@
 $proteopath_light_green: #DEEAEA;
 $blue_font_color: #0A2747;
+
 $light-blue-link-color: #55A5D8;
 $gray: #B6B5B0;
 
@@ -77,6 +78,35 @@ content {
 	color: $light-blue-link-color;
 	&:hover{ color: #ACABAC; }  
   }
+}
+
+
+#home_text {
+  position: relative;
+  float: left;
+  width: 400px;
+  height: 300px; //,if I don't specify this div height, the javascript when clicking on sii makes page jump to top//
+  overflow: hidden;
+  margin: 0 ;
+  display: table;
+  border: 1px dashed #B6B5B0;
+  border-radius: 6px;
+  padding: 2em;
+  p { text-align: justify }
+}
+
+#home_img {
+  position: relative;
+  float: right;
+  width: 350px;
+  //height: 300px; //,if I don't specify this div height, the javascript when clicking on sii makes page jump to top//
+  overflow: hidden;
+  //margin: 1em ;
+  display: table;
+  border: 1px dashed #B6B5B0;
+  border-radius: 6px;
+  padding: 2em;
+  p { text-align: justify }
 }
 
 /*h2, h3 { letter-spacing: 1px}*/

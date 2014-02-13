@@ -13,19 +13,16 @@ class ProteinDetectionHypothesis < ActiveRecord::Base
   has_many :peptide_hypotheses, dependent: :destroy
   has_many :peptide_spectrum_assignments, through: :peptide_hypotheses
   
-  def db_seq_description
   #note: <ProteinDetectionHypothesis has an optional attr dBSequence_ref but "is optional and redundant since the PeptideEvidence elements referenced from here also map to the DBSequence"
   #that is why PDH is not linked to db_seq_ref, but I nevetheless need access to db_seq_things to display on protein_detection controller and views:
-    db_seq_descr_arr = self.peptide_hypotheses.collect { |pdh| pdh.peptide_spectrum_assignment.peptide_evidence.db_sequence.description}
-    #check all the collected peptide_hypotheses refer to one db_seq:
-    return db_seq_descr_arr.compact.uniq[0] if db_seq_descr_arr.uniq.length == 1
+  
+  def db_seq_mapping
+    db_seq_ids = self.peptide_hypotheses.collect { |pep_h| pep_h.peptide_spectrum_assignment.peptide_evidence.db_sequence_id }
+    return DbSequence.find(db_seq_ids[0]) if db_seq_ids.uniq.count == 1
   end
-
-
-  def db_seq_sequence
-  #note: same thing applies as with db_seq_description
-    db_seq_sequence_arr = self.peptide_hypotheses.collect { |pdh| pdh.peptide_spectrum_assignment.peptide_evidence.db_sequence.sequence}
-    return db_seq_sequence_arr.compact.uniq[0] if db_seq_sequence_arr.uniq.length == 1
+  
+  def db_seq_description
+    return self.db_seq_mapping.description if self.db_seq_mapping
   end
   
   def cgdid
@@ -34,5 +31,18 @@ class ProteinDetectionHypothesis < ActiveRecord::Base
     end
   end
   
+
+  def prot_seq_highlighted_coverage(coverage_offsets)
+    prot_seq_w_highlighted_coverage = ""
+    prot_seq_arr = self.db_seq_mapping.sequence.split("")
+    prot_seq_arr.each_with_index do |aa, i|
+       coverage_offsets.each do |offsets|
+        prot_seq_arr[i] = "<span class='cov'>#{aa}" if i == offsets[0]
+        prot_seq_arr[i] = "#{aa}</span>" if i == offsets[1]-1
+      end
+    end
+    return prot_seq_w_highlighted_coverage = prot_seq_arr.join
+  end
+
 
 end
