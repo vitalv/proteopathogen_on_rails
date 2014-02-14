@@ -8,12 +8,17 @@ table#pdp_cvp {display: none;}
 table#pdp_up {display: none;}
 
 //NOTE: This is very important, remember there is this user parameter unique_stripped_peptides that can be veeery long and would stretch the table and make it ugly with horizontal scroll on the page WTF!
-table#pdh_up, #psms_table {
+
+table.my_table {
   table-layout: fixed;
   width: 100%;
+  th.protein_description {width: 480px;}
+  th.peptide_sequence { width: 550px;}
   td {
     word-wrap:break-word;
+    width: auto;
    }
+
 }
 
 
