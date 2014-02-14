@@ -48,17 +48,20 @@ class ProteinDetectionsController < ApplicationController
     
     @psms = pdh.peptide_spectrum_assignments
 
-    #pdh_h es ProteinDetectionHypothesis.find(2310) (HORSE MYG)
-    #pdh_h.peptide_hypotheses[0].peptide_spectrum_assignment.peptide_evidence.db_sequence
-    #en este caso solo hay un peptide_hypothesis que solo tiene un peptide_evidence y por tanto solo corresponde a una proteina
-    #p.ej. pdh_cox2 = ProteinDetectionHypothesis.find(935)
-    #tiene 3 peptide_hypotheses entonces tengo que: 
-    #COMPROBAR que todos los pep_hypothesIs.peptide_spectrum_assignment.peptide_evidence se refieren a la misma proteina
+    #if pdh.has_ambiguous_peptides#ESTO NO DEBERíA SER NECESARIO!
+      #can this even happen? Or is it that my_file.mzid is now well built,
+      #I guess public/uploaded_mzid_files/SILAC_phos_OrbitrapVelos_1... is bad  There is NO SII for which there are more than one <PeptideEvidenceRef, and I know it should, bc of PAG_100 peptide_hypotheses
+      #and same thing with Orbitrap_XL_CID_SILAC_blabla_1B.mzid
+      #@watch_out = "some of the peptide sequences are ambiguous, i.e. are also found in other proteins"
+    #  @pdh_id = pdh.protein_detection_hypothesis_id      
+    #else #all the peptide_hypotheses correspond to peptide_evidences that are mapped to ONE (the one ref in <pdh>) db_seq entry
+    #  @protein_sequence = pdh.db_seq.sequence
+    #  @db_seq_accession = pdh.db_seq.accession
+    #end 
     
-    @protein_sequence = pdh.db_seq_mapping.sequence
-    
-    @db_seq_accession = pdh.db_seq_mapping.accession
-    
+    @protein_sequence = pdh.db_seq.sequence
+    @db_seq_accession = pdh.db_seq.accession
+     
     @peptide_sequences = @psms.map { |psm| psm.peptide_evidence.peptide_sequence.sequence }
     
     if @protein_sequence and !@protein_sequence.blank?

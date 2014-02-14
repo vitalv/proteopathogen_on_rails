@@ -16,13 +16,22 @@ class ProteinDetectionHypothesis < ActiveRecord::Base
   #note: <ProteinDetectionHypothesis has an optional attr dBSequence_ref but "is optional and redundant since the PeptideEvidence elements referenced from here also map to the DBSequence"
   #that is why PDH is not linked to db_seq_ref, but I nevetheless need access to db_seq_things to display on protein_detection controller and views:
   
-  def db_seq_mapping
-    db_seq_ids = self.peptide_hypotheses.collect { |pep_h| pep_h.peptide_spectrum_assignment.peptide_evidence.db_sequence_id }
-    return DbSequence.find(db_seq_ids[0]) if db_seq_ids.uniq.count == 1
+  #NOTE: ESTO NO ES NECESARIO, PORQUE NO OCURRE NUNCA SI EL .MZID ES CORRECTO, VER protein_detection controller
+  def has_ambiguous_peptides
+  #Note, I am not sure whether this is even possible but <PeptideHypotheses> under <PDH> may ref to different proteins (DbSequence)
+  #NO it's not you dumbass!
+    db_seq_ids = self.peptide_hypotheses.map { |pep_h| pep_h.peptide_spectrum_assignment.peptide_evidence.db_sequence_id }
+    return true if db_seq_ids.uniq.count != 1
+  end
+  
+  def db_seq
+    #unless self.has_ambiguous_peptides #see above
+      return self.peptide_hypotheses[0].peptide_spectrum_assignment.peptide_evidence.db_sequence
+    #end
   end
   
   def db_seq_description
-    return self.db_seq_mapping.description if self.db_seq_mapping
+    return self.db_seq.description if self.db_seq
   end
   
   def cgdid
@@ -34,9 +43,9 @@ class ProteinDetectionHypothesis < ActiveRecord::Base
 
   def prot_seq_highlighted_coverage(coverage_offsets)
     prot_seq_w_highlighted_coverage = ""
-    prot_seq_arr = self.db_seq_mapping.sequence.split("")
+    prot_seq_arr = self.db_seq.sequence.split("")
     prot_seq_arr.each_with_index do |aa, i|
-       coverage_offsets.each do |offsets|
+      coverage_offsets.each do |offsets|
         prot_seq_arr[i] = "<span class='cov'>#{aa}" if i == offsets[0]
         prot_seq_arr[i] = "#{aa}</span>" if i == offsets[1]-1
       end
