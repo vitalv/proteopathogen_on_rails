@@ -12,7 +12,8 @@ table#pdp_up {display: none;}
 table.my_table {
   table-layout: fixed;
   width: 100%;
-  th.protein_description {width: 480px;}
+  th.pdh_id { width: 120px; } 
+  th.protein_description {width: 450px;}
   th.peptide_sequence { width: 550px;}
   td {
     word-wrap:break-word;
