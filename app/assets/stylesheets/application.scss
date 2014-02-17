@@ -23,6 +23,7 @@ html, body {
 }
 .footer, .push {
   height: 5.5em;
+  clear: both;
   img { 
    /*border-top: solid 1px #924C4C;*/ 
    display: block;
@@ -81,7 +82,7 @@ content {
 }
 
 
-#home_text {
+#home_left_col {
   position: relative;
   clear: both; //para cuando hago log in y aparecen los admin links
   float: left;
@@ -100,7 +101,7 @@ content {
   img { margin-top: 2em; }
 }
 
-#home_table_box {
+#home_right_col {
   position: relative;
   float: right;
   width: 350px;
@@ -239,3 +240,8 @@ table.dataTable thead th {
 //table.dataTable tr.odd td.sorting_1 {
 //  background-color: #ffe8ce!important;
 //}
+
+p.footer_text { 
+  text-align: center; 
+   color: #d45500  ;
+}
