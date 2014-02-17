@@ -7,12 +7,18 @@
       = link_to "New experiment", new_admin_experiment_path
 -else 
   -@experiments.each do |e|
-    %p
-      Experiment #{e.id}: 
-      %br
-      Organism: #{e.organism}
-      %br
-      Protocol: #{e.protocol}
+    %table.my_table
+      %tr
+        %td.title Experiment
+        %td= e.id
+      %tr
+        %td.title Organism
+        %td= e.organism
+      %tr
+        %td.title Protocol
+        %td= e.protocol
+
+%p= link_to "New experiment", :controller => 'admin/experiments', :action => :new
 
 
 // NO!! This view does not require log in    

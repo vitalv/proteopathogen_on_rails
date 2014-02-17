@@ -32,14 +32,16 @@
           = content_tag :div, msg, :id => "flash_#{name}"
 
       %content
-
-        =yield
-        
-        %p
-          - if current_user
+      
+        - if current_user
+          %admin_links
             =link_to "Experiments", :admin_experiments
             =link_to "MzidFiles", :admin_mzid_files
             //=link_to 'SpectraData', :admin_spectra_acquisition_runs
+
+        =yield
+
+
             
       
       %div.push

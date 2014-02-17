@@ -46,7 +46,7 @@ body {
 p {padding: 8px 0;} /* this is bc of the sticky footer thing */ 
 
 
-nav_links {
+nav_links, admin_links {
   padding: 5px;
   float: right;
   ul { list-style-type: none; }
@@ -62,8 +62,6 @@ nav_links {
     }
   }
 }
-
-
 
 content {
   display:block;
@@ -83,6 +81,7 @@ content {
 
 #home_text {
   position: relative;
+  clear: both; //para cuando hago log in y aparecen los admin links
   float: left;
   width: 400px;
   height: 300px; //,if I don't specify this div height, the javascript when clicking on sii makes page jump to top//

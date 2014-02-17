@@ -22,7 +22,7 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=150
+current_page=151
 FILE_NAME_0=0;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fcontrollers%2Fhome_controller.rb;0;4
 FILE_NAME_1=297;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fmodels%2Fdb_sequence.rb;0;4
 FILE_NAME_2=194;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fmodels%2Fexperiment.rb;0;4
@@ -37,7 +37,7 @@ FILE_NAME_10=171;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2
 FILE_NAME_11=371;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fmodels%2Fpeptide_spectrum_assignment.rb;0;4
 FILE_NAME_12=489;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fmodels%2Fprotein_ambiguity_group.rb;0;4
 FILE_NAME_13=294;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fmodels%2Fprotein_detection.rb;0;4
-FILE_NAME_14=1036;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fmodels%2Fprotein_detection_hypothesis.rb;0;4
+FILE_NAME_14=1409;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fmodels%2Fprotein_detection_hypothesis.rb;0;4
 FILE_NAME_15=82;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fmodels%2Fprotein_detection_list.rb;0;4
 FILE_NAME_16=362;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fmodels%2Fprotein_detection_protocol.rb;0;4
 FILE_NAME_17=140;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fmodels%2Fpsi_ms_cv_term.rb;0;4
@@ -175,13 +175,13 @@ FILE_NAME_146=33;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2
 FILE_NAME_147=144;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fviews%2Fspectrum_identification_results%2F_sii_user_params.haml;0;4
 FILE_NAME_148=131;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fviews%2Fspectrum_identification_results%2F_sii_peptide_evidences.haml;0;4
 FILE_NAME_149=166;CSS;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fassets%2Fstylesheets%2Fsessions.css.scss;0;4
-FILE_NAME_150=2323;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fcontrollers%2Fprotein_detections_controller.rb;0;4
-FILE_NAME_151=710;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fviews%2Fprotein_detections%2F_show.haml;0;4
+FILE_NAME_150=2369;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fcontrollers%2Fprotein_detections_controller.rb;0;4
+FILE_NAME_151=910;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fviews%2Fprotein_detections%2F_show.haml;0;4
 FILE_NAME_152=68;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fspec%2Fcontrollers%2Fprotein_detections_controller_spec.rb;0;4
 FILE_NAME_153=1053;Javascript;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fassets%2Fjavascripts%2Fprotein_detections.js.coffee;0;4
 FILE_NAME_154=1076;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fdatatables%2Fprotein_ambiguity_groups_datatable.rb;0;4
-FILE_NAME_155=1254;CSS;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fassets%2Fstylesheets%2Fprotein_detections.css.scss;0;4
-FILE_NAME_156=1857;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fviews%2Fprotein_detections%2Findex.haml;0;4
+FILE_NAME_155=676;CSS;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fassets%2Fstylesheets%2Fprotein_detections.css.scss;0;4
+FILE_NAME_156=2148;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fviews%2Fprotein_detections%2Findex.haml;0;4
 FILE_NAME_157=473;Javascript;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fviews%2Fprotein_detections%2Fshow.js.erb;0;4
 FILE_NAME_158=370;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fviews%2Fprotein_detections%2F_pdp_psi_ms_cv_terms.haml;0;4
 FILE_NAME_159=226;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fviews%2Fprotein_detections%2F_pdp_user_params.haml;0;4
@@ -192,7 +192,7 @@ FILE_NAME_163=447;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%
 FILE_NAME_164=53;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fviews%2Fspectrum_identification_results%2F_peptide_sequence.haml;0;4
 FILE_NAME_165=123;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fcontrollers%2Ferrors_controller.rb;0;4
 FILE_NAME_166=728;HTML;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fpublic%2F404.html;0;4
-FILE_NAME_167=20;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fviews%2Fprotein_detections%2F_peptide_protein_mapping.haml;0;4
+FILE_NAME_167=21;Ruby;0;EUTF-8;1;1;0;%2Fhome%2Fvital%2Fproteopathogen_on_rails%2Fapp%2Fviews%2Fprotein_detections%2F_peptide_protein_mapping.haml;0;4
 
 [VTE]
 last_dir=/home/vital
