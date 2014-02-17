@@ -4,14 +4,20 @@
  
 #ready = -> 
 
+
+$ ->
+  $("a[data-info-link]").click ->
+    info_type = $(this).data("info-link")
+    $("div#" + info_type ).toggle "fast" 
+    return false;
+
+
 #To add a new sort function to DataTables you need to attach your function to the object $.fn.dataTableExt.oSort. 
 jQuery.extend jQuery.fn.dataTableExt.oSort,
   "natural-asc": (a, b) ->
     naturalSort a, b
-
   "natural-desc": (a, b) ->
     naturalSort(a, b) * -1
-
 
 $ -> 
   $("#sir_table").dataTable
@@ -41,15 +47,16 @@ $ ->
 #Delegated events have the advantage that they can process events from descendant elements that are added to the document at a later time
 
 #this function, in show.js.erb works bad. Only for 2nd click and subsequents. Por que? No se sabe
+
 $ ->
   $("#sir_table").on "click", ".sir_link", ()  ->
     $("#sir_table .flat_link").removeClass("flat_link")
     $(this).addClass("flat_link")
-    $("#spectrum").empty()
     $("#peptide_sequence").remove()
-    $("#sii_cvp td.empty").empty()
-
-      
+    $("#spectrum").empty()
+    $("#spectrum").append("<div class='spectrum_display_msg'><p>SPECTRUM IDENTIFICATION ITEM</p>")
+    
+    
 $ ->  
   $('#sii_table').on "click", ".sii_link", (e) -> 
   #this function is bound to all ".sii_link" click events, even if they are added to the DOM via ajax later

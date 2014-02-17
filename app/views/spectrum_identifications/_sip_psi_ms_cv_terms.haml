@@ -7,4 +7,5 @@
         %tr
           %td.title= cvp.psi_ms_cv_term_accession
           %td= cvp.ms_term_name
-          %td= cvp.value if cvp.value
+          - if cvp.value
+            %td= cvp.value 

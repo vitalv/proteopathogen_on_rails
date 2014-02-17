@@ -31,7 +31,10 @@
 
 
 
-%h3.table_header= "Protein Ambiguity Groups"
+%h3.table_header
+  = "Protein Ambiguity Groups"
+  = link_to image_tag("../assets/info.png", class: "info_img"), '#', :data => {'info-link' => "pag_info"}, remote: true
+%div#pag_info.info= "A set of logically related results from a protein detection, for example to represent conflicting assignments of peptides to proteins"
 %table#pag_table.my_table{:data => {'pdl-id' => "#{@pdl.id}", 'source' => mzid_file_protein_detections_url(format: "json") } }
   %thead
     %tr
@@ -40,9 +43,11 @@
       -#%th Protein Accessions
   %tbody
   
-  
 
-%h3.table_header= "Protein Detection Hypothesis/Hypotheses" 
+%h3.table_header
+  = "Protein Detection Hypothesis/Hypotheses" 
+  = link_to image_tag("../assets/info.png", class: "info_img"), '#', :data => {'info-link' => "pdh_info"}, remote: true
+%div#pdh_info.info= "A single result of the ProteinDetection analysis (i.e. a protein)"
 %table#pdh_table.my_table
   %thead
     %tr
@@ -54,8 +59,6 @@
   %tbody
     %tr
       %td{:colspan => 5, :style=> "text-align:center"}Protein detection hypothesis. Single result of the Protein Detection analysis
-
-
 
 
 %h3.table_header= "Protein Detection Hypothesis PSI-MS CV Parameters "

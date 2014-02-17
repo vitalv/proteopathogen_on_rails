@@ -3,9 +3,27 @@
   %p Candida albicans is an organism of great clinical importance since, despite asymptomatically colonizing mucous surfaces of 30 to 50% of the population, it may cause opportunistic infections in specific cases such as weakened host immune defenses, a common circumstance in cancer and AIDS patients as well as in post-chirurgical and lC units stays. However, this clinical relevance is not reflected in the number of large-scale publicly available proteomics resources which is currently still very limited
 
 %div#home_img
-  = image_tag  "../assets/latge_and_calderone.png"
-  %p latge and calderone
-
+  //-̣̣̣̣#= image_tag  "../assets/latge_and_calderone.png"
+  //-#%p latge and calderone
+  %table.my_table.shadow
+    %tr
+      %td.title Number of Experiments
+      %td= @experiment_count
+    %tr
+      %td.title Number of .mzid files
+      %td= @mzid_file_count
+    %tr
+      %td.title Peptide Spectrum Matches
+      %td= @psm_count
+    %tr
+      %td.title Peptide Evidences
+      %td= @peptide_evidence_count
+    %tr
+      %td.title Peptide Sequences
+      %td= @peptide_sequence_count
+    %tr
+      %td.title Protein Detection Hypotheses
+      %td= @pdh_count
 
 -#%div#spectrum_test
 -#  %div#tooltip.hidden
