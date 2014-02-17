@@ -1,8 +1,14 @@
 -#Aqui pondre el contenido de home
 %div#home_text
-  %p Candida albicans is an organism of great clinical importance since, despite asymptomatically colonizing mucous surfaces of 30 to 50% of the population, it may cause opportunistic infections in specific cases such as weakened host immune defenses, a common circumstance in cancer and AIDS patients as well as in post-chirurgical and lC units stays. However, this clinical relevance is not reflected in the number of large-scale publicly available proteomics resources which is currently still very limited
+  %p 
+    Proteopathogen is a database and web application on shotgun Proteomics experiments related to <i>Candida albicans</i>.
+  %p
+    It stores peptide and protein identification results data in a database constructed <i>ad hoc</i> to map data from 
+    =link_to 'the mzIdentML standard', 'http://www.psidev.info/mzidentml', target: 'blank'
+    , the HUPO-Proteomics Standard Initiative adopted "exchange format for peptides and proteins identified from mass spectra"
+    = image_tag  "../assets/mzidentml.png"
 
-%div#home_img
+%div#home_table_box
   //-̣̣̣̣#= image_tag  "../assets/latge_and_calderone.png"
   //-#%p latge and calderone
   %table.my_table.shadow
@@ -25,6 +31,8 @@
       %td.title Protein Detection Hypotheses
       %td= @pdh_count
 
+  %p
+    <i>Candida albicans</i> is a polymorphic fungus, that colonizes mucous membranes asymptomatically but may act as an opportunistic pathogen. As such it is the main etiological agent of nosocomial infections and bla bla
 -#%div#spectrum_test
 -#  %div#tooltip.hidden
 -#    %span#value= ""

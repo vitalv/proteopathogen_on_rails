@@ -74,7 +74,9 @@ content {
 	text-decoration: none;
     font-weight: bold;
 	color: $light-blue-link-color;
-	&:hover{ color: #ACABAC; }  
+	//color: #ff7f2a;
+	&:hover{ color: #ACABAC; }
+	//&:hover{ color: #ffab44; }
   }
 }
 
@@ -83,18 +85,22 @@ content {
   position: relative;
   clear: both; //para cuando hago log in y aparecen los admin links
   float: left;
-  width: 400px;
+  width: 430px;
   height: 300px; //,if I don't specify this div height, the javascript when clicking on sii makes page jump to top//
   overflow: hidden;
   margin: 0 ;
   display: table;
-  border: 1px dashed #B6B5B0;
-  border-radius: 6px;
+  //border: 1px dashed #B6B5B0;
+  //border-radius: 6px;
   padding: 2em;
-  p { text-align: justify }
+  p { 
+    text-align: justify;
+    font-size: 1.1em;
+  }
+  img { margin-top: 2em; }
 }
 
-#home_img {
+#home_table_box {
   position: relative;
   float: right;
   width: 350px;
@@ -102,10 +108,13 @@ content {
   overflow: hidden;
   //margin: 1em ;
   display: table;
-  border: 1px dashed #B6B5B0;
-  border-radius: 6px;
+  //border: 1px dashed #B6B5B0;
+  //border-radius: 6px;
   padding: 2em;
-  p { text-align: justify }
+  p { 
+    text-align: justify;
+    font-size: 1.1em 
+   }
 }
 
 /*h2, h3 { letter-spacing: 1px}*/

@@ -2,19 +2,22 @@
   %td{:colspan => 2}
     -# sip_mods should only be datatable when there are more than, say 5 modifications
     %a{:href => "#", :data => {'sip-mods-id' => "#{sip.id}"} } > Searched Modifications
-    %table#sip_mods.my_table.inner.dataTable{:data => {'sip-mods-id' => "#{sip.id}"}}
-      %thead
-        %tr
-          %th= "mass delta"
-          %th= "fixed"
-          %th= "residue"
-          %th= "unimod accession"
-          %th= "type of modification"
-      %tbody
-        - sip.searched_modifications.each do |mod|
+    - if sip.searched_modifications.count > 10
+      %table#sip_mods.my_table.inner.dataTable{:data => {'sip-mods-id' => "#{sip.id}"}}
+    -else
+      %table#sip_mods.my_table.inner{:data => {'sip-mods-id' => "#{sip.id}"}}
+        %thead
           %tr
-            %td= mod.mass_delta
-            %td= mod.is_fixed
-            %td= mod.residue
-            %td= mod.unimod_accession
-            %td= UnimodCvTerm.where(accession: mod.unimod_accession)[0].name       
+            %th= "mass delta"
+            %th= "fixed"
+            %th= "residue"
+            %th= "unimod accession"
+            %th= "type of modification"
+        %tbody
+          - sip.searched_modifications.each do |mod|
+            %tr
+              %td.center= mod.mass_delta
+              %td.center= mod.is_fixed
+              %td.center= mod.residue
+              %td.center= mod.unimod_accession
+              %td.center= UnimodCvTerm.where(accession: mod.unimod_accession)[0].name       

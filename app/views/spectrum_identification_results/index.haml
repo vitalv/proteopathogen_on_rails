@@ -7,7 +7,7 @@
 %h3.table_header
   = "Spectrum Identification Results"
   = link_to image_tag("../assets/info.png", class: "info_img"), '#', :data => {'info-link' => "sir_info"}, remote: true
-%div#sir_info.info= "All identifications made from searching one spectrum. For MS/MS data, there will be ranked SpectrumIdentificationItems corresponding to possible different peptide IDs"
+%div#sir_info.info= "All identifications made from searching one spectrum. The table entitled Spectrum Identification Items below will show SpectrumIdentificationItems corresponding to possible different peptide IDs"
 %table#sir_table.my_table{:data => {'si-id' => "#{@si.id}", 'source' =>  spectrum_identification_results_url(format: "json") } }
   %thead
     %tr

@@ -13,4 +13,9 @@ class SpectrumIdentificationProtocol < ActiveRecord::Base
   belongs_to :spectrum_identification  
   validates :spectrum_identification_id, uniqueness: {scope: :sip_id}, presence: true
   
+  
+  def has_at_least_one_cvp_w_value
+    return true unless self.sip_psi_ms_cv_terms.map { |sip| sip.value }.compact.blank?
+  end
+  
 end

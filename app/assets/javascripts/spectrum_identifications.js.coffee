@@ -8,13 +8,13 @@
 $ ->
   $("a[data-sar-id]").click ->
     data_sar_id = $(this).data("sar-id")
-    $("table").find("table[data-sar-id='" + data_sar_id + "']").toggle "fast" 
+    $("table").find("table[data-sar-id='" + data_sar_id + "']").toggle "fast"
     return false;
 
 $ ->
   $("a[data-sip-id]").click ->
     data_sip_id = $(this).data("sip-id")
-    $("table").find("table[data-sip-id='" + data_sip_id + "']").toggle "fast" 
+    $("table").find("table[data-sip-id='" + data_sip_id + "']").toggle "fast"
     return false;
 
 $ ->
