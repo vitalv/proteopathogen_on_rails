@@ -6,7 +6,8 @@
 
 table#sii_table {
     th { text-align: center; }
-  }
+    th.sii_id { width: 180px; }
+}
 
 td.empty { text-align: center;}
 
