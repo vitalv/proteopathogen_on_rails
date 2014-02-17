@@ -3,9 +3,19 @@
     -#%a{:href => "#", :data => {'sip-cvp-id' => "#{sip.id}"} } > PSI-MS CV Params
     = link_to "> PSI-MS CV Params", '#', :data => {'sip-cvp-id' => "#{sip.id}"}, remote: true
     %table#sip_cvp.my_table.inner{:data => {'sip-cvp-id' => "#{sip.id}"}}
-      - sip.sip_psi_ms_cv_terms.each do |cvp|
-        %tr
-          %td.title= cvp.psi_ms_cv_term_accession
-          %td= cvp.ms_term_name
-          - if cvp.value
-            %td= cvp.value 
+      -if sip.has_at_least_one_cvp_w_value
+        - sip.sip_psi_ms_cv_terms.each do |cvp|
+          %tr
+            %td.title= cvp.psi_ms_cv_term_accession
+            -if cvp.value and cvp.value != ""
+              %td= cvp.ms_term_name
+              %td= cvp.value 
+            -else
+              %td{colspan: 2}= cvp.ms_term_name
+              
+      -else
+        - sip.sip_psi_ms_cv_terms.each do |cvp|
+          %tr
+            %td.title= cvp.psi_ms_cv_term_accession
+            %td= cvp.ms_term_name
+

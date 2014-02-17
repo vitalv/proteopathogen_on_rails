@@ -5,16 +5,16 @@
   -@experiments.each do |exp|
     %table{:id => "exp_table_#{exp.id}", :class =>"my_table" }
       %tr
-        %td.title protocol:
+        %td.title Protocol:
         %td= exp.protocol
       %tr
-        %td.title organism:
+        %td.title Organism:
         %td= exp.organism
       %tr
-        %td.title contact:
+        %td.title Contact:
         %td= exp.researcher
       %tr
-        %td.title date:
+        %td.title Date:
         %td= exp.date
       %tr
         %td{:colspan => 2}
