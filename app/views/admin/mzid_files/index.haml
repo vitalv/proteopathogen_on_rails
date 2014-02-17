@@ -3,17 +3,22 @@
   %p No stored .mzid files
 -else 
   -@all_mzid_files.each do |mzidf|
-    %box
-      Experiment: #{Experiment.find(mzidf.experiment_id).protocol}
-      %br
-      Mzid file: #{mzidf.name}      
-      %br
-      Sha-1: #{mzidf.sha1}
-      %br
-      Submission date: #{mzidf.submission_date}
-      %p
+    %table.my_table
+      %tr
+        %td.title Experiment:
+        %td= Experiment.find(mzidf.experiment_id).protocol
+      %tr
+        %td.title Mzid file:
+        %td= mzidf.name
+      %tr
+        %td.title Sha-1:
+        %td=  #{mzidf.sha1}
+      %tr
+        %td.title Submission date:
+        %td=  mzidf.submission_date
       -if mzidf.spectrum_identifications.blank?
-        =button_to 'Load 2 DB', load2db_admin_mzid_file_path(:id => mzidf.id)
+        %tr
+          %td=button_to 'Load 2 DB', load2db_admin_mzid_file_path(:id => mzidf.id)
 
 
 %p= link_to "New mzid file", :controller => 'admin/mzid_files', :action => :new
