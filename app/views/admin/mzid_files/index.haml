@@ -18,7 +18,7 @@
         %td=  mzidf.submission_date
       -if mzidf.spectrum_identifications.blank?
         %tr
-          %td=button_to 'Load 2 DB', load2db_admin_mzid_file_path(:id => mzidf.id)
+          %td{:colspan => 2}=button_to 'Load 2 DB', load2db_admin_mzid_file_path(:id => mzidf.id)
 
 
 %p= link_to "New mzid file", :controller => 'admin/mzid_files', :action => :new

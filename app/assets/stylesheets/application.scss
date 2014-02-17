@@ -127,7 +127,20 @@ content {
   &:hover{ color: white; }
 }
 
-.table_header { margin-top: 2em;}
+
+.info {
+  display: none;
+  color: gray;
+  font-weight: normal;
+  border: dashed #FF7F2A 1px;
+  border-radius: 4px;
+  padding: 4px;
+  margin: 2px;
+}
+.info_img { vertical-align:middle;}
+
+
+.table_header { margin-top: 2em; }
 
 .my_table {
   margin: 1em auto;
@@ -149,6 +162,10 @@ content {
     width: 200px;
     font-weight: bold;
     /*text-transform:uppercase;*/
+  }
+  td.sum_table_title { 
+    width: 100px;
+    font-weight: bold;
   }
   td h4 {
     padding-top: 10px;
