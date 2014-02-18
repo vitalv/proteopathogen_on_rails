@@ -4,7 +4,7 @@
 - else
   - @psms.each do |psm|
     %tr
-      %td= psm.spectrum_identification_item.sii_id
+      %td= psm.spectrum_identification_item.short_sii_id
       /%td.center= psm.spectrum_identification_item.calc_m2z
       /%td.center= psm.spectrum_identification_item.exp_m2z
       /%td.center= psm.spectrum_identification_item.rank

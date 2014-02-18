@@ -11,9 +11,10 @@ table#sii_table {
 
 td.empty { text-align: center;}
 
-
-
-.underline {text-decoration: underline;}
+table#pep_ev_table {
+  th.db_seq { width:180px  }
+ 
+}
 
 
 $blue_font_color: #0A2747;
