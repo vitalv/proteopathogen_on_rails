@@ -11,7 +11,9 @@ class SpectrumIdentificationResult < ActiveRecord::Base
     validates :sir_id, uniqueness: {scope: :spectrum_identification_list_id}, presence: true #rails4
 
   def spectrum_title
-    return self.sir_psi_ms_cv_terms.map { |cvp| cvp.value if cvp.psi_ms_cv_term == "MS:1000796"}.first
+    title = ""
+    self.sir_psi_ms_cv_terms.map { |cvp| title = cvp.value if cvp.psi_ms_cv_term == "MS:1000796"}
+    return title unless title.blank?
   end
 
 end

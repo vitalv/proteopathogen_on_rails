@@ -43,7 +43,7 @@ class SpectrumIdentificationResultsDatatable
     sirs = @spectrum_identification_results.order("#{sort_column} #{sort_direction}")
     sirs = sirs.page(page).per_page(per_page)
     if params[:sSearch].present?
-      sirs = sirs.where("spectrum_name like :search or sir_id or spectrum_id like :search", search: "%#{params[:sSearch]}%")
+      sirs = sirs.where("spectrum_name like :search or sir_id like :search or spectrum_id like :search", search: "%#{params[:sSearch]}%")
     end
     sirs
   end
