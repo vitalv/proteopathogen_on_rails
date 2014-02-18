@@ -1,0 +1,21 @@
+= link_to "> Search Database(s)", '#', :data => {'sdb-id' => "#{si_id}"}, remote: true
+%table#search_databases.my_table.inner{:data => {'sdb-id' => "#{si_id}"}}
+  - sdbs.each do |sdb|
+    %tr
+      %td.title Search database ID
+      %td= sdb.sdb_id
+    %tr
+      %td.title Name
+      %td= sdb.name
+    %tr
+      %td.title Version
+      %td= sdb.version
+    %tr
+      %td.title Release date
+      %td= sdb.release_date
+    %tr
+      %td.title Number of sequences
+      %td= sdb.number_of_sequences
+    %tr
+      %td.title Original location
+      %td= sdb.location

@@ -35,6 +35,11 @@ $ ->
     $("table").find("table[data-sip-mods-id='" + data_sip_mods_id + "']").toggle "fast" 
     return false;
 
+$ ->
+  $("a[data-sdb-id]").click ->
+    data_sdb_id = $(this).data("sdb-id")
+    $("table").find("table[data-sdb-id='" + data_sdb_id + "']").toggle "fast" 
+    return false;
 
 $ ->
   $("#sip_mods.dataTable").dataTable(

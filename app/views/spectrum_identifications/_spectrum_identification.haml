@@ -20,6 +20,11 @@
       %td{:colspan => 2}
         = render partial: "spectrum_identification_protocol", locals: {sip: spectrum_identification.spectrum_identification_protocol}
 
+  -unless spectrum_identification.search_databases.blank?
+    %tr
+      %td{:colspan => 2}
+        = render partial: "search_databases", locals: {si_id: spectrum_identification.id, sdbs: spectrum_identification.search_databases}
+
   -unless spectrum_identification.spectrum_identification_list.blank? #can this be blank?
     %tr
       %td{:colspan => 2, :style=> "text-align:center"}

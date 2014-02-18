@@ -1,5 +1,8 @@
 - if @pep_mods.blank?
-  %p=@peptide_sequence.sequence
+  - if @peptide_sequence
+    %p=@peptide_sequence.sequence
+  - else
+    %p "No Peptide Element Found"
 - else 
   %p=@modified_pep_seq.html_safe
   - @pep_mods.each do |m|
