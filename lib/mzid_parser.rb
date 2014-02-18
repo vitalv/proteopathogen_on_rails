@@ -337,13 +337,16 @@ end #class Mzid
       name = getcvParams(node)[0][:name]
     elsif !getuserParams(node).empty?
       name = name + " ; " + getuserParams(node)[0][:name] if name != ""
+      name = name + " ; " + getuserParams(node)[0][:value] if getuserParams(node)[0][:name] == "name" and name != ""
       name = getuserParams(node)[0][:name] if name == ""
+      name = getuserParams(node)[0][:value] if name == "name" #getuserParams(node)[0][:name] == "name" and name == ""
     else
       #break
       puts node.class
       puts node.inspect
       #puts "there must be at least cvParam and/or userParam under #{node.node_name}"
     end
+    return name
   end
 
 
