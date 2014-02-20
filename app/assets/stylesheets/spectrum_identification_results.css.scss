@@ -3,6 +3,9 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 
+table#sir_table {
+  th.spectrum_name { width: 330px; }
+}
 
 table#sii_table {
     th { text-align: center; }

@@ -1,6 +1,6 @@
 class SearchDatabase < ActiveRecord::Base
 
-  has_and_belongs_to_many :spectrum_identifications, :join_table => :sip_sdb_join_table
+  has_and_belongs_to_many :spectrum_identifications,  join_table: "sdb_si_join_table"
   before_destroy { |sdb| sdb.spectrum_identifications.clear } #avoids orphans in join table
   
   #self.location = "/unkown/location" if self.location == nil or self.location == ""
