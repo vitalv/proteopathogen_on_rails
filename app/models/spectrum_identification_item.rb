@@ -12,6 +12,10 @@ class SpectrumIdentificationItem < ActiveRecord::Base
   has_many :peptide_hypotheses, through: :peptide_spectrum_assignments
   has_many :peptide_evidences, through: :peptide_spectrum_assignments#, dependent: :destroy
   
+  
+  #cuidao con esto
+  #before_destroy { |sii| sii.peptide_evidences.clear } #avoids orphans in join table
+  
   def short_sii_id
     return self.sii_id.gsub(/_Mzid_\d+/, "")
   end
