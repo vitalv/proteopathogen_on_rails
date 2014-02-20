@@ -308,8 +308,9 @@ class Mzid2db
     db_seq_sequence = mzid_db_seq.sequence
     search_db_ref = mzid_db_seq.search_db_ref
     #get search_db_id(s) (through sil_id):
-    si_id = SpectrumIdentificationList.find(sil_id).spectrum_identification_id
-    search_db_id = SpectrumIdentification.find(si_id).search_databases.map { |sdb| sdb.id if sdb.sdb_id == search_db_ref }[0]
+    si_id = SpectrumIdentificationList.find(sil_id).spectrum_identification_id    
+    search_db_id = ""
+    SpectrumIdentification.find(si_id).search_databases.map { |sdb| search_db_id = sdb.id if sdb.sdb_id == search_db_ref }[0]
     #watch out searching by accession, it may change in different mzid files
     my_DbSequence = DbSequence.find_or_create_by(accession: db_seq_accession, search_database_id: search_db_id) do |dbseq|
       dbseq.sequence = db_seq_sequence

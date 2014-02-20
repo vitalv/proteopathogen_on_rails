@@ -114,6 +114,9 @@ class Mzid
         search_database = @doc.xpath("//xmlns:SearchDatabase[@id='#{sdb_id}']")[0]
         name = get_cvParam_and_or_userParam(search_database.xpath(".//xmlns:DatabaseName"))
         location, version = search_database.attr("location"), search_database.attr("version")
+        if search_database.attr("location") == "" or search_database.attr("location").nil? #model has a validation, location is required, but there might be some bad mzid files with attribute location: ""
+          location = "unkown/location" 
+        end
         releaseDate, num_seq = search_database.attr("releaseDate"),  search_database.attr("numDatabaseSequences")
         sdb = SearchDB.new(name, sdb_id, location, version, releaseDate, num_seq)
         search_db_arr << sdb if search_db_arr.empty?
