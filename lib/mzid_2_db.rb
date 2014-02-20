@@ -312,10 +312,10 @@ class Mzid2db
     search_db_id = ""
     SpectrumIdentification.find(si_id).search_databases.map { |sdb| search_db_id = sdb.id if sdb.sdb_id == search_db_ref }[0]
     #watch out searching by accession, it may change in different mzid files
-    my_DbSequence = DbSequence.find_or_create_by(accession: db_seq_accession, search_database_id: search_db_id) do |dbseq|
-      dbseq.sequence = db_seq_sequence
-      dbseq.description = db_seq_description
-    end
+    my_DbSequence = DbSequence.find_or_create_by(accession: db_seq_accession,
+      search_database_id: search_db_id,
+      sequence: db_seq_sequence,
+      description: db_seq_description)
     return my_DbSequence
   end
 
@@ -344,7 +344,8 @@ class Mzid2db
     my_modifications = []
     mzid_modif_arr.each do |m|
       unless m.cv_params.empty?
-        unimod_acc = m.cv_params.map { |cvP| cvP[:accession] if cvP[:cvRef] == "UNIMOD" }[0] unless m.cv_params.empty?
+        unimod_acc = ""
+        m.cv_params.map { |cvP| unimod_acc = cvP[:accession] if cvP[:cvRef] == "UNIMOD" }[0] unless m.cv_params.empty?
         my_mod = Modification.find_or_create_by(
         peptide_evidence_id: pep_ev_id,
         peptide_sequence_id: pep_seq_id,
@@ -591,10 +592,10 @@ def rollback(mzid_file_id)
       sip = si.spectrum_identification_protocol
       sil_id = si.spectrum_identification_list
       SpectrumIdentificationProtocol.destroy(sip.id) #sip_searched_mod_join_table, SipPsiMsCvTerms and SipUserParams are dependently destroyed
-      #pd_ids << SpectrumIdentificationList.find(sil_id).protein_detection_id
+      pd_ids << SpectrumIdentificationList.find(sil_id).protein_detection_id
       this_si_sir_ids = si.spectrum_identification_list.spectrum_identification_result_ids
       SpectrumIdentificationResult.destroy(this_si_sir_ids)
-      #PeptideEvidence.all.each { |pev| PeptideEvidence.destroy(pev.id) if pev.peptide_spectrum_assignments.blank? }
+      PeptideEvidence.all.each { |pev| PeptideEvidence.destroy(pev.id) if pev.peptide_spectrum_assignments.blank? }
       SpectrumIdentification.destroy(si)
     end
     unless pd_ids.blank?
