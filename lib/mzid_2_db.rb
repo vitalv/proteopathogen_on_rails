@@ -564,6 +564,7 @@ def rollback(mzid_file_id)
         #SirPsiMsTerms and SirUserP
         #PeptideSpectrumAssignment (which in turn dependently destroys associated PeptideHypothesis)
         #Note that PeptideEvidence is not destroyed here
+      #PeptideEvidence.all.each { |pev| PeptideEvidence.destroy(pev.id) if pev.peptide_spectrum_assignments.blank? }
       SpectrumIdentification.destroy(si)
       #Destroys SI, Sip, SipPsiTerms, SipUserP
     end
@@ -577,26 +578,26 @@ def rollback(mzid_file_id)
         #PDP and its PdpPsiTerms and PdpUserParams are destroyed
         #PD is destroyed
     end
-      
   end
 end
 
 
-#def rollback(mzid_file_id)
-  #if MzidFile.exists? mzid_file_id
-    #puts "\n-Error saving data 2 tables. Rolling back -- \n\n"
-    #pd_ids = []
-    #MzidFile.find(mzid_file_id).spectrum_identifications.each do |si|
-      #sip = si.spectrum_identification_protocol
-      #sil_id = si.spectrum_identification_list
-      #SpectrumIdentificationProtocol.destroy(sip.id) #sip_searched_mod_join_table, SipPsiMsCvTerms and SipUserParams are dependently destroyed
+def rollback(mzid_file_id)
+  if MzidFile.exists? mzid_file_id
+    puts "\n-Error saving data 2 tables. Rolling back -- \n\n"
+    pd_ids = []
+    MzidFile.find(mzid_file_id).spectrum_identifications.each do |si|
+      sip = si.spectrum_identification_protocol
+      sil_id = si.spectrum_identification_list
+      SpectrumIdentificationProtocol.destroy(sip.id) #sip_searched_mod_join_table, SipPsiMsCvTerms and SipUserParams are dependently destroyed
       #pd_ids << SpectrumIdentificationList.find(sil_id).protein_detection_id
-      #this_si_sir_ids = si.spectrum_identification_list.spectrum_identification_result_ids
-      #SpectrumIdentificationResult.destroy(this_si_sir_ids)
-      #SpectrumIdentification.destroy(si)
-    #end
-    #unless pd_ids.blank?
-      #ProteinDetection.destroy(pd_ids.uniq)
-    #end      
-  #end
-#end
+      this_si_sir_ids = si.spectrum_identification_list.spectrum_identification_result_ids
+      SpectrumIdentificationResult.destroy(this_si_sir_ids)
+      #PeptideEvidence.all.each { |pev| PeptideEvidence.destroy(pev.id) if pev.peptide_spectrum_assignments.blank? }
+      SpectrumIdentification.destroy(si)
+    end
+    unless pd_ids.blank?
+      ProteinDetection.destroy(pd_ids.uniq)
+    end
+  end
+end
