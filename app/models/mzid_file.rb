@@ -9,30 +9,31 @@ class MzidFile < ActiveRecord::Base
   #validates_associated :spectrum_identifications  #This is in the other part of the association
    
   
-  def self.spectra_files  
-    @mzidf_input_spectra_files = {} #HASH: {4=>["AtiO2.mzML", "Elu1A.mzML", "Elu2A.mzML"], 5=>["MYOGLOBIN_ECD.mgf"]} 
-    #get this from existing mzidfile.spectra_acquisition_runs
-    #~ spect_acq_runs, @stored_spectra_files = [], []  
-    self.all.each do |mzidf|
-      #get this from the mzid file
-      input_spect_files = []  
-      #~ if File.exists? mzidf.location
-        #~ spect_acq_runs = MzidFile.find(mzidf).spectra_acquisition_runs
-        #~ unless spect_acq_runs.blank?
-          #~ spect_acq_runs.each do |sar|
-            #~ @stored_spectra_files << sar.spectra_file
-          #~ end
-        #~ end
-      #~ end
-      spectra_data = Nokogiri::XML(File.open(mzidf.location)).xpath("//xmlns:SpectraData")
-      spectra_data.each do |s| #<SpectraData> minOccurs = 1
-        input_spect_files << s.attr("location").split("/")[-1] #attr location required
-      end
-      @mzidf_input_spectra_files[mzidf.id] = input_spect_files
-    end    
-    return @mzidf_input_spectra_files
-  end
+  #def self.spectra_files  
+    #@mzidf_input_spectra_files = {} #HASH: {4=>["AtiO2.mzML", "Elu1A.mzML", "Elu2A.mzML"], 5=>["MYOGLOBIN_ECD.mgf"]} 
+    #self.all.each do |mzidf|
+      #input_spect_files = []  
+      #spectra_data = Nokogiri::XML(File.open(mzidf.location)).xpath("//xmlns:SpectraData")
+      #spectra_data.each do |s| #<SpectraData> minOccurs = 1
+        #input_spect_files << s.attr("location").split("/")[-1] #attr location required
+      #end
+      #@mzidf_input_spectra_files[mzidf.id] = input_spect_files
+    #end    
+    #return @mzidf_input_spectra_files
+  #end
   
+  
+  def si_sars
+    #self.id
+    mzid = Nokogiri::XML(File.open(self.location))
+    mzid_si = mzid.xpath("//xmlns:SpectrumIdentification")
+    my_si = SpectrumIdentification.where(si_id: mzid_si.attr("id"), mzid_file_id: self.id)
+    si.xpath(".//xmlns:InputSpectra").each do |is|
+      spectraData_ref = is.attr("spectraData_ref")
+      mzid.xpath("//xmlns:SpectraData[@id='#{spectraData_ref}']")
+    end
+  
+  end
   
   
   def includes_protein_detection 

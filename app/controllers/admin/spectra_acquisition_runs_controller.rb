@@ -7,32 +7,34 @@ before_filter :require_login
 
 def index
 
-
-  @mzidf_input_spectra_files = MzidFile.spectra_files
-  #do a method and put it in model!!!
-  #~ @mzidf_input_spectra_files = {} #HASH: {4=>["AtiO2.mzML", "Elu1A.mzML", "Elu2A.mzML"], 5=>["MYOGLOBIN_ECD.mgf"]}
- #~ 
-  #~ #get this from existing mzidfile.spectra_acquisition_runs
-  #~ spect_acq_runs, @stored_spectra_files = [], []
-  #~ 
-  #~ MzidFile.all.each do |mzidf|
-    #~ #get this from the mzid file
-    #~ input_spect_files = []  
-    #~ if File.exists? mzidf.location
-      #~ spect_acq_runs = MzidFile.find(mzidf).spectra_acquisition_runs
-      #~ unless spect_acq_runs.blank?
-         #~ spect_acq_runs.each do |sar|
-          #~ @stored_spectra_files << sar.spectra_file
-        #~ end
-      #~ end
-      #~ spectra_data = Nokogiri::XML(File.open(mzidf.location)).xpath("//xmlns:SpectraData")
-      #~ spectra_data.each do |s| #<SpectraData> minOccurs = 1
-        #~ input_spect_files << s.attr("location").split("/")[-1] #attr location required
-      #~ end
-      #~ @mzidf_input_spectra_files[mzidf.id] = input_spect_files
-    #~ end    
-  #~ end
-
+  @mzidf_input_spectra_files = MzidFile.spectra_files 
+  #HASH: {4=>["AtiO2.mzML", "Elu1A.mzML", "Elu2A.mzML"], 5=>["MYOGLOBIN_ECD.mgf"]}
+  
+   ##get this from existing mzidfile.spectra_acquisition_runs
+   #spect_acq_runs, @stored_spectra_files = [], []
+   
+   #@si_sars = {}
+   
+   #MzidFile.all.each do |mzidf|
+     #get this from the mzid file
+     #input_spect_files = []  
+     #if File.exists? mzidf.location
+       #mzidf.spectrum_identifications.collect do |si|
+         #s_files = []
+         #si.spectra_acquisition_runs.each { |sar| s_files << sar.spectra_file }
+         #@si_sars[si.id] = s_files
+       #end
+       #
+       #mzidf.spectrum_identifications.collect { |si| spect_acq_runs = si.spectra_acquisition_runs }
+       #unless spect_acq_runs.blank?
+         #spect_acq_runs.each do |sar|
+           #@stored_spectra_files << sar.spectra_file
+         #end
+       #end
+#
+     #end    
+   #end
+#
 
 end
 
@@ -61,7 +63,7 @@ def create
   if @spectra_acquisition_run.invalid?
     render "new"
   else
-    redirect_to :action => :index
+    redirect_to :index
   end
   
 end
