@@ -26,4 +26,24 @@ class SpectrumIdentification < ActiveRecord::Base
   has_many :spectra_acquisition_runs
   
   
+  
+  def read_spectra_data_from_mzid
+    mzidf = MzidFile.find(self.mzid_file_id)
+    mzid = Nokogiri::XML(File.open(mzidf.location))
+    si_id = self.si_id
+    spectra_data_refs = []
+    mzid.xpath("//xmlns:SpectrumIdentification[@id='#{si_id}']").xpath(".//xmlns:InputSpectra").collect { |is| spectra_data_refs << is.attr("spectraData_ref").to_s }
+    input_spectra = []
+    spectra_data_refs.each do |s|
+      input_spectra << mzid.xpath("//xmlns:SpectraData[@id='#{s}']").attr("location").to_s.split(/[\/|\\]/)[-1]
+    end
+    return input_spectra
+  end
+  
+  
+  def sar_input_spectra_files
+    return self.spectra_acquisition_runs.collect { |sar| sar.spectra_file }  
+  end
+  
+  
 end
