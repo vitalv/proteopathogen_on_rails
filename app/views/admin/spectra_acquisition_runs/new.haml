@@ -1,14 +1,9 @@
-%h2 Spectra acquisition data for mzid file #{@mzid_file_name}
-%br
+%h2 Spectra acquisition data for #{@input_spectra_file}
 =form_for [:admin, @spectra_acquisition_run] do |f|
-
   - if @spectra_acquisition_run.errors.any?
     %ul
       - for message in @spectra_acquisition_run.errors.full_messages
         %li= message
-
-  %p 
-    Spectra acquisition data for #{@input_spectra_file}
   %p
     = f.label :fraction
     %br
@@ -29,7 +24,7 @@
     = f.hidden_field :spectra_file, {:value => @input_spectra_file}
     %br
   %p
-    = f.hidden_field :mzid_file_id,  {:value => @mzid_file_id}
+    = f.hidden_field :spectrum_identification_id,  {:value => @si_id}
     %br    
   %p
     = f.submit

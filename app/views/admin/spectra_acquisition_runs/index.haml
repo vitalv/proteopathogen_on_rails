@@ -1,27 +1,21 @@
 %h2 Spectra Acquisition Runs
 
-- @mzidf_input_spectra_files.each do |mzidf_id, input_spect_files_arr|
+- @mzid_files.each do |mzid|
   %table.my_table
     %tr
       %td.title MZID FILE
-      %td= MzidFile.find(mzidf_id).name
-    - input_spect_files_arr.each do |input_spectra_file|
+      %td= mzid.name
+    - mzid.spectrum_identifications.each do |si|
       %tr
         %td{colspan:2}
+          ="Input Spectra: #{si.si_id}"
           %table.my_table.inner
-            %tr
-              %td.title Input Spectra File
-              %td= input_spectra_file
-            %tr
-            - if !@stored_spectra_files.include? input_spectra_file
-              %td.center{colspan: 2}= link_to "add spectra acquisition data" , new_admin_spectra_acquisition_run_path(:mzid_file_id => mzidf_id, :input_spectra_file => input_spectra_file)
-            - else
-              %table.my_table.inner
-                %tr
-                  %td= "#{SpectraAcquisitionRun.find_by_spectra_file(input_spectra_file).fraction} - "
-                %tr
-                  %td= "#{SpectraAcquisitionRun.find_by_spectra_file(input_spectra_file).instrument} - "
-                %tr
-                  %td= "#{SpectraAcquisitionRun.find_by_spectra_file(input_spectra_file).ionization} - " 
-                %tr
-                  %td= SpectraAcquisitionRun.find_by_spectra_file(input_spectra_file).analyzer    
+            - si.read_spectra_data_from_mzid.each do |is|
+              %tr
+                %td= is
+                - if si.sar_input_spectra_files.include? is
+                  %td.center "Input Spectra #{si.spectra_acquisition_runs.where(spectra_file: is)[0].id} already stored"
+                - else
+                  %td.center= link_to "add spectra acquisition data" , new_admin_spectra_acquisition_run_path(:si_id => si.id, :input_spectra_file => is)
+
+          
