@@ -29,7 +29,7 @@ class ProteinAmbiguityGroupsDatatable
     pags.map do |pag|
       [
         link_to( "#{pag.protein_ambiguity_group_id}", "protein_detections/#{pag.id}", remote: true, format: :js, :data => {'pag-id' => "#{pag.id}"}, class: "pag_link" ),
-        pag.accessions_in_group
+        pag.proteins_in_group
       ]
     end
   end

@@ -4,7 +4,12 @@
 - else
   - @pdh_psi_ms_cv_terms.each do |cvP|
     %tr
-      %td.title= cvP.psi_ms_cv_term_accession
-      %td= cvP.ms_term_name
-      %td= cvP.value
+      - if cvP.psi_ms_cv_term_accession == "MS:1001093"
+        %td.title= cvP.psi_ms_cv_term_accession
+        %td covered protein sequence (%)
+        %td= @sequence_coverage
+      - else 
+        %td.title= cvP.psi_ms_cv_term_accession
+        %td= cvP.ms_term_name
+        %td= cvP.value
 

@@ -4,18 +4,23 @@
     %tr
       %td.title Search database ID
       %td= sdb.sdb_id
-    %tr
-      %td.title Name
-      %td= sdb.name
-    %tr
-      %td.title Version
-      %td= sdb.version
-    %tr
-      %td.title Release date
-      %td= sdb.release_date
-    %tr
-      %td.title Number of sequences
-      %td= sdb.number_of_sequences
-    %tr
-      %td.title Original location
-      %td= sdb.location
+    -if sdb.name
+      %tr
+        %td.title Name
+        %td= sdb.name
+    -if sdb.version
+      %tr
+        %td.title Version
+        %td= sdb.version
+    -if sdb.release_date
+      %tr
+        %td.title Release date
+        %td= sdb.release_date
+    -if sdb.number_of_sequences
+      %tr
+        %td.title Number of sequences
+        %td= sdb.number_of_sequences
+    -if sdb.location
+      %tr
+        %td.title Original location
+        %td= sdb.location
