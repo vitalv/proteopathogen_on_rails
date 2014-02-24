@@ -11,11 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130731083715) do
+ActiveRecord::Schema.define(version: 20140224112314) do
 
   create_table "db_sequences", force: true do |t|
     t.string  "accession"
-    t.string  "description"
+    t.text    "description"
     t.text    "sequence"
     t.integer "search_database_id"
   end
@@ -65,7 +65,7 @@ ActiveRecord::Schema.define(version: 20130731083715) do
   create_table "pdh_user_params", force: true do |t|
     t.integer "protein_detection_hypothesis_id"
     t.string  "name"
-    t.string  "value"
+    t.text    "value"
   end
 
   create_table "pdp_psi_ms_cv_terms", force: true do |t|

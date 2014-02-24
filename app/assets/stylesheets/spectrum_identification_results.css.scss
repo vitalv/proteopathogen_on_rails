@@ -4,12 +4,12 @@
 
 
 table#sir_table {
-  th.spectrum_name { width: 330px; }
+  th.sii_id { width: 300px; }
+  th.spectrum_name { width: 300px; }
 }
 
 table#sii_table {
-    th { text-align: center; }
-    th.sii_id { width: 180px; }
+    th.sii_id { width: 330px; }
 }
 
 td.empty { text-align: center;}

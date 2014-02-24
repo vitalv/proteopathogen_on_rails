@@ -48,36 +48,28 @@ class ProteinDetectionsController < ApplicationController
     
     @psms = pdh.peptide_spectrum_assignments
 
-    #if pdh.has_ambiguous_peptides#ESTO NO DEBERíA SER NECESARIO!
-      #can this even happen? Or is it that my_file.mzid is now well built,
-      #I guess public/uploaded_mzid_files/SILAC_phos_OrbitrapVelos_1... is bad  There is NO SII for which there are more than one <PeptideEvidenceRef, and I know it should, bc of PAG_100 peptide_hypotheses
-      #and same thing with Orbitrap_XL_CID_SILAC_blabla_1B.mzid
-      #@watch_out = "some of the peptide sequences are ambiguous, i.e. are also found in other proteins"
-    #  @pdh_id = pdh.protein_detection_hypothesis_id      
-    #else #all the peptide_hypotheses correspond to peptide_evidences that are mapped to ONE (the one ref in <pdh>) db_seq entry
-    #  @protein_sequence = pdh.db_seq.sequence
-    #  @db_seq_accession = pdh.db_seq.accession
-    #end 
-    
-    @protein_sequence = pdh.db_seq.sequence
-    @db_seq_accession = pdh.db_seq.accession
-     
-    @peptide_sequences = @psms.map { |psm| psm.peptide_evidence.peptide_sequence.sequence }
+    if pdh.db_seq #this should not be needed, just in case .mzid file is not well constructed
+      @protein_sequence = pdh.db_seq.sequence
+      @db_seq_accession = pdh.db_seq.accession
+      @peptide_sequences = @psms.map { |psm| psm.peptide_evidence.peptide_sequence.sequence }
+    end
     
     if @protein_sequence and !@protein_sequence.blank?
       offsets = []
       @peptide_sequences.each {|pepseq| @protein_sequence.scan(pepseq){offsets << $~.offset(0)} }
       ranges = offsets.map { |o| o[0]..o[1] }
-      #convierto mis offsets arrays a ranges para poder usar la funcion merge_ranges
+      #Convert offsets from arrays to ranges to use def merge_ranges
       coverage_ranges = merge_ranges(ranges) #[5..17, 34..63]
       coverage_offsets = coverage_ranges.map {|r| [r.first, r.last] } #[[5, 17], [34, 63]]
-      #pero claro, luego tengo que voler a convertir los ranges a offsets (arrays)
-      @prot_seq_w_cov_tags = pdh.prot_seq_highlighted_coverage(coverage_offsets)
+      #then convert back to arrays
+      @prot_seq_w_cov_tags = pdh.prot_seq_highlighted_coverage(coverage_offsets)      
+      covered_length = 0
+      coverage_offsets.each { |c| covered_length += c[1]-c[0] }      
+      @sequence_coverage = ((covered_length * 100).to_f / @protein_sequence.length.to_f).round 2      
     end
     
    respond_to do |format|
     #  format.html { render json: @fragments  }
-    #  format.json { render json: @fragments }
       format.js { render :layout => false }
     end
 
