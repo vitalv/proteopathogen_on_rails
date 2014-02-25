@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<MzIdentML xmlns="http://psidev.info/psi/pi/mzIdentML/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="" version="1.1.0" xsi:schemaLocation="http://psidev.info/psi/pi/mzIdentML/1.1 ../../schema/mzIdentML1.1.0.xsd" creationDate="2014-02-24T14:45:19">
+<MzIdentML xmlns="http://psidev.info/psi/pi/mzIdentML/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="" version="1.1.0" xsi:schemaLocation="http://psidev.info/psi/pi/mzIdentML/1.1 ../../schema/mzIdentML1.1.0.xsd" creationDate="2014-02-25T14:42:51">
   <cvList>
     <cv id="PSI-MS" fullName="Proteomics Standards Initiative Mass Spectrometry Vocabularies" uri="http://psidev.cvs.sourceforge.net/viewvc/*checkout*/psidev/psi/psi-ms/mzML/controlledVocabulary/psi-ms.obo" version="2.32.0"/>
     <cv id="UNIMOD" fullName="UNIMOD" uri="http://www.unimod.org/obo/unimod.obo"/>
@@ -477,7 +477,7 @@
     </DBSequence>
     <DBSequence id="SDB_1_K22E_HUMAN" searchDatabase_ref="SDB_1" accession="K22E_HUMAN">
       <cvParam accession="MS:1001088" name="protein description" cvRef="PSI-MS" value=""/>
-      <Seq>MQSCSCIKSRGRGFGGGGGRSASSGSGFGVVSGRRSTSLSCFSSRSGGGGGFFGGGHGGGRLGGSTVLGKGGGSIGVGGGFIGAFSGAGSARFGGSGSFGGGGGGGGGGGGGGFGGSGFGFSGFGGGRNFHLFSGGPGGGQFVGIGGNQSLPGYVPVGGPPLGVGGGGLEGKVDEPNIQVKEQARQEIKNTNLKIFFSADKVRTQLVEQLQNFQKQVGNPWLLSNYFLGETQMLQIDRIEIPKRDTAYGLELRSEMETQYNLVSNNDDQLKKKNEIYDEKRDNVFTLATAEKKVDDYMAINKSEVLQKIFEDLVQNLELKMIQIVSQNVINALSSTHDLTDSVDYERENIIAVDDLLSKEYAIAQEQRSKALYESEHAEKVQLEVYGTERLSHDGKIEKIEISNLERVQIRGLVHIAEQKKCQKQNQEDVAAAIDRAHEGLKADRNKDQLLNAQEEALKLAEDRLLRDQNVYEMLKYLDAITAEVLRKGECLLEERSVISDMTSSSVAGNNVTSTSVLSSKSAGFAGGGRYSGGGSGGYGGSSSSSGSSRSGSQRGGGSGGGSGIGGGGGSGSGGSYRGGSGYGSKGIGGGGGYGGSSGSKHSGSGSGRSYSGGGGGSGSVSSGSGGGKESSSTAFFGGSSVFGR</Seq>
+      <Seq>MSCQISCKSRGRGGGGGGFRGFSSGSAVVSGGSRRSTSSFSCLSRHGGGGGGFGGGGFGSRSLVGLGGTKSISISVAGGGGGFGAAGGFGGRGGGFGGGSGFGGGSGFGGGSGFSGGGFGGGGFGGGRFGGFGGPGGVGGLGGPGGFGPGGYPGGIHEVSVNQSLLQPLNVKVDPEIQNVKAQEREQIKTLNNKFASFIDKVRFLEQQNQVLQTKWELLQQMNVGTRPINLEPIFQGYIDSLKRYLDGLTAERTSQNSELNNMQDLVEDYKKKYEDEINKRTAAENDFVTLKKDVDNAYMIKVELQSKVDLLNQEIEFLKVLYDAEISQIHQSVTDTNVILSMDNSRNLDLDSIIAEVKAQYEEIAQRSKEEAEALYHSKYEELQVTVGRHGDSLKEIKIEISELNRVIQRLQGEIAHVKKQCKNVQDAIADAEQRGEHALKDARNKLNDLEEALQQAKEDLARLLRDYQELMNVKLALDVEIATYRKLLEGEECRMSGDLSSNVTVSVTSSTISSNVASKAAFGGSGGRGSSSGGGYSSGSSSYGSGGRQSGSRGGSGGGGSISGGGYGSGGGSGGRYGSGGGSKGGSISGGGYGSGGGKHSSGGGSRGGSSSGGGYGSGGGGSSSVKGSSGEAFGSSVTFSFR</Seq>
     </DBSequence>
     <DBSequence id="SDB_1_orf19.1059" searchDatabase_ref="SDB_1" accession="orf19.1059">
       <cvParam accession="MS:1001088" name="protein description" cvRef="PSI-MS" value="HHF1 CGDID:CAL0001194 COORDS:Ca21chr1_C_albicans_SC5314:881330-881013C, translated using codon table 12 (105 amino acids) Verified ORF; Putative histone H4; reduced mRNA in homozygous fkh2 null mutant; regulated by Efg1p; fluconazole induced; amphotericin B repressed; farnesol regulated; shows colony morphology-related gene regulation by Ssn6p; Hap43p-induced gene"/>
@@ -495,7 +495,9 @@
     </Peptide>
     <Peptide id="peptide_1_2">
       <PeptideSequence>QHEQHQQPLSDPLPHAEKPQPEIPQSPEAPQAK</PeptideSequence>
-      <Modification residues="Q" location="1" avgMassDelta=""/>
+      <Modification residues="Q" location="1" avgMassDelta="-17.0265">
+        <cvParam cvRef="UNIMOD" accession="UNIMOD:28" name="Gln-&gt;pyro-Glu"/>
+      </Modification>
     </Peptide>
     <Peptide id="peptide_1_3">
       <PeptideSequence>DGKYDLDFKNPESDPSK</PeptideSequence>
@@ -583,11 +585,15 @@
     </Peptide>
     <Peptide id="peptide_4_1">
       <PeptideSequence>FPEPKLSKQTSSTSTSTDGIKSFR</PeptideSequence>
-      <Modification residues="L" location="6" avgMassDelta=""/>
+      <Modification residues="L" location="6" avgMassDelta="6.0201">
+        <cvParam cvRef="UNIMOD" accession="UNIMOD:188" name="13C(6) Silac label"/>
+      </Modification>
       <Modification residues="S" location="7" avgMassDelta="79.9663">
         <cvParam cvRef="UNIMOD" accession="UNIMOD:21" name="Phospho"/>
       </Modification>
-      <Modification residues="T" location="17" avgMassDelta=""/>
+      <Modification residues="T" location="17" avgMassDelta="79.9663">
+        <cvParam cvRef="UNIMOD" accession="UNIMOD:21" name="Phospho"/>
+      </Modification>
       <Modification residues="R" location="24" avgMassDelta="6.0201">
         <cvParam cvRef="UNIMOD" accession="UNIMOD:188" name="13C(6) Silac label"/>
       </Modification>
@@ -603,7 +609,9 @@
     </Peptide>
     <Peptide id="peptide_4_5">
       <PeptideSequence>CLIDTDMWRNAMIGIEFEGEAYR</PeptideSequence>
-      <Modification residues="C" location="1" avgMassDelta=""/>
+      <Modification residues="C" location="1" avgMassDelta="57.0215">
+        <cvParam cvRef="UNIMOD" accession="UNIMOD:4" name="Carbamidomethyl"/>
+      </Modification>
       <Modification residues="R" location="9" avgMassDelta="6.0201">
         <cvParam cvRef="UNIMOD" accession="UNIMOD:188" name="13C(6) Silac label"/>
       </Modification>
@@ -646,7 +654,9 @@
     </Peptide>
     <Peptide id="peptide_5_7">
       <PeptideSequence>QQQEQQQEQEQVEDESVHQVQQ</PeptideSequence>
-      <Modification residues="Q" location="1" avgMassDelta=""/>
+      <Modification residues="Q" location="1" avgMassDelta="-17.0265">
+        <cvParam cvRef="UNIMOD" accession="UNIMOD:28" name="Gln-&gt;pyro-Glu"/>
+      </Modification>
     </Peptide>
     <Peptide id="peptide_5_8">
       <PeptideSequence>GAPGVAADVSHVPTNSTVK</PeptideSequence>
@@ -656,14 +666,18 @@
     </Peptide>
     <Peptide id="peptide_5_10">
       <PeptideSequence>IPDGKPENQFAFSGECK</PeptideSequence>
-      <Modification residues="C" location="16" avgMassDelta=""/>
+      <Modification residues="C" location="16" avgMassDelta="57.0215">
+        <cvParam cvRef="UNIMOD" accession="UNIMOD:4" name="Carbamidomethyl"/>
+      </Modification>
     </Peptide>
     <Peptide id="peptide_6_1">
       <PeptideSequence>DGDKPQSFAPPTNINK</PeptideSequence>
     </Peptide>
     <Peptide id="peptide_6_2">
       <PeptideSequence>QQQQQQQEPQQQSENQFSGQK</PeptideSequence>
-      <Modification residues="Q" location="1" avgMassDelta=""/>
+      <Modification residues="Q" location="1" avgMassDelta="-17.0265">
+        <cvParam cvRef="UNIMOD" accession="UNIMOD:28" name="Gln-&gt;pyro-Glu"/>
+      </Modification>
     </Peptide>
     <Peptide id="peptide_6_3">
       <PeptideSequence>NDKPETPNTNENNESAGGER</PeptideSequence>
@@ -679,14 +693,18 @@
     </Peptide>
     <Peptide id="peptide_6_7">
       <PeptideSequence>CDSAPSSTNNAPSFK</PeptideSequence>
-      <Modification residues="C" location="1" avgMassDelta=""/>
+      <Modification residues="C" location="1" avgMassDelta="57.0215">
+        <cvParam cvRef="UNIMOD" accession="UNIMOD:4" name="Carbamidomethyl"/>
+      </Modification>
     </Peptide>
     <Peptide id="peptide_6_8">
       <PeptideSequence>EIDNDDDDEDNEVDEDHDEEQAK</PeptideSequence>
     </Peptide>
     <Peptide id="peptide_6_9">
       <PeptideSequence>NCDSAPSSTNNAPSFK</PeptideSequence>
-      <Modification residues="C" location="2" avgMassDelta=""/>
+      <Modification residues="C" location="2" avgMassDelta="57.0215">
+        <cvParam cvRef="UNIMOD" accession="UNIMOD:4" name="Carbamidomethyl"/>
+      </Modification>
     </Peptide>
     <Peptide id="peptide_6_10">
       <PeptideSequence>EQMQQPDDRPSASQNDQPSPIK</PeptideSequence>
@@ -702,8 +720,12 @@
     </Peptide>
     <Peptide id="peptide_7_4">
       <PeptideSequence>NPALDLPQSNNGFNK</PeptideSequence>
-      <Modification residues="L" location="4" avgMassDelta=""/>
-      <Modification residues="L" location="6" avgMassDelta=""/>
+      <Modification residues="L" location="4" avgMassDelta="6.0201">
+        <cvParam cvRef="UNIMOD" accession="UNIMOD:188" name="13C(6) Silac label"/>
+      </Modification>
+      <Modification residues="L" location="6" avgMassDelta="6.0201">
+        <cvParam cvRef="UNIMOD" accession="UNIMOD:188" name="13C(6) Silac label"/>
+      </Modification>
     </Peptide>
     <Peptide id="peptide_7_5">
       <PeptideSequence>GVVAEEDEEEEEEEEKENEDDDFKEQVQN</PeptideSequence>
@@ -755,14 +777,18 @@
     </Peptide>
     <Peptide id="peptide_9_1">
       <PeptideSequence>NAEAQTGSDNQDTLK</PeptideSequence>
-      <Modification residues="L" location="14" avgMassDelta=""/>
+      <Modification residues="L" location="14" avgMassDelta="6.0201">
+        <cvParam cvRef="UNIMOD" accession="UNIMOD:188" name="13C(6) Silac label"/>
+      </Modification>
     </Peptide>
     <Peptide id="peptide_9_2">
       <PeptideSequence>SPSSDEVVEYGDLNSANNSANLSK</PeptideSequence>
     </Peptide>
     <Peptide id="peptide_9_3">
       <PeptideSequence>NNLADTVENPEQTTR</PeptideSequence>
-      <Modification residues="L" location="3" avgMassDelta=""/>
+      <Modification residues="L" location="3" avgMassDelta="6.0201">
+        <cvParam cvRef="UNIMOD" accession="UNIMOD:188" name="13C(6) Silac label"/>
+      </Modification>
       <Modification residues="R" location="15" avgMassDelta="6.0201">
         <cvParam cvRef="UNIMOD" accession="UNIMOD:188" name="13C(6) Silac label"/>
       </Modification>
@@ -847,14 +873,18 @@
     </Peptide>
     <Peptide id="peptide_11_5">
       <PeptideSequence>NQDDDDLEQVQNR</PeptideSequence>
-      <Modification residues="L" location="7" avgMassDelta=""/>
+      <Modification residues="L" location="7" avgMassDelta="6.0201">
+        <cvParam cvRef="UNIMOD" accession="UNIMOD:188" name="13C(6) Silac label"/>
+      </Modification>
       <Modification residues="R" location="13" avgMassDelta="6.0201">
         <cvParam cvRef="UNIMOD" accession="UNIMOD:188" name="13C(6) Silac label"/>
       </Modification>
     </Peptide>
     <Peptide id="peptide_11_6">
       <PeptideSequence>TPCQLNNNSETINK</PeptideSequence>
-      <Modification residues="C" location="3" avgMassDelta=""/>
+      <Modification residues="C" location="3" avgMassDelta="57.0215">
+        <cvParam cvRef="UNIMOD" accession="UNIMOD:4" name="Carbamidomethyl"/>
+      </Modification>
     </Peptide>
     <Peptide id="peptide_11_7">
       <PeptideSequence>VEIIANDQGNR</PeptideSequence>
@@ -891,7 +921,9 @@
     </Peptide>
     <Peptide id="peptide_12_6">
       <PeptideSequence>NDDDGQSKPLSER</PeptideSequence>
-      <Modification residues="L" location="10" avgMassDelta=""/>
+      <Modification residues="L" location="10" avgMassDelta="6.0201">
+        <cvParam cvRef="UNIMOD" accession="UNIMOD:188" name="13C(6) Silac label"/>
+      </Modification>
       <Modification residues="R" location="13" avgMassDelta="6.0201">
         <cvParam cvRef="UNIMOD" accession="UNIMOD:188" name="13C(6) Silac label"/>
       </Modification>
@@ -910,8 +942,12 @@
     </Peptide>
     <Peptide id="peptide_13_1">
       <PeptideSequence>GYFKDENLDIAILEPSNPSDVTELVGSGK</PeptideSequence>
-      <Modification residues="L" location="8" avgMassDelta=""/>
-      <Modification residues="L" location="13" avgMassDelta=""/>
+      <Modification residues="L" location="8" avgMassDelta="6.0201">
+        <cvParam cvRef="UNIMOD" accession="UNIMOD:188" name="13C(6) Silac label"/>
+      </Modification>
+      <Modification residues="L" location="13" avgMassDelta="6.0201">
+        <cvParam cvRef="UNIMOD" accession="UNIMOD:188" name="13C(6) Silac label"/>
+      </Modification>
     </Peptide>
     <Peptide id="peptide_13_2">
       <PeptideSequence>KYGQSAGNVGDEGGVAPDIK</PeptideSequence>
@@ -922,7 +958,9 @@
     </Peptide>
     <Peptide id="peptide_13_4">
       <PeptideSequence>NEGANNLHGGANGFDK</PeptideSequence>
-      <Modification residues="L" location="7" avgMassDelta=""/>
+      <Modification residues="L" location="7" avgMassDelta="6.0201">
+        <cvParam cvRef="UNIMOD" accession="UNIMOD:188" name="13C(6) Silac label"/>
+      </Modification>
     </Peptide>
     <Peptide id="peptide_13_5">
       <PeptideSequence>DTTVSTDDKESTTTSEDNKQEK</PeptideSequence>
@@ -955,12 +993,18 @@
       <PeptideSequence>NKPQDLVVDNNK</PeptideSequence>
     </Peptide>
     <Peptide id="peptide_14_5">
-      <PeptideSequence>HNDDEQYVWESNAGGK</PeptideSequence>
+      <PeptideSequence>CQGGNNAGHTIVVGK</PeptideSequence>
+      <Modification residues="C" location="1" avgMassDelta="57.0215">
+        <cvParam cvRef="UNIMOD" accession="UNIMOD:4" name="Carbamidomethyl"/>
+      </Modification>
     </Peptide>
     <Peptide id="peptide_14_6">
-      <PeptideSequence>KEEEEQEEEESDDNNDNDK</PeptideSequence>
+      <PeptideSequence>HNDDEQYVWESNAGGK</PeptideSequence>
     </Peptide>
     <Peptide id="peptide_14_7">
+      <PeptideSequence>KEEEEQEEEESDDNNDNDK</PeptideSequence>
+    </Peptide>
+    <Peptide id="peptide_14_8">
       <PeptideSequence>HSSGGGSRGGSSSGGGYGSGGGGSSSVK</PeptideSequence>
     </Peptide>
     <PeptideEvidence dBSequence_ref="SDB_1_orf19.18" id="peptide_1_1_SDB_1_orf19.18_167_184" isDecoy="" name="" peptide_ref="peptide_1_1" start="167" end="184" pre="R" post="D"/>
@@ -1099,9 +1143,10 @@
     <PeptideEvidence dBSequence_ref="SDB_1_orf19.4506" id="peptide_14_2_SDB_1_orf19.4506_388_413" isDecoy="" name="" peptide_ref="peptide_14_2" start="388" end="413" pre="K" post="K"/>
     <PeptideEvidence dBSequence_ref="SDB_1_orf19.6515" id="peptide_14_3_SDB_1_orf19.6515_277_288" isDecoy="" name="" peptide_ref="peptide_14_3" start="277" end="288" pre="R" post="F"/>
     <PeptideEvidence dBSequence_ref="SDB_1_orf19.1663" id="peptide_14_4_SDB_1_orf19.1663_85_96" isDecoy="" name="" peptide_ref="peptide_14_4" start="85" end="96" pre="K" post="D"/>
-    <PeptideEvidence dBSequence_ref="SDB_1_orf19.6515" id="peptide_14_5_SDB_1_orf19.6515_143_158" isDecoy="" name="" peptide_ref="peptide_14_5" start="143" end="158" pre="K" post="F"/>
-    <PeptideEvidence dBSequence_ref="SDB_1_orf19.6313.2" id="peptide_14_6_SDB_1_orf19.6313.2_123_141" isDecoy="" name="" peptide_ref="peptide_14_6" start="123" end="141" pre="K" post="D"/>
-    <PeptideEvidence dBSequence_ref="SDB_1_K22E_HUMAN" id="peptide_14_7_SDB_1_K22E_HUMAN_0_0" isDecoy="" name="" peptide_ref="peptide_14_7" start="0" end="0" pre="K" post="G"/>
+    <PeptideEvidence dBSequence_ref="SDB_1_orf19.4827" id="peptide_14_5_SDB_1_orf19.4827_32_46" isDecoy="" name="" peptide_ref="peptide_14_5" start="32" end="46" pre="R" post="V"/>
+    <PeptideEvidence dBSequence_ref="SDB_1_orf19.6515" id="peptide_14_6_SDB_1_orf19.6515_143_158" isDecoy="" name="" peptide_ref="peptide_14_6" start="143" end="158" pre="K" post="F"/>
+    <PeptideEvidence dBSequence_ref="SDB_1_orf19.6313.2" id="peptide_14_7_SDB_1_orf19.6313.2_123_141" isDecoy="" name="" peptide_ref="peptide_14_7" start="123" end="141" pre="K" post="D"/>
+    <PeptideEvidence dBSequence_ref="SDB_1_K22E_HUMAN" id="peptide_14_8_SDB_1_K22E_HUMAN_602_629" isDecoy="" name="" peptide_ref="peptide_14_8" start="602" end="629" pre="K" post="G"/>
   </SequenceCollection>
   <AnalysisCollection>
     <SpectrumIdentification id="SI_CGG_2011_212_SILAC1_TiO2_F46" spectrumIdentificationProtocol_ref="SIP_CGG_2011_212_SILAC1_TiO2_F46" spectrumIdentificationList_ref="SIL_CGG_2011_212_SILAC1_TiO2_F46">
@@ -4329,8 +4374,8 @@
           </SpectrumIdentificationItem>
         </SpectrumIdentificationResult>
         <SpectrumIdentificationResult id="SIR_25_SIL_CGG_2011_212_SILAC1_TiO2_Fr40" name="CGG_2011_212_SILAC1_TiO2_Fr40.00536.00536.2" spectrumID="index=22" spectraData_ref="SID_CGG_2011_212_SILAC1_TiO2_Fr40">
-          <SpectrumIdentificationItem id="SIL_CGG_2011_212_SILAC1_TiO2_Fr40_SII_25_1" calculatedMassToCharge="756.37277647" chargeState="2" experimentalMassToCharge="756.37377647" peptide_ref="peptide_13_3" rank="1" passThreshold="true">
-            <PeptideEvidenceRef peptideEvidence_ref="peptide_13_3_SDB_1_orf19.4827_32_46"/>
+          <SpectrumIdentificationItem id="SIL_CGG_2011_212_SILAC1_TiO2_Fr40_SII_25_1" calculatedMassToCharge="756.37277647" chargeState="2" experimentalMassToCharge="756.37377647" peptide_ref="peptide_14_5" rank="1" passThreshold="true">
+            <PeptideEvidenceRef peptideEvidence_ref="peptide_14_5_SDB_1_orf19.4827_32_46"/>
             <cvParam accession="MS:1001331" name="xtandem:hyperscore" cvRef="PSI-MS" value="529"/>
             <cvParam accession="MS:1001330" name="xtandem:expect" cvRef="PSI-MS" value="0.0028"/>
             <userParam name="xtandem:nextscore" value="334"/>
@@ -4409,8 +4454,8 @@
           </SpectrumIdentificationItem>
         </SpectrumIdentificationResult>
         <SpectrumIdentificationResult id="SIR_30_SIL_CGG_2011_212_SILAC1_TiO2_Fr40" name="CGG_2011_212_SILAC1_TiO2_Fr40.00869.00869.3" spectrumID="index=32" spectraData_ref="SID_CGG_2011_212_SILAC1_TiO2_Fr40">
-          <SpectrumIdentificationItem id="SIL_CGG_2011_212_SILAC1_TiO2_Fr40_SII_30_1" calculatedMassToCharge="616.93094313" chargeState="3" experimentalMassToCharge="616.93094313" peptide_ref="peptide_14_5" rank="1" passThreshold="true">
-            <PeptideEvidenceRef peptideEvidence_ref="peptide_14_5_SDB_1_orf19.6515_143_158"/>
+          <SpectrumIdentificationItem id="SIL_CGG_2011_212_SILAC1_TiO2_Fr40_SII_30_1" calculatedMassToCharge="616.93094313" chargeState="3" experimentalMassToCharge="616.93094313" peptide_ref="peptide_14_6" rank="1" passThreshold="true">
+            <PeptideEvidenceRef peptideEvidence_ref="peptide_14_6_SDB_1_orf19.6515_143_158"/>
             <cvParam accession="MS:1001331" name="xtandem:hyperscore" cvRef="PSI-MS" value="666"/>
             <cvParam accession="MS:1001330" name="xtandem:expect" cvRef="PSI-MS" value="0.0073"/>
             <userParam name="xtandem:nextscore" value="440"/>
@@ -4473,8 +4518,8 @@
           </SpectrumIdentificationItem>
         </SpectrumIdentificationResult>
         <SpectrumIdentificationResult id="SIR_34_SIL_CGG_2011_212_SILAC1_TiO2_Fr40" name="CGG_2011_212_SILAC1_TiO2_Fr40.00411.00411.3" spectrumID="index=6" spectraData_ref="SID_CGG_2011_212_SILAC1_TiO2_Fr40">
-          <SpectrumIdentificationItem id="SIL_CGG_2011_212_SILAC1_TiO2_Fr40_SII_34_1" calculatedMassToCharge="775.63007647" chargeState="3" experimentalMassToCharge="775.62974313" peptide_ref="peptide_14_6" rank="1" passThreshold="true">
-            <PeptideEvidenceRef peptideEvidence_ref="peptide_14_6_SDB_1_orf19.6313.2_123_141"/>
+          <SpectrumIdentificationItem id="SIL_CGG_2011_212_SILAC1_TiO2_Fr40_SII_34_1" calculatedMassToCharge="775.63007647" chargeState="3" experimentalMassToCharge="775.62974313" peptide_ref="peptide_14_7" rank="1" passThreshold="true">
+            <PeptideEvidenceRef peptideEvidence_ref="peptide_14_7_SDB_1_orf19.6313.2_123_141"/>
             <cvParam accession="MS:1001331" name="xtandem:hyperscore" cvRef="PSI-MS" value="577"/>
             <cvParam accession="MS:1001330" name="xtandem:expect" cvRef="PSI-MS" value="0.29"/>
             <userParam name="xtandem:nextscore" value="496"/>
@@ -4489,8 +4534,8 @@
           </SpectrumIdentificationItem>
         </SpectrumIdentificationResult>
         <SpectrumIdentificationResult id="SIR_35_SIL_CGG_2011_212_SILAC1_TiO2_Fr40" name="CGG_2011_212_SILAC1_TiO2_Fr40.00402.00402.3" spectrumID="index=4" spectraData_ref="SID_CGG_2011_212_SILAC1_TiO2_Fr40">
-          <SpectrumIdentificationItem id="SIL_CGG_2011_212_SILAC1_TiO2_Fr40_SII_35_1" calculatedMassToCharge="772.00617647" chargeState="3" experimentalMassToCharge="772.33450980" peptide_ref="peptide_14_7" rank="1" passThreshold="true">
-            <PeptideEvidenceRef peptideEvidence_ref="peptide_14_7_SDB_1_K22E_HUMAN_0_0"/>
+          <SpectrumIdentificationItem id="SIL_CGG_2011_212_SILAC1_TiO2_Fr40_SII_35_1" calculatedMassToCharge="772.00617647" chargeState="3" experimentalMassToCharge="772.33450980" peptide_ref="peptide_14_8" rank="1" passThreshold="true">
+            <PeptideEvidenceRef peptideEvidence_ref="peptide_14_8_SDB_1_K22E_HUMAN_602_629"/>
             <cvParam accession="MS:1001331" name="xtandem:hyperscore" cvRef="PSI-MS" value="619"/>
             <cvParam accession="MS:1001330" name="xtandem:expect" cvRef="PSI-MS" value="0.0014"/>
             <userParam name="xtandem:nextscore" value="451"/>
@@ -4904,7 +4949,7 @@
         </ProteinAmbiguityGroup>
         <ProteinAmbiguityGroup id="PAG_19">
           <ProteinDetectionHypothesis id="orf19.6515" passThreshold="true">
-            <PeptideHypothesis peptideEvidence_ref="peptide_14_5_SDB_1_orf19.6515_143_158">
+            <PeptideHypothesis peptideEvidence_ref="peptide_14_6_SDB_1_orf19.6515_143_158">
               <SpectrumIdentificationItemRef spectrumIdentificationItem_ref="SIL_CGG_2011_212_SILAC1_TiO2_Fr40_SII_30_1"/>
             </PeptideHypothesis>
             <PeptideHypothesis peptideEvidence_ref="peptide_14_3_SDB_1_orf19.6515_277_288">
@@ -5456,6 +5501,8 @@
           <ProteinDetectionHypothesis id="orf19.4827" passThreshold="true">
             <PeptideHypothesis peptideEvidence_ref="peptide_13_3_SDB_1_orf19.4827_32_46">
               <SpectrumIdentificationItemRef spectrumIdentificationItem_ref="SIL_CGG_2011_212_SILAC1_TiO2_Fr40_SII_11_1"/>
+            </PeptideHypothesis>
+            <PeptideHypothesis peptideEvidence_ref="peptide_14_5_SDB_1_orf19.4827_32_46">
               <SpectrumIdentificationItemRef spectrumIdentificationItem_ref="SIL_CGG_2011_212_SILAC1_TiO2_Fr40_SII_25_1"/>
             </PeptideHypothesis>
             <cvParam accession="MS:1001093" name="sequence coverage" cvRef="PSI-MS" value="0"/>
@@ -5712,6 +5759,9 @@
         </ProteinAmbiguityGroup>
         <ProteinAmbiguityGroup id="PAG_66">
           <ProteinDetectionHypothesis id="sp|K22E_HUMAN|" passThreshold="true">
+            <PeptideHypothesis peptideEvidence_ref="peptide_14_8_SDB_1_K22E_HUMAN_602_629">
+              <SpectrumIdentificationItemRef spectrumIdentificationItem_ref="SIL_CGG_2011_212_SILAC1_TiO2_Fr40_SII_35_1"/>
+            </PeptideHypothesis>
             <cvParam accession="MS:1001093" name="sequence coverage" cvRef="PSI-MS" value="0"/>
             <userParam name="n_indist_proteins" value="1"/>
             <userParam name="probability" value="0.9974"/>
@@ -6014,7 +6064,7 @@
         </ProteinAmbiguityGroup>
         <ProteinAmbiguityGroup id="PAG_87">
           <ProteinDetectionHypothesis id="orf19.6313.2" passThreshold="true">
-            <PeptideHypothesis peptideEvidence_ref="peptide_14_6_SDB_1_orf19.6313.2_123_141">
+            <PeptideHypothesis peptideEvidence_ref="peptide_14_7_SDB_1_orf19.6313.2_123_141">
               <SpectrumIdentificationItemRef spectrumIdentificationItem_ref="SIL_CGG_2011_212_SILAC1_TiO2_Fr40_SII_34_1"/>
             </PeptideHypothesis>
             <cvParam accession="MS:1001093" name="sequence coverage" cvRef="PSI-MS" value="0"/>

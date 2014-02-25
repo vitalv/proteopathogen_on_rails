@@ -3,6 +3,7 @@ class Admin::MzidFilesController < ApplicationController
   before_filter :require_login
 
   def index 
+    @experiments = Experiment.all
     @all_mzid_files = MzidFile.all
   end
 

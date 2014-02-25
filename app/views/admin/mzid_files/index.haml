@@ -1,24 +1,28 @@
 %h2 .mzid Files
 -if @all_mzid_files.blank?
   %p No stored .mzid files
--else 
-  -@all_mzid_files.each do |mzidf|
+-else
+  -@experiments.each do |e|
     %table.my_table
       %tr
         %td.title Experiment:
-        %td= Experiment.find(mzidf.experiment_id).protocol
+        %td= e.protocol
       %tr
-        %td.title Mzid file:
-        %td= mzidf.name
-      %tr
-        %td.title Sha-1:
-        %td=  #{mzidf.sha1}
-      %tr
-        %td.title Submission date:
-        %td=  mzidf.submission_date
-      -if mzidf.spectrum_identifications.blank?
-        %tr
-          %td.load_button.center{:colspan => 2}=button_to 'Load 2 DB', load2db_admin_mzid_file_path(:id => mzidf.id)#, remote: true
+        %td{colspan: 2}
+          -e.mzid_files.each do |mzidf|
+            %table.my_table.inner
+              %tr
+                %td.title Mzid file:
+                %td= mzidf.name
+              %tr
+                %td.title Sha-1:
+                %td=  #{mzidf.sha1}
+              %tr
+                %td.title Submission date:
+                %td=  mzidf.submission_date
+              -if mzidf.spectrum_identifications.blank?
+                %tr 
+                  %td.load_button.center{:colspan => 2}=button_to 'Load 2 DB', load2db_admin_mzid_file_path(:id => mzidf.id)#, remote: true
 
 
 %p= link_to "New mzid file", :controller => 'admin/mzid_files', :action => :new
