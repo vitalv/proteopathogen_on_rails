@@ -54,18 +54,20 @@ class ProteinDetectionsController < ApplicationController
       @peptide_sequences = @psms.map { |psm| psm.peptide_evidence.peptide_sequence.sequence }
     end
     
-    if @protein_sequence and !@protein_sequence.blank?
+    if (@protein_sequence and !@protein_sequence.blank?) and (@peptide_sequences and !@peptide_sequences.blank?)
       offsets = []
       @peptide_sequences.each {|pepseq| @protein_sequence.scan(pepseq){offsets << $~.offset(0)} }
-      ranges = offsets.map { |o| o[0]..o[1] }
-      #Convert offsets from arrays to ranges to use def merge_ranges
-      coverage_ranges = merge_ranges(ranges) #[5..17, 34..63]
-      coverage_offsets = coverage_ranges.map {|r| [r.first, r.last] } #[[5, 17], [34, 63]]
-      #then convert back to arrays
-      @prot_seq_w_cov_tags = pdh.prot_seq_highlighted_coverage(coverage_offsets)      
-      covered_length = 0
-      coverage_offsets.each { |c| covered_length += c[1]-c[0] }      
-      @sequence_coverage = ((covered_length * 100).to_f / @protein_sequence.length.to_f).round 2      
+      unless offsets.blank? #pepseq not found in protseq, should not happen, just catch this possibility
+        ranges = offsets.map { |o| o[0]..o[1] }
+        #Convert offsets from arrays to ranges to use def merge_ranges
+        coverage_ranges = merge_ranges(ranges) #[5..17, 34..63]
+        coverage_offsets = coverage_ranges.map {|r| [r.first, r.last] } #[[5, 17], [34, 63]]
+        #then convert back to arrays
+        @prot_seq_w_cov_tags = pdh.prot_seq_highlighted_coverage(coverage_offsets)      
+        covered_length = 0
+        coverage_offsets.each { |c| covered_length += c[1]-c[0] }      
+        @sequence_coverage = ((covered_length * 100).to_f / @protein_sequence.length.to_f).round 2
+      end
     end
     
    respond_to do |format|

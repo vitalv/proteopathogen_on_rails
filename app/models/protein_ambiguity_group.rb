@@ -9,8 +9,10 @@ class ProteinAmbiguityGroup < ActiveRecord::Base
     gene_names = []
     pdh_ids = self.protein_detection_hypotheses.map { |pdh| pdh.protein_detection_hypothesis_id}.join(", ")
     self.protein_detection_hypotheses.each do |pdh|
-      if pdh.db_seq.description.split("CGDID:")[0] !~ /^orf/
-        gene_names << pdh.db_seq.description.split(" CGDID:")[0]
+      if pdh.db_seq.description
+        if pdh.db_seq.description.split("CGDID:")[0] !~ /^orf/
+          gene_names << pdh.db_seq.description.split(" CGDID:")[0]
+        end
       end
     end
     gene_names = gene_names.join(", ")

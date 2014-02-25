@@ -28,5 +28,12 @@ class PeptideEvidence < ActiveRecord::Base
     end    
   end
   
+  def matches_decoy_protein
+    if self.db_sequence.accession =~ /decoy/i
+      return "true" 
+    else
+      return "false"
+    end
+  end
   
 end

@@ -36,12 +36,6 @@ class SpectrumIdentificationResultsController < ApplicationController
     @sii_psi_ms_cv_terms = sii.sii_psi_ms_cv_terms
     @sii_user_params = sii.sii_user_params
     @psms = sii.peptide_spectrum_assignments
-    
-    #NOTA, OJO!! WTF!! SIL_Elu2A_SII_495_1, sii = SpectrumIdentificationItem.find(55356)
-    #NO TIENE peptide_spectrum_assignments !! ?? !!
-    #Sí, es que el .mzid estaba mal, por algun motivo ese sii no tiene debajo su <peptideevidenceref>
-    #Ojo, pero hay mas, SIL_Elu2A_SII_498_1, SIL_Elu2A_SII_507_1
-     
     @peptide_evidences = sii.peptide_evidences 
     #note: I can safely fetch @peptide_evidences[0] There might be more than one peptide_evidence per sii in the case "a specific sequence can be assigned to multiple proteins and or positions in a protein", but the peptide sequence is the same
     @peptide_sequence = @peptide_evidences[0].peptide_sequence unless @peptide_evidences.blank?
@@ -49,9 +43,9 @@ class SpectrumIdentificationResultsController < ApplicationController
     @pep_mods = @peptide_evidences[0].modifications unless @peptide_evidences.blank?
     @modified_pep_seq = @peptide_evidences[0].modified_seq_html_string unless @pep_mods.blank? if !@pep_mods.nil?
     @db_seq = []
-    @peptide_evidences.each do |pep_ev|
-      @db_seq << pep_ev.db_sequence
-    end
+    #@peptide_evidences.each do |pep_ev|
+    #  @db_seq << pep_ev.db_sequence
+    #end
     respond_to do |format|
       format.html { render json: @fragments  }
       format.json { render json: @fragments }
