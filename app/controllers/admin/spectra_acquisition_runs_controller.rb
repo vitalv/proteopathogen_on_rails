@@ -16,6 +16,7 @@ class Admin::SpectraAcquisitionRunsController < ApplicationController
   
     if params[:si_id] and params[:input_spectra_file]
       @si_id = params[:si_id] 
+      @mzid_file_name = SpectrumIdentification.find(@si_id).mzid_file.name
       @input_spectra_file = params[:input_spectra_file]
       @spectra_acquisition_run = SpectraAcquisitionRun.new
       
