@@ -1,16 +1,17 @@
 %h2 Upload .mzid File
 
 %p
-= form_for [:admin, @mzid_file], :url => {:action => "create"} do |f|
+= form_for [:admin, @mzid_file], :url => {:action => "create"}, html: {class: "my_form"} do |f|
   - if @mzid_file.errors.any?
     %ul
       - for message in @mzid_file.errors.full_messages
         %li= message
-  %br
-  %p=f.select :experiment_id, @experiments.collect { |e| [e.protocol, e.id] } , :prompt => 'Select experiment'
-  %br
-  =f.file_field 'uploaded_file'
-  %br
-  %p=f.submit
+  - @experiments.each do |exp|
+    %label
+      -#= "exp es #{exp}"
+      = f.radio_button(:experiment_id, "#{exp.id}")
+      = exp.protocol
   
-//%p= select_date Date.today, :prefix => :start_date
+  %p=f.file_field 'uploaded_file'
+
+  %p=f.submit 'Create .mzid file', class: "my_button"

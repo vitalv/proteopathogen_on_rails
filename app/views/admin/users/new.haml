@@ -1,6 +1,6 @@
 %h2 Sign Up
 
-= form_for [:admin, @user] do |f|
+= form_for [:admin, @user], html: {class: "my_form"} do |f|
   -if @user.errors.any?
     %b Form is invalid
     %ul
@@ -8,15 +8,12 @@
         %li= message
   %p
     = f.label :email
-    %br
-    = f.text_field :email
+  = f.text_field :email
   %p
     = f.label :password
-    %br
-    = f.password_field :password
+  = f.password_field :password
   %p
     = f.label :password_confirmation
-    %br
-    = f.password_field :password_confirmation
-  %p
-    = f.submit
+  = f.password_field :password_confirmation
+  
+  %p= f.submit 'Create User', class: "my_button"

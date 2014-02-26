@@ -10,6 +10,8 @@ class Admin::MzidFilesController < ApplicationController
   def new
     @experiments = Experiment.all
     @mzid_file = MzidFile.new
+    @experiment_protocols = []
+    @experiments.each {|e| @experiment_protocols << e.protocol}
   end
 
   def create

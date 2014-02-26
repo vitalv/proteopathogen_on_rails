@@ -1,5 +1,5 @@
 %h2 new experiment
-=form_for [:admin, @experiment] do |f|
+=form_for [:admin, @experiment], html: {class: "my_form"} do |f|
   - if @experiment.errors.any?
     %ul
       - for message in @experiment.errors.full_messages
@@ -20,4 +20,4 @@
     %br
     = f.text_field :researcher
   %p
-    = f.submit
+    = f.submit 'Create Experiment', class: "my_button"
