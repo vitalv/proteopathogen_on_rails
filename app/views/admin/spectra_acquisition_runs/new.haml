@@ -1,4 +1,5 @@
 %h2 Spectra acquisition data for #{@input_spectra_file}
+%h3 ( #{@mzid_file_name} )
 
 = form_for [:admin, @spectra_acquisition_run], :url => {:action => "create"}, html: {class: "my_form"} do |f|
   - if @spectra_acquisition_run.errors.any?
@@ -11,11 +12,15 @@
   %br
   =f.text_area :fraction
   
-  =f.select :ionization, @ionization_types.collect { |i| [i.name, i.id] } , :prompt => 'Select ionization type'
+  =f.select :ionization, @ionization_types.collect { |i| [i.name, i.name] } , :prompt => 'Select ionization type'
 
-  =f.select :analyzer, @analyzers.flatten.collect { |a| [a.name, a.id] } , :prompt => 'Select analyzer type'
+  =f.select :analyzer, @analyzers.flatten.collect { |a| [a.name, a.name] } , :prompt => 'Select analyzer type'
   
-  =f.select :instrument, @instruments.collect { |i| [i.name, i.id] } , :prompt => 'Select instrument model'
+  =f.select :instrument, @instruments.collect { |i| [i.name, i.name] } , :prompt => 'Select instrument model'
+  
+  =f.hidden_field :spectra_file,  value: @input_spectra_file
+  
+  =f.hidden_field :spectrum_identification_id, value: @si_id
 
   %p=f.submit 'Create Spectra Acquisition Data', class: "my_button"
   
