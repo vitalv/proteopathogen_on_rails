@@ -29,6 +29,7 @@ class Mzid2db
   def save2tables
 
     savePsiMsCvTerms(@psi_ms_cv_terms)
+    saveExtraPsiMsCvTerms
     saveUnimodCvTerms(@unimod_cv_terms)
 
     my_spectrum_identification_lists_ids = []
@@ -122,6 +123,39 @@ class Mzid2db
     psi_ms_cv_terms.each do |acc, name|
       PsiMsCvTerm.find_or_create_by(accession: acc) do |psi_ms_t|
         psi_ms_t.name = name
+      end
+    end
+  end
+
+
+  def saveExtraPsiMsCvTerms
+    #check version of psi-ms.obo and do this only if it is at least, say 3 months old 
+    terms, term = [], {}
+    f = File.open("#{File.expand_path(File.dirname(__FILE__))}/../public/psi-ms.obo")
+    #f = File.open('./public/psi-ms.obo')
+    f.each_line do |l|
+      if l =~ /^\[Term\]/
+        term = {}
+      elsif l =~ /^id/ 
+        term["id"] = l.split(": ")[1].chomp
+      elsif l =~ /^name/
+        term["name"] = l.split(": ")[1].chomp
+      elsif l =~ /^def/
+        term["def"] = l.split(": ")[1].chomp
+      elsif l =~ /^is_a/
+        term["is_a"] = l.split(": ")[1].chomp
+      elsif l =~ /^\n/
+        terms << term
+      end
+    end
+    mass_analyzer_types = terms.collect { |term| term if term["is_a"] =~ /^MS:1000443/ }.compact #is_a: MS:1000443 ! mass analyzer type
+    instrument_models = terms.collect { |term| term if term["is_a"] =~ /instrument model$/ }.compact #is_a: whatever brand instrument model
+    ionization_types = terms.collect { |term| term if term["is_a"] =~ /^MS:1000008/ }.compact #is_a: MS:1000443 ! mass analyzer type
+    dissociation_methods = terms.collect { |term| term if term["is_a"] =~ /^MS:1000044/ }.compact
+    extra_psi_ms_cv_terms = mass_analyzer_types + instrument_models + dissociation_methods + ionization_types
+    extra_psi_ms_cv_terms.each do |term|
+      PsiMsCvTerm.find_or_create_by(accession: term["id"]) do |psi_ms_t|
+        psi_ms_t.name = term["name"]
       end
     end
   end

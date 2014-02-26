@@ -1,30 +1,21 @@
 %h2 Spectra acquisition data for #{@input_spectra_file}
-=form_for [:admin, @spectra_acquisition_run] do |f|
+
+= form_for [:admin, @spectra_acquisition_run], :url => {:action => "create"}, html: {class: "my_form"} do |f|
   - if @spectra_acquisition_run.errors.any?
     %ul
       - for message in @spectra_acquisition_run.errors.full_messages
         %li= message
-  %p
-    = f.label :fraction
-    %br
-    = f.text_field :fraction
-  %p
-    = f.label :instrument
-    %br
-    = f.text_field :instrument
-  %p
-    = f.label :ionization
-    %br
-    = f.text_field :ionization
-  %p
-    = f.label :analyzer
-    %br
-    = f.text_field :analyzer
-  %p
-    = f.hidden_field :spectra_file, {:value => @input_spectra_file}
-    %br
-  %p
-    = f.hidden_field :spectrum_identification_id,  {:value => @si_id}
-    %br    
-  %p
-    = f.submit
+  
+  
+  = f.label :fraction, "Describe sample (or fraction) obtention"
+  %br
+  =f.text_area :fraction
+  
+  =f.select :ionization, @ionization_types.collect { |i| [i.name, i.id] } , :prompt => 'Select ionization type'
+
+  =f.select :analyzer, @analyzers.flatten.collect { |a| [a.name, a.id] } , :prompt => 'Select analyzer type'
+  
+  =f.select :instrument, @instruments.collect { |i| [i.name, i.id] } , :prompt => 'Select instrument model'
+
+  %p=f.submit 'Create Spectra Acquisition Data', class: "my_button"
+  
