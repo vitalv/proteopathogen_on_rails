@@ -35,7 +35,7 @@ html, body {
 
 body {
   /*background-color: #FAFAFA; #poner una imagen de fondo?*/
-  padding: 0% 16% 0% 16%;
+  padding: 0% 13% 0% 13%;
   font-family: helvetica, 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
   font-size: 8pt;
   color: $blue_font_color;
@@ -86,7 +86,7 @@ content {
   position: relative;
   clear: both; //para cuando hago log in y aparecen los admin links
   float: left;
-  width: 380px;
+  width: 400px;
   height: 300px; //,if I don't specify this div height, the javascript when clicking on sii makes page jump to top//
   overflow: hidden;
   margin: 0 ;
@@ -107,7 +107,7 @@ content {
 #home_right_col {
   position: relative;
   float: right;
-  width: 330px;
+  width: 350px;
   //height: 300px; //,if I don't specify this div height, the javascript when clicking on sii makes page jump to top//
   overflow: hidden;
   //margin: 1em ;
@@ -125,7 +125,7 @@ content {
 
 .flat {
   display: table;
-  background-color: #924C4C;  
+  background-color: #924C4C;
   color: WhiteSmoke;
   letter-spacing: 1px;
   padding: 1px;
@@ -134,6 +134,7 @@ content {
 
 .flat_link {
   background-color: #55A5D8;
+  display: inline-block;
   padding: 1px 4px;
   border-radius: 2px;
   color: whitesmoke;
