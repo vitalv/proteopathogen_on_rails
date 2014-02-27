@@ -1,24 +1,18 @@
--mzid_files.each do |mzidf|
-  %table{:id => "mzidf_table_#{mzidf.id}", :class =>"my_table inner" }
+%table{:id => "exp_mzid_files_table", :class =>"my_table inner" }
+  %thead
     %tr
-      %td.title Mzid file:
-      %td= mzidf.name
-    -#%tr
-      -#%td.title Sha-1:
-      -#%td= mzidf.sha1
-    -#%tr
-      -#%td.title File original location:
-      -#%td= mzidf.location
-    %tr
-      %td.title Submission date:
-      %td= mzidf.submission_date
-    %tr
-      %td{:colspan => 2, :style=> "text-align:center"}
-        = link_to 'Spectrum Identification', mzid_file_spectrum_identifications_path(mzidf.id), id:"mzidf_#{mzidf.id}_si", class: "flat_link"
-    -#Ojo con este -if , puede que la sil del s_i[0] no se haya utilizado para protein_detection
-    -#ver <ProteinDetection> element -> subelement InputSpectrumIdentifications: "are the lists of spectrum identifications that are input to the protein detection process"
-    - if mzidf.includes_protein_detection
+      %th.mzid_file_name .mzid File
+      %th.submission_date submission date
+      %th{colspan: 2}
+  %tbody  
+    -mzid_files.each do |mzidf|
       %tr
-        %td{:colspan => 2, :style=> "text-align:center"}
-          =link_to 'Protein Detection', mzid_file_protein_detections_path(mzidf.id), id: "mzid_file_#{mzidf.id}_protein_detection", class: "flat_link"
-          
+        %td= mzidf.name
+        %td= mzidf.submission_date
+        %td.center
+          = link_to '<Spectrum Identification>', mzid_file_spectrum_identifications_path(mzidf.id), id:"mzidf_#{mzidf.id}_si", class: "flat_link"
+        %td.center
+          - if mzidf.includes_protein_detection
+            =link_to '<Protein Detection>', mzid_file_protein_detections_path(mzidf.id), id: "mzid_file_#{mzidf.id}_protein_detection", class: "flat_link"
+          - else
+            No Protein Detection 
