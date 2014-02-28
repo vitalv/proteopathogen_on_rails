@@ -6,4 +6,18 @@
 #I am appending svg to #spectrum, I will see the results on / (home), where div spectrum is
 #However, this should prollly be in spectrum_identification_results.js.coffee or spectrum_identification_items.js.coffee or something
 
+jQuery.extend jQuery.fn.dataTableExt.oSort,
+  "natural-asc": (a, b) ->
+    naturalSort a, b
+  "natural-desc": (a, b) ->
+    naturalSort(a, b) * -1
 
+$ ->
+  $("#exp_mzid_files_table.dataTable").dataTable
+    bLengthChange: false
+    bFilter: false
+    bInfo: false
+    bPaginate: false
+    aoColumns: [{bSortable: true},{bSortable: true}, {bSortable: false}, {bSortable: false} ]
+
+  return false;

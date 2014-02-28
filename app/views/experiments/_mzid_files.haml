@@ -1,9 +1,10 @@
-%table{:id => "exp_mzid_files_table", :class =>"my_table inner" }
+%table#exp_mzid_files_table.my_table.inner{:class => if exp.mzid_files.count > 5 then 'dataTable' end}
   %thead
     %tr
       %th.mzid_file_name .mzid File
       %th.submission_date submission date
-      %th{colspan: 2}
+      %th
+      %th
   %tbody  
     -mzid_files.each do |mzidf|
       %tr
