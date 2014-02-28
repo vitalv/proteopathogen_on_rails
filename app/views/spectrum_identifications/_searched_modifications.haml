@@ -2,37 +2,20 @@
   %td{:colspan => 2}
     -# sip_mods should only be datatable when there are more than, say 5 modifications
     = link_to "> Searched Modifications", '#', :data => {'sip-mods-id' => "#{sip.id}"}, remote: true
-    - if sip.searched_modifications.count > 5
-      %table#sip_mods.my_table.inner.dataTable{:data => {'sip-mods-id' => "#{sip.id}"}}
-        %thead
+    %table#sip_mods.my_table.inner{:data => {'sip-mods-id' => "#{sip.id}"}, :class => if sip.searched_modifications.count > 5 then 'dataTable' end}
+      %thead
+        %tr
+          %th= "mass delta"
+          %th= "fixed"
+          %th= "residue"
+          %th= "unimod accession"
+          %th= "type of modification"
+      %tbody
+        - sip.searched_modifications.each do |mod|
           %tr
-            %th= "mass delta"
-            %th= "fixed"
-            %th= "residue"
-            %th= "unimod accession"
-            %th= "type of modification"
-        %tbody
-          - sip.searched_modifications.each do |mod|
-            %tr
-              %td.center= mod.mass_delta
-              %td.center= mod.is_fixed
-              %td.center= mod.residue
-              %td.center= mod.unimod_accession
-              %td.center= UnimodCvTerm.where(accession: mod.unimod_accession)[0].name
-    -else
-      %table#sip_mods.my_table.inner{:data => {'sip-mods-id' => "#{sip.id}"}}
-        %thead
-          %tr
-            %th= "mass delta"
-            %th= "fixed"
-            %th= "residue"
-            %th= "unimod accession"
-            %th= "type of modification"
-        %tbody
-          - sip.searched_modifications.each do |mod|
-            %tr
-              %td.center= mod.mass_delta
-              %td.center= mod.is_fixed
-              %td.center= mod.residue
-              %td.center= mod.unimod_accession
-              %td.center= UnimodCvTerm.where(accession: mod.unimod_accession)[0].name 
+            %td.center= mod.mass_delta
+            %td.center= mod.is_fixed
+            %td.center= mod.residue
+            %td.center= mod.unimod_accession
+            %td.center= UnimodCvTerm.where(accession: mod.unimod_accession)[0].name
+

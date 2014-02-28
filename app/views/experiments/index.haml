@@ -18,5 +18,5 @@
         %td= exp.date
       %tr
         %td{:colspan => 2}
-          = render partial: "mzid_files", locals: {exp_id: exp.id, mzid_files: exp.mzid_files}
+          = render partial: "mzid_files", locals: {exp: exp, mzid_files: exp.mzid_files}
   

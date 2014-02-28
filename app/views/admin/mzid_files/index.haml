@@ -18,10 +18,10 @@
               -e.mzid_files.each do |mzidf|
                 %tr
                   %td= mzidf.name
-                  %td=  mzidf.submission_date
+                  %td.center=  mzidf.submission_date
                   -if mzidf.spectrum_identifications.blank?
                     %td.load_button.center=button_to 'Load 2 DB', load2db_admin_mzid_file_path(:id => mzidf.id)#, remote: true
                   -else 
-                    %td.center .mzid file loaded 2 db
+                    %td.center content in database
 
 %p= link_to "New mzid file", :controller => 'admin/mzid_files', :action => :new
