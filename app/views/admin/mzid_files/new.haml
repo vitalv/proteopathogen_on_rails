@@ -8,9 +8,9 @@
         %li= message
   - @experiments.each do |exp|
     %label
-      -#= "exp es #{exp}"
-      = f.radio_button(:experiment_id, "#{exp.id}")
-      = exp.protocol
+      %p
+        = f.radio_button(:experiment_id, "#{exp.id}")
+        = exp.protocol
   
   %p=f.file_field 'uploaded_file'
 

@@ -81,17 +81,25 @@ content {
   }
 }
 
+#home_div {
+  display: table; 
+  //border: solid gray 1px;
+  min-width: 800px;
+}
 
 #home_left_col {
   position: relative;
+  display: table-cell;
   clear: both; //para cuando hago log in y aparecen los admin links
   float: left;
-  width: 400px;
-  height: 300px; //,if I don't specify this div height, the javascript when clicking on sii makes page jump to top//
+  //width: 400px;
+  width: 45%;
+  min-width: 380px;
+  height: 300px; 
   overflow: hidden;
   margin: 0 ;
   display: table;
- // border: 1px dashed #B6B5B0;
+  //border: 1px dashed #B6B5B0;
   //border-radius: 6px;
   padding: 2em;
   p { 
@@ -106,10 +114,11 @@ content {
 
 #home_right_col {
   position: relative;
+  display: table-cell;
   float: right;
-  width: 350px;
-  //height: 300px; //,if I don't specify this div height, the javascript when clicking on sii makes page jump to top//
-  overflow: hidden;
+  //width: 350px;
+  width: 40%;
+  //overflow: hidden;
   //margin: 1em ;
   display: table;
   //border: 1px dashed #B6B5B0;

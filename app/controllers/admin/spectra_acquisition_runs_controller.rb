@@ -20,7 +20,7 @@ class Admin::SpectraAcquisitionRunsController < ApplicationController
       @input_spectra_file = params[:input_spectra_file]
       @spectra_acquisition_run = SpectraAcquisitionRun.new
       
-      @instruments = PsiMsCvTerm.where("name REGEXP ?", "trap|orbi|thermo|tof")
+      @instruments = PsiMsCvTerm.where("name REGEXP ?", "trap|orbi|thermo|tof|bruker|sciex")
       @ionization_types = PsiMsCvTerm.where("name REGEXP ?", "ionization")
       analyzers_acs = ["MS:1000079", "MS:1000080", "MS:1000081", "MS:1000084", "MS:1000254", "MS:1000264", "MS:1000284", "MS:1000288" , "MS:1000484"]
       @analyzers = Array.new
