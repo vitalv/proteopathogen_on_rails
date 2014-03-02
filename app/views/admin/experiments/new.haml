@@ -5,7 +5,7 @@
       - for message in @experiment.errors.full_messages
         %li= message
   %p
-    = f.select :organism, options_for_select([['Candida albicans (strain SC5314 / ATCC MYA-2876) Taxonomy ID: 237561', "Candida albicans (strain SC5314 / ATCC MYA-2876)"]]), :prompt => 'Select species'
+    = f.select :organism, options_for_select({'Candida albicans (strain SC5314 / ATCC MYA-2876) Taxonomy ID: 237561' => "Candida albicans (strain SC5314 / ATCC MYA-2876)", 'Other species' => "Other species" }), :prompt => 'Select species'
     
   %p
     = f.label :protocol

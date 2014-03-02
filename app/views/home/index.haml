@@ -1,50 +1,50 @@
--#Aqui pondre el contenido de home
-%div#home_left_col
-  %p 
-    Proteopathogen is a database-backed web application on shotgun Proteomics experiments related to <i>Candida albicans</i>.
-  %p
-    It stores peptide and protein identification results data in a database constructed <i>ad hoc</i> to map data from 
-    =link_to 'the mzIdentML standard', 'http://www.psidev.info/mzidentml', target: 'blank'
-    , the HUPO-Proteomics Standard Initiative adopted "exchange format for peptides and proteins identified from mass spectra".
+%div#home_div
+  %div#home_left_col
+    %p 
+      Proteopathogen is a database-backed web application on shotgun Proteomics experiments related to <i>Candida albicans</i>.
+    %p
+      It stores peptide and protein identification results data in a database constructed <i>ad hoc</i> to map data from 
+      =link_to 'the mzIdentML standard', 'http://www.psidev.info/mzidentml', target: 'blank'
+      , the HUPO-Proteomics Standard Initiative adopted "exchange format for peptides and proteins identified from mass spectra".
     
-  = image_tag  "../assets/mzidentml.png"
+    = image_tag  "../assets/mzidentml.png"
 
-%div#home_right_col
-  //-̣̣̣̣#= image_tag  "../assets/latge_and_calderone.png"
-  //-#%p latge and calderone
-  %table.my_table.shadow
-    %tr
-      %td.title Number of Experiments
-      %td= @experiment_count
-    %tr
-      %td.title Number of .mzid files
-      %td= @mzid_file_count
-    %tr
-      %td.title Peptide Spectrum Matches
-      %td= @psm_count
-    %tr
-      %td.title Peptide Evidences
-      %td= @peptide_evidence_count
-    %tr
-      %td.title Peptide Sequences
-      %td= @peptide_sequence_count
-    %tr
-      %td.title Protein Detection Hypotheses
-      %td= @pdh_count
-    %tr
-      %td.title DB Sequence Accessions
-      %td= @distinct_dbseq_accession_count
-    %tr
-      %td.title Distinct proteins (sequence)
-      %td= @dbseq_sequence_count
+  %div#home_right_col
+    //-̣̣̣̣#= image_tag  "../assets/latge_and_calderone.png"
+    //-#%p latge and calderone
+    %table.my_table.shadow
+      %tr
+        %td.title Number of Experiments
+        %td= @experiment_count
+      %tr
+        %td.title Number of .mzid files
+        %td= @mzid_file_count
+      %tr
+        %td.title Peptide Spectrum Matches
+        %td= @psm_count
+      %tr
+        %td.title Peptide Evidences
+        %td= @peptide_evidence_count
+      %tr
+        %td.title Peptide Sequences
+        %td= @peptide_sequence_count
+      %tr
+        %td.title Protein Detection Hypotheses
+        %td= @pdh_count
+      %tr
+        %td.title DB Sequence Accessions
+        %td= @distinct_dbseq_accession_count
+      %tr
+        %td.title Distinct proteins (sequence)
+        %td= @dbseq_sequence_count
 
-  %p
-    <i>Candida albicans</i> is a polymorphic fungus that colonizes mucous membranes asymptomatically in a large percentage of the population. But it may also act as an opportunistic pathogen. As such it is the main etiological agent of nosocomial fungal infections and poses a global challenge in economical and health costs.
+    %p
+      <i>Candida albicans</i> is a polymorphic fungus that colonizes mucous membranes asymptomatically in a large percentage of the population. But it may also act as an opportunistic pathogen. As such it is the main etiological agent of nosocomial fungal infections and poses a global challenge in economical and health costs.
 
-  = image_tag  "../assets/colonization_and_invasion.png"
+    = image_tag  "../assets/colonization_and_invasion.png"
 
-  %p
-    Whereas the yeast forms may colonize healthy individuals mucous membranes, in the case of immunocompromised patients, the hyphal form, usually associated to the pathogenic status, may penetrate into the tissue. Then a switch back to yeast form enables dissemination through vessels.
+    %p
+      Whereas the yeast forms may colonize healthy individuals mucous membranes, in the case of immunocompromised patients, the hyphal form, usually associated to the pathogenic status, may penetrate into the tissue. Then a switch back to yeast form enables dissemination through vessels.
 
 
     
