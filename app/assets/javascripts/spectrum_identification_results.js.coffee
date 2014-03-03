@@ -24,8 +24,8 @@ $ ->
     sPaginationType: "full_numbers"
     bProcessing: true
     bServerSide: true
-    #aoColumns: [{sType: "html", "natural"}, {sType: "natural"} , {sType: "natural"} ]
-    #aaSorting: [[ 1, "asc" ]]
+    aoColumns: [{sType: "natural"}, {sType: "natural"} , {sType: "natural"} ]
+    aaSorting: [[ 1, "asc" ]]
     sAjaxSource: $('#sir_table').data('source')
 
 

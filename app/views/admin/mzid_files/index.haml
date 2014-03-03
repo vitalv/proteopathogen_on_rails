@@ -22,6 +22,6 @@
                   -if mzidf.spectrum_identifications.blank?
                     %td.load_button.center=button_to 'Load 2 DB', load2db_admin_mzid_file_path(:id => mzidf.id)#, remote: true
                   -else 
-                    %td.center content in database
+                    %td.center loaded to database
 
 %p= link_to "New mzid file", :controller => 'admin/mzid_files', :action => :new
