@@ -13,19 +13,18 @@ $ ->
 
 
 #To add a new sort function to DataTables you need to attach your function to the object $.fn.dataTableExt.oSort. 
-jQuery.extend jQuery.fn.dataTableExt.oSort,
-  "natural-asc": (a, b) ->
-    naturalSort a, b
-  "natural-desc": (a, b) ->
-    naturalSort(a, b) * -1
+jQuery.fn.dataTableExt.oSort["natural-asc"] = (a, b) ->
+  naturalSort a, b
+
+jQuery.fn.dataTableExt.oSort["natural-desc"] = (a, b) ->
+  naturalSort(a, b) * -1
 
 $ -> 
   $("#sir_table").dataTable
     sPaginationType: "full_numbers"
     bProcessing: true
     bServerSide: true
-    aoColumns: [{sType: "natural"}, {sType: "natural"} , {sType: "natural"} ]
-    aaSorting: [[ 1, "asc" ]]
+    aoColumns: [{"sType": "natural"}, {"sType": "natural"}, {"sType": "natural"} ]
     sAjaxSource: $('#sir_table').data('source')
 
 
