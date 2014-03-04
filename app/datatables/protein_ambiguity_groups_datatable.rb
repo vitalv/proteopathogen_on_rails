@@ -39,17 +39,16 @@ class ProteinAmbiguityGroupsDatatable
   end
 
   def fetch_pags
-    #pags = @protein_ambiguity_groups.order("#{sort_column} #{sort_direction}")
-    pags = @protein_ambiguity_groups
-    pags = pags.page(page).per_page(per_page)
-    
-    if params[:sSortDir_0].present? and params[:sSortDir_0] == "desc"
-      pags = @protein_ambiguity_groups.reverse_order
-      pags = pags.page(page).per_page(per_page)
+  
+    sorted_pags = @protein_ambiguity_groups.sort_by {|r| r.protein_ambiguity_group_id.split(/(\d+)/).map { |a| a=~ /\d+/ ? a.to_i : a } }
+    sorted_pag_ids = sorted_pags.collect { |pag| pag.id }
+    if params[:sSortDir_0] == "asc"
+      pags = ProteinAmbiguityGroup.where(id: sorted_pag_ids).order("field(id,#{sorted_pag_ids.join(',')})")
+    elsif params[:sSortDir_0] == "desc"
+      pags = ProteinAmbiguityGroup.where(id: sorted_pag_ids).order("field(id,#{sorted_pag_ids.reverse.join(',')})")
     end
-    
-    @total_entries = pags.count
-    
+    pags = pags.page(page).per_page(per_page)
+
     if params[:sSearch].present?
       pags = pags.where("protein_ambiguity_group_id like :search", search: "%#{params[:sSearch]}%")
     
@@ -65,13 +64,13 @@ class ProteinAmbiguityGroupsDatatable
     params[:iDisplayLength].to_i > 0 ? params[:iDisplayLength].to_i : 10
   end
 
-  def sort_column
-    columns = %w[protein_ambiguity_group_id]
-    columns[params[:iSortCol_0].to_i]
-  end
+  #def sort_column
+    #columns = %w[protein_ambiguity_group_id]
+    #columns[params[:iSortCol_0].to_i]
+  #end
 
-  def sort_direction
-    params[:sSortDir_0] == "desc" ? "desc" : "asc"
-  end
+  #def sort_direction
+    #params[:sSortDir_0] == "desc" ? "desc" : "asc"
+  #end
   
 end
