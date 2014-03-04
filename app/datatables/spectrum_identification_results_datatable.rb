@@ -16,7 +16,9 @@ class SpectrumIdentificationResultsDatatable
       sEcho: params[:sEcho].to_i,
       iTotalRecords: @spectrum_identification_results.count,
       iTotalDisplayRecords: sirs.total_entries,
-      aaData: data      
+      #iTotalDisplayRecords: @total_entries,
+      aaData: data,
+
     }
   
 
@@ -40,12 +42,27 @@ class SpectrumIdentificationResultsDatatable
   end
 
   def fetch_sirs
-    sirs = @spectrum_identification_results.order("#{sort_column} #{sort_direction}")
+    #sirs = @spectrum_identification_results.order("#{sort_column} #{sort_direction}") #("sir_id " "asc")
+    
+    sirs = @spectrum_identification_results
     sirs = sirs.page(page).per_page(per_page)
+    if params[:sSortDir_0].present? and params[:sSortDir_0] == "desc"
+      sirs = @spectrum_identification_results.reverse_order
+      sirs = sirs.page(page).per_page(per_page)
+    end
+    
+    @total_entries = sirs.count
+    #My Custom natural sort:
+    #sorted_sirs = @spectrum_identification_results.sort_by {|r| r.spectrum_name.split(/(\d+)/).map { |a| a=~ /\d+/ ? a.to_i : a } }
+    #sorted_sir_ids = sorted_sirs.collect { |sir| sir.id }
+    #sirs = SpectrumIdentificationResult.where(id: sorted_sir_ids) 
+    
     if params[:sSearch].present?
       sirs = sirs.where("spectrum_name like :search or sir_id like :search or spectrum_id like :search", search: "%#{params[:sSearch]}%")
     end
+    
     sirs
+    
   end
 
   def page
@@ -56,14 +73,14 @@ class SpectrumIdentificationResultsDatatable
     params[:iDisplayLength].to_i > 0 ? params[:iDisplayLength].to_i : 10
   end
 
-  def sort_column
-    columns = %w[sir_id spectrum_name spectrum_id]
-    columns[params[:iSortCol_0].to_i]
-  end
+  #def sort_column
+  #  columns = %w[sir_id spectrum_name spectrum_id]
+  #  columns[params[:iSortCol_0].to_i]
+  #end
 
-  def sort_direction
-    params[:sSortDir_0] == "desc" ? "desc" : "asc"
-  end
+  #def sort_direction
+  #  params[:sSortDir_0] == "desc" ? "desc" : "asc"
+  #end
   
   
   #def sort_type

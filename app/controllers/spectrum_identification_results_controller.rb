@@ -6,6 +6,7 @@ class SpectrumIdentificationResultsController < ApplicationController
     @protocol = @si.mzid_file.experiment.protocol
     @sil = @si.spectrum_identification_list
     @spectrum_identification_results = @si.spectrum_identification_list.spectrum_identification_results
+    #@total_entries = @spectrum_identification_results.count
     respond_to do |format|
       format.html #“if the client wants HTML in response to this action, just respond as we would have before
       format.json { 
