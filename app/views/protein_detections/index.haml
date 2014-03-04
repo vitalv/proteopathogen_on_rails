@@ -1,6 +1,9 @@
 %h2= "EXPERIMENT"
 %h3= @protocol
 
+-#%h3= ".mzid FILE"
+%h3= @mzid_file_name
+
 %h3.table_header= "PROTEIN DETECTION"
 
 %table{:id => "pd_table_#{@pd.id}", :class =>"my_table" }

@@ -4,9 +4,7 @@ class ProteinDetectionsController < ApplicationController
 
     mzid_file_id = params[:mzid_file_id]
     mzid_file = MzidFile.find(mzid_file_id)
-    
-    #@pd_id = params[:id]
-    
+    @mzid_file_name = mzid_file.name
     @pd = mzid_file.protein_detection
     @pdp = @pd.protein_detection_protocol
     @pdl = @pd.protein_detection_list
@@ -28,9 +26,6 @@ class ProteinDetectionsController < ApplicationController
   def show
     pag = ProteinAmbiguityGroup.find(params[:id])
     @pdhs = pag.protein_detection_hypotheses
-    #@sir_psi_ms_cv_terms = sir.sir_psi_ms_cv_terms
-    #@sir_id_name = sir.sir_id
-    #@spectrum_identification_items = sir.spectrum_identification_items    
     respond_to do |format|
       format.html 
       format.js { render  :layout => false } 

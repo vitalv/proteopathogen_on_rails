@@ -46,6 +46,9 @@ class SpectrumIdentificationResultsDatatable
     #sirs = @spectrum_identification_results.order("#{sort_column} #{sort_direction}") #("sir_id " "asc")
     
     if params[:iSortCol_0] == "0"
+      
+      ##sirs = custom_sort(sort_attr)
+    
       sorted_sirs = @spectrum_identification_results.sort_by {|r| r.sir_id.split(/(\d+)/).map { |a| a=~ /\d+/ ? a.to_i : a } }
       sorted_sir_ids = sorted_sirs.collect { |sir| sir.id }
       if params[:sSortDir_0] == "asc"
@@ -56,6 +59,7 @@ class SpectrumIdentificationResultsDatatable
       sirs = sirs.page(page).per_page(per_page)
 
     elsif params[:iSortCol_0].to_i == 2 
+    
       sorted_sirs = @spectrum_identification_results.sort_by {|r| r.spectrum_name.split(/(\d+)/).map { |a| a=~ /\d+/ ? a.to_i : a } }
       sorted_sir_ids = sorted_sirs.collect { |sir| sir.id }
       if params[:sSortDir_0] == "asc"
@@ -66,6 +70,7 @@ class SpectrumIdentificationResultsDatatable
       sirs = sirs.page(page).per_page(per_page)
 
     elsif params[:iSortCol_0].to_i == 1
+    
       sorted_sirs = @spectrum_identification_results.sort_by do |r|
         spec = r.spectrum_name || r.spectrum_title
         spec.split(/(\d+)/).map { |a| a=~ /\d+/ ? a.to_i : a } 
@@ -80,6 +85,7 @@ class SpectrumIdentificationResultsDatatable
       
     end
     
+    sirs = sirs.page(page).per_page(per_page)
     
     if params[:sSearch].present?
       sirs = sirs.where("spectrum_name like :search or sir_id like :search or spectrum_id like :search", search: "%#{params[:sSearch]}%")
@@ -96,7 +102,21 @@ class SpectrumIdentificationResultsDatatable
   def per_page
     params[:iDisplayLength].to_i > 0 ? params[:iDisplayLength].to_i : 10
   end
-
+  
+  ##sort_attr = nil
+  #def custom_sort (sort_attr = 'sir_id')
+    #sort_attr = sort_attr
+    #sorted_sirs = @spectrum_identification_results.sort_by {|r| r.sort_attr.split(/(\d+)/).map { |a| a=~ /\d+/ ? a.to_i : a } }
+    #sorted_sir_ids = sorted_sirs.collect { |sir| sir.id }
+    #if params[:sSortDir_0] == "asc"
+      #sirs = SpectrumIdentificationResult.where(id: sorted_sir_ids).order("field(id,#{sorted_sir_ids.join(',')})")
+    #elsif params[:sSortDir_0] == "desc"
+      #sirs = SpectrumIdentificationResult.where(id: sorted_sir_ids).order("field(id,#{sorted_sir_ids.reverse.join(',')})")
+    #end
+    #sirs
+  #end
+  
+  
   #def sort_column
   #  columns = %w[sir_id spectrum_name spectrum_id]
   #  columns[params[:iSortCol_0].to_i]
@@ -105,14 +125,7 @@ class SpectrumIdentificationResultsDatatable
   #def sort_direction
   #  params[:sSortDir_0] == "desc" ? "desc" : "asc"
   #end
-  
-  
-  #def sort_type
-  # params[:aoColumns] == [{sType: "natural"}, {sType: "natural"} , {sType: "natural"} ]
-  #end
-  
-  #aoColumns: [{sType: "html", "natural"}, {sType: "natural"} , {sType: "natural"} ]
-  #aaSorting: [[ 1, "asc" ]]
+
   
 end
 
