@@ -39,10 +39,20 @@ class ProteinAmbiguityGroupsDatatable
   end
 
   def fetch_pags
-    pags = @protein_ambiguity_groups.order("#{sort_column} #{sort_direction}")
+    #pags = @protein_ambiguity_groups.order("#{sort_column} #{sort_direction}")
+    pags = @protein_ambiguity_groups
     pags = pags.page(page).per_page(per_page)
+    
+    if params[:sSortDir_0].present? and params[:sSortDir_0] == "desc"
+      pags = @protein_ambiguity_groups.reverse_order
+      pags = pags.page(page).per_page(per_page)
+    end
+    
+    @total_entries = pags.count
+    
     if params[:sSearch].present?
       pags = pags.where("protein_ambiguity_group_id like :search", search: "%#{params[:sSearch]}%")
+    
     end
     pags
   end
