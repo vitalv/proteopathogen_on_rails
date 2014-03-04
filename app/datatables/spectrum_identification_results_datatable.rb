@@ -60,7 +60,7 @@ class SpectrumIdentificationResultsDatatable
 
     elsif params[:iSortCol_0].to_i == 2 
     
-      sorted_sirs = @spectrum_identification_results.sort_by {|r| r.spectrum_name.split(/(\d+)/).map { |a| a=~ /\d+/ ? a.to_i : a } }
+      sorted_sirs = @spectrum_identification_results.sort_by {|r| r.spectrum_id.split(/(\d+)/).map { |a| a=~ /\d+/ ? a.to_i : a } }
       sorted_sir_ids = sorted_sirs.collect { |sir| sir.id }
       if params[:sSortDir_0] == "asc"
         sirs = SpectrumIdentificationResult.where(id: sorted_sir_ids).order("field(id,#{sorted_sir_ids.join(',')})")
