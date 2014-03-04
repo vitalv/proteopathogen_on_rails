@@ -41,21 +41,45 @@ class SpectrumIdentificationResultsDatatable
     @sirs ||= fetch_sirs
   end
 
+
   def fetch_sirs
     #sirs = @spectrum_identification_results.order("#{sort_column} #{sort_direction}") #("sir_id " "asc")
     
-    sirs = @spectrum_identification_results
-    sirs = sirs.page(page).per_page(per_page)
-    if params[:sSortDir_0].present? and params[:sSortDir_0] == "desc"
-      sirs = @spectrum_identification_results.reverse_order
+    if params[:iSortCol_0] == "0"
+      sorted_sirs = @spectrum_identification_results.sort_by {|r| r.sir_id.split(/(\d+)/).map { |a| a=~ /\d+/ ? a.to_i : a } }
+      sorted_sir_ids = sorted_sirs.collect { |sir| sir.id }
+      if params[:sSortDir_0] == "asc"
+        sirs = SpectrumIdentificationResult.where(id: sorted_sir_ids).order("field(id,#{sorted_sir_ids.join(',')})")
+      elsif params[:sSortDir_0] == "desc"
+        sirs = SpectrumIdentificationResult.where(id: sorted_sir_ids).order("field(id,#{sorted_sir_ids.reverse.join(',')})")
+      end
       sirs = sirs.page(page).per_page(per_page)
+
+    elsif params[:iSortCol_0].to_i == 2 
+      sorted_sirs = @spectrum_identification_results.sort_by {|r| r.spectrum_name.split(/(\d+)/).map { |a| a=~ /\d+/ ? a.to_i : a } }
+      sorted_sir_ids = sorted_sirs.collect { |sir| sir.id }
+      if params[:sSortDir_0] == "asc"
+        sirs = SpectrumIdentificationResult.where(id: sorted_sir_ids).order("field(id,#{sorted_sir_ids.join(',')})")
+      elsif params[:sSortDir_0] == "desc"
+        sirs = SpectrumIdentificationResult.where(id: sorted_sir_ids).order("field(id,#{sorted_sir_ids.reverse.join(',')})")
+      end
+      sirs = sirs.page(page).per_page(per_page)
+
+    elsif params[:iSortCol_0].to_i == 1
+      sorted_sirs = @spectrum_identification_results.sort_by do |r|
+        spec = r.spectrum_name || r.spectrum_title
+        spec.split(/(\d+)/).map { |a| a=~ /\d+/ ? a.to_i : a } 
+      end
+      sorted_sir_ids = sorted_sirs.collect { |sir| sir.id }
+      if params[:sSortDir_0] == "asc"
+        sirs = SpectrumIdentificationResult.where(id: sorted_sir_ids).order("field(id,#{sorted_sir_ids.join(',')})")
+      elsif params[:sSortDir_0] == "desc"
+        sirs = SpectrumIdentificationResult.where(id: sorted_sir_ids).order("field(id,#{sorted_sir_ids.reverse.join(',')})")
+      end
+      sirs = sirs.page(page).per_page(per_page)
+      
     end
     
-    @total_entries = sirs.count
-    #My Custom natural sort:
-    #sorted_sirs = @spectrum_identification_results.sort_by {|r| r.spectrum_name.split(/(\d+)/).map { |a| a=~ /\d+/ ? a.to_i : a } }
-    #sorted_sir_ids = sorted_sirs.collect { |sir| sir.id }
-    #sirs = SpectrumIdentificationResult.where(id: sorted_sir_ids) 
     
     if params[:sSearch].present?
       sirs = sirs.where("spectrum_name like :search or sir_id like :search or spectrum_id like :search", search: "%#{params[:sSearch]}%")
