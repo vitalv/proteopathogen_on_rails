@@ -2,7 +2,7 @@
   %td{:colspan => 2}
     -#%a{:href => "#", :data => {'sip-up-id' => "#{sip.id}"} } > User Params
     = link_to "> User Params", '#', :data => {'sip-up-id' => "#{sip.id}"}, remote: true
-    %table#sip_up.my_table.inner{:data => {'sip-up-id' => "#{sip.id}"}}
+    %table#sip_up.inner{:data => {'sip-up-id' => "#{sip.id}"}}
       - sip.sip_user_params.each do |up|
         %tr
           %td.title= up.name

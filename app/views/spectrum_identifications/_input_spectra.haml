@@ -2,7 +2,7 @@
 - sars.each do |sar|
   -#%a{:href => "#", :data => {'sar-id' => "#{sar.id}"} } > Spectra Acquisition Run Data #{sar.id}
   = link_to "> Spectra Acquisition Run Data", '#', :data => {'sar-id' => "#{sar.id}"}, remote: true
-  %table#sar.my_table.inner{:data => {'sar-id' => "#{sar.id}"}}
+  %table#sar.inner{:data => {'sar-id' => "#{sar.id}"}}
     %tr
       %td.title Fraction
       %td= sar.fraction

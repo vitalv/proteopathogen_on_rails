@@ -1,6 +1,6 @@
 = link_to "> Search Database(s)", '#', :data => {'sdb-id' => "#{si_id}"}, remote: true
 - sdbs.each do |sdb|
-  %table#search_databases.my_table.inner{:data => {'sdb-id' => "#{si_id}"}}
+  %table#search_databases.inner{:data => {'sdb-id' => "#{si_id}"}}
     %tr
       %td.title Search database ID
       %td= sdb.sdb_id

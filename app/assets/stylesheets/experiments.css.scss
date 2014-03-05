@@ -2,14 +2,28 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+table#exp_table { margin-bottom: 3em;}
+
 table#exp_mzid_files_table {
-  th { border: solid white 2px; border-collapse: collapse; }
+  //th { border: solid white 2px; border-collapse: collapse; }
   th.mzid_file_name { width: 370px;}
   th.submission_date { width: 110px;}
 }
+
+/*
+.separator { 
+  margin: 0 auto;
+  width: 80%;
+  border: 0;
+  border-bottom: 1px solid #ffe6d5;
+  
+  }
+*/
+
 
 select { }
 
 
 
 label {display: inline}
+

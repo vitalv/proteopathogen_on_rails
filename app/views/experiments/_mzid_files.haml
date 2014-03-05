@@ -1,4 +1,4 @@
-%table#exp_mzid_files_table.my_table.inner{:class => if exp.mzid_files.count > 5 then 'dataTable' end}
+%table#exp_mzid_files_table.inner{:class => if exp.mzid_files.count > 5 then 'dataTable' end}
   %thead
     %tr
       %th.mzid_file_name .mzid File
@@ -11,9 +11,9 @@
         %td= mzidf.name
         %td.center= mzidf.submission_date
         %td.center
-          = link_to '<Spectrum Identification>', mzid_file_spectrum_identifications_path(mzidf.id), id:"mzidf_#{mzidf.id}_si", class: "flat_link"
+          = link_to 'Spectrum Identification', mzid_file_spectrum_identifications_path(mzidf.id), id:"mzidf_#{mzidf.id}_si", class: "flat_link"
         %td.center
           - if mzidf.includes_protein_detection
-            =link_to '<Protein Detection>', mzid_file_protein_detections_path(mzidf.id), id: "mzid_file_#{mzidf.id}_protein_detection", class: "flat_link"
+            =link_to 'Protein Detection', mzid_file_protein_detections_path(mzidf.id), id: "mzid_file_#{mzidf.id}_protein_detection", class: "flat_link"
           - else
             No Protein Detection 

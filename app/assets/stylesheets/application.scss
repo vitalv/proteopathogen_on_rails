@@ -145,9 +145,12 @@ content {
   background-color: #55A5D8;
   display: inline-block;
   padding: 1px 4px;
-  border-radius: 2px;
-  color: whitesmoke;
-  &:hover{ color: white; }
+  //border-radius: 2px;
+  color: #F6F6F6;
+  &:hover{ 
+   background-color: #64B3E5;
+   color: white; 
+  }
 }
 
 
@@ -188,13 +191,27 @@ content {
   margin: 1em auto;
   //table-layout: fixed;
   width: 100%;
-  border:solid 1px #E1E1E1;
+  //border:solid 1px #E1E1E1;
+  border-collapse: collapse;
   border-radius: 5px;
+
+  thead th { 
+    background-color: #DADADA; //#FF7F2A;
+    //color: white;
+  }
+
   tr:nth-of-type(odd){
     background-color:#F1F1F1;
+    td.title {
+      background-color: #EBEAEA;
+    }
   }
+  
   tr:nth-of-type(even){
     background-color:#F8F8F8;
+    td.title {
+      background-color: #EBEAEA;
+    }
   } 
   td {
     padding: 3px 6px;
@@ -225,11 +242,16 @@ content {
 
 .my_table .inner {
   border-collapse: collapse;
-  border-color: white;
+  //border-color: white;
+  border: solid white 2px;
   margin: 1% auto;
   width: 100%;
+  thead th { 
+    background-color: #DADADA; //#FF7F2A;
+    //color: white;
+  }
   tr td {
-    border: solid 2px white;
+    //border: solid 2px white;
   }
   /*td.title { text-transform: lowercase; } */
 }
@@ -239,9 +261,7 @@ content {
 
 .dataTables_wrapper { margin:  1em auto; }
 
-table.dataTable thead th {
-  border: none;
-}
+
 .paging_full_numbers a.paginate_button, paging_full_numbers a.paginate_active {
   color: #55A5D8!important;
 }
@@ -256,22 +276,30 @@ table.dataTable thead th {
   }
 }
 
-//table.dataTable tr.odd {
-//  background-color: #F1F1F1; //#FFE6D5;
-//}
-
-//table.dataTable tr.even {
-//  background-color: #F8F8F8; //#fff5ed;
-//}
 
 
-//table.dataTable tr.even td.sorting_1 {
-//  background-color: #ffe5c5!important;
-//}
+table.dataTable {
 
-//table.dataTable tr.odd td.sorting_1 {
-//  background-color: #ffe8ce!important;
-//}
+  thead { 
+    th {
+      border: none;
+      background-color: #DADADA; //#FF7F2A; //#DADADA; //#FFCCAB; //#FF9A57;
+      //color: white;
+    }
+  }
+  tr.odd { 
+    background-color: #F8F8F8; //#FFE6D6 ;
+    td.sorting_1 {background-color: #E9E9E9;} //#FFCCAB;}
+  }
+  tr.even {
+    background-color: #F1F1F1; //#FFF6F1;
+    td.sorting_1 {background-color: #E5E9F5; }// #FFD8BE;}
+  }
+}
+
+
+
+
 
 p.footer_text { 
   text-align: center; 
