@@ -9,7 +9,8 @@ class Admin::ExperimentsController < ApplicationController
 
 
   def new
-    @experiment = Experiment.new  
+    #@experiment = Experiment.new(:date => "2010-01-01".to_date)
+    @experiment = Experiment.new
   end
 
 
@@ -18,12 +19,15 @@ class Admin::ExperimentsController < ApplicationController
     organism = params[:experiment][:organism]
     protocol = params[:experiment][:protocol]
     researcher = params[:experiment][:researcher]
-    date = "#{params[:experiment]['date(2i)']} - #{params[:experiment]['date(1i)']}"
+    month = params[:experiment]['date(2i)']
+    year = params[:experiment]['date(1i)']
+    date = params[:experiment][:date]
     
     @experiment = Experiment.create({:organism => organism, :protocol => protocol, :date => date, :researcher => researcher})
     
     if @experiment.invalid?
       render :action => "new"
+      #@experiment.date = Date.today
     else
       redirect_to :action => "index"
     end

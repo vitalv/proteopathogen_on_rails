@@ -16,7 +16,7 @@ class Admin::MzidFilesController < ApplicationController
 
   def create
   # Depending on the size of the uploaded file it may in fact be a StringIO or an instance of File backed by a temporary file- SEE guides/form_helpers
-    if params[:mzid_file]
+    if params[:mzid_file] and params[:mzid_file][:uploaded_file]
     
       @experiment_id = params[:mzid_file][:experiment_id]
       uploaded_io = params[:mzid_file][:uploaded_file]
