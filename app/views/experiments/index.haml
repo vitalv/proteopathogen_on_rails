@@ -3,7 +3,7 @@
   %p No stored Experiments 
 -else
   -@experiments.each do |exp|
-    %table{:id => "exp_table_#{exp.id}", :class =>"my_table" }
+    %table#exp_table.my_table
       %tr
         %td.title EXPERIMENT/PROTOCOL:
         %td= exp.protocol
@@ -19,4 +19,5 @@
       %tr
         %td{:colspan => 2}
           = render partial: "mzid_files", locals: {exp: exp, mzid_files: exp.mzid_files}
-  
+    
+    -#%hr.separator

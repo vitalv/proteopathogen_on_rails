@@ -1,7 +1,7 @@
-%table{:id => "si_table_#{spectrum_identification.id}", :class =>"my_table" }
+%table#si_table.my_table
   %tr
-    %td.title Spectrum Identification ID
-    %td= spectrum_identification.si_id
+    %td.title.si Spectrum Identification ID
+    %td.si= spectrum_identification.si_id
   - if spectrum_identification.name
     %tr
       %td.title Spectrum Identification Name

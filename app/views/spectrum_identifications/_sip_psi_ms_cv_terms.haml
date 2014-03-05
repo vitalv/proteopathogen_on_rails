@@ -2,7 +2,7 @@
   %td{:colspan => 2}
     -#%a{:href => "#", :data => {'sip-cvp-id' => "#{sip.id}"} } > PSI-MS CV Params
     = link_to "> PSI-MS CV Params", '#', :data => {'sip-cvp-id' => "#{sip.id}"}, remote: true
-    %table#sip_cvp.my_table.inner{:data => {'sip-cvp-id' => "#{sip.id}"}}
+    %table#sip_cvp.inner{:data => {'sip-cvp-id' => "#{sip.id}"}}
       -if sip.has_at_least_one_cvp_w_value
         - sip.sip_psi_ms_cv_terms.each do |cvp|
           %tr

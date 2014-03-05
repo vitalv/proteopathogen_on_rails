@@ -2,7 +2,7 @@
   %td{:colspan => 2}
     -# sip_mods should only be datatable when there are more than, say 5 modifications
     = link_to "> Searched Modifications", '#', :data => {'sip-mods-id' => "#{sip.id}"}, remote: true
-    %table#sip_mods.my_table.inner{:data => {'sip-mods-id' => "#{sip.id}"}, :class => if sip.searched_modifications.count > 5 then 'dataTable' end}
+    %table#sip_mods.inner{:data => {'sip-mods-id' => "#{sip.id}"}, :class => if sip.searched_modifications.count > 5 then 'dataTable' end}
       %thead
         %tr
           %th= "mass delta"
