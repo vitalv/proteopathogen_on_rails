@@ -16,22 +16,35 @@ class Admin::MzidFilesController < ApplicationController
 
   def create
   # Depending on the size of the uploaded file it may in fact be a StringIO or an instance of File backed by a temporary file- SEE guides/form_helpers
-    @experiment_id = params[:mzid_file][:experiment_id]
-    uploaded_io = params[:mzid_file][:uploaded_file]
-    uploaded_io_filename = uploaded_io.original_filename
-    File.open(Rails.root.join('public', 'uploaded_mzid_files', uploaded_io_filename), 'w') do |file|
-      file.write(uploaded_io.read)
-    end
-    uploaded_mzid_file = File.new("#{Rails.root}/public/uploaded_mzid_files/#{uploaded_io_filename}")
-    location = File.absolute_path(uploaded_mzid_file)
-    name = uploaded_io_filename
-    sha1 = Digest::SHA1.hexdigest("#{Rails.root}/public/uploaded_mzid_files/#{uploaded_io_filename}")
-    @saved_mzid = MzidFile.find_or_create_by_sha1({:location => location, :sha1 => sha1, :name => name, :submission_date => Date.today, :experiment_id => @experiment_id})
+    if params[:mzid_file]
     
-    if @saved_mzid.invalid? #could add validation in the model to check file extension really is .mzid
-      render "new"
+      @experiment_id = params[:mzid_file][:experiment_id]
+      uploaded_io = params[:mzid_file][:uploaded_file]
+      uploaded_io_filename = uploaded_io.original_filename
+      File.open(Rails.root.join('public', 'uploaded_mzid_files', uploaded_io_filename), 'w') do |file|
+        file.write(uploaded_io.read)
+      end
+      uploaded_mzid_file = File.new("#{Rails.root}/public/uploaded_mzid_files/#{uploaded_io_filename}")
+      location = File.absolute_path(uploaded_mzid_file)
+      name = uploaded_io_filename
+      sha1 = Digest::SHA1.hexdigest("#{Rails.root}/public/uploaded_mzid_files/#{uploaded_io_filename}")
+    
+      @mzid_file = MzidFile.find_or_create_by(sha1: sha1) do |mzidf|
+        mzidf.location = location,
+        mzidf.name = name,
+        mzidf.submission_date = Date.today
+        mzidf.experiment_id = @experiment_id
+      end
+
+      if @mzid_file.invalid? #could add validation in the model to check file extension really is .mzid
+        @experiments = Experiment.all
+        render "new"
+      else
+        redirect_to :action =>  :index
+      end
+    
     else
-      redirect_to :action =>  :index
+      redirect_to :action => :new
     end
 
   end

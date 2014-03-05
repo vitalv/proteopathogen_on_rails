@@ -19,3 +19,21 @@ div.ajax-progress {
   -webkit-border-radius: 10px;
   border-radius:         10px;
 }
+
+input[type="radio"] {
+  margin-top: -1px;
+  vertical-align: middle;
+}
+
+label { display: block; line-height: 2em;}
+.field_with_errors { 
+  border: solid red 1px;
+  border-radius: 5px;
+  display: inline;
+}
+
+.error_list { 
+  margin: 2em;
+  font-size: 1.1em; 
+  color: red;
+}

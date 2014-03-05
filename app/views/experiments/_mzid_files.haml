@@ -9,7 +9,7 @@
     -mzid_files.each do |mzidf|
       %tr
         %td= mzidf.name
-        %td= mzidf.submission_date
+        %td.center= mzidf.submission_date
         %td.center
           = link_to '<Spectrum Identification>', mzid_file_spectrum_identifications_path(mzidf.id), id:"mzidf_#{mzidf.id}_si", class: "flat_link"
         %td.center

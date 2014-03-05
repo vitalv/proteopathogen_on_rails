@@ -2,15 +2,16 @@
 
 %p
 = form_for [:admin, @mzid_file], :url => {:action => "create"}, html: {class: "my_form"} do |f|
-  - if @mzid_file.errors.any?
-    %ul
-      - for message in @mzid_file.errors.full_messages
-        %li= message
+
   - @experiments.each do |exp|
     %label
-      %p
-        = f.radio_button(:experiment_id, "#{exp.id}")
-        = exp.protocol
+      = f.radio_button(:experiment_id, "#{exp.id}") 
+      = exp.protocol
+
+  - if @mzid_file.errors.any?
+    %ul.error_list
+      - for message in @mzid_file.errors.full_messages
+        %li= message
   
   %p=f.file_field 'uploaded_file'
 
