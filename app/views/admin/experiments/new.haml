@@ -1,23 +1,23 @@
 %h2 new experiment
 =form_for [:admin, @experiment], html: {class: "my_form"} do |f|
+
+  = f.select :organism, options_for_select({'Candida albicans (strain SC5314 / ATCC MYA-2876) Taxonomy ID: 237561' => "Candida albicans (strain SC5314 / ATCC MYA-2876)", 'Other species' => "Other species" }), :prompt => 'Select species'
+    
+  = f.label :protocol
+  = f.text_area :protocol
+    
+
+  = f.date_select :date, :order => [:month, :year]
+  -#= f.date_select :date
+
+
+  = f.label :researcher
+  = f.text_field :researcher
+    
   - if @experiment.errors.any?
-    %ul
+    %ul.error_list
       - for message in @experiment.errors.full_messages
         %li= message
-  %p
-    = f.select :organism, options_for_select({'Candida albicans (strain SC5314 / ATCC MYA-2876) Taxonomy ID: 237561' => "Candida albicans (strain SC5314 / ATCC MYA-2876)", 'Other species' => "Other species" }), :prompt => 'Select species'
     
-  %p
-    = f.label :protocol
-    %br
-    = f.text_area :protocol
-    
-  %p    
-    = f.date_select :date, :order => [:month, :year]
-
-  %p    
-    = f.label :researcher
-    %br
-    = f.text_field :researcher
   %p
     = f.submit 'Create Experiment', class: "my_button"

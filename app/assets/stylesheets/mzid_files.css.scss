@@ -27,8 +27,8 @@ input[type="radio"] {
 
 label { display: block; line-height: 2em;}
 .field_with_errors { 
-  border: solid red 1px;
-  border-radius: 5px;
+  border-bottom: ridge red 2px;
+  padding: 2px;
   display: inline;
 }
 
