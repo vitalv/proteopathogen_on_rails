@@ -41,14 +41,26 @@ $ ->
     $("table").find("table[data-sdb-id='" + data_sdb_id + "']").toggle "fast" 
     return false;
 
+
+
+
+jQuery.fn.dataTableExt.oSort["natural-asc"] = (a, b) ->
+  naturalSort a, b
+
+jQuery.fn.dataTableExt.oSort["natural-desc"] = (a, b) ->
+  naturalSort(a, b) * -1
+
+
 $ ->
-  $("#sip_mods.dataTable").dataTable(
-	  "bLengthChange": false,
-	  "bFilter": false,
-	  "bInfo": false,
-	  "bPaginate": false
-  )
-  return false;
+  $("#sip_mods.dataTable").dataTable
+	  bLengthChange: false
+	  bFilter: false
+	  bInfo: false
+	  bPaginate: false
+	  aoColumns: [null, null, null, {"sType": "natural"}, {"sType": "natural"} ]
+      #aaSorting: [[0,'asc']]
+
+  #return false;
 
 #$(document).ready ready
 #$(document).on "page:load", ready 

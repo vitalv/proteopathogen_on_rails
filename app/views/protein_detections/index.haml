@@ -6,7 +6,7 @@
 
 %h3.table_header= "PROTEIN DETECTION"
 
-%table{:id => "pd_table_#{@pd.id}", :class =>"my_table" }
+%table#pd_table.my_table
   %tr
     %td.title Protein Detection ID
     %td= @pd.protein_detection_id 
@@ -42,8 +42,8 @@
   %thead
     %tr
       %th Protein Group ID
-      %th Protein Accession(s) in group
-      -#%th Protein Accessions
+      %th Accession(s) / Id(s)
+      %th Gene Name(s)
   %tbody
   
 

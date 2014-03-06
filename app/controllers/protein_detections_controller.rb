@@ -2,8 +2,8 @@ class ProteinDetectionsController < ApplicationController
 
   def index
 
-    mzid_file_id = params[:mzid_file_id]
-    mzid_file = MzidFile.find(mzid_file_id)
+    @mzid_file_id = params[:mzid_file_id]
+    mzid_file = MzidFile.find(@mzid_file_id)
     @mzid_file_name = mzid_file.name
     @pd = mzid_file.protein_detection
     @pdp = @pd.protein_detection_protocol
@@ -11,7 +11,7 @@ class ProteinDetectionsController < ApplicationController
     @pag_count = @pdl.protein_ambiguity_groups.count
     @pags = @pdl.protein_ambiguity_groups
     
-    experiment_id = MzidFile.find(mzid_file_id).experiment_id
+    experiment_id = MzidFile.find(@mzid_file_id).experiment_id
     @protocol = Experiment.find(experiment_id).protocol
     
     respond_to do |format|

@@ -193,10 +193,9 @@ content {
   width: 100%;
   //border:solid 1px #E1E1E1;
   border-collapse: collapse;
-  border-radius: 5px;
 
   thead th { 
-    background-color: #DADADA; //#FF7F2A;
+    background-color: #DADADA; 
     //color: white;
   }
 
@@ -218,9 +217,10 @@ content {
   }
   td.center { text-align: center; }
   td.title {
-    width: 200px;
+    //border-bottom: solid #E4E4E4 1px;
+    width: 280px;
+    text-align: right;
     font-weight: bold;
-    /*text-transform:uppercase;*/
   }
   td.sum_table_title { 
     width: 100px;
@@ -242,8 +242,7 @@ content {
 
 .my_table .inner {
   border-collapse: collapse;
-  //border-color: white;
-  border: solid white 2px;
+  border: solid #FCFCFC 4px;
   margin: 1% auto;
   width: 100%;
   thead th { 
@@ -253,7 +252,6 @@ content {
   tr td {
     //border: solid 2px white;
   }
-  /*td.title { text-transform: lowercase; } */
 }
 
 
@@ -289,11 +287,11 @@ table.dataTable {
   }
   tr.odd { 
     background-color: #F8F8F8; //#FFE6D6 ;
-    td.sorting_1 {background-color: #E9E9E9;} //#FFCCAB;}
+    td.sorting_1 {background-color: #F0EFEF;} //#FFCCAB;}E9E9E9
   }
   tr.even {
     background-color: #F1F1F1; //#FFF6F1;
-    td.sorting_1 {background-color: #E5E9F5; }// #FFD8BE;}
+    td.sorting_1 {background-color: #E7ECF0; }// #FFD8BE;}
   }
 }
 
