@@ -26,8 +26,8 @@ $ ->
     bProcessing: true
     bServerSide: true
     sAjaxSource: $('#pag_table').data('source')
-    aoColumns: [{sType: "natural"}, bSortable: false ]
-    aaSorting: [[ 0, "asc" ]]
+    aoColumns: [{sType: "natural"}, {bSortable: false}, {bSortable: false} ]
+    #aaSorting: [[ 0, "asc" ]]
 
 
 

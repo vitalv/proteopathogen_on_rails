@@ -17,7 +17,7 @@ class ProteinAmbiguityGroupsDatatable
       sEcho: params[:sEcho].to_i,
       iTotalRecords: @protein_ambiguity_groups.count,
       iTotalDisplayRecords: pags.total_entries,
-      aaData: data      
+      aaData: data
     }
   
 
@@ -29,7 +29,8 @@ class ProteinAmbiguityGroupsDatatable
     pags.map do |pag|
       [
         link_to( "#{pag.protein_ambiguity_group_id}", "protein_detections/#{pag.id}", remote: true, format: :js, :data => {'pag-id' => "#{pag.id}"}, class: "pag_link" ),
-        pag.proteins_in_group
+        pag.pdh_ids, 
+        pag.gene_names
       ]
     end
   end
@@ -51,8 +52,9 @@ class ProteinAmbiguityGroupsDatatable
 
     if params[:sSearch].present?
       pags = pags.where("protein_ambiguity_group_id like :search", search: "%#{params[:sSearch]}%")
+    end #params[:sSearch].present
     
-    end
+    
     pags
   end
 
