@@ -1,7 +1,7 @@
 $proteopath_light_green: #DEEAEA;
 $blue_font_color: #0A2747;
-
-$light-blue-link-color: #55A5D8;
+$blue-link-color: #3196DD;
+$light-blue-link-color: #2A9BEA;
 $gray: #B6B5B0;
 
 
@@ -55,11 +55,11 @@ nav_links, admin_links {
     float: left;
     padding: 18px 0px 0px 30px;
     a {
-	  font-size: 11pt;
-	  text-decoration: none;
-	  font-weight: bold;
-	  color: #d45500;
-	  &:hover{ color: #ff822e; }
+     font-size: 11pt;
+     text-decoration: none;
+     font-weight: bold;
+     color: #DA6E25;
+     &:hover{ color: #E97121; }
     }
   }
 }
@@ -72,12 +72,10 @@ content {
   /*overflow: scroll;*/
   a { 
     font-size: 9pt;
-	text-decoration: none;
+    text-decoration: none;
     font-weight: bold;
-	color: $light-blue-link-color;
-	//color: #ff7f2a;
-	&:hover{ color: #ACABAC; }
-	//&:hover{ color: #ffab44; }
+    color: $blue-link-color;
+    &:hover{ color: $light-blue-link-color}
   }
 }
 
@@ -142,17 +140,18 @@ content {
 }
 
 .flat_link {
-  background-color: #55A5D8;
+  background-color: $blue-link-color;//#55A5D8;
   display: inline-block;
   padding: 1px 4px;
   //border-radius: 2px;
   color: #F6F6F6;
   &:hover{ 
-   background-color: #64B3E5;
+   background-color: $light-blue-link-color;
    color: white; 
   }
 }
 
+.inner_link { padding-left: 11px;}
 
 .info {
   display: none;
@@ -163,7 +162,10 @@ content {
   padding: 4px;
   margin: 2px;
 }
-.info_img { vertical-align:middle;}
+.info_img { 
+  vertical-align:middle;
+  //cursor:help;
+}
 
 
 .table_header { margin-top: 2em; }
@@ -242,7 +244,7 @@ content {
 
 .my_table .inner {
   border-collapse: collapse;
-  border: solid #FCFCFC 4px;
+  border: solid #FCFCFC 4px; //
   margin: 1% auto;
   width: 100%;
   thead th { 
@@ -261,7 +263,7 @@ content {
 
 
 .paging_full_numbers a.paginate_button, paging_full_numbers a.paginate_active {
-  color: #55A5D8!important;
+  color: $blue-link-color!important;
 }
 #sir_table_paginate, #pag_table_paginate{  
   a { 
@@ -283,6 +285,11 @@ table.dataTable {
       border: none;
       background-color: #DADADA; //#FF7F2A; //#DADADA; //#FFCCAB; //#FF9A57;
       //color: white;
+      &:hover{ color: #224D79; }
+    }
+    th.sorting_disabled { 
+      cursor: default!important;
+      &:hover{ color: $blue_font_color; }
     }
   }
   tr.odd { 
