@@ -143,7 +143,7 @@ content {
   background-color: $blue-link-color;//#55A5D8;
   display: inline-block;
   padding: 1px 4px;
-  //border-radius: 2px;
+  border-radius: 2px;
   color: #F6F6F6;
   &:hover{ 
    background-color: $light-blue-link-color;
@@ -269,13 +269,30 @@ content {
   a { 
     background-color:white;
     border: none;
+
   }
   .paginate_active {
-    text-decoration: underline;
-    color: gray!important;
+    //text-decoration: underline;
+    background-color: $blue-link-color;//#55A5D8;
+    display: inline-block;
+    padding: 0px 3px;
+    border-radius: 2px;
+    color: #F6F6F6!important;
   }
 }
 
+
+/*
+  background-color: $blue-link-color;//#55A5D8;
+  display: inline-block;
+  padding: 1px 4px;
+  border-radius: 2px;
+  color: #F6F6F6;
+  &:hover{ 
+   background-color: $light-blue-link-color;
+   color: white; 
+  }
+*/
 
 
 table.dataTable {
