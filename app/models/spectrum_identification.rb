@@ -22,6 +22,8 @@ class SpectrumIdentification < ActiveRecord::Base
   #so I am not validating them here. 
    
   has_many :spectrum_identification_results, through: :spectrum_identification_list #, :dependent => :destroy
+  has_many :spectrum_identification_items, through: :spectrum_identification_results
+  has_many :peptide_spectrum_assignments, through: :spectrum_identification_items
   
   has_many :spectra_acquisition_runs
   
@@ -46,4 +48,44 @@ class SpectrumIdentification < ActiveRecord::Base
   end
   
   
+  def decoy_psms
+
+   #has_many_psms through above, enables to do self.peptide_spectrum_assignments here:
+    decoy_psms = []
+    self.peptide_spectrum_assignments.each do |psm|
+      if psm.peptide_evidence.db_sequence.accession =~ /decoy/i  or psm.peptide_evidence.is_decoy == true
+        decoy_psms << psm 
+      end
+    end
+    return decoy_psms.count
+    
+    #otherwise, I would have to fetch first sirs, then psms, which is way longer
+    #sirs = self.spectrum_identification_results
+    #sir_siis_sets = {}
+    #sirs.each { |sir| sir_siis_sets[sir] = sir.spectrum_identification_items }
+    #sii_psms_sets = {} #k es el sii, v es la lista de psms
+    #sir_siis_sets.each do |sir, sii_set|
+       #sii_set.each { |sii| sii_psms_sets[sii] = sii.peptide_spectrum_assignments } 
+    #end
+    #psms_sets = sii_psms_sets.values
+    #decoy_psms = []
+    #psms_sets.each do |psm_set|
+      #psm_set.each do |psm|
+        #if psm.peptide_evidence.db_sequence.accession =~ /decoy/i  or psm.peptide_evidence.is_decoy == true
+          #decoy_psms << psm 
+        #end
+      #end
+    #end
+    #return decoy_psms.count
+    
+    
+  end
+  
+  
+  
+  
 end
+
+
+
+

@@ -11,6 +11,11 @@ class SpectrumIdentificationsController < ApplicationController
       si_ids_h["data-si-id-#{si.id}"] = si.si_id
     end
     @si_ids = si_ids_h
+    
+    
+    #decoy_psms method in si model
+    
+    
   end
 
 
