@@ -54,4 +54,31 @@ class ProteinDetectionHypothesis < ActiveRecord::Base
   end
 
 
+  def psms
+    psms = self.peptide_spectrum_assignments
+    psms_h, psm_freq = {} , {}
+    psms.each { |psm| psms_h[psm.spectrum_identification_item.short_sii_id] = psm.peptide_evidence.peptide_sequence.sequence }
+    seq_freq = psms_h.values.inject(Hash.new(0)){ |h,v| h[v] += 1; h}
+    seq_freq.each do |seqk, siis_count|
+      siis, sii_a = [], []
+      psms_h.each do |sii, seqv|
+        if siis_count == 1
+          if seqk == seqv
+            sii_a = [sii, 1]
+            psm_freq[seqk] = sii_a 
+          end
+        elsif siis_count > 1
+          siis << sii if seqk == seqv
+        end
+      end
+      if siis_count > 1
+        sii_a = [siis.join(", "), siis_count]
+        psm_freq[seqk] = sii_a
+      end
+    end
+    return psm_freq
+  end
+
+
+
 end

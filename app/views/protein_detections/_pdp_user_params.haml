@@ -1,6 +1,6 @@
 %tr
   %td{:colspan => 2}
-    = link_to "> User Params", '#', :data => {'pdp-up-id' => "#{pdp.id}"}, remote: true
+    = link_to "> User Params", '#', :data => {'pdp-up-id' => "#{pdp.id}"}, class: "inner_link", remote: true
     %table#pdp_up.my_table.inner{:data => {'pdp-up-id' => "#{pdp.id}"}}
       - pdp.pdp_user_params.each do |up|
         %tr

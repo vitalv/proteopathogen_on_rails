@@ -42,7 +42,9 @@ class ProteinDetectionsController < ApplicationController
     @pdh_user_params = pdh.pdh_user_params
     
     @psms = pdh.peptide_spectrum_assignments
-
+    
+    @psm_freq = pdh.psms #see method in model
+    
     if pdh.db_seq #this should not be needed, just in case .mzid file is not well constructed
       @protein_sequence = pdh.db_seq.sequence
       @db_seq_accession = pdh.db_seq.accession
