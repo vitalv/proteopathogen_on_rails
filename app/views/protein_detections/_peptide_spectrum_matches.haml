@@ -1,14 +1,16 @@
-- if  @psms.blank?
+- if  @psm_freq.blank?
   %tr
     %td.empty= "No Peptide Spectrum Matches. Really? Can this even be possible??"
 - else
-  - @psms.each do |psm|
+  - @psm_freq.each do |pep_seq, sii_ids|
     %tr
-      %td= psm.spectrum_identification_item.short_sii_id
+      %td= pep_seq
+      %td= sii_ids[0]
+      %td.center= sii_ids[1]
       /%td.center= psm.spectrum_identification_item.calc_m2z
       /%td.center= psm.spectrum_identification_item.exp_m2z
       /%td.center= psm.spectrum_identification_item.rank
       /%td.center= psm.spectrum_identification_item.charge_state
       /%td.center= psm.spectrum_identification_item.pass_threshold
-      %td= psm.peptide_evidence.peptide_sequence.sequence
+
 

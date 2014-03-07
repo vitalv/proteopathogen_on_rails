@@ -52,5 +52,13 @@ $ ->
     
     $("#protein_sequence").empty()
 
-    
+
+
+$ ->
+  $("#psms_table.dataTable").dataTable
+	  bLengthChange: false
+	  bFilter: false
+	  bInfo: false
+	  bPaginate: true
+	  aoColumns: [{"sType": "natural"}, {"sType": "natural"} ]
     

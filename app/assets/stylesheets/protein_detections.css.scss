@@ -15,7 +15,7 @@ table.my_table {
   th.pdh_id { width: 120px; } 
   th.protein_description {width: 450px;}
   th.pdh_name {width: 110px;}
-  th.peptide_sequence { width: 550px;}
+  //th.peptide_sequence { width: 550px;}
   td {
     word-wrap:break-word;
     width: auto;
@@ -24,14 +24,16 @@ table.my_table {
 }
 
 
+
+
 .peptide_protein_map{
   //height: 50px;
   position: relative;
   display: table;
   table-layout: fixed;
-  margin: 5px auto;
+  margin: 2em auto;
   padding: 4px 0;
-  width: 90%;
+  width: 100%;
   border: 1px dashed #B6B5B0;
   border-radius: 6px;
   p {

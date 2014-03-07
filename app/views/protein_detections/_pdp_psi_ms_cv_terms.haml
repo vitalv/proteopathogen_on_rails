@@ -1,6 +1,6 @@
 %tr
   %td{:colspan => 2}
-    = link_to "> PSI-MS CV Params", '#', :data => {'pdp-cvp-id' => "#{pdp.id}"}, remote: true
+    = link_to "> PSI-MS CV Params", '#', :data => {'pdp-cvp-id' => "#{pdp.id}"}, class: "inner_link", remote: true
     %table#pdp_cvp.my_table.inner{:data => {'pdp-cvp-id' => "#{pdp.id}"}}
       - pdp.pdp_psi_ms_cv_terms.each do |cvp|
         %tr
