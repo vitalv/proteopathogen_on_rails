@@ -31,14 +31,14 @@
       %tr
         %td.title Protein Detection Hypotheses
         %td= @pdh_count
+      -#%tr
+        -#%td.title DB Sequence Accessions
+        -#%td= @distinct_dbseq_accession_count
+      -#%tr
+        -#%td.title Distinct proteins (sequence)
+        -#%td= @dbseq_sequence_count
       %tr
-        %td.title DB Sequence Accessions
-        %td= @distinct_dbseq_accession_count
-      %tr
-        %td.title Distinct proteins (sequence)
-        %td= @dbseq_sequence_count
-      %tr
-        %td.title Candida Decoy-Filtered distinct DB seq accessions
+        %td.title Candida distinct DB sequence accessions
         %td= @candida_decoy_filtered_dbseq_accs
 
     %p
