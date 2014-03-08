@@ -29,9 +29,9 @@ class Admin::MzidFilesController < ApplicationController
       name = uploaded_io_filename
       sha1 = Digest::SHA1.hexdigest("#{Rails.root}/public/uploaded_mzid_files/#{uploaded_io_filename}")
     
-      @mzid_file = MzidFile.find_or_create_by(sha1: sha1) do |mzidf|
-        mzidf.location = location,
-        mzidf.name = name,
+      @mzid_file = MzidFile.find_or_create_by(sha1: sha1, location: location, name: name) do |mzidf|
+        #mzidf.location = location,
+        #mzidf.name = name,
         mzidf.submission_date = Date.today
         mzidf.experiment_id = @experiment_id
       end
