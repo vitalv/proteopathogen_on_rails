@@ -40,9 +40,12 @@ ProteopathogenOnRails::Application.routes.draw do
     end
   end
 
+ 
+  get 'about' => "about#index"
 
   root :to => "home#index"
   
+ 
   
   get "*path" => 'errors#routing'
 
