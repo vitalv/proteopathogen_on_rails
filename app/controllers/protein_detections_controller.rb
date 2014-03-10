@@ -26,9 +26,20 @@ class ProteinDetectionsController < ApplicationController
   def show
     pag = ProteinAmbiguityGroup.find(params[:id])
     @pdhs = pag.protein_detection_hypotheses
+    
+    #CHECK HERE WHETHER PDHS IS JUST ONE PDH.
+    #IN THAT CASE I CAN DIRECTLY SHOW PDH PSI-MS CV PARAMS AND USER PARAMS, AND PROTEIN SEQ AND PSMs
+    
     respond_to do |format|
       format.html 
-      format.js { render  :layout => false } 
+      #if @pdhs.count > 1
+        format.js { render 'show', :layout => false } 
+      #else
+      #  format.js { 
+          ##render '_single_pdh', :layout => false
+      #    redirect_to :action => 'protein_detection_hypothesis', :pdh_id => @pdhs[0].id
+      #   } 
+      #end
     end
   end
   
