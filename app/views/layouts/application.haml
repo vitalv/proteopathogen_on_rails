@@ -20,7 +20,7 @@
           %ul
             %li=link_to 'home', '/'
             %li=link_to 'experiments', experiments_path
-            %li=link_to 'contact', controller: 'about'
+            %li=link_to 'contact', '#' 
             - if current_user
               %li="logged in as #{current_user.email}"
               %li= link_to 'log out', log_out_path

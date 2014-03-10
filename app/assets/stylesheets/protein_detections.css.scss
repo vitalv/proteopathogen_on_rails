@@ -10,18 +10,26 @@ table#pdp_up {display: none;}
 //NOTE: This is very important, remember there is this user parameter unique_stripped_peptides that can be veeery long and would stretch the table and make it ugly with horizontal scroll on the page WTF!
 
 table.my_table {
-  table-layout: fixed;
-  width: 100%;
   th.pdh_id { width: 120px; } 
   th.protein_description {width: 450px;}
   th.pdh_name {width: 110px;}
   //th.peptide_sequence { width: 550px;}
-  td {
-    word-wrap:break-word;
-    width: auto;
-   }
+  th.psm_count {width: 90px; }
+  //td {
+  //  word-wrap:break-word;
+  //  width: auto;
+  // }
 
 }
+
+table#pdh_up {
+  //watchout tablelayout fixed and window width!!
+  table-layout: fixed;
+  td {
+    word-wrap:break-word;
+  }
+}
+
 
 
 
