@@ -39,7 +39,6 @@ $ ->
     #$("#protein_sequence").empty()
     $('#protein_sequence').empty();
     $("#protein_sequence").append("<p>PROTEIN SEQUENCE</p>")
-
     
 
 $ ->  
