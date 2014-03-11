@@ -35,7 +35,7 @@ $ ->
     
     fnDrawCallback: (oSettings) ->
       if oSettings._iDisplayLength > oSettings.fnRecordsDisplay()
-        $(oSettings.nTableWrapper).find(".dataTables_paginate, .dataTables_length").hide()
+        $(oSettings.nTableWrapper).find(".dataTables_paginate").hide()
       else
         $(oSettings.nTableWrapper).find(".dataTables_paginate, .dataTables_length").show() 
       $('table#sir_cvp').find('tbody').html("<tr><td class='empty'>PSI-MS CV terms, names and value</td></tr>")
