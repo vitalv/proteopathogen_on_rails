@@ -37,20 +37,27 @@ $ ->
     $(this).addClass("flat_link")
     $("#pdh_cvp td.empty").empty()
     #$("#protein_sequence").empty()
-    $('#protein_sequence').empty();
+    $('#protein_sequence').empty()
     $("#protein_sequence").append("<p>PROTEIN SEQUENCE</p>")
     
+
+$ ->
+  $("#pag_table_paginate").on "click", ".paginate_button", ()  ->
+    $('table#pdh_table').find('tbody').html("<tr><td colspan='5' class='empty'>Protein detection hypothesis. Single result of the Protein Detection analysis</td></tr>")
+    $("table#pdh_cvp").find('tbody').html("<tr><td class='empty'>PSI-MS CV terms, names and value</td></tr>")
+    $("table#pdh_up").find('tbody').html("<tr><td class='empty'>PSI-MS CV terms, names and value</td></tr>")
+    $('#protein_sequence').empty()
+    $("#protein_sequence").append("<p>PROTEIN SEQUENCE</p>")
+    $('table#psms_table').find('tbody').empty()
+
 
 $ ->  
   $('#pdh_table').on "click", ".pdh_link", (e) -> 
   #this function is bound to all ".sii_link" click events, even if they are added to the DOM via ajax later
     pdh_id = $(this).data("pdh-id")
-
     $("#pdh_table .flat_link").removeClass("flat_link")
     $(this).addClass("flat_link")
-    
     $("#protein_sequence").empty()
-
 
 
 $ ->
