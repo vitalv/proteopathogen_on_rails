@@ -56,7 +56,7 @@ $ ->
   $("#sir_table").on "click", ".sir_link", ()  ->
     $("#sir_table .flat_link").removeClass("flat_link")
     $(this).addClass("flat_link")
-    $("#peptide_sequence").remove()
+    $("#pep_seq").html("<p class='empty'>PEPTIDE SEQUENCE</p>")
     $("#spectrum").empty()
     $("#spectrum").append("<div class='spectrum_display_msg'><p>SPECTRUM IDENTIFICATION ITEM</p>")
     
@@ -68,7 +68,7 @@ $ ->
     $('table#sir_up').find('tbody').html("<tr><td class='empty'>User-defined Parameters</td></tr>")
     $('table#sii_table').find('tbody').html("<tr><td colspan='6' class='empty'> Spectrum Identification Items</td></tr>")
     $('table#pep_ev_table').find('tbody').html("<tr><td colspan='6' class='empty'> Peptide Evidences</td></tr>")
-    $("#peptide_sequence").remove()
+    $("#pep_seq").remove()
     $("#spectrum").empty()
     $("#spectrum").append("<div class='spectrum_display_msg'><p>SPECTRUM IDENTIFICATION ITEM</p>")
     $('table#sii_cvp').find('tbody').html("<tr><td class='empty'>PSI-MS CV terms, names and value</td></tr>")
@@ -84,8 +84,8 @@ $ ->
     $("#sii_table .flat_link").removeClass("flat_link")
     $(this).addClass("flat_link")
     $("#spectrum").empty()    
-    $("#peptide_sequence").remove()
-    $("#spectrum").before("<div id=peptide_sequence class=spectrum_annotation>")   
+    $("#pep_seq").remove()
+    $("#spectrum").before("<div id='pep_seq' class='spectrum_annotation'>")   
 
     d3.json "results/sir_id/identification_item?sii_id=" + sii_id + "", (error, json) ->
       #$("#spectrum").css("visibility", "visible") 

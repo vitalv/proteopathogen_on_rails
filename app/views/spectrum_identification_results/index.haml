@@ -1,10 +1,10 @@
 %h2= "EXPERIMENT"
 %h3= @protocol
 
-%h3.table_header= ".mzid FILE"
-%h3= @mzid_file.name
+%h3.header= ".mzid FILE"
+%h4= @mzid_file.name
 
-%h3.table_header= "SPECTRUM IDENTIFICATION"
+%h3.header= "SPECTRUM IDENTIFICATION"
 %h4= "Spectrum Identification: #{@si.si_id} - Spectrum Identification List:  #{@sil.sil_id}"
 
 %h3.table_header
@@ -70,7 +70,11 @@
       %td.empty{colspan: 6}Peptide Evidence(s)
 
 
-%div#peptide_sequence
+-#%div#peptide_sequence
+%div#pep_seq.spectrum_annotation
+  %p.empty PEPTIDE SEQUENCE
+
+
 
 %div#spectrum{:class => unless @mzid_file.contains_fragmentation_data then 'hidden' end }
   %div.spectrum_display_msg
