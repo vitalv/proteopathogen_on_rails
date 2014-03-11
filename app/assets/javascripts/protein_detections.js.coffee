@@ -28,9 +28,18 @@ $ ->
     sAjaxSource: $('#pag_table').data('source')
     aoColumns: [{sType: "natural"}, {bSortable: false}, {bSortable: false} ]
     #aaSorting: [[ 0, "asc" ]]
-    
+    fnInitComplete: (oSettings)->
+      if oSettings._iDisplayLength > oSettings.fnRecordsDisplay()
+        $(oSettings.nTableWrapper).find(".dataTables_paginate, .dataTables_length, .dataTables_filter").hide()
+        $('thead th').unbind('click')
+
+   
     fnDrawCallback: (oSettings) ->
-      $(oSettings.nTableWrapper).find(".dataTables_paginate").hide()  if oSettings._iDisplayLength > oSettings.fnRecordsDisplay()
+      if oSettings._iDisplayLength > oSettings.fnRecordsDisplay()
+        $(oSettings.nTableWrapper).find(".dataTables_paginate, .dataTables_length").hide()
+      else
+        $(oSettings.nTableWrapper).find(".dataTables_paginate, .dataTables_length").show() 
+        
       $('table#pdh_table').find('tbody').html("<tr><td colspan='5' class='empty'>Protein detection hypothesis. Single result of the Protein Detection analysis</td></tr>")
       $("table#pdh_cvp").find('tbody').html("<tr><td class='empty'>PSI-MS CV terms, names and value</td></tr>")
       $("table#pdh_up").find('tbody').html("<tr><td class='empty'>PSI-MS CV terms, names and value</td></tr>")
