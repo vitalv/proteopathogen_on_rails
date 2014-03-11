@@ -30,7 +30,6 @@ $ ->
     fnInitComplete: (oSettings)->
       if oSettings._iDisplayLength > oSettings.fnRecordsDisplay()
         $(oSettings.nTableWrapper).find(".dataTables_filter").hide()
-        #oSettings.bSort = false
         $('thead th').unbind('click')
     
     fnDrawCallback: (oSettings) ->
