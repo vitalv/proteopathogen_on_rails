@@ -29,7 +29,7 @@ $ ->
     
     fnInitComplete: (oSettings)->
       if oSettings._iDisplayLength > oSettings.fnRecordsDisplay()
-        $(oSettings.nTableWrapper).find(".dataTables_filter").hide()
+        $(oSettings.nTableWrapper).find(".dataTables_filter, .dataTables_length").hide()
         $('thead th').unbind('click')
     
     fnDrawCallback: (oSettings) ->
