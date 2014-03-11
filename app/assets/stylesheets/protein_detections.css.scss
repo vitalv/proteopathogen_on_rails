@@ -22,13 +22,14 @@ table.my_table {
 
 }
 
-table#pdh_up {
+table#pdh_up, #psms_table {
   //watchout tablelayout fixed and window width!!
   table-layout: fixed;
   td {
     word-wrap:break-word;
   }
 }
+
 
 
 
