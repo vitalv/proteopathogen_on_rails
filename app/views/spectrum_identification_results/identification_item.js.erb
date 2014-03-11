@@ -5,3 +5,6 @@ $('table#sii_up').find('tbody').append("<%= escape_javascript(render partial: 's
 $('table#pep_ev_table').find('tbody').empty()
 $('table#pep_ev_table').find('tbody').append("<%= escape_javascript(render partial: 'sii_peptide_evidences') %>");
 $('#peptide_sequence').append("<%= escape_javascript(render partial: 'peptide_sequence') %>");
+<% if !@fragments.blank? %>
+  $('#spectrum').removeClass('hidden')
+<% end %>
