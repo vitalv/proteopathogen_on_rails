@@ -28,7 +28,16 @@ $ ->
     sAjaxSource: $('#pag_table').data('source')
     aoColumns: [{sType: "natural"}, {bSortable: false}, {bSortable: false} ]
     #aaSorting: [[ 0, "asc" ]]
-
+    
+    fnDrawCallback: (oSettings) ->
+      $(oSettings.nTableWrapper).find(".dataTables_paginate").hide()  if oSettings._iDisplayLength > oSettings.fnRecordsDisplay()
+      $('table#pdh_table').find('tbody').html("<tr><td colspan='5' class='empty'>Protein detection hypothesis. Single result of the Protein Detection analysis</td></tr>")
+      $("table#pdh_cvp").find('tbody').html("<tr><td class='empty'>PSI-MS CV terms, names and value</td></tr>")
+      $("table#pdh_up").find('tbody').html("<tr><td class='empty'>PSI-MS CV terms, names and value</td></tr>")
+      $('#protein_sequence').empty()
+      $("#protein_sequence").append("<p>PROTEIN SEQUENCE</p>")
+      $('table#psms_table').find('tbody').empty()
+      return
 
 
 $ ->
@@ -40,15 +49,6 @@ $ ->
     $('#protein_sequence').empty()
     $("#protein_sequence").append("<p>PROTEIN SEQUENCE</p>")
     
-
-$ ->
-  $("#pag_table_paginate").on "click", ".paginate_button", ()  ->
-    $('table#pdh_table').find('tbody').html("<tr><td colspan='5' class='empty'>Protein detection hypothesis. Single result of the Protein Detection analysis</td></tr>")
-    $("table#pdh_cvp").find('tbody').html("<tr><td class='empty'>PSI-MS CV terms, names and value</td></tr>")
-    $("table#pdh_up").find('tbody').html("<tr><td class='empty'>PSI-MS CV terms, names and value</td></tr>")
-    $('#protein_sequence').empty()
-    $("#protein_sequence").append("<p>PROTEIN SEQUENCE</p>")
-    $('table#psms_table').find('tbody').empty()
 
 
 $ ->  
