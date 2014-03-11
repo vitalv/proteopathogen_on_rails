@@ -13,36 +13,42 @@ $ ->
 
 
 #To add a new sort function to DataTables you need to attach your function to the object $.fn.dataTableExt.oSort. 
-jQuery.fn.dataTableExt.oSort["natural-asc"] = (a, b) ->
-  naturalSort a, b
+#jQuery.fn.dataTableExt.oSort["natural-asc"] = (a, b) ->
+#  naturalSort a, b
 
-jQuery.fn.dataTableExt.oSort["natural-desc"] = (a, b) ->
-  naturalSort(a, b) * -1
+#jQuery.fn.dataTableExt.oSort["natural-desc"] = (a, b) ->
+#  naturalSort(a, b) * -1
+
 
 $ -> 
   $("#sir_table").dataTable
     sPaginationType: "full_numbers"
     bProcessing: true
     bServerSide: true
-    #bServerSide: false
-    #aoColumns: [{"sType": "natural"}, {"sType": "natural"}, {"sType": "natural"} ]
-    #aaSorting: [[0,'asc']]
     sAjaxSource: $('#sir_table').data('source')
-
+    
+    fnInitComplete: (oSettings)->
+      if oSettings._iDisplayLength > oSettings.fnRecordsDisplay()
+        $(oSettings.nTableWrapper).find(".dataTables_filter").hide()
+        #oSettings.bSort = false
+        $('thead th').unbind('click')
+    
     fnDrawCallback: (oSettings) ->
-     $(oSettings.nTableWrapper).find(".dataTables_paginate").hide()  if oSettings._iDisplayLength > oSettings.fnRecordsDisplay()
-     
-     $('table#sir_cvp').find('tbody').html("<tr><td class='empty'>PSI-MS CV terms, names and value</td></tr>")
-     $('table#sir_up').find('tbody').html("<tr><td class='empty'>User-defined Parameters</td></tr>")
-     $('table#sii_table').find('tbody').html("<tr><td colspan='6' class='empty'> Spectrum Identification Items</td></tr>")
-     $('table#pep_ev_table').find('tbody').html("<tr><td colspan='6' class='empty'> Peptide Evidences</td></tr>")
-     $("#pep_seq").html("<p class='empty'>PEPTIDE SEQUENCE</p>")
-     $("#spectrum").empty()
-     $("#spectrum").append("<div class='spectrum_display_msg'><p>SPECTRUM IDENTIFICATION ITEM</p>")
-     $('table#sii_cvp').find('tbody').html("<tr><td class='empty'>PSI-MS CV terms, names and value</td></tr>")
-     $('table#sii_up').find('tbody').html("<tr><td class='empty'>User-defined Parameters</td></tr>")     
-     
-     return
+      if oSettings._iDisplayLength > oSettings.fnRecordsDisplay()
+        $(oSettings.nTableWrapper).find(".dataTables_paginate, .dataTables_length").hide()
+      else
+        $(oSettings.nTableWrapper).find(".dataTables_paginate, .dataTables_length").show() 
+      $('table#sir_cvp').find('tbody').html("<tr><td class='empty'>PSI-MS CV terms, names and value</td></tr>")
+      $('table#sir_up').find('tbody').html("<tr><td class='empty'>User-defined Parameters</td></tr>")
+      $('table#sii_table').find('tbody').html("<tr><td colspan='6' class='empty'> Spectrum Identification Items</td></tr>")
+      $('table#pep_ev_table').find('tbody').html("<tr><td colspan='6' class='empty'> Peptide Evidences</td></tr>")
+      $("#pep_seq").html("<p class='empty'>PEPTIDE SEQUENCE</p>")
+      $("#spectrum").empty()
+      $("#spectrum").append("<div class='spectrum_display_msg'><p>SPECTRUM IDENTIFICATION ITEM</p>")
+      $('table#sii_cvp').find('tbody').html("<tr><td class='empty'>PSI-MS CV terms, names and value</td></tr>")
+      $('table#sii_up').find('tbody').html("<tr><td class='empty'>User-defined Parameters</td></tr>")     
+
+      return
 
 
 # Note that if I use the "click" function on ".sii_link" like so:

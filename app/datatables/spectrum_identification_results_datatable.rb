@@ -16,8 +16,7 @@ class SpectrumIdentificationResultsDatatable
       sEcho: params[:sEcho].to_i,
       iTotalRecords: @spectrum_identification_results.count,
       iTotalDisplayRecords: sirs.total_entries,
-      #iTotalDisplayRecords: @total_entries,
-      aaData: data,
+      aaData: data
 
     }
   
