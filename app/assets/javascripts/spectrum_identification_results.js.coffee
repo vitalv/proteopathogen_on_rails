@@ -31,6 +31,17 @@ $ ->
 
     fnDrawCallback: (oSettings) ->
      $(oSettings.nTableWrapper).find(".dataTables_paginate").hide()  if oSettings._iDisplayLength > oSettings.fnRecordsDisplay()
+     
+     $('table#sir_cvp').find('tbody').html("<tr><td class='empty'>PSI-MS CV terms, names and value</td></tr>")
+     $('table#sir_up').find('tbody').html("<tr><td class='empty'>User-defined Parameters</td></tr>")
+     $('table#sii_table').find('tbody').html("<tr><td colspan='6' class='empty'> Spectrum Identification Items</td></tr>")
+     $('table#pep_ev_table').find('tbody').html("<tr><td colspan='6' class='empty'> Peptide Evidences</td></tr>")
+     $("#pep_seq").html("<p class='empty'>PEPTIDE SEQUENCE</p>")
+     $("#spectrum").empty()
+     $("#spectrum").append("<div class='spectrum_display_msg'><p>SPECTRUM IDENTIFICATION ITEM</p>")
+     $('table#sii_cvp').find('tbody').html("<tr><td class='empty'>PSI-MS CV terms, names and value</td></tr>")
+     $('table#sii_up').find('tbody').html("<tr><td class='empty'>User-defined Parameters</td></tr>")     
+     
      return
 
 
@@ -60,20 +71,6 @@ $ ->
     $("#spectrum").empty()
     $("#spectrum").append("<div class='spectrum_display_msg'><p>SPECTRUM IDENTIFICATION ITEM</p>")
     
-
-
-$ ->
-  $("#sir_table_paginate").on "click", ".paginate_button", ()  ->
-    $('table#sir_cvp').find('tbody').html("<tr><td class='empty'>PSI-MS CV terms, names and value</td></tr>")
-    $('table#sir_up').find('tbody').html("<tr><td class='empty'>User-defined Parameters</td></tr>")
-    $('table#sii_table').find('tbody').html("<tr><td colspan='6' class='empty'> Spectrum Identification Items</td></tr>")
-    $('table#pep_ev_table').find('tbody').html("<tr><td colspan='6' class='empty'> Peptide Evidences</td></tr>")
-    $("#pep_seq").remove()
-    $("#spectrum").empty()
-    $("#spectrum").append("<div class='spectrum_display_msg'><p>SPECTRUM IDENTIFICATION ITEM</p>")
-    $('table#sii_cvp').find('tbody').html("<tr><td class='empty'>PSI-MS CV terms, names and value</td></tr>")
-    $('table#sii_up').find('tbody').html("<tr><td class='empty'>User-defined Parameters</td></tr>")
-
 
 
     
