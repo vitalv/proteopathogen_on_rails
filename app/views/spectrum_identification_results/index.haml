@@ -16,7 +16,7 @@
       %th Spectrum ID
   %tbody
   
--#%div#sir_cvp.hidden
+
 %h3.table_header= "Spectrum Identification Result PSI-MS CV Parameters "
 %table#sir_cvp.my_table
   %tbody
@@ -67,8 +67,7 @@
       %td{colspan: 6, style: "text-align:center"}Peptide Evidence(s)
 
 
-%div#spectrum
-
+%div#spectrum{:class => unless @mzid_file.contains_fragmentation_data then 'hidden' end }
   %div.spectrum_display_msg
     %p
       SPECTRUM IDENTIFICATION ITEM
