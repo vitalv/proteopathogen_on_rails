@@ -32,11 +32,9 @@ $ ->
       if oSettings._iDisplayLength > oSettings.fnRecordsDisplay()
         $(oSettings.nTableWrapper).find(".dataTables_paginate, .dataTables_length, .dataTables_filter").hide()
         $('thead th').unbind('click')
-
-   
     fnDrawCallback: (oSettings) ->
       if oSettings._iDisplayLength > oSettings.fnRecordsDisplay()
-        $(oSettings.nTableWrapper).find(".dataTables_paginate, .dataTables_length").hide()
+        $(oSettings.nTableWrapper).find(".dataTables_paginate").hide()
       else
         $(oSettings.nTableWrapper).find(".dataTables_paginate, .dataTables_length").show() 
         
