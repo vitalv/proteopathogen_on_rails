@@ -1,6 +1,6 @@
 - if  @pdhs.blank?
   %tr
-    %td{:colspan => 6, :style=> "text-align:center"}No Protein Detection Hypotheses? WTF, this is not possible, I can write whatever here, this is not going to ever happen or be displayed, is it?
+    %td.center{:colspan => 6}No Protein Detection Hypotheses? WTF, this is not possible, I can write whatever here, this is not going to ever happen or be displayed, is it?
 - else
   = @pdhs.each_with_index do |pdh, i|
     %tr

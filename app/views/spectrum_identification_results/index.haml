@@ -1,6 +1,9 @@
 %h2= "EXPERIMENT"
 %h3= @protocol
 
+%h3.table_header= ".mzid FILE"
+%h3= @mzid_file.name
+
 %h3.table_header= "SPECTRUM IDENTIFICATION"
 %h4= "Spectrum Identification: #{@si.si_id} - Spectrum Identification List:  #{@sil.sil_id}"
 
@@ -46,7 +49,7 @@
       %th pass thrshld
   %tbody
     %tr
-      %td{:colspan => 6, :style=> "text-align:center"}Spectrum Identification Items
+      %td.empty{colspan: 6}Spectrum Identification Items
 
 
 %h3.table_header
@@ -64,8 +67,10 @@
       %th.db_seq DB sequence
   %tbody
     %tr
-      %td{colspan: 6, style: "text-align:center"}Peptide Evidence(s)
+      %td.empty{colspan: 6}Peptide Evidence(s)
 
+
+%div#peptide_sequence
 
 %div#spectrum{:class => unless @mzid_file.contains_fragmentation_data then 'hidden' end }
   %div.spectrum_display_msg
