@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140224112314) do
+ActiveRecord::Schema.define(version: 20140312092634) do
 
   create_table "db_sequences", force: true do |t|
     t.string  "accession"
@@ -22,9 +22,11 @@ ActiveRecord::Schema.define(version: 20140224112314) do
 
   create_table "experiments", force: true do |t|
     t.string "organism"
-    t.string "protocol"
+    t.text   "protocol"
     t.string "date"
     t.string "researcher"
+    t.string "pmid"
+    t.string "short_label"
   end
 
   create_table "fragments", force: true do |t|

@@ -5,17 +5,28 @@
   -@experiments.each do |exp|
     %table#exp_table.my_table.shadow
       %tr
-        %td.title EXPERIMENT/PROTOCOL:
-        %td= exp.protocol
+        %td.title EXPERIMENT short label:
+        %td= exp.short_label
+      - if exp.protocol
+        %tr
+          %td.title Protocol          
+          %td 
+            = link_to "view protocol description", '#', :data => {'exp-id' => "#{exp.id}" },  remote: true
+            #protocol{:data => {'exp-id' => "#{exp.id}"}}=exp.protocol
       %tr
         %td.title Organism:
         %td= exp.organism
       %tr
         %td.title Contact:
         %td= exp.researcher
-      %tr
-        %td.title Date:
-        %td= exp.date
+      - if exp.date
+        %tr
+          %td.title Date:
+          %td= exp.date
+      - if exp.pmid
+        %tr
+          %td.title Publication
+          %td= link_to "PubMed", "http://www.ncbi.nlm.nih.gov/pubmed/#{exp.pmid}", target: '_blank'
       %tr
         %td{:colspan => 2}
           = render partial: "mzid_files", locals: {exp: exp, mzid_files: exp.mzid_files}

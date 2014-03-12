@@ -2,10 +2,13 @@
 =form_for [:admin, @experiment], html: {class: "my_form"} do |f|
 
   = f.select :organism, options_for_select({'Candida albicans (strain SC5314 / ATCC MYA-2876) Taxonomy ID: 237561' => "Candida albicans (strain SC5314 / ATCC MYA-2876)", 'Other species' => "Other species" }), :prompt => 'Select species'
+
+  = f.label :short_label
+  = f.text_field :short_label
+
     
   = f.label :protocol
   = f.text_area :protocol
-    
 
   = f.date_select :date, :order => [:month, :year]
   -#= f.date_select :date
@@ -13,6 +16,10 @@
 
   = f.label :researcher
   = f.text_field :researcher
+
+  = f.label :pmid
+  = f.text_field :pmid
+
     
   - if @experiment.errors.any?
     %ul.error_list
