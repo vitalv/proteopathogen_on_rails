@@ -3,7 +3,7 @@ class SpectrumIdentificationResultsController < ApplicationController
   def index
     @si = SpectrumIdentification.find(params[:spectrum_identification_id])
     @mzid_file = @si.mzid_file
-    @protocol = @si.mzid_file.experiment.protocol
+    @exp_short_label = @si.mzid_file.experiment.short_label
     @sil = @si.spectrum_identification_list
     @spectrum_identification_results = @si.spectrum_identification_list.spectrum_identification_results
     #@total_entries = @spectrum_identification_results.count

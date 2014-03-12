@@ -12,7 +12,7 @@ class ProteinDetectionsController < ApplicationController
     @pags = @pdl.protein_ambiguity_groups
     
     experiment_id = MzidFile.find(@mzid_file_id).experiment_id
-    @protocol = Experiment.find(experiment_id).protocol
+    @exp_short_label = Experiment.find(experiment_id).short_label
     
     respond_to do |format|
       format.html #“if the client wants HTML in response to this action, just respond as we would have before
