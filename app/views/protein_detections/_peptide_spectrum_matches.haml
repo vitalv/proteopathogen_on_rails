@@ -5,7 +5,7 @@
   - @psm_freq.each do |pep_seq, sii_ids|
     %tr
       %td= pep_seq
-      %td= sii_ids[0]
+      %td{:class => if sii_ids[1] > 20 then 'small_sii_ids' end}= sii_ids[0]
       %td.center= sii_ids[1]
       /%td.center= psm.spectrum_identification_item.calc_m2z
       /%td.center= psm.spectrum_identification_item.exp_m2z
