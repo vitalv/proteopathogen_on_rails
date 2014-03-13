@@ -1,5 +1,8 @@
 class MzidFile < ActiveRecord::Base
 
+  extend FriendlyId
+  friendly_id :name
+
   before_validation :check_file_extension
   # attr_accessible :title, :body
   validates :location, presence: true

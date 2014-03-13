@@ -1,5 +1,8 @@
 class SpectrumIdentification < ActiveRecord::Base
 
+  extend FriendlyId
+  friendly_id :si_id
+
   validates :si_id, uniqueness: {scope: :mzid_file_id}, presence: true
   
   belongs_to :mzid_file
