@@ -62,7 +62,7 @@ gem 'jquery-rails'
 gem 'jquery-ui-rails' #trae estilos y demas
 
 #friendly_id e facilita el uso del nombre del modelo en la URL sin tener que poner el id como prefijo. URLS mas informativas.
-gem 'friendly_id'
+gem 'friendly_id', :require => 'friendly_id'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'

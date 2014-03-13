@@ -1,7 +1,7 @@
 class MzidFile < ActiveRecord::Base
 
   extend FriendlyId
-  friendly_id :name
+  friendly_id :name, use: :slugged
 
   before_validation :check_file_extension
   # attr_accessible :title, :body
