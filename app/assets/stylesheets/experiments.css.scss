@@ -2,16 +2,30 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+
+#exp_table_wrapper { 
+  display: table;
+  height: 200px;
+  }
+
 table#exp_table { 
-  margin-bottom: 3em;
+  margin: 5% 0;
+
+}
+
+#index_exp_table_wrapper { margin-top: 3em;}
+
+table#index_exp_table {
   thead tr {
-    th { padding: 4px; }
+    th { 
+     padding: 6px; 
+     font-size: 1.1em;
+     }
     th.organism { width: 200px; }
     th.date { width: 64px; }
   }
-  td { padding: 6px; }
+  td { padding: 1em 10px; }
 }
-
 
 
 table#exp_mzid_files_table {
