@@ -34,7 +34,10 @@ class SpectrumIdentification < ActiveRecord::Base
     mzid = Nokogiri::XML(File.open(mzidf.location))
     si_id = self.si_id
     spectra_data_refs = []
-    mzid.xpath("//xmlns:SpectrumIdentification[@id='#{si_id}']").xpath(".//xmlns:InputSpectra").collect { |is| spectra_data_refs << is.attr("spectraData_ref").to_s }
+    mzid_si = mzid.xpath("//xmlns:SpectrumIdentification[@id='#{si_id}']")
+    mzid_si.xpath(".//xmlns:InputSpectra").collect do |is| 
+      spectra_data_refs << is.attr("spectraData_ref").to_s 
+    end
     input_spectra = []
     spectra_data_refs.each do |s|
       input_spectra << mzid.xpath("//xmlns:SpectraData[@id='#{s}']").attr("location").to_s.split(/[\/|\\]/)[-1]
