@@ -29,3 +29,14 @@ $ ->
     aoColumns: [{bSortable: true},{bSortable: true}, {bSortable: false}, {bSortable: false} ]
 
   return false;
+
+
+$ ->
+  $("#index_exp_table.dataTable").dataTable
+    bLengthChange: true
+    bFilter: true
+    bInfo: true
+    bPaginate: true
+    aoColumns: [{"sType": "natural"}, {"sType": "natural"},{"sType": null},{"sType": "natural"} ]
+
+    
