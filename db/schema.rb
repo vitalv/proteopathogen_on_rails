@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140312092634) do
+ActiveRecord::Schema.define(version: 20140313153432) do
 
   create_table "db_sequences", force: true do |t|
     t.string  "accession"
@@ -27,7 +27,11 @@ ActiveRecord::Schema.define(version: 20140312092634) do
     t.string "researcher"
     t.string "pmid"
     t.string "short_label"
+    t.string "slug"
   end
+
+  add_index "experiments", ["short_label"], name: "index_experiments_on_short_label", unique: true, using: :btree
+  add_index "experiments", ["slug"], name: "index_experiments_on_slug", using: :btree
 
   create_table "fragments", force: true do |t|
     t.integer "spectrum_identification_item_id"
@@ -39,6 +43,19 @@ ActiveRecord::Schema.define(version: 20140312092634) do
     t.string  "fragment_type"
     t.string  "psi_ms_cv_fragment_type_accession"
   end
+
+  create_table "friendly_id_slugs", force: true do |t|
+    t.string   "slug",                      null: false
+    t.integer  "sluggable_id",              null: false
+    t.string   "sluggable_type", limit: 50
+    t.string   "scope"
+    t.datetime "created_at"
+  end
+
+  add_index "friendly_id_slugs", ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true, using: :btree
+  add_index "friendly_id_slugs", ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type", using: :btree
+  add_index "friendly_id_slugs", ["sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_id", using: :btree
+  add_index "friendly_id_slugs", ["sluggable_type"], name: "index_friendly_id_slugs_on_sluggable_type", using: :btree
 
   create_table "modifications", force: true do |t|
     t.string  "residue"
@@ -56,7 +73,11 @@ ActiveRecord::Schema.define(version: 20140312092634) do
     t.string  "submission_date"
     t.string  "name"
     t.integer "experiment_id"
+    t.string  "slug"
   end
+
+  add_index "mzid_files", ["name"], name: "index_mzid_files_on_name", unique: true, using: :btree
+  add_index "mzid_files", ["slug"], name: "index_mzid_files_on_slug", using: :btree
 
   create_table "pdh_psi_ms_cv_terms", force: true do |t|
     t.integer "protein_detection_hypothesis_id"

@@ -2,7 +2,7 @@ class SpectrumIdentificationsController < ApplicationController
 
   def index 
 
-    mzid_file_id = params[:mzid_file_id]
+    mzid_file_id = MzidFile.friendly.find(params[:mzid_file_id]).id
     @mzid_file = MzidFile.find(mzid_file_id)
     experiment_id = MzidFile.find(mzid_file_id).experiment_id
     @exp_short_label = Experiment.find(experiment_id).short_label

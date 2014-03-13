@@ -2,7 +2,17 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-table#exp_table { margin-bottom: 3em;}
+table#exp_table { 
+  margin-bottom: 3em;
+  thead tr {
+    th { padding: 4px; }
+    th.organism { width: 200px; }
+    th.date { width: 64px; }
+  }
+  td { padding: 6px; }
+}
+
+
 
 table#exp_mzid_files_table {
   //th { border: solid white 2px; border-collapse: collapse; }
@@ -20,7 +30,7 @@ table#exp_mzid_files_table {
   }
 */
 
-#protocol {display: none;}
+//#protocol {display: none;}
 
 
 label {display: inline}

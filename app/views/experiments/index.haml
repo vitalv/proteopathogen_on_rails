@@ -2,33 +2,18 @@
 -if @experiments.blank?
   %p No stored Experiments 
 -else
-  -@experiments.each do |exp|
-    %table#exp_table.my_table.shadow
+  %table#exp_table.my_table.shadow
+    %thead
+      %th EXPERIMENT short label
+      %th.organism Organism
+      %th.date Date
+      %th Publication
+    -@experiments.each do |exp|
       %tr
-        %td.title EXPERIMENT short label:
-        %td= exp.short_label
-      - if exp.protocol
-        %tr
-          %td.title Protocol          
-          %td 
-            = link_to "view protocol description", '#', :data => {'exp-id' => "#{exp.id}" },  remote: true
-            #protocol{:data => {'exp-id' => "#{exp.id}"}}=exp.protocol
-      %tr
-        %td.title Organism:
+        %td= link_to "#{exp.short_label}", experiment_path(exp.slug)
         %td= exp.organism
-      %tr
-        %td.title Contact:
-        %td= exp.researcher
-      - if exp.date
-        %tr
-          %td.title Date:
-          %td= exp.date
-      - if exp.pmid
-        %tr
-          %td.title Publication
-          %td= link_to "PubMed", "http://www.ncbi.nlm.nih.gov/pubmed/#{exp.pmid}", target: '_blank'
-      %tr
-        %td{:colspan => 2}
-          = render partial: "mzid_files", locals: {exp: exp, mzid_files: exp.mzid_files}
-    
-    -#%hr.separator
+        %td.center= exp.date
+        - if exp.pmid
+          %td.center= link_to "PubMed", "http://www.ncbi.nlm.nih.gov/pubmed/#{exp.pmid}", target: '_blank'
+        -else
+          %td

@@ -2,7 +2,7 @@ class ProteinDetectionsController < ApplicationController
 
   def index
 
-    @mzid_file_id = params[:mzid_file_id]
+    @mzid_file_id = MzidFile.friendly.find(params[:mzid_file_id])
     mzid_file = MzidFile.find(@mzid_file_id)
     @mzid_file_name = mzid_file.name
     @pd = mzid_file.protein_detection
