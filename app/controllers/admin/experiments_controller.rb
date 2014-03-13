@@ -16,14 +16,16 @@ class Admin::ExperimentsController < ApplicationController
 
   def create
     #@experiment = Experiment.create(params[:experiment])
-    organism = params[:experiment][:organism]
+    short_label = params[:experiment][:short_label]
+    organism = params[:experiment][:organism] || "species not defined"
     protocol = params[:experiment][:protocol]
+    protocol = nil if params[:experiment][:protocol] == ""
     researcher = params[:experiment][:researcher]
     month = params[:experiment]['date(2i)']
     year = params[:experiment]['date(1i)']
     date = params[:experiment][:date]
     
-    @experiment = Experiment.create({:organism => organism, :protocol => protocol, :date => date, :researcher => researcher})
+    @experiment = Experiment.create({:short_label => short_label, :organism => organism, :protocol => protocol, :date => date, :researcher => researcher})
     
     if @experiment.invalid?
       render :action => "new"

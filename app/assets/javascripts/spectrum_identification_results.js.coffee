@@ -85,9 +85,8 @@ $ ->
     sii_id = $(this).data("sii-id")
     $("#sii_table .flat_link").removeClass("flat_link")
     $(this).addClass("flat_link")
-    $("#spectrum").empty()    
-    $("#pep_seq").remove()
-    $("#spectrum").before("<div id='pep_seq' class='spectrum_annotation'>")   
+    $("#spectrum").empty()
+    $("#pep_seq").empty()
 
     d3.json "results/sir_id/identification_item?sii_id=" + sii_id + "", (error, json) ->
       #$("#spectrum").css("visibility", "visible") 
