@@ -37,6 +37,6 @@ $ ->
     bFilter: true
     bInfo: true
     bPaginate: true
-    aoColumns: [{"sType": "natural"}, {"sType": "natural"},{"sType": null},{"sType": "natural"} ]
+    aoColumns: [{"sType": "natural"}, {"sType": "natural"},{"sType": "date"},{"sType": "natural"} ]
 
     
