@@ -39,11 +39,15 @@ class MzidFile < ActiveRecord::Base
     
 
   def contains_fragmentation_data
-    mzid = Nokogiri::XML(File.open(self.location))
-    if mzid.xpath("//xmlns:Fragmentation").blank?
+    if File.file? self.location
+      mzid = Nokogiri::XML(File.open(self.location))
+      if !mzid.xpath("//xmlns:Fragmentation").blank?
+        return true
+      else 
+        return false
+      end
+    else 
       return false
-    else
-      return true
     end
   end
 

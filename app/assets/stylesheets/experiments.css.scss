@@ -13,7 +13,17 @@ table#exp_table {
 
 }
 
-#index_exp_table_wrapper { margin-top: 3em;}
+table#exp_table.spaced { 
+  margin-top: 4em; 
+  td { padding: 6px; } 
+  table#exp_mzid_files_table {
+    margin: 5% 0;
+    td { padding: 4px; }
+  }  
+}
+
+
+#index_exp_table_wrapper { margin-top: 4em;}
 
 table#index_exp_table {
   thead tr {
@@ -44,7 +54,7 @@ table#exp_mzid_files_table {
   }
 */
 
-//#protocol {display: none;}
+#protocol {display: none;}
 
 
 label {display: inline}
