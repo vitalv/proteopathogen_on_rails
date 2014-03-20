@@ -84,7 +84,9 @@ gem 'bcrypt-ruby', :require => "bcrypt"
 # gem 'unicorn'
 
 # Use Capistrano for deployment
-# gem 'capistrano', group: :development
+ gem 'capistrano', group: :development
+ gem  'capistrano-ext', group: :development
+ gem 'net-ssh', '~> 2.8.1', :git => "https://github.com/net-ssh/net-ssh"
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
