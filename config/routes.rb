@@ -42,7 +42,9 @@ ProteopathogenOnRails::Application.routes.draw do
 
  
   get 'about' => "about#index"
-
+  get "about/download_structure_sql"
+  get "about/download_structure_mwb"
+  
   root :to => "home#index"
   
  

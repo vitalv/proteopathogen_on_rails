@@ -6,7 +6,7 @@
     Proteopathogen was first released in 2009 to collect and store mainly but not only Candida related Proteomics experiments.
     Published in
     =link_to "October 2009 in Proteomics", "http://dx.doi.org/10.1002/pmic.200900023"
-    \. The original version is available at:
+    \. The original version of the web application is available at:
     =link_to "proteopathogen.dacya.ucm.es", "http://proteopathogen.dacya.ucm.es"
 
   %p 
@@ -15,11 +15,11 @@
   
   %p
     A SQL schema of the structure is available here:
-    %li=link_to "proteopathogen_structure.sql", "../../public/structure.sql"
+    %li=link_to "proteopathogen_structure.sql", :action => :download_structure_sql
     
   %p 
     Also in MySql workbench .mwb format
-    %li=link_to "proteopathogen.mwb", "#"
+    %li=link_to "proteopathogen.mwb", :action => :download_structure_mwb
 
   %p 
     The experimental data comes mostly from Dept. Microbiologia II - Universidad Complutense de Madrid - Spain 
