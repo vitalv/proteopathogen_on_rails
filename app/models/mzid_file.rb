@@ -39,9 +39,10 @@ class MzidFile < ActiveRecord::Base
     
 
   def contains_fragmentation_data
-    file_rel_path = Pathname.new(self.location).relative_path_from(Rails.root)
-    if File.file? file_rel_path.to_s
-      mzid = Nokogiri::XML(File.open(file_rel_path.to_s))
+    file_name = self.location.split("/")[-1]
+    file_path = Rails.public_path.to_s + "/uploaded_mzid_files/" + file_name
+    if File.file? (file_path)
+      mzid = Nokogiri::XML(File.open(file_path))
       if !mzid.xpath("//xmlns:Fragmentation").blank?
         return true
       else 
