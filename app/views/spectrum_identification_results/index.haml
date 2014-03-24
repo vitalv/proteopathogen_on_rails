@@ -9,7 +9,7 @@
 
 %h3.table_header
   = "Spectrum Identification Results"
-  = link_to image_tag("../assets/info.png", class: "info_img"), '#', :data => {'info-link' => "sir_info"}, remote: true
+  = link_to image_tag("info.png", class: "info_img"), '#', :data => {'info-link' => "sir_info"}, remote: true
 %div#sir_info.info= "All identifications made from searching one spectrum. The table entitled Spectrum Identification Items below will show SpectrumIdentificationItems corresponding to possible different peptide IDs"
 %table#sir_table.my_table{:data => {'si-id' => "#{@si.id}", 'source' =>  spectrum_identification_results_url(format: "json") } }
   %thead
@@ -36,7 +36,7 @@
 
 %h3.table_header
   = "Spectrum Identification Items" 
-  = link_to image_tag("../assets/info.png", class: "info_img"), '#', :data => {'info-link' => "sii_info"}, remote: true
+  = link_to image_tag("info.png", class: "info_img"), '#', :data => {'info-link' => "sii_info"}, remote: true
 %div#sii_info.info= "An identification of a single (poly)peptide, resulting from querying an input spectra, along with the set of confidence values for that identification"
 %table#sii_table.my_table
   %thead
@@ -54,7 +54,7 @@
 
 %h3.table_header
   = "Peptide Evidence(s)"
-  = link_to image_tag("../assets/info.png", class: "info_img"), '#', :data => {'info-link' => "pep_ev_info"}, remote: true
+  = link_to image_tag("info.png", class: "info_img"), '#', :data => {'info-link' => "pep_ev_info"}, remote: true
 %div#pep_ev_info.info= "A peptide evidence links a specific Peptide element to a specific position in a DBSequence, If a specific sequence can be assigned to multiple proteins and or positions in a protein all possible PeptideEvidence elements are referenced here"
 %table#pep_ev_table.my_table
   %thead

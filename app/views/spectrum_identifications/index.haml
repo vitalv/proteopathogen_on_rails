@@ -6,7 +6,7 @@
 
 %h3.header
   SPECTRUM IDENTIFICATION
-  = link_to image_tag("../assets/info.png", class: "info_img"), '#', :data => {'info-link' => "si_info"}, remote: true
+  = link_to image_tag("info.png", class: "info_img"), '#', :data => {'info-link' => "si_info"}, remote: true
 %div#si_info.info= "A Spectrum Identification is an analysis which tries to identify peptides in input spectra, referencing the database searched, the input spectra, the output results and the protocol that is run. Usually represents different samples, fractions or replicates each corresponding to one MS/MS run"
 
 = render @spectrum_identifications
