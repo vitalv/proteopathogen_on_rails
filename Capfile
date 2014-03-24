@@ -4,7 +4,7 @@ require 'capistrano/setup'
 # Includes default deployment tasks
 require 'capistrano/deploy'
 require 'capistrano/bundler'
-require 'capistrano/rails'
+require 'capistrano/rails/assets'
 require 'capistrano/rvm'
 
 # Includes tasks from other gems included in your Gemfile
@@ -27,11 +27,3 @@ require 'capistrano/rvm'
 # Loads custom tasks from `lib/capistrano/tasks' if you have any defined.
 Dir.glob('lib/capistrano/tasks/*.cap').each { |r| import r }
 
-#this is my solution on how to avoid having database.yml on github, just copy it to my protdb home
-namespace :db do
-  task :db_config, :except => { :no_release => true }, :role => :app do
-    run "cp -f ~/database.yml #{release_path}/config/database.yml"
-  end
-end
-
-after "deploy:finalize_update", "db:db_config"
