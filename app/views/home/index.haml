@@ -1,12 +1,24 @@
 %div#home_div
   %div#home_left_col
-    %p 
-      Proteopathogen is a database-backed web application on shotgun Proteomics experiments related to <i>Candida albicans</i>.
     %p
-      It stores peptide and protein identification results data in a database constructed <i>ad hoc</i> to map data from 
+      %b Proteopathogen2.0, a database and web tool to store and display Proteomics Identification Results in the MzIdentML standard format
+    %p 
+      Proteopathogen2.0 is a database-backed web application on shotgun Proteomics experiments addressed at
+      the study of <i>Candida albicans</i> and other fungal pathogens and their interaction with the host.  
+      It follows the idea first implemented in the original version of Proteopathogen, 
+      =link_to 'proteopathogen.dacya.ucm.es', 'http://proteopathogen.dacya.ucm.es'
+      =link_to '(Vialas 2009, Proteomics)', 'http://www.ncbi.nlm.nih.gov/pubmed/19743419'
+    %p
+      It stores peptide and protein identification results in a database that directly maps elements from 
       =link_to 'the mzIdentML standard', 'http://www.psidev.info/mzidentml', target: 'blank'
       , the HUPO-Proteomics Standard Initiative adopted "exchange format for peptides and proteins identified from mass spectra".
     
+      The data consists of high confidence peptide and protein identifications coming from the
+      =link_to 'Candida albicans PeptideAtlas',  'https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/buildDetails?atlas_build_id=323'
+      =link_to '(Vialas 2014, Journal of Proteomics)', 'http://www.ncbi.nlm.nih.gov/pubmed/23811049'
+      but Proteopathogen2.0 welcomes identification results in the MzIdentML format from experiments
+      related to fungal pathogen proteomics.      
+
     = image_tag  "mzidentml.png"
 
   %div#home_right_col
@@ -42,12 +54,23 @@
         %td= @candida_decoy_filtered_dbseq_accs
 
     %p
-      <i>Candida albicans</i> is a polymorphic fungus that colonizes mucous membranes asymptomatically in a large percentage of the population. But it may also act as an opportunistic pathogen. As such it is the main etiological agent of nosocomial fungal infections and poses a global challenge in economical and health costs.
+      %b <i>Candida albicans</i> as a model organism to study fungal pathogens and their interaction with the host
+
+    %p
+      The opportunistic pathogenic fungus <i>Candida albicans</i>, under usual circumstances, 
+      is a harmless resident commensal in  human mucous membranes of a large percentage of 
+      the population. However, taking advantage of weakened host immune defenses, for instance
+      in immunocompromised cancer or AIDS patients, it may switch to its pathogenic status, 
+      overproliferating and becoming thus the main etiological agent of candidiasis, one of the
+      most prevalent and costly types of fungal infections in global terms.
 
     = image_tag  "colonization_and_invasion.png"
 
     %p
-      Whereas the yeast forms may colonize healthy individuals mucous membranes, in the case of immunocompromised patients, the hyphal form, usually associated to the pathogenic status, may penetrate into the tissue. Then a switch back to yeast form enables dissemination through vessels.
+      Whereas the yeast forms may colonize healthy individuals mucous membranes, 
+      in the case of immunocompromised patients, the hyphal form, usually associated
+      to the pathogenic status, may penetrate into the tissue. Then a switch back
+      to yeast form enables dissemination through vessels.
 
 
     
