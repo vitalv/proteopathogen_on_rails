@@ -91,7 +91,7 @@ content {
   clear: both; //para cuando hago log in y aparecen los admin links
   float: left;
   //width: 400px;
-  width: 45%;
+  width: 42%;
   min-width: 380px;
   height: 300px; 
   overflow: hidden;
@@ -103,6 +103,7 @@ content {
   p { 
     text-align: justify;
     font-size: 1.1em;
+    line-height: 1.3em;
   }
   img {
   // border: solid gray 1px;
@@ -115,7 +116,7 @@ content {
   display: table-cell;
   float: right;
   //width: 350px;
-  width: 40%;
+  width: 42%;
   //overflow: hidden;
   //margin: 1em ;
   display: table;
@@ -124,7 +125,8 @@ content {
   padding: 2em;
   p { 
     text-align: justify;
-    font-size: 1.1em 
+    font-size: 1.1em;
+    line-height: 1.3em;
    }
 }
 
