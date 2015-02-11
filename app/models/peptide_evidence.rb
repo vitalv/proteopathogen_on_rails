@@ -17,7 +17,7 @@ class PeptideEvidence < ActiveRecord::Base
   
   
   def modified_seq_html_string
-    unless self.modifications.blank?
+    unless self.peptide_sequence.modifications.blank?
       pep_seq_arr = self.peptide_sequence.sequence.split("")      
       pep_seq_arr.each_with_index do |aa, i|
         self.modifications.each do |m|

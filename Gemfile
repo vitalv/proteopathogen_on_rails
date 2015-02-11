@@ -13,7 +13,8 @@ gem 'nokogiri' #xml parser/reader I use for .mzIdentML files
 
 
 #tablas bonitas
-gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
+#gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'
+gem 'jquery-datatables-rails' #note: git protocol does not seem to work (my ports??)
 gem 'ajax-datatables-rails'
 
 #D3.js is a JavaScript library for manipulating documents based on data. Interactive graphics and stuff
