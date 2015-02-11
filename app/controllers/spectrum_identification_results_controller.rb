@@ -41,7 +41,9 @@ class SpectrumIdentificationResultsController < ApplicationController
     #note: I can safely fetch @peptide_evidences[0] There might be more than one peptide_evidence per sii in the case "a specific sequence can be assigned to multiple proteins and or positions in a protein", but the peptide sequence is the same
     @peptide_sequence = @peptide_evidences[0].peptide_sequence unless @peptide_evidences.blank?
     #for that reason, the referred protein might be different, but REMEMBER: the referred peptided (PeptideSequence in my DB), is the same, and that includes its modifications:
-    @pep_mods = @peptide_evidences[0].modifications unless @peptide_evidences.blank?
+    #@pep_mods = @peptide_evidences[0].modifications unless @peptide_evidences.blank?
+    #this (the where condition) should not be needed but :
+    @pep_mods = @peptide_evidences[0].modifications.where(peptide_sequence_id: @peptide_evidences[0].peptide_sequence_id) unless @peptide_evidences.blank?
     @modified_pep_seq = @peptide_evidences[0].modified_seq_html_string unless @pep_mods.blank? if !@pep_mods.nil?
     @db_seq = []
     #@peptide_evidences.each do |pep_ev|
