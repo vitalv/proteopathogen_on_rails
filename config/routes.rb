@@ -46,7 +46,7 @@ ProteopathogenOnRails::Application.routes.draw do
   get "about/download_structure_mwb"
   
   root :to => "home#index"
-  
+  get "home/download_mayu_fdr"
  
   
   get "*path" => 'errors#routing'

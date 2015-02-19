@@ -16,8 +16,8 @@
       The data consists of high confidence peptide and protein identifications coming from the
       =link_to 'Candida albicans PeptideAtlas',  'https://db.systemsbiology.net/sbeams/cgi/PeptideAtlas/buildDetails?atlas_build_id=323', target: 'blank'
       =link_to '(Vialas 2014, Journal of Proteomics)', 'http://www.ncbi.nlm.nih.gov/pubmed/23811049', target: 'blank'
-      but Proteopathogen2.0 welcomes identification results in the MzIdentML format from experiments
-      related to fungal pathogen proteomics.      
+      but Proteopathogen2.0 welcomes identification results in the MzIdentML format from proteomics experiments
+      addressed to other fungal pathogens as well.      
 
     = image_tag  "mzidentml.png"
 
@@ -31,6 +31,9 @@
       %tr
         %td.title Number of .mzid files
         %td= @mzid_file_count
+      %tr
+        %td.title Number of MS runs
+        %td= @msruns_count
       %tr
         %td.title Peptide Spectrum Matches
         %td= @psm_count
@@ -52,6 +55,10 @@
       %tr
         %td.title Candida distinct DB sequence accessions
         %td= @candida_decoy_filtered_dbseq_accs
+    
+    * Check 
+    =link_to "Mayu FDR analysis", :action => :download_mayu_fdr
+    for different FDR cut offs
 
     %p
       %b <i>Candida albicans</i> as a model organism to study fungal pathogens and their interaction with the host

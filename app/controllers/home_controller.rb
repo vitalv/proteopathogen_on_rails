@@ -4,6 +4,9 @@ class HomeController < ApplicationController
     
     @experiment_count = Experiment.count
     @mzid_file_count = MzidFile.count
+    @msruns_count = SpectrumIdentification.count
+    
+    
     @peptide_evidence_count = PeptideEvidence.count
     #this is scoped to mzid, pepev_id attr contains Mzid_ :
     ##<PeptideEvidence id: 1, start: 633, end: 643, pre: "R", post: "D", is_decoy: nil, db_sequence_id: 1, peptide_sequence_id: 1, pepev_id: "peptide_1_1_SDB_1_orf19.6092_633_643_Mzid_1">
@@ -24,5 +27,10 @@ class HomeController < ApplicationController
     @dbseq_sequence_count = DbSequence.all.map { |d| d.sequence}.count
     
   end
+  
+  def download_mayu_fdr
+    send_file("#{Rails.root}/public/mayu_FDR_analysis.csv", filename: "mayu_FDR_analysis.csv")
+  end  
+  
 
 end
