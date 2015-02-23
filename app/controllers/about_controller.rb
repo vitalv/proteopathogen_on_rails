@@ -5,11 +5,7 @@ class AboutController < ApplicationController
   end
   
   def download_structure_sql
-    send_file(
-      "#{Rails.root}/public/structure.sql",
-       filename: "proteopathogen_structure.sql",
-       type: "text/x-sql"
-    )
+   send_file("#{Rails.root}/public/proteopathogen_structure.sql", filename: "proteopathogen_structure.sql")
   end
 
   def download_structure_mwb
