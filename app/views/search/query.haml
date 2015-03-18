@@ -1,0 +1,39 @@
+%h3 Search for "#{@query_thing}"
+%table.search_result_table
+  %tbody
+    %tr
+      %td.title Systematic Name
+      %td= @db_sequence_accession
+    %tr
+      %td.title Description
+      %td= @descr
+    %tr
+      %td.title Sequence          
+      %td.seq
+        = link_to "show sequence", '#', class: 'seq_link', remote: true
+        %div#sequence= @db_sequence
+    %tr
+      %td.title Search database 
+      %td= @database_name
+
+%h3.table_header
+  = "Peptides" 
+%table#observed_peptides.my_table
+  %thead
+    %tr
+      %th peptide sequence
+      %th times observed
+  %tbody
+  - @prot_peps_freq_hash.each do |pep_seq, freq|
+    %tr
+      %td= link_to name="#{pep_seq}", 
+      url={controller: "search", action:"psm", pep_seq: pep_seq, db_seq_acc: @db_sequence_accession },
+      options={remote: true, format: :js, data: {}, class: "sii_link"}
+      %td= freq
+
+%h3.table_header
+  = "PSMs - Found in Spectrum Identification / MzidentML files"       
+      
+      
+      
+      

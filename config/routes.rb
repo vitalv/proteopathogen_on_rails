@@ -22,6 +22,11 @@ ProteopathogenOnRails::Application.routes.draw do
   resources :experiments do 
     resources :mzid_files
   end
+
+  #Searches is not a resource, no need for new, create, show, ... just index and custom actions
+  #resources :search
+  get 'search', to: 'search#index'
+  get 'search/query'
   
   resources :mzid_files do
     resources :spectrum_identifications

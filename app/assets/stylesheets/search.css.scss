@@ -1,0 +1,77 @@
+// Place all the styles related to the search controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+#search_form {
+  margin: 10% auto;
+
+  width: 30%;
+  /*display: table;*/
+  border: 1px dashed #B6B5B0;
+  border-radius: 6px;  
+  /*position: relative;*/
+  padding: 2em;
+  boder: dashed gray 1px;
+  border-radius: 5px;
+  }
+
+
+.search_result_table {
+  margin: 1em auto;
+  table-layout: fixed; // need this so seq can be wrapped , see below
+  width: 80%;
+  border-collapse: collapse;
+  
+  td.seq { 
+    word-wrap: break-word; 
+  }
+
+  thead th { 
+    background-color: #DADADA; 
+  }
+
+  tr:nth-of-type(odd){
+    background-color:#F1F1F1;
+    td.title {
+      background-color: #EBEAEA;
+    }
+  }
+  
+  tr:nth-of-type(even){
+    background-color:#F8F8F8;
+    td.title {
+      background-color: #EBEAEA;
+    }
+  } 
+  td {
+    padding: 3px 6px;
+  }
+  td.center { text-align: center; }
+  td.title {
+    //border-bottom: solid #E4E4E4 1px;
+    width: 280px;
+    text-align: right;
+    font-weight: bold;
+  }
+  td.sum_table_title { 
+    width: 100px;
+    font-weight: bold;
+  }
+  td h4 {
+    padding-top: 10px;
+  }
+
+}
+
+
+#sequence {
+  display: none;
+  font-family: monospace;
+  }
+  
+  
+#observed_peptides{
+  width: 80%;
+
+}

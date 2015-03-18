@@ -19,7 +19,8 @@
         %nav_links
           %ul
             %li=link_to 'home', '/'
-            %li=link_to 'experiments', experiments_path
+            %li=link_to 'browse', experiments_path
+            %li=link_to 'search', search_path
             %li=link_to 'about', about_path 
             - if current_user
               %li="logged in as #{current_user.email}"
