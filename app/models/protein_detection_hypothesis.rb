@@ -41,19 +41,6 @@ class ProteinDetectionHypothesis < ActiveRecord::Base
   end
   
 
-  def prot_seq_highlighted_coverage(coverage_offsets)
-    prot_seq_w_highlighted_coverage = ""
-    prot_seq_arr = self.db_seq.sequence.split("")
-    prot_seq_arr.each_with_index do |aa, i|
-      coverage_offsets.each do |offsets|
-        prot_seq_arr[i] = "&nbsp;<span class='cov'>#{aa}" if i == offsets[0]
-        prot_seq_arr[i] = "#{aa}</span>&nbsp;" if i == offsets[1]-1
-      end
-    end
-    return prot_seq_w_highlighted_coverage = prot_seq_arr.join
-  end
-
-
   def psms
     psms = self.peptide_spectrum_assignments
     psms_h, psm_freq = {} , {}
