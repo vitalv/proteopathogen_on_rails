@@ -65,7 +65,8 @@ class ProteinDetectionsController < ApplicationController
       @peptide_sequences = @psms.map { |psm| psm.peptide_evidence.peptide_sequence.sequence }
     end
   
-    @sequence_coverage, @prot_seq_w_cov_tags = map_peptides_2_protein(pdh.db_seq, @peptide_sequences)
+    #@sequence_coverage, @prot_seq_w_cov_tags = map_peptides_2_protein(pdh.db_seq, @peptide_sequences)
+    @sequence_coverage, @prot_seq_w_cov_tags = map_peptides_2_protein(pdh.db_seq.sequence, @peptide_sequences)
     
    respond_to do |format|
     # format.html { render json: @fragments  }

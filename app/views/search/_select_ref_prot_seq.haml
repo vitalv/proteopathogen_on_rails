@@ -1,0 +1,5 @@
+- if @selected_reference_prot_seq and !@selected_reference_prot_seq.blank?
+  - if  @prot_seq_w_cov_tags and !@prot_seq_w_cov_tags.blank?
+    %p= @prot_seq_w_cov_tags.html_safe
+  -else
+    %p=@selected_reference_prot_seq

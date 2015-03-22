@@ -27,6 +27,9 @@ ProteopathogenOnRails::Application.routes.draw do
   #resources :search
   get 'search', to: 'search#index'
   get 'search/query'
+  get 'search/pep_seq_siis'
+  get 'search/select_ref_prot_seq'
+  get 'search/identification_item'
   
   resources :mzid_files do
     resources :spectrum_identifications

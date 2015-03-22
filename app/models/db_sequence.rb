@@ -16,7 +16,7 @@ class DbSequence < ActiveRecord::Base
     end
   end
   
-  def pep_evidences_freq_hash
+  def pep_sequences_freq_hash
     unless self.peptide_evidences.empty?
       prot_peps = self.peptide_evidences.map{|pep_ev| pep_ev.peptide_sequence.sequence}
       return prot_peps.inject(Hash.new(0)){|h,e| h[e]+=1; h}
