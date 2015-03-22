@@ -1,10 +1,11 @@
 %table#exp_mzid_files_table.inner{:class => if exp.mzid_files.count > 5 then 'dataTable' end}
   %thead
     %tr
-      %th.mzid_file_name .mzid File
+      %th.mzid_file_name .mzid File name
       %th.submission_date submission date
       %th
       %th
+      %th download .mzid File
   %tbody  
     -mzid_files.each do |mzidf|
       %tr
@@ -15,6 +16,8 @@
         %td.center
           - if mzidf.includes_protein_detection
             =link_to 'Protein Detection', mzid_file_protein_detections_path(mzidf.slug), id: "mzid_file_#{mzidf.id}_protein_detection", class: "flat_link"
-          - else
-          
+          - else          
             No Protein Detection 
+        %td.center= link_to image_tag("download_file_icon.png"),
+        url={action: "download_mzid_file", mzidf_id: mzidf.id} 
+        -#options={remote: true, format: :js}
