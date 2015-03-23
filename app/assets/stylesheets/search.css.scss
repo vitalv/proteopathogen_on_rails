@@ -3,23 +3,41 @@
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
 
-#search_form {
+#search_form_container {
   margin: 10% auto;
-
-  width: 30%;
-  /*display: table;*/
+  width: 700px;
+  //position: relative;
+  
+  font-size: 9pt;
+  
   border: 1px dashed #B6B5B0;
   border-radius: 6px;  
-  /*position: relative;*/
+
+  overflow: auto;
+  
   padding: 2em;
   boder: dashed gray 1px;
   border-radius: 5px;
   }
 
+#search_form {
+ position:relative;
+ width: 300px;
+ float: left;
+}
+
+
+#query_options {
+ position:relative;
+ width: 350px;
+ float: right;
+}
 
 table#pep_freq_table td.long_peptide a {font-size: 9px;}
 
-
+p.query_not_found{
+  color: red;
+}
 
 #sequence {
   display: none;

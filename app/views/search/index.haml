@@ -1,9 +1,23 @@
 
-%div#search_form
-  = form_tag({controller: "search", action: "query"}, method: "get") do 
-    %h2 Search Proteopathogen
-    = search_field_tag :search, params[:input]
-    %p
-      = submit_tag "Search" 
-
-
+%div#search_form_container
+  %div#search_form
+    -if flash[:error]
+      %p.query_not_found= flash[:error]
+    = form_tag({controller: "search", action: "query"}, method: "get") do 
+      %h2 Search Proteopathogen
+      = search_field_tag :search, params[:input]
+      %p
+        = submit_tag "Search" 
+  %div#query_options
+    Proteopathogen allows the following type of queries:
+    %ul
+      %li= "Protein Name (or whatever has been used in the <ProteinDetectionHypothesis> name attribute)"
+      Examples:
+      %ul
+        %li= "orf19.1052"
+        %li= "CaalfMp01"
+      %li= "Peptide Sequence (in plain text without line breaks) "
+      Examples:
+      %ul
+        %li= "CHLDHLGAK"
+        %li= "TIGGALQISDNSELR"

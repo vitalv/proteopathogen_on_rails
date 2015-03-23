@@ -80,9 +80,9 @@ class SearchController < ApplicationController
       @fragments.flatten!      
       render 'query_pept'
     else
-  
       @not_found_string = "Sorry, your query \"#{@query_thing}\" did not retrieve any results"
-  
+      redirect_to search_path, :flash => {:error => @not_found_string}
+      
     end
 
     

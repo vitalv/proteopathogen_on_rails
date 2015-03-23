@@ -28,10 +28,16 @@
             - else
               %li=link_to 'log in', log_in_path
              
-        - flash.each do |name, msg|
-          = content_tag :div, msg, :id => "flash_#{name}"
+        -# flash.each do |name, msg|
+          -#= content_tag :div, msg, :id => "flash_#{name}"
+          
 
       %content
+
+        %div#quick_search
+          = form_tag({controller: "search", action: "query"}, method: "get") do 
+            = search_field_tag :search, params[:input] , value:'search Proteopathogen'
+            = submit_tag "Search" 
       
         - if current_user
           %admin_links

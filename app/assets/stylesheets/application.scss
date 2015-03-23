@@ -49,6 +49,7 @@ p {padding: 8px 0;} /* this is bc of the sticky footer thing */
 
 nav_links, admin_links {
   padding: 5px;
+  clear: both;
   float: right;
   ul { list-style-type: none; }
   li {
@@ -61,6 +62,17 @@ nav_links, admin_links {
      color: #DA6E25;
      &:hover{ color: #E97121; }
     }
+  }
+}
+admin_links a { padding: 0 5px; }
+
+#quick_search {
+  margin-top: -10px;
+  margin-right: -20px;
+  float: right;
+  input {
+    font-size: 10pt;
+    color: gray;
   }
 }
 
@@ -80,7 +92,7 @@ content {
 }
 
 #home_div {
-  display: table; 
+  //display: table; 
   //border: solid gray 1px;
   min-width: 800px;
 }
