@@ -21,16 +21,14 @@ class SearchController < ApplicationController
     if ProteinDetectionHypothesis.exists? protein_detection_hypothesis_id: @query_thing
       pdhs = ProteinDetectionHypothesis.where('protein_detection_hypothesis_id LIKE ?', @query_thing) #ActiveRecord::Relation, may be many! 
       @pdh_id = pdhs.take.protein_detection_hypothesis_id #take (any), all in pdh are same protein_detection_hypothesis_id
-      @pdh_count = pdhs.count
-      
+      @pdh_count = pdhs.count      
       @pdhs_in_pag = pdhs.take.protein_ambiguity_group.protein_detection_hypotheses.map {|pdh| pdh.protein_detection_hypothesis_id}
-      
       #PARA PODER HACER EL PEPTIDE PROTEIN MAPPING NECESITO UNA SECUENCIA DE PROTEÍNA DE REFERENCIA, (DbSequence) PERO PUEDE HABER MAS DE 1 DbSequence PARA UN PDH / DbSequence.accession (Misma proteina, distintas search_databases)
       #Primero, comprobar si para mis pdhs (todos) hay mas de un db_sequence 
       db_sequence_ids, db_sequence_seqs, db_sequence_descrs = [], [], []
       pdhs.each { |pdh| pdh.peptide_hypotheses.each { |pep_hyp| db_sequence_ids << pep_hyp.peptide_spectrum_assignment.peptide_evidence.db_sequence_id } }
       distinct_referenced_db_sequences = db_sequence_ids.uniq
-      
+      #
       @uniq_reference_prot_seq = "" #Normalmente será 1, pero pueden ser más en el caso de que dos db_seq (mismo accession) hayan cambiado su seq de una version de search_database a otra
       @distinct_referenced_db_sequences_w_different_seqs = nil
       @db_seq_description = ""
@@ -56,7 +54,7 @@ class SearchController < ApplicationController
         end
         
       end
-      
+      #
       pep_seqs = [] #all peptide sequences from all pdhs (combined, same pdh from multiple experiments)
       pdhs.each do |pdh|
         pdh.peptide_hypotheses.map do |pep_hyp| 
@@ -68,7 +66,19 @@ class SearchController < ApplicationController
       if !@uniq_reference_prot_seq.blank?
         @sequence_coverage, @prot_seq_w_cov_tags = map_peptides_2_protein(@uniq_reference_prot_seq, pep_seqs.uniq)
       end
-    
+      render 'query_prot'
+ 
+    elsif PeptideSequence.exists? sequence: @query_thing
+      peptide = PeptideSequence.where('sequence LIKE ?', @query_thing)
+      @peptide_sequence = peptide.take.sequence
+      @db_sequences_accessions = peptide.take.peptide_evidences.map{ |pep_ev| pep_ev.db_sequence.accession}.uniq      
+      @pep_evs = PeptideSequence.where(sequence: @peptide_sequence).take.peptide_evidences
+      sii_ids = []    
+      @pep_evs.each { |pep_ev|  sii_ids << pep_ev.spectrum_identification_item_ids }
+      @spectrum_identification_items = SpectrumIdentificationItem.find(sii_ids.flatten)
+      @fragments = @spectrum_identification_items.map{ |sii| sii.fragments}
+      @fragments.flatten!      
+      render 'query_pept'
     else
   
       @not_found_string = "Sorry, your query \"#{@query_thing}\" did not retrieve any results"
@@ -80,23 +90,18 @@ class SearchController < ApplicationController
   
   def pep_seq_siis
 
-    pep_seq = params[:pep_seq]
-    
-    pep_evs = PeptideSequence.where(sequence: pep_seq).take.peptide_evidences
-    
-    sii_ids = []
-    pep_evs.each do |pep_ev|
+    pep_seq = params[:pep_seq]    
+    @pep_evs = PeptideSequence.where(sequence: pep_seq).take.peptide_evidences    
+    sii_ids = []    
+    @pep_evs.each do |pep_ev|
        sii_ids << pep_ev.spectrum_identification_item_ids
     end
-    @spectrum_identification_items = SpectrumIdentificationItem.find(sii_ids.flatten)
-      
+    @spectrum_identification_items = SpectrumIdentificationItem.find(sii_ids.flatten)      
     @fragments = @spectrum_identification_items.map{ |sii| sii.fragments}
-    @fragments.flatten!
-          
+    @fragments.flatten!          
    respond_to do |format|
      format.js { render :layout => false }
    end
-  
   
   end
   

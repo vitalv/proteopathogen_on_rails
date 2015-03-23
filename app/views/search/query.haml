@@ -63,9 +63,9 @@
     %tbody
     - @prot_peps_freq_hash.each do |pep_seq, freq|
       %tr
-        %td.wrappable= link_to name="#{pep_seq}", 
+        %td{:class => if pep_seq.length > 40 then 'long_peptide' end}= link_to name="#{pep_seq}", 
         url={action:"pep_seq_siis", pep_seq: pep_seq }, 
-        options={remote: true, format: :js, data: {pep_seq: pep_seq}, class: "pep_seq_link"}
+        options={remote: true, format: :js, data: {pep_seq: pep_seq}, class: "pep_seq_link", }
         %td.center= freq
 
 
@@ -86,9 +86,10 @@
         %th pass thrshld
         %th spectrum identification
         %th mzid file
+        %th mod
     %tbody
       %tr
-        %td.empty{colspan: 8}Spectrum Identification Items
+        %td.empty{colspan:9}Spectrum Identification Items
 
       
   

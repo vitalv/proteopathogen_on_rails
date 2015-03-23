@@ -1,0 +1,92 @@
+%h3 Search for "#{@query_thing}"
+%table.my_table
+  %tbody
+    %tr
+      %td.title Protein Name
+      %td= @pdh_id
+    %tr
+      %td.title Description
+      %td
+        =@db_seq_description
+        - if @db_seq_description_addendum
+          =@db_seq_description_addendum
+    %tr
+      %td.title Total observations
+      %td= @pdh_count
+    %tr
+      %td.title Proteins in Group
+      %td= @pdhs_in_pag.join(",")
+    -#%tr
+      -#%td.title Sequence          
+      -#%td.seq
+        -#= link_to "show sequence", '#', class: 'seq_link', remote: true
+        -#%div#sequence= @prot_seq
+    -#%tr
+      -#%td.title Search database 
+      -#%td
+
+%h3 Sequence coverage
+%div#protein_sequence.peptide_protein_map
+  %p=@pdh_id
+  - if @uniq_reference_prot_seq and !@uniq_reference_prot_seq.blank?
+    - if  @prot_seq_w_cov_tags and !@prot_seq_w_cov_tags.blank?
+      %p= @prot_seq_w_cov_tags.html_safe
+    -else
+      %p=@uniq_reference_prot_seq
+  - else 
+    - if @distinct_referenced_db_sequences_w_different_seqs and !@distinct_referenced_db_sequences_w_different_seqs.nil?
+      %p= "\"#{@pdh_id}\" has more than one (different) reference protein sequence (most probably due to changes/updates from one search database to another); select one to show peptide to protein mapping:"
+      - @distinct_referenced_db_sequences_w_different_seqs.each do |db_seq|
+        %p=link_to name="#{db_seq.accession} from search database: #{db_seq.search_database.name}", 
+        url={controller: "search", action:"select_ref_prot_seq", db_seq_id: db_seq.id }, 
+        options={remote: true, format: :js, data: {dbseq_id: db_seq.id}, class: "sii_link"}
+      %div#select_ref_prot_seq
+      
+      
+    - else     
+      %p.no_prot_seq PROTEIN SEQUENCE NOT FOUND
+
+%h3.table_header
+  = "Peptides" 
+%table#pep_freq_table.my_table
+  %thead
+    %tr
+    %th peptide sequence
+    %th observations (PSMs)
+  %tbody
+  - @prot_peps_freq_hash.each do |pep_seq, freq|
+    %tr
+      %td{:class => if pep_seq.length > 40 then 'long_peptide' end}= link_to name="#{pep_seq}", 
+      url={action:"pep_seq_siis", pep_seq: pep_seq }, 
+      options={remote: true, format: :js, data: {pep_seq: pep_seq}, class: "pep_seq_link", }
+      %td.center= freq
+
+%h3.table_header
+  = "Spectrum Identification Items" 
+  = link_to image_tag("info.png", class: "info_img"), '#', :data => {'info-link' => "sii_info"}, remote: true
+%div#sii_info.info= "An identification of a single (poly)peptide, resulting from querying an input spectra, along with the set of confidence values for that identification"
+%table#sii_table.my_table
+  %thead
+    %tr
+      %th SII ID
+      %th calc m/z
+      %th exp m/z
+      %th rank
+      %th charge
+      %th pass thrshld
+      %th spectrum identification
+      %th mzid file
+      %th mod
+  %tbody
+    %tr
+      %td.empty{colspan:9}Spectrum Identification Items
+     
+
+    
+-#%div#spectrum{:class => unless @mzid_file.contains_fragmentation_data then 'hidden' end }
+%div#spectrum.hidden
+  %div.spectrum_display_msg
+    %p
+      SPECTRUM IDENTIFICATION ITEM      
+      
+      

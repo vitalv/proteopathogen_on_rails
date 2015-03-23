@@ -2,7 +2,7 @@
   %tr
     %td{:colspan => 6, :style=> "text-align:center"}No Spectrum Identification Items found
 - else
-  = @spectrum_identification_items.each do |sii|
+  - @spectrum_identification_items.each do |sii|
     %tr
       - if @fragments.blank?
         %td= "#{sii.sii_id.gsub(/_Mzid_\d+/, "")}"
@@ -15,7 +15,9 @@
       %td.center= sii.rank
       %td.center= sii.charge_state
       %td.center= sii.pass_threshold    
-      %td.center= sii.spectrum_identification_result.spectrum_identification_list.spectrum_identification.si_id
+      %td.center= link_to "#{sii.spectrum_identification_result.spectrum_identification_list.spectrum_identification.si_id}", "/spectrum_identifications/#{sii.spectrum_identification_result.spectrum_identification_list.spectrum_identification.id}/results", options={target:  "_blank"}
       %td= sii.spectrum_identification_result.spectrum_identification_list.spectrum_identification.mzid_file.name
-
-
+      %td
+        - sii.peptide_evidences.take.modifications.each do |m| 
+          ="[#{m.unimod_name}] #{m.residue} #{m.location}" 
+          %br
