@@ -23,7 +23,7 @@
             %li=link_to 'search', search_path
             %li=link_to 'about', about_path 
             - if current_user
-              %li="logged in as #{current_user.email}"
+              %li.logged_in_as="logged in as #{current_user.email}"
               %li= link_to 'log out', log_out_path
             - else
               %li=link_to 'log in', log_in_path
@@ -35,15 +35,21 @@
       %content
 
         %div#quick_search
-          = form_tag({controller: "search", action: "query"}, method: "get") do 
+          = form_tag('/search/query', method: "get") do 
             = search_field_tag :search, params[:input] , value:'search Proteopathogen'
             = submit_tag "Search" 
       
-        - if current_user
-          %admin_links
-            =link_to "Experiments", :admin_experiments
-            =link_to "MzidFiles", :admin_mzid_files
-            =link_to 'SpectraData', :admin_spectra_acquisition_runs
+        - if current_user 
+          - if current_user.email == 'vital@ucm.es'
+            %admin_links
+              =link_to "New User", :new_admin_user
+              =link_to "Experiments", :admin_experiments
+              =link_to "MzidFiles", :admin_mzid_files
+              =link_to 'SpectraData', :admin_spectra_acquisition_runs
+          - else
+            %admin_links
+              =link_to "Submit MzIdentML file", :new_admin_submission
+              
 
         =yield
 

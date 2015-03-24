@@ -1,5 +1,10 @@
 %div#log_in
 
+  -if flash[:error] 
+    %p.center= flash[:error]
+  - if flash[:alert]
+    %p.center= flash[:alert]
+
   %h2 Log in
 
   = form_tag sessions_path do

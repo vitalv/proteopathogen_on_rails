@@ -1,6 +1,7 @@
 class Admin::UsersController < ApplicationController
 
-  before_filter :require_login
+  before_filter :require_login 
+  #Uncomment to let only admin to Sign Up
  
   def new
     @user = User.new

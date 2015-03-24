@@ -1,0 +1,19 @@
+%h2 Submit MzIdentML file
+
+%div#submit_form_container
+
+  %div#submit_form.my_form
+    -if flash[:error]
+      %p= flash[:error]
+      
+    = form_tag({action: "create"}, multipart: true, remote: true) do 
+      %h2 Search & Upload
+      %p= file_field_tag :upload
+      %p
+        = submit_tag "Upload", class: "my_button"
+        
+  %p.center
+    Please select and upload MzIdentML file.
+    File name extension is checked to be .mzid
+    
+

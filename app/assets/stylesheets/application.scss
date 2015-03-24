@@ -66,6 +66,10 @@ nav_links, admin_links {
 }
 admin_links a { padding: 0 5px; }
 
+nav_links li.logged_in_as {
+  margin: 4px;
+}
+
 #quick_search {
   margin-top: -10px;
   margin-right: -20px;
@@ -187,7 +191,7 @@ content {
 
 
 .my_form {
-  margin: 2em auto;
+  margin: 10% auto;
   padding: 2em;
   width: 70%;
   border:solid 1px #E1E1E1;

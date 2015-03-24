@@ -23,7 +23,15 @@ class ApplicationController < ActionController::Base
   private
 
   def current_user
+    
+    #the require login is used in the Users controller to let only logged_in users (defined here) do stuff
+    #but I want not just any logged_in user, only "Admin" user, to be able to create new users!
+    
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
+    
+    #@current_user ||= User.find(session[:user_id]) if session[:user_id] == User.find_by_email("vital@ucm.es").id
+    #No, this does not do as expected
+    
   end
   
   def require_login
@@ -34,7 +42,11 @@ class ApplicationController < ActionController::Base
   end
   
   def logged_in?
-    !!current_user
+    !!current_user 
+    #About !!
+    #The internal logic it uses to decide this value is by checking to see if the current_user variable is set.
+    #If it is set, it will evaluate to true in a boolean context. 
+    #If not, it will evaluate as false. The double negation forces the return value to be a boolean
   end
   
 end
