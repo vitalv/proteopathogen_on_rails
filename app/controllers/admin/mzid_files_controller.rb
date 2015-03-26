@@ -1,6 +1,9 @@
 class Admin::MzidFilesController < ApplicationController
 
   before_filter :require_login
+  
+  load_and_authorize_resource
+
 
   def index 
     @experiments = Experiment.all
@@ -28,13 +31,20 @@ class Admin::MzidFilesController < ApplicationController
       location = File.absolute_path(uploaded_mzid_file)
       name = uploaded_io_filename
       sha1 = Digest::SHA1.hexdigest("#{Rails.root}/public/uploaded_mzid_files/#{uploaded_io_filename}")
+      submission_date = Date.today
     
-      @mzid_file = MzidFile.find_or_create_by(sha1: sha1, location: location, name: name) do |mzidf|
-        #mzidf.location = location,
-        #mzidf.name = name,
-        mzidf.submission_date = Date.today
-        mzidf.experiment_id = @experiment_id
-      end
+      #@mzid_file = MzidFile.find_or_create_by(sha1: sha1, location: location, name: name) do |mzidf|
+      ##@mzid_file = MzidFile.find_or_create_by(sha1: mzid_file_params[:sha1], location: mzid_file_params[:location], name: mzid_file_params[:name]) do |mzidf|
+      #  #mzidf.location = location,
+      #  #mzidf.name = name,
+      #  mzidf.submission_date = Date.today
+      #  mzidf.experiment_id = @experiment_id
+      #end
+      
+      @mzid_file = MzidFile.new(sha1: sha1, name: name, location: location, submission_date: submission_date, experiment_id: @experiment_id)
+      @mzid_file.save 
+
+      #@mzid_file_params = mzid_file_params
 
       if @mzid_file.invalid? #could add validation in the model to check file extension really is .mzid
         @experiments = Experiment.all
@@ -42,6 +52,8 @@ class Admin::MzidFilesController < ApplicationController
       else
         redirect_to :action =>  :index
       end
+    
+    
     
     else
       redirect_to :action => :new
@@ -81,6 +93,13 @@ class Admin::MzidFilesController < ApplicationController
   
   end
 
+
+  private
   
+  def mzid_file_params
+    params.require(:mzid_file).permit(:experiment_id)
+  end
 
 end
+
+

@@ -24,4 +24,15 @@ class User < ActiveRecord::Base
     end
   end  
   
+  def admin?
+    #Podria hacer una migracion para poner una columna "role" o "admin"
+    #y este metodo comprobaría si esa columna tiene un valor "admin" o "true"
+    #pero al fin y al cabo hago lo mismo, que es comprobar un valor de un campo
+    if self.id == 1 and self.email == "vital@ucm.es"
+      return true  
+    else 
+      return false
+    end
+  end
+  
 end

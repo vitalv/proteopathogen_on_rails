@@ -1,7 +1,10 @@
 class Admin::UsersController < ApplicationController
 
   before_filter :require_login 
-  #Uncomment to let only admin to Sign Up
+  
+  load_and_authorize_resource
+
+
  
   def new
     @user = User.new

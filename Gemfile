@@ -11,6 +11,11 @@ gem 'haml'#, '3.1.7'
 
 gem 'nokogiri' #xml parser/reader I use for .mzIdentML files
 
+#CanCan is an authorization library for Ruby on Rails which restricts 
+#what resources a given user is allowed to access. All permissions are 
+#defined in a single location (the Ability class) and not duplicated 
+#across controllers, views, and database queries
+gem 'cancancan'
 
 #tablas bonitas
 #gem 'jquery-datatables-rails', git: 'git://github.com/rweng/jquery-datatables-rails.git'

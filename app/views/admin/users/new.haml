@@ -1,5 +1,5 @@
-%h2 Sign Up
 
+%h2 Sign Up
 = form_for [:admin, @user], html: {class: "my_form"} do |f|
   -if @user.errors.any?
     %b Form is invalid
@@ -15,5 +15,6 @@
   %p
     = f.label :password_confirmation
   = f.password_field :password_confirmation
-  
+
   %p= f.submit 'Create User', class: "my_button"
+

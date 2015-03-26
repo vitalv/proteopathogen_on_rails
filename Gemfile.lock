@@ -36,6 +36,7 @@ GEM
     atomic (1.1.10)
     bcrypt-ruby (3.0.1)
     builder (3.1.4)
+    cancancan (1.10.1)
     capistrano (3.1.0)
       i18n
       rake (>= 10.0.0)
@@ -238,6 +239,7 @@ PLATFORMS
 DEPENDENCIES
   ajax-datatables-rails
   bcrypt-ruby
+  cancancan
   capistrano
   capistrano-bundler
   capistrano-rails

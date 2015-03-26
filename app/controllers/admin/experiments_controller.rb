@@ -2,6 +2,9 @@ class Admin::ExperimentsController < ApplicationController
 
   before_filter :require_login #, :only=> [:new, :create]
   
+  load_and_authorize_resource
+  
+  
   def index 
     @experiments = Experiment.all
 
@@ -21,11 +24,17 @@ class Admin::ExperimentsController < ApplicationController
     protocol = params[:experiment][:protocol]
     protocol = nil if params[:experiment][:protocol] == ""
     researcher = params[:experiment][:researcher]
-    month = params[:experiment]['date(2i)']
-    year = params[:experiment]['date(1i)']
+    month = params[:experiment]['date_m_y(2i)']
+    #year = params[:experiment]['date_m_y(1i)']
+    #date = params[:experiment][:date]
+    #date = "#{year}/#{month}"
+    #date = date.strftime("%m/%d/%Y")
     date = params[:experiment][:date]
+    pmid = params[:experiment][:pmid]
     
-    @experiment = Experiment.create({:short_label => short_label, :organism => organism, :protocol => protocol, :date => date, :researcher => researcher})
+    #@experiment = Experiment.create({:short_label => short_label, :organism => organism, :protocol => protocol, :date => date, :researcher => researcher})
+    #strong_params ; Rails 4
+    @experiment = Experiment.create(experiment_params)
     
     if @experiment.invalid?
       render :action => "new"
@@ -35,4 +44,14 @@ class Admin::ExperimentsController < ApplicationController
     end
   end
   
+  private
+
+  def experiment_params
+    params.require(:experiment).permit(:short_label, :organism, :protocol, :date, :researcher, :pmid)
+  end
+
+
+  
 end
+
+

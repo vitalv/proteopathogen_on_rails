@@ -9,16 +9,18 @@ class ApplicationController < ActionController::Base
   #to catch those there is get "*path" => 'errors#routing' in routes.rb and the errors_controller
   #UNCOMMENT IN PRODUCTION, IN DEV , I DO WANT TO SEE THE ERRORS/EXCEPTIONS
   
-  #rescue_from Exception, :with => :error_render_method
-  #def error_render_method
-  #  respond_to do |type|
-  #    #type.html { render :template => "errors/error_404", status: 404 }
-  #    type.html { render file: "#{Rails.root}/public/404.html", status: 404 }
-  #    type.all  { render :nothing => true, :status => 404 }
-  #  end
-  #  true
-  #end
+  rescue_from CanCan::AccessDenied do |exception|
+    redirect_to main_app.root_url, :alert => exception.message
+  end
 
+  #apparently using cancan creates strong_parameters issue. (ActiveModel::ForbiddenAttributesError) when creating new user
+  #when saving new stuff (experiments mzid, ...) http://stackoverflow.com/questions/17335329/activemodelforbiddenattributeserror-when-creating-new-user
+  #cancancan solves this issue apparently
+  #~ before_filter do
+    #~ resource = controller_name.singularize.to_sym
+    #~ method = "#{resource}_params"
+    #~ params[resource] &&= send(method) if respond_to?(method, true)
+  #~ end
 
   private
 

@@ -10,9 +10,11 @@
   = f.label :protocol
   = f.text_area :protocol
 
-  = f.date_select :date, :order => [:month, :year]
-  -#= f.date_select :date
+  -#= f.date_select :date, :order => [:month, :year]
+  -#-#= f.date_select :date
 
+  = f.label 'date (YYYY/MM/DD)'
+  = f.text_field :date
 
   = f.label :researcher
   = f.text_field :researcher

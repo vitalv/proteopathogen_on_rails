@@ -1,5 +1,8 @@
 class Admin::SpectraAcquisitionRunsController < ApplicationController
 
+  load_and_authorize_resource
+
+
   require 'nokogiri'
 
   before_filter :require_login
