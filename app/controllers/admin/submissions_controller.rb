@@ -1,11 +1,19 @@
 class Admin::SubmissionsController < ApplicationController
 
+  before_filter :require_login
+  
+  #load_and_authorize_resource
+  
   
   def new
+    authorize! :new, :submissions
     
   end
 
   def create
+  
+    authorize! :create, :submissions
+  
     uploaded_io = params[:upload]
     #The object in the params hash is an instance of a subclass of IO.
     #Depending on the size of the uploaded file it may in fact be a StringIO
@@ -17,13 +25,13 @@ class Admin::SubmissionsController < ApplicationController
       file.write(uploaded_io.read)
     end
   end
-  
-   respond_to do |format|
-     format.js { 
+  #Here the file is uploaded but the MzidFile object (model) is not saved- To do that admin user
+  respond_to do |format|
+    format.js { 
        
-       render :layout => false 
-     }
-   end
+      render :layout => false 
+    }
+  end
    
    #redirect_to :back
   

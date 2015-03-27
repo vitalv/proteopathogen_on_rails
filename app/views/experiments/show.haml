@@ -21,7 +21,7 @@
     %tr
       %td.title Date:
       %td= @exp.date
-  - if @exp.pmid
+  - if @exp.pmid and @exp.pmid != ""
     %tr
       %td.title Publication
       %td= link_to "PubMed", "http://www.ncbi.nlm.nih.gov/pubmed/#{@exp.pmid}", target: '_blank'

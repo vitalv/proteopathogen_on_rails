@@ -2,11 +2,6 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-#Note: I am placing this d3 thing here , 
-#I am appending svg to #spectrum, I will see the results on / (home), where div spectrum is
-#However, this should prollly be in spectrum_identification_results.js.coffee or spectrum_identification_items.js.coffee or something
-
-
 $ ->
   $("a[data-exp-id]").click ->
     data_exp_id = $(this).data("exp-id")
@@ -26,7 +21,7 @@ $ ->
     bFilter: false
     bInfo: false
     bPaginate: false
-    aoColumns: [{bSortable: true},{bSortable: true}, {bSortable: false}, {bSortable: false} ]
+    aoColumns: [{bSortable: true},{bSortable: true}, {bSortable: false}, {bSortable: false}, {bSortable: false} ]
 
   return false;
 
