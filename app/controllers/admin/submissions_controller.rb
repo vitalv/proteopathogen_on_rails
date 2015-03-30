@@ -6,13 +6,13 @@ class Admin::SubmissionsController < ApplicationController
   
   
   def new
-    authorize! :new, :submissions
+    #authorize! :new, :submissions
     
   end
 
   def create
   
-    authorize! :create, :submissions
+    #authorize! :create, :submissions
   
     uploaded_io = params[:upload]
     #The object in the params hash is an instance of a subclass of IO.

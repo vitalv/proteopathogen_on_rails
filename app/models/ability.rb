@@ -10,7 +10,7 @@ class Ability
          can :manage, :all
        else
          cannot :create, User
-         #can :create, Submission
+         can :create, Submission
        end
     
     
