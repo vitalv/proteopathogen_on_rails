@@ -13,7 +13,7 @@
         %td= link_to "#{exp.short_label}", experiment_path(exp.slug)
         %td= exp.organism
         %td.center= exp.date
-        - if exp.pmid
+        - if exp.pmid and !exp.pmid.blank?
           %td.center= link_to "PubMed", "http://www.ncbi.nlm.nih.gov/pubmed/#{exp.pmid}", target: '_blank'
         -else
           %td
