@@ -94,7 +94,10 @@ class SearchController < ApplicationController
     @pep_evs = PeptideSequence.where(sequence: pep_seq).take.peptide_evidences    
     sii_ids = []    
     @pep_evs.each do |pep_ev|
-       sii_ids << pep_ev.spectrum_identification_item_ids
+       #verify the pep_ev has peptide hypothesis (and hence pdh) so the number of siis here is the same as in  @prot_peps_freq_hash above
+       pep_ev_psms = pep_ev.peptide_spectrum_assignments
+       pep_ev_peptide_hypotheses = pep_ev_psms.map { |psm| psm.peptide_hypotheses }       
+       sii_ids << pep_ev.spectrum_identification_item_ids unless pep_ev_peptide_hypotheses.flatten.empty?
     end
     @spectrum_identification_items = SpectrumIdentificationItem.find(sii_ids.flatten)      
     @fragments = @spectrum_identification_items.map{ |sii| sii.fragments}
