@@ -36,8 +36,9 @@
 
         %div#quick_search
           = form_tag('/search/query', method: "get") do 
-            = search_field_tag :search, params[:input] , value:'search Proteopathogen'
+            = search_field_tag :search, params[:input] , placeholder:'search Proteopathogen'
             = submit_tag "Search" 
+            
       
         - if current_user 
           - if current_user.email == 'vital@ucm.es'
