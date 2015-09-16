@@ -92,6 +92,7 @@ class Mzid2db
       pdl_id = my_protein_detection_list.id
       pdl_ref = ProteinDetectionList.find(pdl_id).pdl_id
       pag_arr = @mzid_obj.protein_ambigroups(pdl_ref)
+   
       pag_arr.each do |pag|
         pag_id = pag.pag_id
         my_pag_id = saveProteinAmbiguityGroup(pag_id, pdl_id)
@@ -99,19 +100,43 @@ class Mzid2db
           my_Protein_hypothesis_id = saveProteinDetectionHypothesis(mzid_prot_hyp, my_pag_id)
           saveProtHypPsiMsTerms(mzid_prot_hyp, my_Protein_hypothesis_id)
           saveProtHypUserParams(mzid_prot_hyp, my_Protein_hypothesis_id)
+          
+          saved_pep_hypotheses_per_prot_hyp = []
+          
           mzid_prot_hyp.pep_hyp_arr.each do |mzid_pep_hyp|
             mzid_pep_ev_ref = mzid_pep_hyp.pep_ev_ref            
             #REMEMBER:
             #<SpectrumIdentificationItemRef>s under <PeptideHypothesis> "indicate which spectra were actually accepted as evidence for this peptide identification in the given protein."
             #So, it may be the case that not all Spectra corresponding to a PeptideEvidence are used to infer the pdh => check examplefile.mzid
             #It is better to associate the pdh with its peptides through the psa, i.e., at the spectrum level
-            mzid_pep_hyp.sii_arr.each do |mzid_sii_ref|
-              savePeptideHypothesis(my_Protein_hypothesis_id, mzid_pep_ev_ref, mzid_sii_ref)
+            safe2save_pep_hypotheses = []
+            saved_pep_hypotheses = []
+            mzid_pep_hyp.sii_arr.each do |mzid_sii_ref|              
+              #WATCH OUT! some PeptideHypothesis (PepEv) may refer to one SpectrumIdentificationItem SII
+              #But that SII (below SIR) does not contain the PepEv in this PeptideHypothesis (bad MzIdentML!?)
+              #So, to save PeptideHypothesis, check first that its sii_refs are legit, i.e., that PepEv was already found under SpectrumIdentificationItem
+              SpectrumIdentificationItem.find_by(sii_id: "#{mzid_sii_ref}" + "_Mzid_" + "#{@mzid_file_id}").peptide_evidences.each { |pep_ev| safe2save_pep_hypotheses << pep_ev.pepev_id }
+              this_pep_hyp = "#{mzid_pep_ev_ref}" + "_Mzid_" + "#{@mzid_file_id}"
+              if safe2save_pep_hypotheses.include? this_pep_hyp
+                savePeptideHypothesis(my_Protein_hypothesis_id, mzid_pep_ev_ref, mzid_sii_ref)
+                saved_pep_hypotheses << this_pep_hyp
+              end
             end
-            
+            saved_pep_hypotheses_per_prot_hyp << saved_pep_hypotheses
+          end 
+          #This ensures consistency for those cases where there are sii_s under PeptideHypothesis that do not appear under Spectru
+          if saved_pep_hypotheses_per_prot_hyp.flatten.blank?
+            ProteinDetectionHypothesis.destroy(my_Protein_hypothesis_id) 
           end
+          
+        end #pag.prot_hyp_arr.each do |mzid_prot_hyp|
+        #This avoids PAGs without PDHs for the special cases of the WATCHOUT
+        if ProteinAmbiguityGroup.find(my_pag_id).protein_detection_hypotheses.blank?
+          ProteinAmbiguityGroup.destroy(my_pag_id) 
         end
-      end
+        
+      end #pag_arr.each do |pag|
+      
     end
 
 
@@ -185,10 +210,14 @@ class Mzid2db
 
   def saveSip(mzid_sip, my_si)
     sip_id = mzid_sip.sip_id
-    parent_tol_plus_value = mzid_sip.parent_tolerance[0][:value] + " #{mzid_sip.parent_tolerance[0][:unitName]}"
-    parent_tol_minus_value = mzid_sip.parent_tolerance[1][:value] + " #{mzid_sip.parent_tolerance[0][:unitName ]}"
-    fragment_tol_plus_value = mzid_sip.fragment_tolerance[0][:value] + " #{mzid_sip.fragment_tolerance[0][:unitName]}"
-    fragment_tol_minus_value = mzid_sip.fragment_tolerance[1][:value] + " #{mzid_sip.fragment_tolerance[0][:unitName]}"
+    if mzid_sip.parent_tolerance
+      parent_tol_plus_value = mzid_sip.parent_tolerance[0][:value] + " #{mzid_sip.parent_tolerance[0][:unitName]}"
+      parent_tol_minus_value = mzid_sip.parent_tolerance[1][:value] + " #{mzid_sip.parent_tolerance[0][:unitName ]}"
+    end
+    if mzid_sip.fragment_tolerance
+      fragment_tol_plus_value = mzid_sip.fragment_tolerance[0][:value] + " #{mzid_sip.fragment_tolerance[0][:unitName]}"
+      fragment_tol_minus_value = mzid_sip.fragment_tolerance[1][:value] + " #{mzid_sip.fragment_tolerance[0][:unitName]}"
+    end
     #Check Sip model : (validates_uniqueness)
     my_sip = SpectrumIdentificationProtocol.find_or_create_by(spectrum_identification_id: my_si.id, sip_id: sip_id) do |sip|
       sip.analysis_software = mzid_sip.analysis_software

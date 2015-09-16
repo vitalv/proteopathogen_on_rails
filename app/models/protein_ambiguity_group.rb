@@ -26,19 +26,19 @@ class ProteinAmbiguityGroup < ActiveRecord::Base
   
   
   def pdh_ids
-    self.protein_detection_hypotheses.map { |pdh| pdh.protein_detection_hypothesis_id}.join(" ")
+    self.protein_detection_hypotheses.map { |pdh| pdh.protein_detection_hypothesis_id}.join(" ; ")
   end
   
   def gene_names
     gene_names = []
     self.protein_detection_hypotheses.each do |pdh|
-      if pdh.db_seq.description
+      if pdh.db_seq and pdh.db_seq.description
         if pdh.db_seq.description.split("CGDID:")[0] !~ /^orf/
           gene_names << pdh.db_seq.description.split(" CGDID:")[0]
         end
       end
     end
-    return gene_names.join(" ") unless gene_names.empty?
+    return gene_names.join(" ; ") unless gene_names.empty?
   end
   
 end

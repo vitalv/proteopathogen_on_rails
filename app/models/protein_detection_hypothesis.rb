@@ -26,8 +26,9 @@ class ProteinDetectionHypothesis < ActiveRecord::Base
   
   def db_seq
     #unless self.has_ambiguous_peptides #see above
+    unless self.peptide_hypotheses.blank?
       return self.peptide_hypotheses[0].peptide_spectrum_assignment.peptide_evidence.db_sequence
-    #end
+    end    
   end
   
   def db_seq_description
