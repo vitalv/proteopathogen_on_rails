@@ -223,10 +223,14 @@ class Mzid2db
       sip.analysis_software = mzid_sip.analysis_software
       sip.search_type = mzid_sip.search_type
       sip.threshold = mzid_sip.threshold
-      sip.parent_tol_plus_value = parent_tol_plus_value
-      sip.parent_tol_minus_value = parent_tol_minus_value
-      sip.fragment_tol_plus_value = fragment_tol_plus_value
-      sip.fragment_tol_minus_value = fragment_tol_minus_value
+      if mzid_sip.parent_tolerance
+        sip.parent_tol_plus_value = parent_tol_plus_value
+        sip.parent_tol_minus_value = parent_tol_minus_value
+      end
+      if mzid_sip.fragment_tolerance
+        sip.fragment_tol_plus_value = fragment_tol_plus_value
+        sip.fragment_tol_minus_value = fragment_tol_minus_value
+      end
     end
     return my_sip
   end

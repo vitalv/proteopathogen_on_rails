@@ -8,7 +8,7 @@
           %th= "mass delta"
           %th= "fixed"
           %th= "residue"
-          %th= "unimod accession"
+          %th= "accession"
           %th= "type of modification"
       %tbody
         - sip.searched_modifications.each do |mod|
@@ -17,5 +17,7 @@
             %td.center= mod.is_fixed
             %td.center= mod.residue
             %td.center= mod.unimod_accession
-            %td.center= UnimodCvTerm.where(accession: mod.unimod_accession)[0].name
-
+            - if mod.unimod_accession =~ /^UNIMOD/
+              %td.center= UnimodCvTerm.where(accession: mod.unimod_accession)[0].name
+            - elsif mod.unimod_accession =~ /^MS/
+              %td.center= PsiMsCvTerm.where(accession: mod.unimod_accession)[0].name
