@@ -618,7 +618,7 @@ def rollback(mzid_file_id)
     pd_ids = []
     MzidFile.find(mzid_file_id).spectrum_identifications.each do |si|
       sip = si.spectrum_identification_protocol
-      sil_id = si.spectrum_identification_list
+      sil_id = si.spectrum_identification_list.id
       SpectrumIdentificationProtocol.destroy(sip.id) #sip_searched_mod_join_table, SipPsiMsCvTerms and SipUserParams are dependently destroyed
       pd_ids << SpectrumIdentificationList.find(sil_id).protein_detection_id
       #this_si_sir_ids = si.spectrum_identification_results.map { |sir| sir.id }
