@@ -23,7 +23,7 @@ class Mzid
   def psi_ms_cv_terms
     psi_t = {}
     accessions = []
-    @doc.xpath("//xmlns:cvParam[@cvRef='PSI-MS']").each do |psiterm|
+    @doc.xpath("//xmlns:cvParam[@cvRef='PSI-MS' or @cvRef='MS']").each do |psiterm|
       ac = psiterm.attr("accession")
       name = psiterm.attr("name")
       psi_t[ac] = name unless accessions.include? ac
